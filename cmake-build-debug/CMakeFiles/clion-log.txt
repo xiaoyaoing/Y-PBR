@@ -1,0 +1,5 @@
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/ninja -G Ninja -S /Users/yjp/nju/大三下/graphics/Y-PBR -B /Users/yjp/nju/大三下/graphics/Y-PBR/cmake-build-debug
+/Users/yjp/nju/大三下/graphics/Y-PBR/src/Camera/Camera.cpp/Users/yjp/nju/大三下/graphics/Y-PBR/src/Camera/Camera.hpp/Users/yjp/nju/大三下/graphics/Y-PBR/src/main.cpp/Users/yjp/nju/大三下/graphics/Y-PBR/src/scene.hpp
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/yjp/nju/大三下/graphics/Y-PBR/cmake-build-debug
