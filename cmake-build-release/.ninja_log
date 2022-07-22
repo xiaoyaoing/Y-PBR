@@ -1,0 +1,10 @@
+# ninja log v5
+6	1939	1657894445277082837	CMakeFiles/Y-PBR.dir/src/Ray/Ray.cpp.o	e45090f47a695818
+6	8539	1657894451876257025	CMakeFiles/Y-PBR.dir/src/Integrator/PathIntegrator.cpp.o	4cfdf88e31a3ed35
+5	8451	1657894451788995285	CMakeFiles/Y-PBR.dir/src/Common/util.cpp.o	d5982e03cee6a220
+4	6423	1657894945307662718	CMakeFiles/Y-PBR.dir/src/main.cpp.o	15164b5836ff8176
+6	7823	1657894451162834610	CMakeFiles/Y-PBR.dir/src/Integrator/Integrator.cpp.o	227f892cc7e64ee7
+4	9182	1657894452520976700	CMakeFiles/Y-PBR.dir/src/Camera/Camera.cpp.o	b76710f3c3313017
+5	8784	1657894452123319486	CMakeFiles/Y-PBR.dir/src/Camera/Image.cpp.o	3637d133eb18603e
+7	7031	1657894450369370896	CMakeFiles/Y-PBR.dir/src/Scene.cpp.o	62bd0ec784b25a8d
+6423	6522	1657894945408347808	Y-PBR	36af591647f2b3c7

@@ -1,0 +1,18 @@
+# ninja log v5
+5	4607	1658413850979602749	CMakeFiles/Y-PBR.dir/src/Camera/Camera.cpp.o	bb91dd2b854a2028
+11	7478	1658413624745623090	CMakeFiles/Y-PBR.dir/src/Primitives/Sphere.cpp.o	1815c82da886258a
+5	5632	1658413371129933136	CMakeFiles/Y-PBR.dir/src/Scene.cpp.o	2f4d4252fee8b8cd
+4608	4765	1658413851148496224	Y-PBR	145e0988ed042a44
+5	8055	1658413038097378932	CMakeFiles/Y-PBR.dir/src/Integrator/Integrator.cpp.o	96bb7ffd2ddde0bd
+13	10116	1658413040155268455	CMakeFiles/Y-PBR.dir/src/main.cpp.o	1407a7fb706a9b00
+9	12458	1658409196973717463	CMakeFiles/Y-PBR.dir/src/Camera/Image.cpp.o	ff2a93c6a610d539
+10004	10787	1658409195325542381	CMakeFiles/Y-PBR.dir/src/Ray/Ray.cpp.o	4cf59662c87eb711
+9	7552	1658043698646308021	CMakeFiles/Y-PBR.dir/src/Bsdfs/Bsdf.cpp.o	8fda760ce155ecb3
+9	9229	1658409193636540244	CMakeFiles/Y-PBR.dir/src/Common/BoundingBox.cpp.o	59624510e0626419
+6	8036	1658413038097514408	CMakeFiles/Y-PBR.dir/src/Primitives/Quadric.cpp.o	e0d8f45c0b8906f2
+10	8072	1658413038097791458	CMakeFiles/Y-PBR.dir/src/Primitives/Triangle.cpp.o	e3b2b66bcdd2e417
+4	3481	1658413736983480761	CMakeFiles/Y-PBR.dir/src/Integrator/PathIntegrator.cpp.o	651220604003ed91
+5	8448	1658413038518821376	CMakeFiles/Y-PBR.dir/src/Common/util.cpp.o	50a3c8578fbe32c1
+9230	10003	1658409194542179529	CMakeFiles/Y-PBR.dir/src/Ray/Intersection.cpp.o	ce1e9b5ebefbc671
+6	8084	1658413038096949166	CMakeFiles/Y-PBR.dir/src/Primitives/Primitive.cpp.o	961c9988133ec04a
+17	6071	1658055168967744216	CMakeFiles/Y-PBR.dir/src/Primitive.cpp.o	d54842c9bf82ae74
