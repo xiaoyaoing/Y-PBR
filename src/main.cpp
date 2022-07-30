@@ -27,16 +27,16 @@ int main(){
 
     Ray ray;
 
-
-    for(size_t x=0;x<outputImage->height;x++){
-        for(size_t y=0;y<outputImage->width;y++)
-        {
-            camera->sampleRay( x,y,
-                              outputImage->width,outputImage->height,
-                              ray,sampler.getNext2D());
-            outputImage->addPixel(x,y,integrator->integrate(ray,*scene,sampler));
-        }
+    for(size_t y=0;y<outputImage->height;y++)
+    {
+        for(size_t x=0;x<outputImage->width;x++)
+            {
+                camera->sampleRay(x,y,outputImage->width,outputImage->height,
+                                  ray,sampler.getNext2D());
+                outputImage->addPixel(x,y,integrator->integrate(ray,*scene,sampler));
+            }
     }
+
 
     outputImage->save();
 

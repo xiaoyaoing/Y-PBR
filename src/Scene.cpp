@@ -51,7 +51,9 @@ Scene::Scene(const nlohmann::json j) {
         else  // load single shape
         {
         std::shared_ptr<Primitive>  primitive= loadMap[type](p,bsdf);
+
         if(primitive)
+            if(transform) primitive->transform(*transform);
             primitives.push_back(primitive);
         }
     }

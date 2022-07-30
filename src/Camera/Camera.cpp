@@ -3,13 +3,12 @@
 #include "Camera.hpp"
 #include "../Common/util.hpp"
 Camera::Camera(const nlohmann::json & c) {
-   eye = c.at("eye");
+    eye = c.at("eye");
 //    from_json(c.at("eye"),eye);
     focal_length = c.at("focal_length").get<Float>() / Float(1000);
     sensor_width = c.at("sensor_width").get<Float>() / Float(1000);
     vec3 look_at=c.at("look_at");
     lookAt(look_at);
-
 }
 
 void Camera::sampleRay(size_t x, size_t y ,size_t width,size_t height, Ray & ray, vec2 sample) const {

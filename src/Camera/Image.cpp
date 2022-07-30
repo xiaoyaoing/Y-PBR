@@ -11,7 +11,7 @@ void Image::save() const {
 
         for (unsigned int i = 0; i < height; ++i) {
             for (unsigned int j = 0; j < width; ++j) {
-                const vec3 rgb = getPixel(i, j);
+                const vec3 rgb = getPixel(j, i);
                 const unsigned int R =
                         std::clamp(static_cast<unsigned int>(255.0f * rgb[0]), 0u, 255u);
                 const unsigned int G =
@@ -29,8 +29,9 @@ vec3 Image::getPixel(int x, int y) const {
     return vec3 (pixels[idx], pixels[idx + 1], pixels[idx + 2]);
 }
 
-size_t Image::getIndex(int x, int y) const {
-    return 3 * y + 3 * width * x;
+size_t Image::getIndex(size_t x, size_t y) const {
+   // std::cout<<3 * x + 3 * width * y<<" ";
+    return 3 * x + 3 * width * y;
 }
 
 void Image::addPixel(size_t x, size_t y, vec3 rgb) {

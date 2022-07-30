@@ -8,7 +8,6 @@ Sphere::Sphere(double radius, std::shared_ptr<Bsdf> bsdf):Primitive(bsdf),radius
 
 bool  Sphere::intersect(Ray& ray, Intersection& intersection) const{
     vec3  p = ray.start - origin;
-    glm::vec3 v=p;
     float B = dot(p,ray.direction);
     float C = length2(p) - pow2(radius);
     float detSq = B*B - C;
@@ -47,6 +46,8 @@ vec3 Sphere::normal(const vec3& pos) const{
     return  normalize(pos-origin);
 }
 void Sphere::transform(const Transform &T) {
+    origin = T.position;
+    radius = radius * ((T.scale.x + T.scale.y + T.scale.z) / 3.0);
 
 }
 

@@ -51,6 +51,31 @@ inline mat4 rotate(Float radians,vec3 axis){
 }
 
 
+inline bool solveQuadratic(double a, double b, double c, double& t_min, double& t_max)
+{
+    if (a != 0.0)
+    {
+        double d = b * b - 4.0 * a * c;
+
+        if (d < 0.0) return false;
+
+        double t = -0.5 * (b + (b < 0.0 ? -std::sqrt(d) : std::sqrt(d)));
+
+        t_min = t / a;
+        t_max = c / t;
+
+        if (t_min > t_max) std::swap(t_min, t_max);
+
+        return true;
+    }
+    if (b != 0.0)
+    {
+        t_min = t_max = -c / b;
+        return true;
+    }
+    return false;
+}
+
 
 
 
