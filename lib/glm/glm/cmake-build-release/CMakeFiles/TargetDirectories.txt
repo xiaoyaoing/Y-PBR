@@ -1,2 +1,0 @@
-/Users/yjp/nju/大三下/graphics/Y-PBR/lib/glm/glm/cmake-build-release/CMakeFiles/edit_cache.dir
-/Users/yjp/nju/大三下/graphics/Y-PBR/lib/glm/glm/cmake-build-release/CMakeFiles/rebuild_cache.dir

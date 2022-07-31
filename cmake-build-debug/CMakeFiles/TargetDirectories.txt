@@ -1,3 +1,0 @@
-/Users/yjp/nju/大三下/graphics/Y-PBR/cmake-build-debug/CMakeFiles/Y-PBR.dir
-/Users/yjp/nju/大三下/graphics/Y-PBR/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/yjp/nju/大三下/graphics/Y-PBR/cmake-build-debug/CMakeFiles/rebuild_cache.dir
