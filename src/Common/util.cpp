@@ -15,6 +15,9 @@ Transform::Transform(const vec3 &position, const vec3 &scale, const vec3 &rotati
                       rotate(rotation.y, glm::dvec3(0.0, 1.0, 0.0)) *
                       rotate(rotation.x, glm::dvec3(1.0, 0.0, 0.0));
 
+    matrix = glm::translate(mat4(1.0), position) *
+             rotation_matrix *
+             glm::scale(mat4(1.0), scale);
 
 }
 

@@ -6,9 +6,10 @@ Sphere::Sphere(double radius, std::shared_ptr<Bsdf> bsdf):Primitive(bsdf),radius
 
 }
 
-bool  Sphere::intersect(Ray& ray, Intersection& intersection) const{
-    vec3  p = ray.start - origin;
-    float B = dot(p,ray.direction);
+std::optional<Intersection>  Sphere::intersect(Ray& ray) const{
+    Intersection intersection;
+    vec3  p = ray.o - origin;
+    float B = dot(p,ray.d);
     float C = length2(p) - pow2(radius);
     float detSq = B*B - C;
     if (detSq >= 0.0f) {
@@ -16,28 +17,25 @@ bool  Sphere::intersect(Ray& ray, Intersection& intersection) const{
         float t = -B - det;
         if (t < ray.farT && t > ray.nearT) {
             ray.farT=t;
-            intersection.pos=ray(t);
-            intersection.normal= normal(intersection.pos);
+            intersection.p=ray(t);
+            intersection.n= normal(intersection.p);
 //            data.primitive = this;
 //            data.as<SphereIntersection>()->backSide = false;
-            return true;
+            return {intersection};
         }
         t = -B + det;
         if (t < ray.farT && t > ray.nearT) {
             ray.farT = t;
-            intersection.pos=ray(t);
-            intersection.normal= normal(intersection.pos);
+            intersection.p=ray(t);
+            intersection.n= normal(intersection.p);
 //            data.primitive = this;
 //            data.as<SphereIntersection>()->backSide = true;
-            return true;
+            return {intersection};
         }
     }
 
-    return false;
+    return std::nullopt;
 
-
-
-    return false;
 }
 vec3 Sphere::operator()(double u, double v) const{
 
@@ -59,6 +57,8 @@ void Sphere::computeBoundingBox() {
 
 }
 
+Intersection Sphere::Sample(const vec2 & u, Float * pdf) const {
+    Intersection it;
 
-
-
+    return it;
+}

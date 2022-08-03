@@ -1,7 +1,7 @@
 #include <fstream>
 #include "Image.hpp"
 #include "iostream"
-
+#include "spdlog/spdlog.h"
 void Image::save() const {
         std::ofstream file(outputFileName);
 
@@ -36,7 +36,11 @@ size_t Image::getIndex(size_t x, size_t y) const {
 
 void Image::addPixel(size_t x, size_t y, vec3 rgb) {
     auto idx = getIndex(x,y);
-    int s=pixels.size();
+
+    if(rgb.x<0 || rgb.y<0 || rgb.z<0 || rgb.x>1|| rgb.y>1 || rgb.z>1){
+        spdlog::error("Invalid radiance R:{} G:{} B:{}",rgb.x,rgb.y,rgb.z);
+    }
+
     pixels[idx]+=rgb.x;
     pixels[idx+1]+=rgb.y;
     pixels[idx+2]+=rgb.z;

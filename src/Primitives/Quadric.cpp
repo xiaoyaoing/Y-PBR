@@ -6,8 +6,8 @@ Quadric::Quadric(const nlohmann::json &j, std::shared_ptr<Bsdf> bsdf):Primitive(
 
 }
 
-bool  Quadric::intersect( Ray& ray, Intersection& intersection) const{
-    return false;
+std::optional < Intersection > Quadric::intersect(Ray & ray) const{
+    return std::nullopt;
 }
 vec3 Quadric::operator()(double u, double v) const{
     return vec3(0);

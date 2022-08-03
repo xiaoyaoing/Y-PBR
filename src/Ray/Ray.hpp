@@ -11,11 +11,11 @@ public:
     Ray(vec3 start,vec3 direction);
 
     vec3  operator()(Float  t) const {
-        return start + t*direction;
+        return o + t * d;
     }
 
-    vec3 start;
-    vec3 direction;
+    vec3 o;
+    vec3 d;
     Float farT;
     Float nearT;
 

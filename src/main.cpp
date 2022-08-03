@@ -17,7 +17,6 @@ int main(){
     scene_file.close();
 
 
-
     std::unique_ptr<Camera> camera = std::make_unique<Camera>(j.at("camera").at(0));
     std::unique_ptr<Image>  outputImage = std::make_unique<Image>(j.at("image"));
     std::unique_ptr<Scene>  scene= std::make_unique<Scene>(j);
@@ -33,6 +32,7 @@ int main(){
             {
                 camera->sampleRay(x,y,outputImage->width,outputImage->height,
                                   ray,sampler.getNext2D());
+
                 outputImage->addPixel(x,y,integrator->integrate(ray,*scene,sampler));
             }
     }
