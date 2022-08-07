@@ -77,6 +77,7 @@ std::optional < Intersection > Triangle::intersect(Ray & ray) const {
         ray.farT=t;
         intersection.n= normalize(cross(p1 - p0, p2 - p0));
         intersection.p=ray(t);
+        intersection.bsdf=bsdf.get();
         return {intersection};
     }
     return std::nullopt;
@@ -114,7 +115,11 @@ vec3 Triangle::interpolatedNormal(const glm::dvec2 & uv) const {
 }
 
 void Triangle::computeArea( ) {
-
+    const vec3 &p0 = mesh->p[v[0]];
+    const vec3 &p1 = mesh->p[v[1]];
+    const vec3 &p2 = mesh->p[v[2]];
+    area=0.5 * glm::length(cross(p1 - p0, p2 - p0));
+    inv_area=1/area;
 }
 
 void Triangle::computeBoundingBox( ) {
@@ -130,7 +135,14 @@ Intersection Triangle::Sample(const vec2 & u, Float * pdf) const {
 
     vec3 point = p0*u.x + p1*u.y +(1-u.x-u.y)*p2;
 
-    return Intersection();
+    it.p=point;
+    it.n = normalize((cross(p1 - p0, p2 - p0)));
+    if(mesh->n){
+        //todo support mesh n
+    }
+    *pdf=inv_area;
+
+    return it;
 }
 
 

@@ -20,7 +20,7 @@ public:
    virtual vec3  sampleDirectLight(const Scene & scene,const Intersection & intersection,Light sample);
 
     Spectrum UniformSampleOneLight(const Intersection &it, const Scene &scene,
-                                             Sampler &sampler,
+                                   Sampler &sampler,
                                    bool handleMedia = false) const;
 
     Spectrum UniformSampleAllLights(const Intersection &it, const Scene &scene,Sampler &sampler,

@@ -1,9 +1,10 @@
 //2022/7/17
 
-#include "Primitive.hpp"
+#include "Sphere.hpp"
 
 Sphere::Sphere(double radius, std::shared_ptr<Bsdf> bsdf):Primitive(bsdf),radius(radius),origin(0.0){
-
+    computeArea();
+    computeBoundingBox();
 }
 
 std::optional<Intersection>  Sphere::intersect(Ray& ray) const{
@@ -19,6 +20,7 @@ std::optional<Intersection>  Sphere::intersect(Ray& ray) const{
             ray.farT=t;
             intersection.p=ray(t);
             intersection.n= normal(intersection.p);
+            intersection.bsdf=bsdf.get();
 //            data.primitive = this;
 //            data.as<SphereIntersection>()->backSide = false;
             return {intersection};
@@ -27,6 +29,7 @@ std::optional<Intersection>  Sphere::intersect(Ray& ray) const{
         if (t < ray.farT && t > ray.nearT) {
             ray.farT = t;
             intersection.p=ray(t);
+            intersection.bsdf=bsdf.get();
             intersection.n= normal(intersection.p);
 //            data.primitive = this;
 //            data.as<SphereIntersection>()->backSide = true;
@@ -50,11 +53,12 @@ void Sphere::transform(const Transform &T) {
 }
 
 void Sphere::computeArea() {
-
+    area = Constant::PI * radius * radius;
+    inv_area =  1/area;
 }
 
 void Sphere::computeBoundingBox() {
-
+    //todo
 }
 
 Intersection Sphere::Sample(const vec2 & u, Float * pdf) const {

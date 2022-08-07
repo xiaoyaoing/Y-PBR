@@ -5,6 +5,7 @@
 #include "Lights/Light.hpp"
 
 class Light;
+class Primitive;
 
 class Scene {
 public:

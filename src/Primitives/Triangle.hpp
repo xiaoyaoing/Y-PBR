@@ -31,6 +31,8 @@ public:
              : Primitive(bsdf), mesh(mesh)
              {
              v=v_indices;
+             computeArea();
+             computeBoundingBox();
     }
 
     virtual std::optional < Intersection > intersect(Ray & ray) const;

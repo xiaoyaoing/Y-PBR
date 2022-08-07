@@ -90,7 +90,7 @@ Integrator::EstimateDirect(const Intersection & its, const vec2 & uShading, cons
 
     auto Li = light.Sample_Li(its,uLight,&wi,&lightPdf,&visibility);
 
-    auto f = its.bsdf->f(its.wo, wi) * abs(dot(wi, its.n));
+    auto f = its.bsdf->f(its.wo, its.shFrame.toLocal(wi)) * abs(dot(wi, its.n));
 
     return Li * f / lightPdf;
 

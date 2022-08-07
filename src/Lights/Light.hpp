@@ -1,6 +1,6 @@
 #pragma  once
 
-#include "../Primitives/Primitive.hpp"
+//#include "../Primitives/Primitive.hpp"
 #include "../Colors/Spectrum.hpp"
 #include "../scene.hpp"
 
@@ -44,10 +44,12 @@ class AreaLight : public  Light{
 public:
     Spectrum L(const Intersection & intr, const vec3 & w) const override;
 
-    AreaLight(std::shared_ptr<Primitive> primitive,Spectrum  albedo,bool twoSide=false);
+
+    AreaLight(const std::shared_ptr < Primitive > & primitive,
+                         const Spectrum & albedo,
+                         bool twoSide=false);
 
 private:
-
     std::shared_ptr<Primitive> primitive;
     Spectrum  albedo;
     bool twoSide;
