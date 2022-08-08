@@ -26,3 +26,12 @@ AreaLight::AreaLight(const std::shared_ptr< Primitive > & primitive,
 {
 
 }
+
+bool VisibilityTester::Unoccluded(const Scene & scene) const {
+    vec3 dir =(p1.p-p0.p);
+    Float distance = length2(dir);
+    dir= normalize(dir);
+    Ray ray(p0.p,dir,Constant::EPSILON,distance-Constant::EPSILON);
+    return scene.intersectP(ray);
+
+}

@@ -1,7 +1,7 @@
 
 #include "scene.hpp"
 #include "iostream"
-#include "Bsdfs/Bsdf.hpp"
+#include "Bsdfs/Reflection.hpp"
 #include "Bsdfs/BsdfFactory.hpp"
 #include "spdlog/spdlog.h"
 
@@ -46,10 +46,14 @@ Scene::Scene(const nlohmann::json j) {
 
     for(auto p : j.at("primitives")){
         //get bsdf
+        std::shared_ptr<Bsdf> bsdf;
         std::string bsdf_str=p.at("bsdf");
-        std::shared_ptr<Bsdf> bsdf = bsdfs[bsdf_str];
-        if(!bsdf.get()){
+        if(!bsdfs.contains(bsdf_str)){
+            spdlog::error("{0},bsdf not found",bsdf_str);
             bsdf = bsdfs["default"];
+        }
+        else {
+            bsdf=bsdfs[bsdf_str];
         }
 
         //get transform
@@ -80,12 +84,12 @@ Scene::Scene(const nlohmann::json j) {
                 if(!mesh_set.contains(meshName)){
                     v = vertices.at(p.at("vertex_set"));
                     mesh_set[meshName]=
-                            CreateTriangleMesh(transform.get(),&v,nullptr,nullptr,nullptr,bsdf);
+                            CreateTriangleMesh(transform.get(),&v,nullptr,nullptr,nullptr);
 
                 }
                 std::shared_ptr<TriangleMesh> mesh=mesh_set[meshName];
                 triangles_v = p.at("triangles").get<std::vector<std::vector<size_t>>>();
-                triangles   = getTrianglesFromMesh(mesh,triangles_v);
+                triangles   = getTrianglesFromMesh(mesh,triangles_v,bsdf);
                 }
             else{                                //.obj
                 continue;
@@ -103,6 +107,11 @@ Scene::Scene(const nlohmann::json j) {
             primitives.push_back(primitive);
         handleAddLight(p,primitives.size()-1,primitives.size());
         }
+    }
+
+//    primitives=std::vector<std::shared_ptr<Primitive>>(primitives.begin(),primitives.begin()+2);
+    for(auto i:primitives){
+        i->bsdf->LogInfo();
     }
 
     spdlog::info("{} Primitives",primitives.size());
@@ -143,13 +152,20 @@ std::optional<Intersection> Scene::intersect(const Ray &ray) const {
             minIntersection = its;
         }
     }
-
-
-
-//    if(minIntersection.has_value()){
-//
-////        minIntersection->n = minIntersection->primitive->n
-//    }
-//
     return minIntersection;
+}
+
+bool Scene::intersectP(const Ray & ray) const {
+    if(_useBVH){
+    }
+
+    Ray _ray(ray);
+
+    for(auto primitive:primitives){
+        auto its = primitive->intersect(_ray);
+        if(its.has_value())
+            return true;
+    }
+
+    return false;
 }

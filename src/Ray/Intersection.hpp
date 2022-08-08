@@ -1,19 +1,28 @@
 #pragma  once
 #include "../Common/math.hpp"
-#include "../Bsdfs/Bsdf.hpp"
+#include "../Bsdfs/Reflection.hpp"
 #include "../Common/Frame.hpp"
 #include "../Colors/Spectrum.hpp"
 
 class Primitive ;
 
 struct Intersection {
-    vec3 p;
-    vec3 n;
-    vec3 wo;
-    Bsdf * bsdf ;
-    Frame shFrame;
-    const Primitive * primitive;
+    vec3 p;                    //position
+    vec3 wo;                   //-ray.d(world space)
+    vec3 n;                    //normal
+    Bsdf * bsdf;
+    const Primitive * primitive;// Primitive ptr
 
-    Spectrum Le(const vec3 & w);
+    void setNormal(const vec3 & n); //set normalAndFrame
+
+    vec3 toLocal(const vec3 & w) const ;
+
+    vec3 toWorld(const vec3 & w) const ;
+
+    Spectrum Le(const vec3 & w) const;
+
+private:
+
+    Frame shFrame;             //shading Frame
 
 };

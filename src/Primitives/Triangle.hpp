@@ -9,13 +9,13 @@ struct TriangleMesh{
     std::unique_ptr<vec3[]> n;
     std::unique_ptr<vec3[]> s;
     std::unique_ptr<vec3[]> uv;
-    std::shared_ptr<Bsdf>   bsdf;
+   // std::shared_ptr<Bsdf>   bsdf;
 
     TriangleMesh(  const Transform * transform,
      //              const  std::vector<std::vector<size_t>> * VertexIndices,
                    const std::vector<vec3>* P, const std::vector<vec3> * S,
-                   const std::vector<vec3>* N, const std::vector<vec2> * UV,
-                   std::shared_ptr<Bsdf> bsdf
+                   const std::vector<vec3>* N, const std::vector<vec2> * UV
+                //   std::shared_ptr<Bsdf> bsdf
                    );
 
 
@@ -66,11 +66,12 @@ std::shared_ptr<TriangleMesh> CreateTriangleMesh(
       //  const  std::vector<std::vector<size_t>> * vertexIndices,
         const std::vector<vec3>*p,
         const std::vector<vec3> *s, const std::vector<vec3> *n, const std::vector<vec2> *uv,
-        std::shared_ptr<Bsdf> bsdf,
+     //   std::shared_ptr<Bsdf> bsdf,
         const std::vector<size_t> * faceIndices = nullptr);
 
 
 std::vector<std::shared_ptr<Primitive>> getTrianglesFromMesh(
                                         const std::shared_ptr<TriangleMesh> mesh,
-                                        const std::vector<std::vector<size_t>> v_indces);
+                                        const std::vector<std::vector<size_t>> v_indces,
+                                        const std::shared_ptr<Bsdf> bsdf);
 

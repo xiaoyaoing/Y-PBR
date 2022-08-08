@@ -10,6 +10,8 @@ public:
 
     Ray(vec3 start,vec3 direction);
 
+    Ray(vec3 start,vec3 direction,Float nt,Float ft);
+
     vec3  operator()(Float  t) const {
         return o + t * d;
     }

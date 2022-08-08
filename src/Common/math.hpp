@@ -21,6 +21,17 @@ typedef  glm::dmat4  mat4;
 #endif
 
 
+typedef std::uint8_t  uint8;
+typedef std::uint16_t uint16;
+typedef std::uint32_t uint32;
+typedef std::uint64_t uint64;
+
+typedef std::int8_t  int8;
+typedef std::int16_t int16;
+typedef std::int32_t int32;
+typedef std::int64_t int64;
+
+
 
 namespace Constant{
     inline constexpr Float PI = 3.14159265358979323846;

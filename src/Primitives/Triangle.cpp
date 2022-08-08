@@ -6,10 +6,7 @@
 TriangleMesh::TriangleMesh(const Transform * T,
                            //const std::vector < std::vector < size_t>> * VertexIndices,
                            const std::vector < vec3 > * P, const std::vector < vec3 > * S,
-                           const std::vector < vec3 > * N, const std::vector < vec2 > * UV,
-                           std::shared_ptr < Bsdf > bsdf)
-                           : // vertexIndices(VertexIndices->begin(),VertexIndices->end()),
-                             bsdf(bsdf)
+                           const std::vector < vec3 > * N, const std::vector < vec2 > * UV)
                            {
     int nVertices = P->size();
     p.reset(new vec3[nVertices]);
@@ -75,8 +72,13 @@ std::optional < Intersection > Triangle::intersect(Ray & ray) const {
 
     if(t >= ray.nearT && t <= ray.farT){
         ray.farT=t;
-        intersection.n= normalize(cross(p1 - p0, p2 - p0));
+        if(bsdf->name=="leftWall"){
+            int k=1;
+        }
+        intersection.setNormal(-normalize(cross(e1, e2)));
+
         intersection.p=ray(t);
+        intersection.primitive=this;
         intersection.bsdf=bsdf.get();
         return {intersection};
     }
@@ -136,7 +138,7 @@ Intersection Triangle::Sample(const vec2 & u, Float * pdf) const {
     vec3 point = p0*u.x + p1*u.y +(1-u.x-u.y)*p2;
 
     it.p=point;
-    it.n = normalize((cross(p1 - p0, p2 - p0)));
+    it.setNormal(normalize((cross(p1 - p0, p2 - p0))));
     if(mesh->n){
         //todo support mesh n
     }
@@ -153,10 +155,10 @@ std::shared_ptr<TriangleMesh> CreateTriangleMesh(
        // const  std::vector<std::vector<size_t>> * vertexIndices,
         const std::vector<vec3>*p,
         const std::vector<vec3> *s, const std::vector<vec3> *n, const std::vector<vec2> *uv,
-        std::shared_ptr<Bsdf> bsdf,
+        //std::shared_ptr<Bsdf> bsdf,
         const std::vector<size_t> * faceIndices){
 
-    auto mesh =std::make_shared<TriangleMesh>(transform,p,s,n,uv,bsdf);
+    auto mesh =std::make_shared<TriangleMesh>(transform,p,s,n,uv);
 
     std::vector<std::shared_ptr<Primitive>> primitives;
 
@@ -168,12 +170,14 @@ std::shared_ptr<TriangleMesh> CreateTriangleMesh(
 
 std::vector<std::shared_ptr<Primitive>> getTrianglesFromMesh(
                                         const std::shared_ptr<TriangleMesh> mesh,
-                                        const std::vector<std::vector<size_t>> v_indces){
+                                        const std::vector<std::vector<size_t>> v_indces,
+                                        const std::shared_ptr<Bsdf> bsdf
+                                        ){
 
     std::vector<std::shared_ptr<Primitive>> triangles;
 
     for(int i=0;i<v_indces.size();i++){
-        std::shared_ptr<Primitive> triangle = std::make_shared<Triangle>(mesh,mesh->bsdf,v_indces[i]);
+        std::shared_ptr<Primitive> triangle = std::make_shared<Triangle>(mesh,bsdf,v_indces[i]);
         triangles.push_back(triangle);
     }
 

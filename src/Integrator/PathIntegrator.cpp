@@ -13,20 +13,18 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
      std::optional<Intersection> its ;
      vec3 val;
      Spectrum throughPut(1.0);
-     Spectrum  L;
+     Spectrum  L(0);
      int bounces=0,maxDepth=10;
 
     for (bounces = 0;; ++bounces) {
          its = scene.intersect(ray);
          if (!its.has_value() || bounces >= maxDepth) break;
-
         // return  glm::abs(its->n) ;
 
          L += throughPut * its->Le(-ray.d);
-         its->shFrame=Frame(its->n);
-         its->wo= normalize(its->shFrame.toLocal(-ray.d));
+//         return L;
+         its->wo= normalize(its->toLocal(-ray.d));
          auto  Ld = UniformSampleOneLight(its.value(),scene,sampler);  //direct lighting
-
 
          L+=Ld;
          return Ld;

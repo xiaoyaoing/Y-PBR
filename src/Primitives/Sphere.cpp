@@ -16,26 +16,21 @@ std::optional<Intersection>  Sphere::intersect(Ray& ray) const{
     if (detSq >= 0.0f) {
         float det = std::sqrt(detSq);
         float t = -B - det;
-        if (t < ray.farT && t > ray.nearT) {
-            ray.farT=t;
-            intersection.p=ray(t);
-            intersection.n= normal(intersection.p);
-            intersection.bsdf=bsdf.get();
-//            data.primitive = this;
-//            data.as<SphereIntersection>()->backSide = false;
+
+        if(t>ray.farT || t+2*det<ray.nearT){
+            return std::nullopt;
+        }
+
+        if(t<ray.nearT)
+            t=t+2*det;
+
+        intersection.p=ray(t);
+        intersection.setNormal(normal(intersection.p));
+        intersection.primitive=this;
+        intersection.bsdf=bsdf.get();
             return {intersection};
         }
-        t = -B + det;
-        if (t < ray.farT && t > ray.nearT) {
-            ray.farT = t;
-            intersection.p=ray(t);
-            intersection.bsdf=bsdf.get();
-            intersection.n= normal(intersection.p);
-//            data.primitive = this;
-//            data.as<SphereIntersection>()->backSide = true;
-            return {intersection};
-        }
-    }
+
 
     return std::nullopt;
 

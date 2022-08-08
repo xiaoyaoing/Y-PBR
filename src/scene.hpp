@@ -11,7 +11,11 @@ class Scene {
 public:
     Scene(const nlohmann::json j);
 
+    // Scene and Light Intersection - Records the most recent intersection
     std::optional<Intersection>  intersect(const Ray& ray) const;
+
+    //Determines whether the light and scene intersect - tests for occlusion
+    bool intersectP(const Ray & ray) const ;
 
     std::vector<std::shared_ptr<Light>> lights;
 private:
@@ -22,6 +26,7 @@ private:
     void handleAddLight(const nlohmann::json & j,size_t l,size_t r);
 
     std::vector<std::shared_ptr<Primitive>> primitives;
+
     bool _useBVH;
 
 
