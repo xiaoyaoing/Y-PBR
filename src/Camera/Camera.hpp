@@ -13,6 +13,7 @@ class Camera {
     Float sensor_width;
     Float focal_length;
 
+    std::unique_ptr<Image> image;
 
     void samplePixel(size_t x,size_t y);
 
@@ -28,6 +29,7 @@ public:
 
     uint32 sample_count  ;
 
+    void Capture();
 
 
 };

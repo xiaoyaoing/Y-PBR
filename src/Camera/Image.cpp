@@ -1,7 +1,7 @@
 #include <fstream>
 #include "Image.hpp"
 #include "iostream"
-#include "spdlog/spdlog.h"
+#include <spdlog/spdlog.h>
 #include "../Common/histogram.hpp"
 #include "../Common/util.hpp"
 

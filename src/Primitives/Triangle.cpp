@@ -1,7 +1,7 @@
 //2022/7/17
 
 #include "Triangle.hpp"
-#include "spdlog/spdlog.h"
+#include <spdlog/spdlog.h>
 
 TriangleMesh::TriangleMesh(const Transform * T,
                            //const std::vector < std::vector < size_t>> * VertexIndices,

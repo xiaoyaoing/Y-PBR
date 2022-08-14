@@ -21,6 +21,7 @@ typedef  glm::dmat3  mat3;
 typedef  glm::dmat4  mat4;
 #endif
 
+typedef glm::ivec2 ivec2;
 
 typedef std::uint8_t uint8;
 typedef std::uint16_t uint16;

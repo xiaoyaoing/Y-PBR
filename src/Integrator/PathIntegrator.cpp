@@ -1,4 +1,5 @@
 #include "PathIntegrator.hpp"
+#include "optional"
 //2022/7/15
 Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler & sampler) const {
 //    Intersection intersection =

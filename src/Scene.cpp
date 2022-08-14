@@ -3,7 +3,7 @@
 #include "iostream"
 #include "Bsdfs/Reflection.hpp"
 #include "Bsdfs/BsdfFactory.hpp"
-#include "spdlog/spdlog.h"
+#include <spdlog/spdlog.h>
 
 #include "Primitives/Triangle.hpp"
 #include "Primitives/Sphere.hpp"

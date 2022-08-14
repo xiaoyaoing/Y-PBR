@@ -23,7 +23,7 @@ class BVHAccel
     enum SplitMethod { SAH, HLBVH, Middle, EqualCounts };
 
 public:
-    BVHAccel(const BoundingBox &BB,
+    BVHAccel( //const BoundingBox &BB,
         const std::vector<std::shared_ptr<Primitive>> & primitives,
         const SplitMethod splitMethod = Middle,
         const uint32 maxPrimInNode = 4

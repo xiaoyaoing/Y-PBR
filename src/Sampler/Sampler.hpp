@@ -54,7 +54,7 @@ protected:
 
 public:
     Sampler() {}
-
+    virtual  ~Sampler() = default;
     Sampler(uint64_t seed) : rng(seed) {}
 
     uint64_t getSeed() const { return rng.getSeed(); }

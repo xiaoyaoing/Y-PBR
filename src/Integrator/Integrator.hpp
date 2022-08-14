@@ -17,7 +17,6 @@ public:
 
    virtual vec3  integrate(const Ray& ray, const Scene& scene, Sampler& sampler) const =0;
 
-   virtual vec3  sampleDirectLight(const Scene & scene,const Intersection & intersection,Light sample);
 
    virtual void  Preprocess(const Scene &scene, Sampler & sampler )  =0;
 

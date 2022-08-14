@@ -21,17 +21,6 @@ class Image{
         vec3 rgb;
     };
 
-    vec3 getPixel(int x,int y) const ;
-
-    uint32 getIndex(uint32 x,uint32 y) const ;
-
-    std::string  outputFileName;
-    std::vector<Pixel> pixels;
-    ToneMap::ToneMapType toneMapType;
-    bool plain;
-    Float exposure_scale;
-    Float gain_scale;
-
     /**************************************************************************
     Hard coded (except for dimensions) uncompressed 24bpp true-color TGA header.
     After writing this to file, the RGB bytes can be dumped in sequence
@@ -48,6 +37,19 @@ class Image{
         uint16_t height;
         uint8_t end[2] = { 24, 32 };
     };
+
+    vec3 getPixel(int x,int y) const ;
+
+    uint32 getIndex(uint32 x,uint32 y) const ;
+
+    std::string  outputFileName;
+    std::vector<Pixel> pixels;
+    ToneMap::ToneMapType toneMapType;
+    bool plain;
+    Float exposure_scale;
+    Float gain_scale;
+
+
 public:
     Image(nlohmann::json json);
 

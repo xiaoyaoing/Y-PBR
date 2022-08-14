@@ -1,6 +1,6 @@
 #include "BsdfFactory.hpp"
 #include "Reflection.hpp"
-#include "spdlog/spdlog.h"
+#include <spdlog/spdlog.h>
 #include "../Common/util.hpp"
 #include "sstream"
 namespace BsdfFactory {

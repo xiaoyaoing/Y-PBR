@@ -1,8 +1,7 @@
-
-#include "../Common/math.hpp"
-
 #pragma once
 
+#include "../Common/math.hpp"
+#include <optional>
 #include "glm/vec3.hpp"
 #include "glm/mat4x4.hpp"
 #include "nlohmann/json.hpp"

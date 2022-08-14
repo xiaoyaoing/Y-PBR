@@ -63,18 +63,7 @@ Integrator::Integrator(nlohmann::json j)
 //    return mis_weight * bsdf_absIdotN * ls.light->material->emittance / (light_pdf * ls.select_probability);
 //}
 
-vec3 Integrator::sampleDirectLight(const Scene & scene, const Intersection & intersection, Light sample) {
 
-//    //todo mult light
-//
-//    auto light = scene.lights[0];
-//
-//    auto Le=light->sampleLi(intersection, sample,
-//                vec3 * wi, Float *pdf,
-//            VisibilityTester *vis);
-//
-//    return light;
-}
 
 
 
