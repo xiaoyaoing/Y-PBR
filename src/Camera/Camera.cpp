@@ -7,6 +7,8 @@ Camera::Camera(const nlohmann::json & c) {
 //    from_json(c.at("eye"),eye);
     focal_length = c.at("focal_length").get<Float>() / Float(1000);
     sensor_width = c.at("sensor_width").get<Float>() / Float(1000);
+    sample_count = c.at("sample_count").get<uint32>();
+
     vec3 look_at=c.at("look_at");
     lookAt(look_at);
 }

@@ -127,8 +127,14 @@ void Scene::handleAddLight(const nlohmann::json & p,size_t l,size_t r){
 
         if(lightType=="area"){
             Spectrum  albedo = lightJson.at("albedo");
+            Float totalArea = 0,invArea;
+            for(size_t i=l;i<r;i++) totalArea+=primitives[i]->Area();
+            invArea=1/ totalArea;
             for(size_t i=l;i<r;i++){
-                auto light = std::make_shared <AreaLight>(this->primitives[i],albedo);
+
+                // flux to radiosity
+                auto light = std::make_shared <AreaLight>(this->primitives[i],albedo * invArea) ;
+
                 this->primitives[i]->areaLight =light;
                 lights.push_back(light);
             }

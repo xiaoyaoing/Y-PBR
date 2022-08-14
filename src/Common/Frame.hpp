@@ -103,6 +103,10 @@ struct Frame {
         return clamp(v.x * v.x / sinTheta2(v), 0.0f, 1.0f);
     }
 
+    static vec3 Reflect(const vec3 & v){
+        return {-v.x,-v.y,v.z};
+    }
+
     /// Equality test
     bool operator==(const Frame &frame) const {
         return frame.s == s && frame.t == t && frame.n == n;
@@ -112,6 +116,8 @@ struct Frame {
     bool operator!=(const Frame &frame) const {
         return !operator==(frame);
     }
+
+
 
 
 };

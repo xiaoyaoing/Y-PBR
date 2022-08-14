@@ -1,5 +1,5 @@
 #include "Integrator.hpp"
-
+#include "iostream"
 Integrator::Integrator(nlohmann::json j)
 {
 
@@ -83,39 +83,47 @@ Integrator::EstimateDirect(const Intersection & its, const vec2 & uShading,
                            const Light & light, const vec2 & uLight,
                            const Scene & scene, Sampler & sampler, bool specular) const{
 
-
+    BXDFType bsdfFlags =
+            specular ? BSDF_ALL : BXDFType(BSDF_ALL & ~BSDF_SPECULAR);
     vec3 wi;
     Float lightPdf = 0, scatteringPdf = 0;
     VisibilityTester visibility;
 
 
     auto Li = light.Sample_Li(its,uLight,&wi,&lightPdf,&visibility);
+//
+//    if( isBlack(Li) || !visibility.Unoccluded(scene)){
+//        return Spectrum();
+//    }
 
-    if(!visibility.Unoccluded(scene)){
-        return Spectrum();
-    }
-
-    auto f = its.bsdf->f(its.wo, its.toLocal(-wi)) * abs(dot(wi, its.n));
+    auto f = its.bsdf->f(its.wo, its.toLocal(-wi),bsdfFlags) * abs(dot(wi, its.n));
 
     return Li * f / lightPdf;
 }
 
 Spectrum
-Integrator::UniformSampleOneLight(const Intersection & its, const Scene & scene, Sampler & sampler, bool handleMedia) const {
+Integrator::UniformSampleOneLight(const Intersection & its,
+                                  const Scene & scene,
+                                  Sampler & sampler,
+                                  const Distribution1D *lightDistrib,
+                                  bool handleMedia) const {
 
     //todo multiple lightPdf
-
-    Float  lightPdf =0.5;
+    Float  lightPdf;
     std::shared_ptr<Light> light;
-    if(sampler.getNext1D()<0.5)
-     light = scene.lights[0];
-    else
-     light = scene.lights[1];
-
+    int lightNum;
+    if (lightDistrib) {
+        lightNum = lightDistrib->SampleDiscrete(sampler.getNext1D(), &lightPdf);
+        if (lightPdf == 0) return Spectrum(0.f);
+    } else {
+        int nLights = scene.lights.size();
+        lightNum = std::min((int)(sampler.getNext1D() * nLights), nLights - 1);
+        lightPdf = Float(1) / nLights;
+    }
+    light = scene.lights.at(lightNum);
 
     vec2 uScattering = sampler.getNext2D();
     vec2 uLight=sampler.getNext2D();
-
     return EstimateDirect(its, uScattering, *light, uLight,
                           scene, sampler,  handleMedia) / lightPdf;
 }

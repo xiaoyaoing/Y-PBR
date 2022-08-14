@@ -6,7 +6,7 @@
 
 
 // BSDF Declarations
-enum BxDFType {
+enum BXDFType {
     BSDF_REFLECTION = 1 << 0,
     BSDF_TRANSMISSION = 1 << 1,
     BSDF_DIFFUSE = 1 << 2,
@@ -16,53 +16,113 @@ enum BxDFType {
                BSDF_TRANSMISSION,
 };
 
-class Bxdf;
+class BXDF;
 
 class Bsdf{
 
 public:
     Spectrum f(const vec3 &wo , const vec3 &wi,
-               BxDFType flags = BSDF_ALL) const ;
+               BXDFType flags = BSDF_ALL) const ;
 
-    int NumComponents(BxDFType flags = BSDF_ALL) const;
+    ///sample a new dir
+    ///wi wo in local space
+    virtual Spectrum sampleF(const vec3 &wo, vec3 *wi, const vec2 &u,
+                             Float *pdf, BXDFType type,BXDFType *sampledType) const ;
 
-    void Add(Bxdf *b) {
-        bxdfs[nBxDFs++] = b;
+    int NumComponents(BXDFType flags = BSDF_ALL) const;
+
+    void Add(BXDF *b) {
+        BXDFs[nBXDFs++] = b;
     }
+
+
+
+    void LogInfo();
+
+    std::string name;
 private:
-    Bxdf *bxdfs[8];
-    int nBxDFs = 0;
+    BXDF *BXDFs[8];
+    int nBXDFs = 0;
+    //for debug
 };
 
-class Bxdf{
+class BXDF{
 public:
+
+    BXDF(BXDFType type) :type(type) {};
+
     virtual Spectrum f(const vec3 & wo,const vec3 & wi) const =0;
+
+    virtual Float Pdf(const vec3 & wo,const vec3 & wi) const =0;
+
+    virtual Spectrum sampleF(const vec3 &wo, vec3 *wi, const vec2 &u,
+                             Float *pdf, BXDFType *sampledType) const =0;
+
 
     virtual void LogInfo() const =0;
 
-    bool MatchesFlags(BxDFType t) const { return (type & t) == type; }
-    std::string name; //for debug
-    BxDFType type;
+    bool MatchesFlags(BXDFType t) const { return (type & t) == type; }
+
+    BXDFType type;
 
 };
 
 
-class Mirror : public Bxdf{
+class Mirror : public BXDF{
 
 };
 
-class Lambertain : public  Bxdf{
+class LambertainR : public  BXDF{
 
 public:
 
     virtual Spectrum f(const vec3 & wo,const vec3 & wi) const override;
 
+    Float Pdf(const vec3 & wo, const vec3 & wi) const override;
+
     virtual void LogInfo() const;
 
-    Lambertain(Spectrum &  albedo);
+    LambertainR(Spectrum &  albedo);
+
+    virtual Spectrum sampleF(const vec3 &wo, vec3 *wi, const vec2 &u,
+                             Float *pdf, BXDFType *sampledType) const override;
+private:
+    bool useCosineSample;
+    Spectrum albedo;
+};
+
+class LambertainT : public  BXDF{
+public:
+
+    virtual Spectrum f(const vec3 & wo,const vec3 & wi) const override;
+
+    virtual void LogInfo() const override;
+
+    LambertainT(Spectrum &  albedo);
+
+    virtual Spectrum sampleF(const vec3 &wo, vec3 *wi, const vec2 &u,
+                             Float *pdf, BXDFType *sampledType) const override;
+
 private:
 
     Spectrum albedo;
+};
+
+class SpecularR : public BXDF{
+public:
+
+
+    virtual Spectrum f(const vec3 & wo,const vec3 & wi) const override;
+
+    virtual void LogInfo() const override;
+
+    SpecularR();
+
+    virtual Spectrum sampleF(const vec3 &wo, vec3 *wi, const vec2 &u,
+                             Float *pdf, BXDFType *sampledType) const override;
+
+    // avoid calculate specular pdf directly
+    Float Pdf(const vec3 & wo, const vec3 & wi) const override;
 };
 
 

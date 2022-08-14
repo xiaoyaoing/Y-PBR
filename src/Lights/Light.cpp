@@ -6,6 +6,10 @@ AreaLight::Sample_Li(const Intersection & ref, const vec2 & u, vec3 * wi, Float 
 
     Intersection pShape = primitive->Sample(ref,u,pdf);
 
+    if(*pdf==0){
+        return Spectrum();
+    }
+
     *wi = normalize(ref.p-pShape.p);
     *vis = VisibilityTester(ref, pShape);
 
@@ -29,7 +33,7 @@ AreaLight::AreaLight(const std::shared_ptr< Primitive > & primitive,
 
 bool VisibilityTester::Unoccluded(const Scene & scene) const {
     vec3 dir =(p1.p-p0.p);
-    Float distance = length2(dir);
+    Float distance = length(dir);
     dir= normalize(dir);
     Ray ray(p0.p,dir,Constant::EPSILON,distance-Constant::EPSILON);
     return scene.intersectP(ray);

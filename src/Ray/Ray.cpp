@@ -12,7 +12,7 @@ Ray::Ray() {
 
 }
 
-Ray::Ray(vec3 start, vec3 direction, Float ft, Float nt)
+Ray::Ray(vec3 start, vec3 direction, Float nt, Float ft)
    : o(start),d(direction),nearT(nt),farT(ft)
 {
 

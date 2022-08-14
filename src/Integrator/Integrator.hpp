@@ -6,7 +6,7 @@
 #include "../Common/math.hpp"
 #include "../Sampler/Sampler.hpp"
 #include "../Ray/Ray.hpp"
-
+#include "../Sampler/Distrib.hpp"
 struct LightSample{
 
 };
@@ -19,8 +19,11 @@ public:
 
    virtual vec3  sampleDirectLight(const Scene & scene,const Intersection & intersection,Light sample);
 
+   virtual void  Preprocess(const Scene &scene, Sampler & sampler )  =0;
+
     Spectrum UniformSampleOneLight(const Intersection &it, const Scene &scene,
                                    Sampler &sampler,
+                                   const Distribution1D *lightDistrib,
                                    bool handleMedia = false) const;
 
     Spectrum UniformSampleAllLights(const Intersection &it, const Scene &scene,Sampler &sampler,

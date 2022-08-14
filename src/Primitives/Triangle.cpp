@@ -72,9 +72,7 @@ std::optional < Intersection > Triangle::intersect(Ray & ray) const {
 
     if(t >= ray.nearT && t <= ray.farT){
         ray.farT=t;
-        if(bsdf->name=="leftWall"){
-            int k=1;
-        }
+
         intersection.setNormal(-normalize(cross(e1, e2)));
 
         intersection.p=ray(t);

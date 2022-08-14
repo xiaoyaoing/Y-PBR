@@ -1,36 +1,82 @@
 #include "BsdfFactory.hpp"
 #include "Reflection.hpp"
 #include "spdlog/spdlog.h"
-
+#include "../Common/util.hpp"
+#include "sstream"
 namespace BsdfFactory {
 
 
 typedef  Bsdf Material;
+static Spectrum  DefaultALbedo =  Spectrum(0.9,0.9,0.9);
 
 
-std::shared_ptr<Material> LoadLambertainBsdf(nlohmann::json j){
+
+std::shared_ptr<Material> LoadLambertainMaterial(nlohmann::json & j){
     std::shared_ptr<Material> material =std::make_shared <Material>();
+    Spectrum albedo;
+    nlohmann::json & r =j["albedo"];
+    if (r.type() == nlohmann::json::value_t::string)
+    {
+        std::string hex_string = r.get<std::string>();
+        if (hex_string.size() == 7 && hex_string[0] == '#')
+        {
+            hex_string.erase(0, 1);
+            std::stringstream ss;
+            ss << std::hex << hex_string;
+            uint32_t color_int;
+            ss >> color_int;
+            albedo = intToColor(color_int);
+        }
+    }
+    else
+    {
+       albedo= r.get<Spectrum>();
+    }
+    material->Add(new LambertainR(albedo));
+   //  material->Add(new LambertainT(albedo));
+    return material;
+}
 
-    Spectrum albedo = j["albedo"];
-    material->Add(new Lambertain(albedo));
+std::shared_ptr<Material> LoadGlassMaterial(nlohmann::json j){
+    std::shared_ptr<Material> material =std::make_shared <Material>();
+    //todo support fresnel specular and uRoughness
+    material->Add(new SpecularR());
+    return material;
 }
 
 
-static Spectrum  DefaultALbedo =  Spectrum(0.5,0.5,0.5);
 
-    std::shared_ptr<Bsdf> getDefaultBsdf(){
-    return std::make_shared<LambertainBsdf>(DefaultALbedo);
+std::shared_ptr<Material> LoadDefualtMaterial(){
+    std::shared_ptr<Material> material =std::make_shared <Material>();
+    material->Add(new LambertainR(DefaultALbedo));
+ //   material->Add(new LambertainT(DefaultALbedo));
+    return material;
 }
+
+
+
+std::unordered_map<std::string,
+            std::function<std::shared_ptr<Material>(nlohmann::json & j)>>
+            MaterialLoadTable  = {
+            {"lambert" , LoadLambertainMaterial},
+            {"glass", LoadGlassMaterial}
+    };
+
+
+/**********************************************************************************************************************/
+/*********************************************************************************************************************/
 
 std::shared_ptr <Bsdf> LoadBsdfFromJson(nlohmann::json j) {
-    if(j["type"]=="lambert"){
-        return CreateLambertainBsdf(j);
+
+    if(MaterialLoadTable.contains(j["type"])){
+        return MaterialLoadTable[j["type"]](j);
     }
+
     //todo  support other bsdfs
     else{
         spdlog::info("{} bsdf not loaded correctly.Used Default Bsdf",
                      j["type"]);
-        return std::make_shared <LambertainBsdf>(DefaultALbedo);
+        return LoadDefualtMaterial();
     }
 
     }
@@ -48,7 +94,7 @@ std::unordered_map < std::string, std::shared_ptr< Bsdf>>
             bsdf_maps[bsdf_name] = bsdf;
         }
 
-        bsdf_maps["default"] =   std::make_shared <LambertainBsdf>(DefaultALbedo);
+        bsdf_maps["default"] =   LoadDefualtMaterial();
 
         spdlog::info(bsdf_maps.size());
         return bsdf_maps;

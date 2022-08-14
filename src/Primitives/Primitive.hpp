@@ -57,6 +57,14 @@ class Bsdf;
             return BB_;
         }
 
+        Float  Area() const {
+            return  area;
+        }
+
+        Float InvArea() const {
+            return inv_area;
+        }
+
 
         std::shared_ptr<Bsdf> bsdf;
 

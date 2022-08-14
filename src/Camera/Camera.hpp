@@ -25,6 +25,11 @@ public:
     void sampleRay(size_t x, size_t y, size_t width, size_t height, Ray &ray, vec2 sample) const;
 
     void lookAt(const vec3 &p);
+
+    uint32 sample_count  ;
+
+
+
 };
 
 

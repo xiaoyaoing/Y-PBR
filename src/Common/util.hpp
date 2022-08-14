@@ -36,13 +36,7 @@ inline T getOptional(const nlohmann::json &j, std::string field, T default_value
 }
 
 /// Simple floating point clamping function
-inline float clamp(Float value, Float min, Float max) {
-    if (value < min)
-        return min;
-    else if (value > max)
-        return max;
-    else return value;
-}
+
 
 /// Simple integer clamping function
 inline int clamp(int value, int min, int max) {

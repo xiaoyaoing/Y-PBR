@@ -17,7 +17,6 @@ Intersection Primitive::Sample(const Intersection & ref, const vec2 & u, Float *
         if (std::isinf(*pdf)) *pdf = 0.f;
     }
     return intr;
-    return Intersection();
 }
 
 
