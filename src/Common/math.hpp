@@ -79,6 +79,8 @@ inline Float clamp(Float value, Float min, Float max) {
 }
 
 
+
+
 template < uint32 num >
 bool AllInRange(const glm::vec < num, Float, glm::defaultp > & v,
                 Float minVal, Float maxVal) {
@@ -113,10 +115,32 @@ glm::vec < size, Float, glm::defaultp > max(const glm::vec < size, Float, glm::d
 }
 
 template < glm::length_t size >
+glm::vec < size, Float, glm::defaultp > min(const glm::vec < size, Float, glm::defaultp > & v1,
+                                            const glm::vec < size, Float, glm::defaultp > & v2) {
+    glm::vec < size, Float, glm::defaultp > res;
+    for ( uint32 i = 0 ; i < size ; i ++ ) {
+        res[i] = v1[i] < v2[i] ? v1[i] : v2[i];
+    }
+    return res;
+}
+
+template < glm::length_t size >
 glm::vec < size, Float, glm::defaultp > clamp(const glm::vec < size, Float, glm::defaultp > & v, Float l, Float r) {
     glm::vec < size, Float, glm::defaultp > res;
     for ( uint32 i = 0 ; i < size ; i ++ ) {
         res[i] = clamp(v[i], l, r);
+    }
+    return res;
+}
+
+template < glm::length_t size >
+glm::vec < size, Float, glm::defaultp > lerp(const glm::vec < size, Float, glm::defaultp > & v1,
+                                             const glm::vec < size, Float, glm::defaultp > & v2,
+                                             const glm::vec < size, Float, glm::defaultp > & p
+                                            ) {
+    glm::vec < size, Float, glm::defaultp > res;
+    for ( uint32 i = 0 ; i < size ; i ++ ) {
+        res[i] = std::lerp(v1[i],v2[i],p);
     }
     return res;
 }

@@ -1,24 +1,23 @@
 #pragma  once
 #include "../Primitives/Primitive.hpp"
 
+struct LinearNode;
+struct BuildNode;
+struct BVHPrimitiveInfo;
+
+
+//BVHAccel Mainly  Borrowed from PBRTv3
+
 
 class BVHAccel
 {
 
-    struct BuildNode
-    {
-        BuildNode() { }
+    BuildNode * RecursiveBuild( std::vector<BVHPrimitiveInfo> &primitiveInfo, int start, int end,
+                                std::vector<std::shared_ptr<Primitive>> &orderedPrims );
 
-        bool leaf()
-        {
-            return children.empty();
-        }
+    std::optional<Intersection> intersect(const Ray & ray);
 
-        BoundingBox BB;
-        std::vector<std::shared_ptr<BuildNode>> children;
-        std::vector<std::shared_ptr<Primitive>> primitives;
-        uint32 df_idx; // depth-first index in tree
-    };
+    bool intersectP(const Ray & ray);
 
     enum SplitMethod { SAH, HLBVH, Middle, EqualCounts };
 
@@ -28,6 +27,13 @@ public:
         const SplitMethod splitMethod = Middle,
         const uint32 maxPrimInNode = 4
         );
+
+private:
+    int FlattenTree(BuildNode *node, int *offset);
+
+    std::vector<std::shared_ptr<Primitive>> primitives;
+    SplitMethod splitMethod;
+    std::vector<LinearNode> nodes;
 };
 
 std::shared_ptr<BVHAccel> CreateBVH(const nlohmann::json &j,

@@ -51,7 +51,7 @@ class Bsdf;
             return vec3();
         }
 
-        BoundingBox BB() const
+        Bounds3 BB() const
         {
             return BB_;
         }
@@ -75,7 +75,7 @@ class Bsdf;
         Float area;
         Float inv_area;
 
-        BoundingBox BB_;
+        Bounds3 BB_;
 
     };
 
