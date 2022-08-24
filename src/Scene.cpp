@@ -7,6 +7,8 @@
 
 #include "Primitives/Triangle.hpp"
 #include "Primitives/Sphere.hpp"
+#include "Primitives/Quad.hpp"
+#include "Primitives/Cube.hpp"
 Scene::Scene(const nlohmann::json j) {
 //    std::unordered_map<std::string,nlohmann::json> bsdf_jsons =j.at("bsdfs");
 //
@@ -26,16 +28,22 @@ Scene::Scene(const nlohmann::json j) {
     auto loadTriangle = [](const nlohmann::json & json,std::shared_ptr<Bsdf> bsdf){
         return nullptr;
     };
-    auto loadQuadric = [](const nlohmann::json & json,std::shared_ptr<Bsdf> bsdf){
-        return nullptr;
+    auto loadQuad = [](const nlohmann::json & json,std::shared_ptr<Bsdf> bsdf){
+        return std::make_shared<Quad>(bsdf);
     };
+    auto loadCube = [](const nlohmann::json & j,std::shared_ptr<Bsdf> bsdf){
+        return std::make_shared <Cube>(bsdf);
+    };
+
 
     std::unordered_map<std::string,
         std::function<std::shared_ptr<Primitive>(const nlohmann::json,std::shared_ptr<Bsdf> bsdf)>
         >loadMap{{"object",loadObject},
                     {"sphere",loadSphere},
                     {"triangle",loadTriangle},
-                    {"quadric",loadQuadric}};
+                    {"quad",loadQuad},
+                    {"cube",loadCube}
+    };
 
 
     std::unordered_map<std::string,
@@ -58,14 +66,8 @@ Scene::Scene(const nlohmann::json j) {
 
         //get transform
         std::unique_ptr<Transform> transform;
-        if (p.find("position") != p.end() || p.find("scale") != p.end() || p.find("rotation") != p.end())
-        {
-            transform = std::make_unique<Transform>(
-                    getOptional(p, "position", vec3(0.0)),
-                    getOptional(p, "scale", vec3(1.0)),
-                    radians(getOptional(p, "rotation", vec3(0.0)))
-            );
-        }
+        if(p.contains("transform"))
+            transform = std::make_unique<Transform>(p["transform"]);
 
 
         std::string type = p.at("type");
@@ -73,9 +75,7 @@ Scene::Scene(const nlohmann::json j) {
         if(type=="object"){  // load shapes
             std::vector<vec3> v, n;
             std::vector<std::vector<size_t>> triangles_v, triangles_vt, triangles_vn;
-
 //            auto vertices = getOptional(j, "vertices", std::unordered_map<std::string,vec3 []>());
-
             std::vector<std::shared_ptr<Primitive>> triangles;
 
             if(p.find("vertex_set")!=p.end()){//vertex object
@@ -102,10 +102,13 @@ Scene::Scene(const nlohmann::json j) {
         {
         std::shared_ptr<Primitive>  primitive= loadMap[type](p,bsdf);
 
-        if(primitive)
-            if(transform) primitive->transform(*transform);
-            primitives.push_back(primitive);
-        handleAddLight(p,primitives.size()-1,primitives.size());
+        if(transform) primitive->transform(*transform);
+        if(primitive->bsdf->name=="light" || primitive->bsdf->name=="shortBox" || primitive->bsdf->name=="tallBox"
+        || true
+        )
+        {    primitives.push_back(primitive);
+             handleAddLight(p,primitives.size()-1,primitives.size());
+        }
         }
     }
 
@@ -117,6 +120,14 @@ Scene::Scene(const nlohmann::json j) {
     spdlog::info("{} Primitives",primitives.size());
     spdlog::info("{} lights",lights.size());
     spdlog::info("{} Bsdfs",bsdfs.size());
+
+    getOptional(j["renderer"],"scene_bvh",_useBVH);
+
+    if(_useBVH){
+        bvh = std::make_unique<BVHAccel>(primitives);
+    }
+
+
 }
 
 
@@ -131,7 +142,6 @@ void Scene::handleAddLight(const nlohmann::json & p,size_t l,size_t r){
             for(size_t i=l;i<r;i++) totalArea+=primitives[i]->Area();
             invArea=1/ totalArea;
             for(size_t i=l;i<r;i++){
-
                 // flux to radiosity
                 auto light = std::make_shared <AreaLight>(this->primitives[i],albedo * invArea) ;
 
@@ -140,18 +150,34 @@ void Scene::handleAddLight(const nlohmann::json & p,size_t l,size_t r){
             }
         }
     }
+    Spectrum  emission;
+    if( containsAndGet(p,"emission",emission)){
+        for(size_t i=l;i<r;i++){
+            auto light = std::make_shared <AreaLight>(this->primitives[i],emission) ;
+            this->primitives[i]->areaLight =light;
+            lights.push_back(light);
+        }
+    }
+
     return ;
 }
 
 
 
 std::optional<Intersection> Scene::intersect(const Ray &ray) const {
+    if(_useBVH){
+      //  return bvh->intersect(ray);
+    }
+
     std::optional<Intersection> minIntersection;
     Ray _ray(ray);
     for(auto primitive : primitives) {
 //        if(primitive->bsdf.get()== nullptr){
 //            int k=1;
 //        }
+        if(primitive->bsdf->name=="ceiling"){
+            int k=1;
+        }
         auto its = primitive->intersect(_ray);
         if ( its.has_value() )
         {
@@ -162,15 +188,17 @@ std::optional<Intersection> Scene::intersect(const Ray &ray) const {
 }
 
 bool Scene::intersectP(const Ray & ray) const {
-    if(_useBVH){
+    if(_useBVH && false){
+        return bvh->intersectP(ray);
     }
-
-    Ray _ray(ray);
-
-    for(auto primitive:primitives){
-        auto its = primitive->intersect(_ray);
-        if(its.has_value())
+    else
+    {
+        Ray _ray(ray);
+        for(auto primitive:primitives){
+         auto its = primitive->intersect(_ray);
+         if(its.has_value())
             return true;
+         }
     }
 
     return false;

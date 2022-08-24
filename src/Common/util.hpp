@@ -3,26 +3,42 @@
 #include "nlohmann/json.hpp"
 
 
-
 namespace  glm{
     void from_json(const nlohmann::json &j, vec3 &v);
+    void from_json(const nlohmann::json &j, ivec2 &v);
 }
+
 
 
 struct Transform
 {
     Transform(const vec3 &position, const vec3 &scale, const vec3 &rotation);
 
+    Transform():position(),scale(),rotation() {}
+
+
     vec3 transformNormal(const vec3 & normal) const;
 
-    vec3 operator()(const vec3 point) const {
-        return matrix * vec4(point,1.0);
+    vec3 operator * (const vec3 point) const {
+        const mat4 & a =matrix;
+        return vec3(
+                a[0][0]*point.x + a[0][1]*point.y + a[0][2]*point.z + a[0][3],
+                a[1][0]*point.x + a[1][1]*point.y + a[1][2]*point.z + a[1][3],
+                a[2][0]*point.x + a[2][1]*point.y + a[2][2]*point.z + a[2][3]
+        );
+    }
+
+    vec3 transformVector(const vec3 & vec) const {
+        return mult(matrix,vec4(vec,0));
     }
 
     mat4 matrix, rotation_matrix;
     const vec3  position, scale, rotation;
     bool negative_determinant;
 };
+
+void from_json(const nlohmann::json & j,Transform & transform);
+
 
 template <class T>
 inline T getOptional(const nlohmann::json &j, std::string field, T default_value)
@@ -34,6 +50,19 @@ inline T getOptional(const nlohmann::json &j, std::string field, T default_value
     }
     return ret;
 }
+
+template <class T>
+inline  bool containsAndGet(const nlohmann::json &j, std::string field, T & value)
+{
+    if (j.find(field) != j.end())
+    {
+        value = j.at(field).get<T>();
+        return true;
+    }
+    return false;
+}
+
+
 
 /// Simple floating point clamping function
 

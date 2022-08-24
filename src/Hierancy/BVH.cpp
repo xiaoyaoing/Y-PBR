@@ -1,46 +1,84 @@
 #include "BVH.hpp"
+#include "../Common/Macro.hpp"
+#include "set"
+#include "iostream"
+#include "spdlog/spdlog.h"
+static int BuildNodeCount = 0;
 
+struct BuildNode {
+    BuildNode( ) {}
 
-static int BuildNodeCount=0;
-
-struct BuildNode
-{
-    BuildNode() { }
-
-
-    void initLeaf(int off,int n,Bounds3 bounds3){
-        firstPrimOffset = off;
-        nPrimitives=n;
-        bounds3=std::move(bounds3);
+    std::optional<Intersection> intersect(    std::vector < std::shared_ptr < Primitive>> primitives
+    ,Ray & ray){
+        std::optional<Intersection> val;
+        if(nPrimitives){
+            for(int i=firstPrimOffset;i<firstPrimOffset+nPrimitives;i++){
+                auto its=primitives[i]->intersect(ray);
+                if(its.has_value()) val=its;
+            }
+        }
+        else {
+        auto val1=children[0]->intersect(primitives,ray);
+        if(val1.has_value()) val=val1;
+         val1=children[1]->intersect(primitives,ray);
+            if(val1.has_value()) val=val1;
+        }
+        return val;
     }
-    void    initInterior(int dim,BuildNode *  left, BuildNode * right )
-    {
-        nPrimitives=0;
-        splitAxis=dim;
-        children[0]=left;
-        children[1]=right;
+
+    void initLeaf(int off, int n, Bounds3 bounds3) {
+        if(off<=14 && 14<off+n){
+            int k=1;
+        }
+        firstPrimOffset = off;
+        nPrimitives = n;
+        bounds3 = std::move(bounds3);
+    }
+
+    void initInterior(int dim, BuildNode * left, BuildNode * right) {
+        nPrimitives = 0;
+        splitAxis = dim;
+        children[0] = left;
+        children[1] = right;
+    }
+
+    //for debug
+    void logInfo(bool logInterior,bool logLeaf){
+        bool isLeaf=(nPrimitives>0);
+        if(isLeaf && logLeaf){
+            spdlog::info("Leaf Node start idx:{0} primNum:{1}",firstPrimOffset,nPrimitives);
+        }
+        if(!isLeaf && logInterior){
+            spdlog::info("Interior node children : ");
+        }
+
+        if(!isLeaf){
+            children[0]->logInfo(logInterior,logLeaf);
+            children[1]->logInfo(logInterior,logLeaf);
+        }
     }
 
     Bounds3 BB;
-    BuildNode *children[2];
-    std::vector<std::shared_ptr<Primitive>> primitives;
+    BuildNode * children[2];
     int firstPrimOffset;
     int nPrimitives;
     int splitAxis;
 };
 
-struct BVHPrimitiveInfo{
-    BVHPrimitiveInfo() {}
-    BVHPrimitiveInfo(size_t primitiveNumber, const Bounds3 &bounds)
+struct BVHPrimitiveInfo {
+    BVHPrimitiveInfo( ) {}
+
+    BVHPrimitiveInfo(size_t primitiveNumber, const Bounds3 & bounds)
             : primitiveNumber(primitiveNumber),
               bounds(bounds),
               centroid(.5f * bounds.pMin + .5f * bounds.pMax) {}
+
     size_t primitiveNumber;
     Bounds3 bounds;
     vec3 centroid;
 };
 
-struct alignas(32) LinearNode{
+struct alignas(32) LinearNode {
     Bounds3 bounds;
     union {
         int primitivesOffset;   // leaf
@@ -51,173 +89,241 @@ struct alignas(32) LinearNode{
 };
 
 
-BVHAccel::BVHAccel(const std::vector < std::shared_ptr < Primitive>> & primitives, const SplitMethod splitMethod,
-                   const uint32 maxPrimInNode) {
-    if(primitives.empty()) return ;
+BVHAccel::BVHAccel( std::vector < std::shared_ptr < Primitive>>   p,
+                   const SplitMethod splitMethod,
+                   const uint32 maxPrimInNode) : splitMethod(splitMethod),primitives(std::move(p))
+                   {
+    if ( primitives.empty() ) return;
 
-    //Take the primitive and its spatial information apart
-    std::vector<BVHPrimitiveInfo> primitiveInfo(primitives.size());
-    for (size_t i = 0; i < primitives.size(); ++i)
+    //Take the primitive and its spatial information apart8
+    std::vector < BVHPrimitiveInfo > primitiveInfo(primitives.size());
+    for ( size_t i = 0 ; i < primitives.size() ; ++ i )
         primitiveInfo[i] = {i, primitives[i]->BB()};
 
-    std::vector<std::shared_ptr<Primitive>> orderedPrims;
+    std::vector < std::shared_ptr < Primitive>> orderedPrims;
+    BuildNode * node = RecursiveBuild(primitiveInfo, 0, primitives.size(), orderedPrims);
+    node->logInfo(true,true);
+    spdlog::info("Build Num {0}", BuildNodeCount);
+    primitives.swap(orderedPrims);
+    nodes = new LinearNode[BuildNodeCount];
+    int offset = 0;
+    FlattenTree(node, & offset);
+    spdlog::info("BVH Constructed");
 
-    BuildNode * node = RecursiveBuild(primitiveInfo,0,primitives.size(),orderedPrims);
+    root=node;
 
-    nodes.resize(BuildNodeCount);
-    int offset=0;
-    FlattenTree(node,&offset);
+#ifdef _DEBUG
+    int leafNum = 0, interiorNum = 0, primitiveNum = 0;
+    for ( int idx = 0 ; idx < BuildNodeCount ; idx ++ ) {
+        LinearNode & node = nodes[idx];
+        if ( node.nPrimitives ) {
+            leafNum ++;
+            primitiveNum += node.nPrimitives;
+        } else {
+            interiorNum ++;
+        }
+    }
+    spdlog::info("NodeNum:{0} LeafNum:{1} interiorNum{2} PrimNum:{3}",
+                 BuildNodeCount, leafNum, interiorNum, primitiveNum);
+#endif
 }
 
-BuildNode  *  BVHAccel::RecursiveBuild( std::vector<BVHPrimitiveInfo> &primitiveInfo, int start, int end,
-                            std::vector<std::shared_ptr<Primitive>> &orderedPrims ){
-    if(start == end){
+BuildNode * BVHAccel::RecursiveBuild(std::vector < BVHPrimitiveInfo > & primitiveInfo, int start, int end,
+                                     std::vector < std::shared_ptr < Primitive>> & orderedPrims) {
+    if ( start == end ) {
         return nullptr;
     }
-    BuildNodeCount++;
+    BuildNodeCount ++;
     Bounds3 bounds;
-    for(int i=start;i<end;i++){
-        bounds = Union(bounds,primitiveInfo[i].bounds);
+    for ( int i = start ; i < end ; i ++ ) {
+        bounds = Union(bounds, primitiveInfo[i].bounds);
     }
 
     BuildNode * node = new BuildNode;
-    int nPrimitives = end-start;
+    node->BB = bounds;
 
+    int nPrimitives = end - start;
     //Only single primitive
-    if(nPrimitives==1){
-        int primIdx= orderedPrims.size();
-        orderedPrims.push_back(primitives[primIdx]);
-        node->initLeaf(primIdx,nPrimitives,bounds);
+    if ( nPrimitives == 1 ) {
+        node->initLeaf(orderedPrims.size(), nPrimitives, bounds);
+        for ( int i = start ; i < end ; ++ i ) {
+            orderedPrims.push_back(primitives[primitiveInfo[i].primitiveNumber]);
+        }
         return node;
     }
 
     Bounds3 centroidBounds;
-    for (int i = start; i < end; ++i)
+    for ( int i = start ; i < end ; ++ i )
         centroidBounds = Union(centroidBounds, primitiveInfo[i].centroid);
     int dim = centroidBounds.MaximumExtent();
 
 
     //All primitives are in one dimension
-    if(centroidBounds.pMax[dim] == centroidBounds.pMin[dim]){
-        int primIdx=primitiveInfo[start].primitiveNumber;
-        orderedPrims.insert(orderedPrims.end(),&primitives[primIdx],&primitives[primIdx]+nPrimitives);
-        node->initLeaf(primIdx,nPrimitives,bounds);
+    if ( centroidBounds.pMax[dim] == centroidBounds.pMin[dim] ) {
+        int primIdx = primitiveInfo[start].primitiveNumber;
+        node->initLeaf(orderedPrims.size(), nPrimitives, bounds);
+        for ( int i = start ; i < end ; ++ i ) {
+            orderedPrims.push_back(primitives[primitiveInfo[i].primitiveNumber]);
+        }
         return node;
     }
 
-    int mid = (start+end)/2;
+    int mid = ( start + end ) / 2;
 
     switch ( splitMethod ) {
-        case Middle:{
-            Float pmid =(centroidBounds.pMin[dim] + centroidBounds.pMax[dim]) / 2;
+        case Middle: {
+            Float pmid = ( centroidBounds.pMin[dim] + centroidBounds.pMax[dim] ) / 2;
             BVHPrimitiveInfo * midPtr = std::partition(
-                    &primitiveInfo[start], &primitiveInfo[end - 1] + 1,
-                    [dim, pmid](const BVHPrimitiveInfo &pi) {
+                    & primitiveInfo[start], & primitiveInfo[end - 1] + 1,
+                    [dim, pmid](const BVHPrimitiveInfo & pi) {
                         return pi.centroid[dim] < pmid;
                     });
-            mid = midPtr - &primitiveInfo[0];
-            break;
+            mid = midPtr - & primitiveInfo[0];
+            if ( mid != start && mid != end ) break;
         }
-        case EqualCounts:{
-            mid = (start + end) / 2;
-            std::nth_element( &primitiveInfo[start], &primitiveInfo[mid],
-                              &primitiveInfo[end - 1] + 1,
-                              [dim](const BVHPrimitiveInfo &a,
-                                    const BVHPrimitiveInfo &b) {
-                                  return a.centroid[dim] < b.centroid[dim];
-                              });}
+        case EqualCounts: {
+            mid = ( start + end ) / 2;
+            std::nth_element(& primitiveInfo[start], & primitiveInfo[mid],
+                             & primitiveInfo[end - 1] + 1,
+                             [dim](const BVHPrimitiveInfo & a,
+                                   const BVHPrimitiveInfo & b) {
+                                 return a.centroid[dim] < b.centroid[dim];
+                             });
+        }
             break;
-        default:
-            ; //todo
+        default:; //todo
     }
 
-    int primIdx= orderedPrims.size();
     node->initInterior(dim,
-                       RecursiveBuild(primitiveInfo,start,mid,orderedPrims),
-                       RecursiveBuild(primitiveInfo,mid,end,orderedPrims)
-                       );
+                       RecursiveBuild(primitiveInfo, start, mid, orderedPrims),
+                       RecursiveBuild(primitiveInfo, mid, end, orderedPrims)
+    );
 
     return node;
 }
 
-//To be honest, I don't know why PBRT flatten the tree, it's probably for performance reasons,
-// and I'll follow along
-int  BVHAccel::FlattenTree(BuildNode * node, int * offset) {
-    LinearNode *linearNode = &nodes[*offset];
+//To be honest, I don't know why PBRT flatten the tree, it's probably for performance reasons.
+// Anyway, I'll follow this.
+int BVHAccel::FlattenTree(BuildNode * node, int * offset) {
+    LinearNode * linearNode = & nodes[* offset];
     linearNode->bounds = node->BB;
-    (*offset)++;
-    int myOffset=*offset;
-    if(node->nPrimitives>0){
-        linearNode->primitivesOffset=node->firstPrimOffset;
-        linearNode->nPrimitives=node->nPrimitives;
-    }
-    else {
-        linearNode->axis=node->splitAxis;
-        FlattenTree(node->children[0],offset);
-        linearNode->secondChildOffset = FlattenTree(node->children[1],offset);
+    int myOffset = ( * offset ) ++;
+    if ( node->nPrimitives > 0 ) {
+        linearNode->primitivesOffset = node->firstPrimOffset;
+        linearNode->nPrimitives = node->nPrimitives;
+    } else {
+        linearNode->nPrimitives = 0;
+        linearNode->axis = node->splitAxis;
+        FlattenTree(node->children[0], offset);
+        linearNode->secondChildOffset = FlattenTree(node->children[1], offset);
     }
     return myOffset;
-
 }
 
-std::optional < Intersection > BVHAccel::intersect(const Ray & ray) {
-    if(nodes.empty()){
+std::optional < Intersection > BVHAccel::intersect(const Ray & ray) const {
+    if ( ! nodes ) {
         return std::nullopt;
     }
-
     Ray _ray(ray);
 
     vec3 invDir(1 / ray.d.x, 1 / ray.d.y, 1 / ray.d.z);
     int dirIsNeg[3] = {invDir.x < 0, invDir.y < 0, invDir.z < 0};
 
     int toVisit[64];
-    int visitIdx=0;
-    int curNodeIdx=0;
-
-    Intersection res;
-    while(true){
-        LinearNode & curNode=nodes[curNodeIdx];
-        if(curNode.bounds.IntersectP(ray,invDir,dirIsNeg)){
-            //left node case
-            if(curNode.nPrimitives>0){
-                for (int i = 0; i < curNode.nPrimitives; ++i)
-                {
-                    auto its=primitives[curNode.primitivesOffset + i]->intersect(_ray);
-                    if(its.has_value()) res=its.value();
+    int visitIdx = 0;
+    int curNodeIdx = 0;
+    std::optional < Intersection > res;
+    int searchCount = 0;
+    while ( true ) {
+        //spdlog::info("CurNode {0}",curNodeIdx);
+        LinearNode & curNode = nodes[curNodeIdx];
+        searchCount ++;
+        if ( curNode.bounds.IntersectP(ray, invDir, dirIsNeg)   ) {
+            // node case
+            if ( curNode.nPrimitives > 0 ) {
+                //spdlog::info("LeafNode {0} ",curNodeIdx);
+                for ( int i = 0 ; i < curNode.nPrimitives ; ++ i ) {
+                    auto its = primitives[curNode.primitivesOffset + i]->intersect(_ray);
+                    if ( its.has_value() )
+                        res = its;
                 }
-                if(visitIdx==0) break; //no node to visit
+                if ( visitIdx == 0 ) break; //no node to visit
+                curNodeIdx = toVisit[-- visitIdx];
             }
-            //interior node case
+                //interior node case
             else {
                 //near
-                if(dirIsNeg[curNode.axis]){
-                    curNodeIdx +=1;
-                    toVisit[visitIdx++] = curNode.secondChildOffset;
-                }
-                else{
-                    toVisit[visitIdx++] =curNodeIdx+1;
-                    curNodeIdx=curNode.secondChildOffset;
+                if ( dirIsNeg[curNode.axis] ) {
+                    //spdlog::info("push {0} to visitList",curNode.secondChildOffset);
+                    curNodeIdx += 1;
+                    toVisit[visitIdx ++] = curNode.secondChildOffset;
+                } else {
+                    toVisit[visitIdx ++] = curNodeIdx + 1;
+                    curNodeIdx = curNode.secondChildOffset;
+                    //spdlog::info("push {0} to visitList",curNodeIdx+1);
+
                 }
             }
+        } else {
+            //spdlog::info("CurNode not hit  {0}",curNodeIdx);
+            if ( visitIdx == 0 ) break;
+            curNodeIdx = toVisit[-- visitIdx];
         }
-        else {
-            curNodeIdx=toVisit[visitIdx--];
-        }
-
     }
 
-
-
-
-}
-
-bool BVHAccel::intersectP(const Ray & ray) {
+    // spdlog::info("SearchCount :{0}",searchCount);
+    return res;
 
 }
 
-std::shared_ptr<BVHAccel> CreateBVH(const nlohmann::json &j,
-                                    const std::vector<std::shared_ptr<Primitive>> primitives
-){
+bool BVHAccel::intersectP(const Ray & ray) const {
+    if ( ! nodes ) {
+        return false;
+    }
+    Ray _ray(ray);
+    //return root->intersect(primitives,_ray);
 
-    return std::make_shared <BVHAccel>(primitives);
+    vec3 invDir(1 / ray.d.x, 1 / ray.d.y, 1 / ray.d.z);
+    int dirIsNeg[3] = {invDir.x < 0, invDir.y < 0, invDir.z < 0};
+
+    int toVisit[64];
+    int visitIdx = 0;
+    int curNodeIdx = 0;
+    int searchCount = 0;
+    while ( true ) {
+        LinearNode & curNode = nodes[curNodeIdx];
+        searchCount ++;
+        if ( curNode.bounds.IntersectP(ray, invDir, dirIsNeg)   ) {
+            // node case
+            if ( curNode.nPrimitives > 0 ) {
+                for ( int i = 0 ; i < curNode.nPrimitives ; ++ i ) {
+                    auto its = primitives[curNode.primitivesOffset + i]->intersect(_ray);
+                    if ( its.has_value() )
+                        return true;
+                }
+                if ( visitIdx == 0 ) break; //no node to visit
+                curNodeIdx = toVisit[-- visitIdx];
+            }
+            else {
+                if ( dirIsNeg[curNode.axis] ) {
+                    curNodeIdx += 1;
+                    toVisit[visitIdx ++] = curNode.secondChildOffset;
+                } else {
+                    toVisit[visitIdx ++] = curNodeIdx + 1;
+                    curNodeIdx = curNode.secondChildOffset;
+                }
+            }
+        } else {
+            if ( visitIdx == 0 ) break;
+            curNodeIdx = toVisit[-- visitIdx];
+        }
+    }
+    return false;
+}
+
+std::unique_ptr < BVHAccel > CreateBVH(const nlohmann::json & j,
+                                       const std::vector < std::shared_ptr < Primitive>> & primitives
+) {
+
+    return std::make_unique < BVHAccel >(primitives);
 }

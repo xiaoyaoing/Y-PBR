@@ -37,7 +37,7 @@ public:
 
     virtual std::optional < Intersection > intersect(Ray & ray) const;
 
-    virtual vec3 operator()(double u, double v) const;
+    virtual vec3 operator()(Float u, Float v) const;
 
     virtual vec3 normal(const vec3& pos) const;
 

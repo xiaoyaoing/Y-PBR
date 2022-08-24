@@ -7,13 +7,20 @@
 #include <nlohmann/json.hpp>
 
 class Camera {
-    vec3 eye;
-    vec3 forward, left, up;
+    vec3 _pos,_lookAt,_up;
+    Float _fovDeg;
+    Float _fovRad;
+    Float _planeDist;  //distance to plane
+    Float _invPlaneArea;
+    Float _ratio;
 
-    Float sensor_width;
-    Float focal_length;
+    ivec2 _res;
+    vec2  _pixelSize;
 
     std::unique_ptr<Image> image;
+
+    Transform _transform;
+
 
     void samplePixel(size_t x,size_t y);
 
@@ -22,10 +29,11 @@ class Camera {
 public:
     Camera(const nlohmann::json & c);
 
+    void preCompute();
 
-    void sampleRay(size_t x, size_t y, size_t width, size_t height, Ray &ray, vec2 sample) const;
+    void sampleRay(size_t x, size_t y, /*size_t width, size_t height,*/ Ray &ray, vec2 sample) const;
 
-    void lookAt(const vec3 &p);
+   // void lookAt(const vec3 &p);
 
     uint32 sample_count  ;
 

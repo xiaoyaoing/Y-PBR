@@ -37,10 +37,19 @@ std::shared_ptr<Material> LoadLambertainMaterial(nlohmann::json & j){
     return material;
 }
 
-std::shared_ptr<Material> LoadGlassMaterial(nlohmann::json j){
+std::shared_ptr<Material> LoadMirrorMaterial(nlohmann::json j){
     std::shared_ptr<Material> material =std::make_shared <Material>();
     //todo support fresnel specular and uRoughness
     material->Add(new SpecularR());
+    return material;
+}
+
+std::shared_ptr<Material> LoadDielectricMaterial(nlohmann::json j){
+    std::shared_ptr<Material> material =std::make_shared <Material>();
+    bool enalbeT = getOptional(j,"enable_refraction",true);
+    Float ior   = j["ior"];
+    Spectrum  albedo = getOptional(j,"abledo",Spectrum(1));
+    material->Add(new Dielectric(ior,albedo,enalbeT));
     return material;
 }
 
@@ -59,7 +68,8 @@ std::unordered_map<std::string,
             std::function<std::shared_ptr<Material>(nlohmann::json & j)>>
             MaterialLoadTable  = {
             {"lambert" , LoadLambertainMaterial},
-            {"glass", LoadGlassMaterial}
+            {"mirror", LoadMirrorMaterial},
+            {"dielectric", LoadDielectricMaterial}
     };
 
 

@@ -10,13 +10,15 @@
       "look_at": [ 8, -2, -0.4 ],
       "focus_distance": 17,
       "f_stop": 1.8,
-      "sqrtspp": 4
+      "sqrtspp": 4,
+      "sample_count" : 16
     }
   ],
 
   "image":  {
     "width": 960, "height": 540,
-    "outputFileName": "standford_box.ppm"
+    "outputFileName": "standford_box",
+    "exposure_compensation": -2.0, "gain_compensation": 0.0
   },
 
 
@@ -44,68 +46,74 @@
     ]
   },
 
-  "bsdfs": {
-    "default": {
-      "specular_roughness": 0.02,
-      "reflectance": 0.9,
-      "ior": 1.5
+  "bsdfs": [
+    {
+      "name": "leftWall",
+      "albedo": "#b3cc99",
+      "type": "lambert"
     },
-    "floor": {
-      "reflectance": 0.9
+    {
+      "name": "rightWall",
+      "albedo": "#99b5cc",
+      "type": "lambert"
     },
-    "roof": {
-      "reflectance": 0.9
+    {
+      "name": "floor",
+      "albedo": [0.9, 0.9,0.9],
+      "type": "lambert"
     },
-    "backwall": {
-      "reflectance": 0.9
+    {
+      "name": "ceiling",
+      "albedo": [0.9, 0.9,0.9],
+      "type": "lambert"
     },
-    "leftwall": {
-      "reflectance": "#b3cc99"
+    {
+      "name": "backWall",
+      "albedo": [0.9, 0.9,0.9],
+      "type": "lambert"
     },
-    "rightwall": {
-      "reflectance": "#99b5cc"
+    {
+      "name": "shortBox",
+      "albedo": [
+        0.725,
+        0.71,
+        0.68
+      ],
+      "type": "lambert"
     },
-    "brass":     {
-      "specular_roughness": 0.02,
-      "ior": "data/spectral-distributions/brass.csv"
+    {
+      "name": "tallBox",
+      "albedo": [
+        0.725,
+        0.71,
+        0.68
+      ],
+      "type": "lambert"
     },
-    "graphite":  {
-      "specular_roughness": 0.02,
-      "ior": "data/spectral-distributions/graphite.csv"
+    {
+      "name": "light",
+      "albedo": 1,
+      "type": "null"
     },
-    "copper": {
-      "specular_roughness": 0.02,
-      "ior": "data/spectral-distributions/copper.csv"
+    {
+      "name" : "mirror",
+      "type":  "mirror"
     },
-    "glass": {
-      "ior": 1.5,
-      "transparency": 1.0
+    {
+      "name": "IceAir",
+      "albedo": 1.0,
+      "type": "dielectric",
+      "ior": 1.31,
+      "enable_refraction": true
     },
-    "smallsphere": {
-      "specular_roughness": 0.25,
-      "roughness": 0.3,
-      "reflectance": 1.0,
-      "ior": 1.6
-    },
-    "rough-ice": {
-      "specular_roughness": 0.25,
-      "transparency": 1.0,
-      "ior": 1.33
-    },
-    "dragon": {
-      "transmittance": "#ff9d47",
-      "transparency": 1.0,
-      "specular_reflectance": 1.0,
-      "specular_roughness": 0.2,
-      "ior": 1.5
-    },
-    "light": {
-      "emittance": { "illuminant": "D65", "scale": 35 }
-    },
-    "glow-sphere": {
-      "emittance": { "illuminant": "D65", "scale": 15 }
+    {
+      "name": "AirIce",
+      "albedo": 1.0,
+      "type": "dielectric",
+      "ior": 0.763,
+      "enable_refraction": true
     }
-  },
+  ],
 
   "primitives": [
     {
@@ -113,6 +121,10 @@
       "vertex_set": "light",
       "position": [0.0, 0.1, 0.0],
       "bsdf": "light",
+       "light":{
+         "type": "area",
+          "albedo" : [16,16,16]
+       },
       "triangles": [
         [0, 2, 3],
         [0, 3, 1]
@@ -130,7 +142,7 @@
     {
       "type": "object",
       "vertex_set": "room",
-      "bsdf": "rightwall",
+      "bsdf": "rightWall",
       "triangles": [
         [6, 7, 4],
         [7, 5, 4]
@@ -139,7 +151,7 @@
     {
       "type": "object",
       "vertex_set": "room",
-      "bsdf": "leftwall",
+      "bsdf": "leftWall",
       "triangles": [
         [0, 1, 2],
         [1, 3, 2]
@@ -148,7 +160,7 @@
     {
       "type": "object",
       "vertex_set": "room",
-      "bsdf": "backwall",
+      "bsdf": "backWall",
       "triangles": [
         [2, 3, 6],
         [3, 7, 6]
@@ -157,7 +169,7 @@
     {
       "type": "object",
       "vertex_set": "room",
-      "bsdf": "backwall",
+      "bsdf": "backWall",
       "triangles": [
         [4, 0, 1],
         [5, 4, 1]
@@ -175,19 +187,20 @@
     {
       "type": "sphere",
       "radius": 1.5,
-      "bsdf": "glow-sphere",
+      "bsdf": "mirror",
+
       "position": [9.5, -3.48, -3.25]
     },
     {
       "type": "sphere",
-      "radius": 1.25,
-      "bsdf": "brass",
-      "position": [5.72, -3.73, 3.5]
+      "radius": 5,
+      "bsdf": "AirIce",
+      "position": [10, -4.73, 0]
     },
     {
       "type": "sphere",
       "radius": 0.76,
-      "bsdf": "glass",
+      "bsdf": "IceAir",
       "position": [4.33, -4.21, 2.115]
     },
     {

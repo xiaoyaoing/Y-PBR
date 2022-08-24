@@ -29,4 +29,5 @@ private:
     size_t thread_num;
     std::unique_ptr<WorkQueue<Bucket>> render_queue;
     const size_t bucketSize =32;
+    size_t spp;
 };

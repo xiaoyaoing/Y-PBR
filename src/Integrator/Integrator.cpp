@@ -78,16 +78,28 @@ Integrator::EstimateDirect(const Intersection & its, const vec2 & uShading,
     Float lightPdf = 0, scatteringPdf = 0;
     VisibilityTester visibility;
 
+    Spectrum  Ld(0);
 
     auto Li = light.Sample_Li(its,uLight,&wi,&lightPdf,&visibility);
 //
-//    if( isBlack(Li) || !visibility.Unoccluded(scene)){
-//        return Spectrum();
-//    }
+    if(isBlack(Li)
+    // || !visibility.Unoccluded(scene)
+    ){
+        return Spectrum();
+    }
 
-    auto f = its.bsdf->f(its.wo, its.toLocal(-wi),bsdfFlags) * abs(dot(wi, its.n));
+    if(lightPdf>0)
+    {   auto f = its.bsdf->f(its.wo, its.toLocal(-wi),bsdfFlags) * abs(dot(wi, its.getNormal()));
+        auto t=its.toLocal(-wi);
+       // f=vec3 (1,1,1);
+        Ld+= Li * f / lightPdf;
+        if( isBlack(Ld) && its.bsdf->name=="shortBox"){
+            std::string s = its.bsdf->name;
+            int k=1;
+        }
+    }
 
-    return Li * f / lightPdf;
+    return Ld;
 }
 
 Spectrum

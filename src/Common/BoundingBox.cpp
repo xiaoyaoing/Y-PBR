@@ -26,3 +26,4 @@ bool Bounds3::IntersectP(const Ray & ray, const vec3 & invDir, const int * dirIs
     if (tzMax < tMax) tMax = tzMax;
     return (tMin < ray.farT) && (tMax > 0);
 }
+

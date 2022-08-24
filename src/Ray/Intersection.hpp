@@ -9,11 +9,11 @@ class Primitive ;
 struct Intersection {
     vec3 p;                    //position
     vec3 wo;                   //-ray.d(world space)
-    vec3 n;                    //normal
     Bsdf * bsdf;
     const Primitive * primitive;// Primitive ptr
 
     void setNormal(const vec3 & n); //set normalAndFrame
+    vec3 getNormal() const  {return n; }
 
     vec3 toLocal(const vec3 & w) const ;
 
@@ -22,7 +22,7 @@ struct Intersection {
     Spectrum Le(const vec3 & w) const;
 
 private:
-
+    vec3 n;                    //normal
     Frame shFrame;             //shading Frame
 
 };

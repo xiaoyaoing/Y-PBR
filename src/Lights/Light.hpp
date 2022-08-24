@@ -1,8 +1,7 @@
 #pragma  once
 
-//#include "../Primitives/Primitive.hpp"
 #include "../Colors/Spectrum.hpp"
-#include "../scene.hpp"
+#include "../Ray/Intersection.hpp"
 
 class Scene;
 class Primitive;

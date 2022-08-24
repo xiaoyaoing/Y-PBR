@@ -2,12 +2,15 @@
 #include <thread>
 #include <spdlog/spdlog.h>
 Render::Render(nlohmann::json j) {
-    camera = std::make_unique<Camera>(j.at("camera").at(0));
+    camera = std::make_unique<Camera>(j.at("camera"));
     image = std::make_unique<Image>(j.at("image"));
     scene= std::make_unique<Scene>(j);
     integrator=std::make_unique<PathIntegrator>(j);
     integrator->Preprocess(*scene,*sampler);
     sampler=std::make_shared <UniformSampler>();
+
+    auto renderJson= j["renderer"];
+    spp = getOptional(renderJson,"spp",32);
 }
 
 void Render::sampleImageThread(){
@@ -19,13 +22,12 @@ void Render::sampleImageThread(){
 
         for(size_t y=bucket.min.y;y<bucket.max.y;y++)
         for(size_t x=bucket.min.x;x<bucket.max.x;x++){
-            for(uint32 count=0;count<camera->sample_count;count++)
+            for(uint32 count=0;count<spp;count++)
             {
-                camera->sampleRay(x,y,image->width,image->height,
-                                  ray,threadSampler->getNext2D());
+                camera->sampleRay(x,y,ray,threadSampler->getNext2D());
                 image->addPixel(x,y,integrator->integrate(ray,*scene,*threadSampler));
             }
-            image->dividePixel(x,y,camera->sample_count);
+            image->dividePixel(x,y,spp);
         }
     }
 }
@@ -50,8 +52,8 @@ void Render::sampleImage(){
 
     std::function<void(Render*)> f = &Render::sampleImageThread;
     size_t max_threads = std::thread::hardware_concurrency();
-    spdlog::info("Thread Count {}",max_threads);
 
+    spdlog::info("Thread Count {}",max_threads);
     std::vector<std::unique_ptr<std::thread>> threads(max_threads);
     for (auto& thread : threads)
     {
@@ -68,6 +70,6 @@ void Render::sampleImage(){
 void Render::Go(){
     sampleImage();
     image->postProgress();
+    image->savePNG();
     image->saveTGA();
-    image->savePPM();
 }

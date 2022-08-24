@@ -15,9 +15,8 @@ class AreaLight;
 
 class Bsdf;
 
-    class Primitive
-    {
-    public:
+class Primitive{
+public:
         Primitive(std::shared_ptr<Bsdf> bsdf)
                 : bsdf(bsdf) {
 //            computeArea();
@@ -28,7 +27,7 @@ class Bsdf;
 
         virtual std::optional<Intersection> intersect(Ray& ray) const = 0;
 
-        virtual vec3 operator()(double u, double v) const = 0;
+        virtual vec3 operator()(Float u, Float v) const = 0;
 
         virtual vec3 normal(const vec3& pos) const = 0;
 
@@ -69,7 +68,8 @@ class Bsdf;
 
         std::shared_ptr<AreaLight> areaLight;
 
-    protected:
+    int id;
+protected:
         virtual void computeArea() = 0;
         virtual void computeBoundingBox() = 0;
         Float area;
@@ -80,23 +80,4 @@ class Bsdf;
     };
 
 
-
-    class Quadric : public Primitive
-    {
-    public:
-        Quadric(const nlohmann::json &j, std::shared_ptr<Bsdf> material);
-
-        virtual std::optional < Intersection > intersect(Ray & ray) const;
-        virtual vec3 operator()(double u, double v) const;
-        virtual vec3 normal(const vec3& pos) const;
-        virtual void transform(const Transform &T);
-
-    protected:
-        virtual void computeArea();
-        virtual void computeBoundingBox() { }
-
-    private:
-        glm::dmat4x4 Q; // Quadric matrix
-        glm::dmat4x3 G; // Gradient matrix
-    };
 

@@ -1,9 +1,7 @@
 #pragma  once
 #include "../Common/math.hpp"
-#include "spdlog/spdlog.h"
 #include "../Ray/Ray.hpp"
 //#include "glog/logging.h"
-
 class Bounds3 {
 public:
     // Bounds3 Public Methods

@@ -125,6 +125,51 @@ public:
     Float Pdf(const vec3 & wo, const vec3 & wi) const override;
 };
 
+class Dielectric : public  BXDF {
+public:
+
+    Dielectric(Float ior,Spectrum albedo,bool enableT=true) : BXDF(BXDFType(BSDF_SPECULAR | BSDF_REFLECTION |
+                                                                (enableT?BSDF_TRANSMISSION:0)) ),
+                                                        ior(ior),albedo(albedo),enableT(enableT){
+       invIor = 1.0f/ior;
+    }
+
+    Spectrum f(const vec3 & wo, const vec3 & wi) const override;
+
+    Float Pdf(const vec3 & wo, const vec3 & wi) const override;
+
+    Spectrum sampleF(const vec3 & wo, vec3 * wi, const vec2 & u, Float * pdf, BXDFType * sampledType) const override;
+
+    void LogInfo( ) const override;
+
+private:
+    Spectrum albedo;
+    Float  ior,invIor;
+    bool  enableT;
+};
+
+class Conductor : public BXDF {
+public:
+    Conductor();
+
+    Spectrum f(const vec3 & wo, const vec3 & wi) const override;
+
+    Float Pdf(const vec3 & wo, const vec3 & wi) const override;
+
+    Spectrum sampleF(const vec3 & wo, vec3 * wi, const vec2 & u, Float * pdf, BXDFType * sampledType) const override;
+
+    void LogInfo( ) const override;
+};
+
+class OrenNayar : public  BXDF{
+public:
+    OrenNayar(const Spectrum &R, Float sigma);
+
+private:
+    const Spectrum R;
+    Float A, B;
+};
+
 
 
 

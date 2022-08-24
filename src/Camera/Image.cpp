@@ -4,7 +4,7 @@
 #include <spdlog/spdlog.h>
 #include "../Common/histogram.hpp"
 #include "../Common/util.hpp"
-
+#include "ImageIO.hpp"
 void Image::savePPM() const {
         std::ofstream file(outputFileName+".ppm");
 
@@ -26,17 +26,19 @@ void Image::savePPM() const {
         }
         file.close();
         spdlog::info("Write to {0}",outputFileName+".ppm");
-
 }
+
+
 
 void Image::saveTGA( ) const {
     HeaderTGA header((uint16_t)width, (uint16_t)height);
     std::ofstream file(outputFileName + ".tga", std::ios::binary);
     file.write(reinterpret_cast<char*>(&header), sizeof(header));
-    vec3 averageRadiance;
+    vec3 averageRadiance(0);
     for (unsigned int i = 0; i < height; ++i) {
         for (unsigned int j = 0; j < width; ++j){
             const vec3 rgb = getPixel(j, i);
+
             averageRadiance+=rgb/Float(pixels.size());
             vec3 c = glm::clamp(rgb, vec3(0.0), vec3(1.0)) * Float(255.0);
             std::vector<uint8_t> fp={ (uint8_t)c.b, (uint8_t)c.g, (uint8_t)c.r };
@@ -47,10 +49,27 @@ void Image::saveTGA( ) const {
     file.close();
     spdlog::info("Average Radiance {0} {1} {2}",averageRadiance.r,averageRadiance.g,averageRadiance.b);
     spdlog::info("Write to {0}",outputFileName+".tga");
-
 }
 
 
+void Image::savePNG( ) const {
+    std::vector<unsigned  char>  image;
+    image.resize(4*width*height);
+
+    for(unsigned y = 0; y < height; y++)
+        for(unsigned x = 0; x < width; x++) {
+            vec3  rgb = getPixel(x,y);
+            image[4 * width * y + 4 * x + 0] = uint8(rgb.r);
+            image[4 * width * y + 4 * x + 1] = uint8(rgb.g);
+            image[4 * width * y + 4 * x + 2] = uint8(rgb.b);
+            image[4 * width * y + 4 * x + 3] = 255;
+        }
+
+    savePng(outputFileName+".png",image,width,height,4);
+    spdlog::info("Write to {0}",outputFileName+".png");
+
+
+}
 
 
 vec3 Image::getPixel(int x, int y) const {
@@ -65,33 +84,35 @@ uint32 Image::getIndex(uint32 x, uint32 y) const {
 
 void Image::addPixel(uint32 x, uint32 y, vec3 rgb) {
     auto idx = getIndex(x,y);
-
+if( isnan(rgb.x) || (x==0 && y==0)){
+        int k=1;
+    }
     if(rgb.x<0 || rgb.y<0 || rgb.z<0 || rgb.x>1|| rgb.y>1 || rgb.z>1){
-        spdlog::error("Invalid radiance R:{} G:{} B:{}",rgb.x,rgb.y,rgb.z);
+      //  spdlog::error("Invalid radiance R:{} G:{} B:{}",rgb.x,rgb.y,rgb.z);
 //        rgb.x=std::min(rgb.x,Float(1));
 //        rgb.y=std::min(rgb.y,Float(1));
 //        rgb.z=std::min(rgb.z,Float(1));
     }
-
-    pixels[idx].rgb=rgb*1.5f;
+    auto t= pixels[idx].rgb;
+    pixels[idx].rgb+=rgb;
 }
 
 Image::Image(nlohmann::json j) {
     width=j.at("width");
     height=j.at("height");
-    outputFileName=j.at("outputFileName");
+    outputFileName=j.at("output_file");
     plain=false;
-
     Float exposure_EV = getOptional(j, "exposure_compensation", 0.0);
     Float gain_EV = getOptional(j, "gain_compensation", 0.0);
     exposure_scale = std::pow(2, exposure_EV);
     gain_scale = std::pow(2, gain_EV);
 
-    toneMapType=ToneMap::Aces;
-    pixels.resize(width*height);
+    toneMapType=ToneMap::Filmic;
+    pixels.resize(width*height,Pixel());
 }
 
 void Image::dividePixel(uint32 x, uint32 y, uint32 count) {
+    auto t=pixels[getIndex(x,y)].rgb;
     pixels[getIndex(x,y)].rgb/=Float(count);
 }
 
@@ -99,11 +120,10 @@ void Image::postProgress(){
     Float exposure_factor = plain ? 1.0 : getExposure() * exposure_scale;
     Float gain_factor = plain ? 1.0 : getGain(exposure_factor) * gain_scale;
 
-    spdlog::info("Tone Mapping Type: {0}",toneMapType);
-    spdlog::info("Exposure {0} Gain {1}",exposure_factor,gain_factor);
+    spdlog::info("Tone Mapping Type: {0} plain {1}",toneMapType,plain);
+    spdlog::info("Exposure {0} Gain {1} ",exposure_factor,gain_factor);
     for(int i=0;i<pixels.size();i++){
-        pixels[i].rgb=gammaCompress(
-                            ToneMap::toneMap(toneMapType,pixels[i].rgb * exposure_factor) * gain_factor);
+        pixels[i].rgb = clamp(255.f * ToneMap::toneMap(toneMapType,pixels[i].rgb),vec3(0),255.f*vec3(1));
        // pixels[i].rgb=ToneMap::toneMap(ToneMap::Filmic,pixels[i].rgb);
     }
 }
@@ -120,6 +140,7 @@ Float Image::getExposure() const
     {
         brightness[i] = compAdd(pixels[i].rgb) / 3.0;
     }
+
     Histogram histogram(brightness, 65536);
     Float L = histogram.level(0.5);
     return L > 0.0 ? 0.5 / L : 1.0;

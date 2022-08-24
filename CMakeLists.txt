@@ -2,32 +2,68 @@ cmake_minimum_required(VERSION 3.10)
 project(Y-PBR)
 
 
-set (CMAKE_C_COMPILER "/usr/local/bin/g++-11")
-set (CMAKE_CXX_COMPILER "/usr/local/bin/g++-11")
+
+#set (CMAKE_C_COMPILER "/usr/local/bin/gcc-11")
+#set (CMAKE_CXX_COMPILER "/usr/local/bin/g++-11")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+set(YPBR_DEPENDENCIES_DIR ${PROJECT_SOURCE_DIR}/lib)
+set(YPBR_SOURCES_DIR ${PROJECT_SOURCE_DIR}/src)
 
-
-
-include_directories(${PROJECT_SOURCE_DIR}/lib/glm/)
 include_directories(${PROJECT_SOURCE_DIR}/lib/nlohmann/)
-include_directories(${PROJECT_SOURCE_DIR}/lib/spdlog/)
+include_directories(${PROJECT_SOURCE_DIR}/lib/loadpng/)
+
+include_directories(${YPBR_DEPENDENCIES_DIR})
+include_directories(${YPBR_SOURCE_DIR})
+
+## complie for dependencies
+set(ASSIMP_BUILD_ASSIMP_TOOLS OFF)
+add_subdirectory(${YPBR_DEPENDENCIES_DIR})
+
+if(NOT TARGET spdlog)
+    find_package(spdlog REQUIRED)
+endif()
 
 
-file(GLOB_RECURSE _source_list ${PROJECT_SOURCE_DIR}/src/*.cpp ${PROJECT_SOURCE_DIR}/src/*.hpp )
+## complie for Zero
+file(GLOB_RECURSE YPBR_SOURCES ${YPBR_SOURCES_DIR}/*.cpp lib/lodepng/lodepng.cpp)
+link_libraries(spdlog::spdlog )
+add_subdirectory(./test)
+#
+#
+#
+#
+#
+#if(NOT TARGET spdlog)
+#    find_package(spdlog REQUIRED)
+#endif()
+#
+#
+#include_directories(${PROJECT_SOURCE_DIR}/lib/glm/)
+#include_directories(${PROJECT_SOURCE_DIR}/lib/nlohmann/)
+#
+#
+#enable_testing()
+#add_subdirectory(lib/gtest)
+#include_directories(lib/gtest)
+#add_tests(tests)
+#
+#
+#file(GLOB_RECURSE _source_list ${PROJECT_SOURCE_DIR}/src/*.cpp ${PROJECT_SOURCE_DIR}/src/*.hpp )
+#
+#
+#foreach(_source IN ITEMS ${_source_list})
+#    get_filename_component(_source_path "${_source}" PATH)
+#    string(REPLACE "${CMAKE_SOURCE_DIR}" "" _group_path "${_source_path}")
+#    string(REPLACE "/" "\\" _group_path "${_group_path}")
+#    source_group("${_group_path}" FILES "${_source}")
+#endforeach()
+##
+#message(${_source_list})
+#
+#
+#add_executable(${PROJECT_NAME} ${_source_list} src/Primitives/Cube.hpp  )
+#target_link_libraries(${PROJECT_NAME}  spdlog::spdlog)
 
-
-
-
-foreach(_source IN ITEMS ${_source_list})
-    get_filename_component(_source_path "${_source}" PATH)
-    string(REPLACE "${CMAKE_SOURCE_DIR}" "" _group_path "${_source_path}")
-    string(REPLACE "/" "\\" _group_path "${_group_path}")
-    source_group("${_group_path}" FILES "${_source}")
-endforeach()
-
-message(${_source_list})
-
-add_executable(${PROJECT_NAME} ${_source_list})

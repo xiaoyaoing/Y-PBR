@@ -3,22 +3,25 @@
 #include <nlohmann/json.hpp>
 #include "../Common/math.hpp"
 #include "ToneMap.hpp"
-
+#include "spdlog/spdlog.h"
 
 inline  vec3 gammaCompress(const vec3 &in)
 {
+
     vec3 out;
     for (uint8_t c = 0; c < 3; c++)
     {
         out[c] = in[c] <= 0.0031308 ? 12.92 * in[c] : 1.055 * std::pow(in[c], 1.0 / 2.4) - 0.055;
     }
+
+//    spdlog::info("{0} {1}", toColorStr(in), toColorStr(out));
     return out;
 }
 
 class Image{
 
     struct Pixel{
-        vec3 rgb;
+        vec3 rgb = vec3(0);
     };
 
     /**************************************************************************
@@ -60,6 +63,8 @@ public:
     void savePPM() const;
 
     void saveTGA() const;
+
+    void savePNG() const ;
 
     void postProgress();
 

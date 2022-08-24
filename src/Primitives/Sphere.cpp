@@ -25,19 +25,18 @@ std::optional < Intersection > Sphere::intersect(Ray & ray) const {
         if ( t < ray.nearT )
             t = t + 2 * det;
 
+        ray.farT=t;
         intersection.p = ray(t);
         intersection.setNormal(normal(intersection.p));
         intersection.primitive = this;
         intersection.bsdf = bsdf.get();
         return {intersection};
     }
-
-
     return std::nullopt;
 
 }
 
-vec3 Sphere::operator ()(double u, double v) const {
+vec3 Sphere::operator ()(Float u, Float v) const {
 
 }
 
@@ -46,8 +45,11 @@ vec3 Sphere::normal(const vec3 & pos) const {
 }
 
 void Sphere::transform(const Transform & T) {
-    origin = T.position;
-    radius = radius * ( ( T.scale.x + T.scale.y + T.scale.z ) / 3.0 );
+    origin = T * vec3(0,0,0);
+    vec3  scale = extractScale(T.matrix) * vec4(vec3(1.0),0);
+    radius = max(scale);
+    computeBoundingBox();
+    computeArea();
 
 }
 
@@ -57,13 +59,16 @@ void Sphere::computeArea( ) {
 }
 
 void Sphere::computeBoundingBox( ) {
+    BB_ = Bounds3(origin-radius,origin+radius);
     //todo
 }
 
 Intersection Sphere::Sample(const vec2 & u, Float * pdf) const {
     Intersection it;
     it.p = origin + radius * Warp::squareToUniformSphere(u);
-    it.n = normal(it.p);
+    it.setNormal(normal(it.p));
     * pdf = inv_area;
     return it;
 }
+
+

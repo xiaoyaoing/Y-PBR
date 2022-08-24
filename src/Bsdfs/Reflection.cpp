@@ -2,7 +2,7 @@
 #include <spdlog/spdlog.h>
 #include "../Common/Frame.hpp"
 #include "../Sampler/Warp.hpp"
-
+#include "Fresnel.hpp"
 Spectrum Bsdf::f(const vec3 & wo, const vec3 & wi, BXDFType flags) const {
     if ( wo.z == 0 ) return Spectrum();
     bool reflect = Frame::cosTheta(wo) * Frame::cosTheta(wi) > 0;
@@ -165,4 +165,63 @@ SpecularR::sampleF(const vec3 & wo, vec3 * wi,
     *pdf=1;
     *sampledType = BXDFType(BSDF_SPECULAR | BSDF_REFLECTION);
     return Spectrum(1.0);
+}
+
+Spectrum Dielectric::f(const vec3 & wo, const vec3 & wi) const {
+   return Spectrum(0);
+}
+
+Float Dielectric::Pdf(const vec3 & wo, const vec3 & wi) const {
+    // avoid compute specular pdf
+    return 0;
+}
+
+Spectrum Dielectric::sampleF(const vec3 & wo, vec3 * wi, const vec2 & u, Float * pdf, BXDFType * sampledType) const {
+    bool sampleT = enableT;
+    Float  eta = wo.z < 0.0f ? ior : invIor;
+    Float cosThetaT;
+    Float F=Fresnel::DielectricReflectance(eta, std::abs(wo.z), cosThetaT);
+
+    Float reflectionProbability=sampleT?F:1;
+
+    if(u[0]<=reflectionProbability) {   //reflection
+        *wi =Frame::Reflect(wo);
+        *pdf = reflectionProbability;
+        *sampledType = BXDFType(BSDF_REFLECTION | BSDF_SPECULAR);
+        return albedo * F;
+    }
+    else {
+        if(reflectionProbability == 1.0){
+            * pdf =0;
+            return  Spectrum(0);
+        }
+
+        *wi = vec3(-eta*wo.x,-eta*wo.y,-std::copysign(cosThetaT,wo.z));
+        *pdf = 1-reflectionProbability;
+        *sampledType = BXDFType(BSDF_TRANSMISSION | BSDF_SPECULAR);
+        Spectrum  f = albedo * (1-F);
+        return f;
+    }
+
+    return Spectrum();
+}
+
+void Dielectric::LogInfo( ) const {
+    spdlog::info("{DielectricBXDF ior:{0} albedo:{1} enableT{2}:",ior, toColorStr(albedo),enableT);
+}
+
+Spectrum Conductor::f(const vec3 & wo, const vec3 & wi) const {
+    return Spectrum();
+}
+
+Float Conductor::Pdf(const vec3 & wo, const vec3 & wi) const {
+    return 0;
+}
+
+Spectrum Conductor::sampleF(const vec3 & wo, vec3 * wi, const vec2 & u, Float * pdf, BXDFType * sampledType) const {
+    return Spectrum();
+}
+
+void Conductor::LogInfo( ) const {
+
 }

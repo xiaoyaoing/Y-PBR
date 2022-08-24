@@ -3,6 +3,7 @@
 #include "nlohmann/json.hpp"
 #include "Primitives/Primitive.hpp"
 #include "Lights/Light.hpp"
+#include "Hierancy/BVH.hpp"
 
 class Light;
 class Primitive;
@@ -26,6 +27,8 @@ private:
     void handleAddLight(const nlohmann::json & j,size_t l,size_t r);
 
     std::vector<std::shared_ptr<Primitive>> primitives;
+
+    std::unique_ptr<BVHAccel> bvh;
 
     bool _useBVH;
 
