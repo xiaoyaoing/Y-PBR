@@ -40,6 +40,10 @@ public:
     void LogInfo();
 
     std::string name;
+
+//    Float eta(){
+//        return BXDF[]
+//    }
 private:
     BXDF *BXDFs[8];
     int nBXDFs = 0;

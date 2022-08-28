@@ -40,7 +40,7 @@ bool VisibilityTester::Unoccluded(const Scene & scene) const {
     vec3 dir =(p1.p-p0.p);
     Float distance = length(dir);
     dir= normalize(dir);
-    Ray ray(p0.p,dir,Constant::EPSILON,distance-Constant::EPSILON);
-    return scene.intersectP(ray);
+    Ray ray(p0.p+Constant::EPSILON * dir ,dir,Constant::EPSILON,distance-10*Constant::EPSILON);
+    return !scene.intersectP(ray);
 
 }

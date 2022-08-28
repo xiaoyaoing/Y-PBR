@@ -18,12 +18,16 @@ std::optional < Intersection > Sphere::intersect(Ray & ray) const {
         float det = std::sqrt(detSq);
         float t = - B - det;
 
-        if ( t > ray.farT || t + 2 * det < ray.nearT ) {
+        if ( t > ray.farT || t  < ray.nearT ) {
+            t+=2 * det;
+            if(t > ray.farT || t  < ray.nearT)
             return std::nullopt;
         }
 
-        if ( t < ray.nearT )
-            t = t + 2 * det;
+
+
+//        if ( t < ray.nearT )
+//            t = t + 2 * det;
 
         ray.farT=t;
         intersection.p = ray(t);

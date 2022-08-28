@@ -3,6 +3,10 @@
 #include "Integrator.hpp"
 #include "../Sampler/LightDistrib.hpp"
 
+struct PathTraceSettings {
+    bool enableTwoSide;
+};
+
 class PathIntegrator :   Integrator{
 public:
     vec3 integrate(const Ray &ray, const Scene &scene, Sampler &sampler) const override;

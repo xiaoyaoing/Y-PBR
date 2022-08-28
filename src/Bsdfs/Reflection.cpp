@@ -80,10 +80,14 @@ Spectrum LambertainR::f(const vec3 & wo, const vec3 & wi) const {
 //    if(wo.z<0 || wi.z<0){
 //        return Spectrum();
 //    }
-    return albedo * Constant::INV_PI;
+    return albedo * Constant::INV_PI
+         ;
 }
 
-LambertainR::LambertainR(Spectrum & albedo) : albedo(albedo), BXDF(BXDFType(BSDF_REFLECTION | BSDF_DIFFUSE)) {
+LambertainR::LambertainR(Spectrum & albedo) : albedo(albedo), useCosineSample(true),
+                                              BXDF(BXDFType(BSDF_REFLECTION | BSDF_DIFFUSE))
+
+{
 
 }
 
@@ -103,6 +107,8 @@ Spectrum LambertainR::sampleF(const vec3 & wo, vec3 * wi,
         *wi=Warp::squareToUniformHemisphere(u);
         *pdf=Warp::squareToUniformHemispherePdf(*wi);
     }
+
+    //*wi = vec3(0,0,1);
 
     *sampledType=BXDFType(BSDF_REFLECTION | BSDF_DIFFUSE);
 
@@ -182,6 +188,8 @@ Spectrum Dielectric::sampleF(const vec3 & wo, vec3 * wi, const vec2 & u, Float *
     Float cosThetaT;
     Float F=Fresnel::DielectricReflectance(eta, std::abs(wo.z), cosThetaT);
 
+
+
     Float reflectionProbability=sampleT?F:1;
 
     if(u[0]<=reflectionProbability) {   //reflection
@@ -197,6 +205,7 @@ Spectrum Dielectric::sampleF(const vec3 & wo, vec3 * wi, const vec2 & u, Float *
         }
 
         *wi = vec3(-eta*wo.x,-eta*wo.y,-std::copysign(cosThetaT,wo.z));
+       // *wi = vec3(0,0,-std::copysign(1,wo.z));
         *pdf = 1-reflectionProbability;
         *sampledType = BXDFType(BSDF_TRANSMISSION | BSDF_SPECULAR);
         Spectrum  f = albedo * (1-F);

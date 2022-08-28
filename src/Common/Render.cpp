@@ -1,6 +1,7 @@
 #include "Render.hpp"
 #include <thread>
 #include <spdlog/spdlog.h>
+#include "Common/Debug.hpp"
 Render::Render(nlohmann::json j) {
     camera = std::make_unique<Camera>(j.at("camera"));
     image = std::make_unique<Image>(j.at("image"));
@@ -53,6 +54,9 @@ void Render::sampleImage(){
     std::function<void(Render*)> f = &Render::sampleImageThread;
     size_t max_threads = std::thread::hardware_concurrency();
 
+    if(DebugConfig::OnlyOneThread) //debug mode  only one  thread
+        max_threads = 1;
+
     spdlog::info("Thread Count {}",max_threads);
     std::vector<std::unique_ptr<std::thread>> threads(max_threads);
     for (auto& thread : threads)
@@ -72,4 +76,5 @@ void Render::Go(){
     image->postProgress();
     image->savePNG();
     image->saveTGA();
+    scene->logDebugInfo();
 }

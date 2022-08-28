@@ -21,8 +21,9 @@ struct Intersection {
 
     Spectrum Le(const vec3 & w) const;
 
+    Frame shFrame;
 private:
     vec3 n;                    //normal
-    Frame shFrame;             //shading Frame
+    //shading Frame
 
 };

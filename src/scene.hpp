@@ -5,6 +5,7 @@
 #include "Lights/Light.hpp"
 #include "Hierancy/BVH.hpp"
 
+
 class Light;
 class Primitive;
 
@@ -17,6 +18,9 @@ public:
 
     //Determines whether the light and scene intersect - tests for occlusion
     bool intersectP(const Ray & ray) const ;
+
+    //log some info for debug
+    void logDebugInfo();
 
     std::vector<std::shared_ptr<Light>> lights;
 private:
@@ -33,7 +37,12 @@ private:
     bool _useBVH;
 
 
+    /*** debug variables ***/
+
+
 //    std::unordered_map<std::string,std::shared_ptr<Bsdf>>  bsdfs;
 };
+
+
 
 

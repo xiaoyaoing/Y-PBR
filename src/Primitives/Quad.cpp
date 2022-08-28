@@ -29,13 +29,18 @@ std::optional < Intersection > Quad::intersect(Ray & ray) const{
         return std::nullopt;
     }
     Float t = dot(n,(_base - ray.o))/dotW;
+
+    if(bsdf->name=="light"){
+        int k=1;
+    }
     if (t < ray.nearT || t > ray.farT)
     return std::nullopt;
 
     vec3 q = ray(t);
     vec3 v = q - _base;
-    Float l0 = dot(v,_edge0) *_invSq.x;
-    Float l1 = dot(v,_edge1)*_invSq.y;
+    Float l0 = dot(v,_edge0) * _invSq.x;
+    Float l1 = dot(v,_edge1) * _invSq.y;
+
 
     if (l0 < 0.0f || l0 > 1.0f || l1 < 0.0f || l1 > 1.0f)
         return std::nullopt;
@@ -77,7 +82,10 @@ void Quad::transform(const Transform &T) {
 void Quad::computeBoundingBox( ) {
     vec3 pMin = _base;
     vec3 pMax= _base+_edge1+_edge0;
-    BB_ = Bounds3(pMin,pMax);
+    Bounds3 bounds;
+    bounds = Union(bounds,pMin);
+    bounds = Union(bounds,pMax);
+    BB_ = bounds;
 }
 
 void Quad::computeArea() {

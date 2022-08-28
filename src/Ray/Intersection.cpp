@@ -11,7 +11,9 @@ vec3 Intersection::toLocal(const vec3 & w) const {
 }
 
 vec3 Intersection::toWorld(const vec3 & w) const  {
-    return normalize(shFrame.toWorld(w));
+    auto worldW = shFrame.toWorld(w);
+    auto normalizedW = normalize(worldW);
+    return normalize(worldW);
 }
 
 void Intersection::setNormal(const vec3 & normal)  {

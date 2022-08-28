@@ -43,11 +43,15 @@ namespace Constant {
     inline constexpr Float INV_PI = 0.31830988618379067154;
     inline constexpr Float HALF_PI = 1.57079632679489661923;
     inline constexpr Float TWO_PI = 6.283185307179586476925;
-    inline constexpr Float EPSILON = 1e-9;
+    inline constexpr Float EPSILON = 1e-5;
 }
 
 inline Float dot(vec3 a, vec3 b) {
     return glm::dot(a, b);
+}
+
+inline  Float absDot(vec3 a,vec3 b){
+    return abs(dot(a,b));
 }
 
 inline Float pow2(Float a) {

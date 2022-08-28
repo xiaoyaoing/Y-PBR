@@ -1,6 +1,7 @@
 #include "PathIntegrator.hpp"
 #include "optional"
 #include "spdlog/spdlog.h"
+#include "Common/Debug.hpp"
 //2022/7/15
 Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler & sampler) const {
 //    Intersection intersection =
@@ -15,45 +16,92 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
     Spectrum throughPut(1.0);
     Spectrum L(0);
     int bounces = 0, maxDepth = 10;
+    bool specularBounce = true;
     Ray _ray(ray);
-    Spectrum  tempL(0);
+
+    std::string firstHitName ;
+    std::string Path;
     for ( bounces = 0 ;; ++ bounces ) {
-        if(throughPut.x<0 || throughPut.y<0 || throughPut.z<0){
-            spdlog::info("invalid throughPut");
-        }
+       if(firstHitName=="IceAir" && bounces==1){
+           int k=1;
+       }
         its = scene.intersect(_ray);
 
         if ( ! its.has_value() || bounces >= maxDepth ) break;
 
-//        vec3 n = its->getNormal();
-//        n += 1.0;
-//        n/=2;
-      //  return  n;
 
+        Path +=its->bsdf->name+" ";
+        if(Path =="IceAir IceAir "){
+            int k=1;
+        }
+
+        if(DebugConfig::OnlyShowNormal){
+           return (its->getNormal()+1.0f)/2.f;
+        }
+
+        if(bounces==0){
+            firstHitName = its->bsdf->name;
+            if(firstHitName=="IceAir"){
+                int k=1;
+            }
+        }
+
+        if(specularBounce)
         L += throughPut * its->Le(- ray.d);   //hit emssive
 
+        if(!its->bsdf->NumComponents(BSDF_TRANSMISSION) && dot(its->getNormal(),_ray.d )>0 )
+        {
+            its->shFrame. n = - its->shFrame.n;
+//            its->setNormal(-its->getNormal());
+            its->shFrame. s = - its->shFrame.s;
+        }
+
         ///sample direct lighting for no specular bxdf
-        its->wo = normalize(its->toLocal(- ray.d));
+        its->wo = normalize(its->toLocal(- _ray.d));
         if ( its->bsdf->NumComponents(BXDFType(BSDF_ALL & ~ BSDF_SPECULAR)) >
              0 ) {
 
             const Distribution1D *distrib = lightDistribution->Lookup(its->p);
             auto Ld = UniformSampleOneLight
                     (its.value(), scene, sampler,distrib);  //direct lighting
-            if(bounces==0)
-             tempL=L;
+
             L += throughPut * Ld;
-            if( isnan(L.x)){
-                int k=1;
+
+            if(DebugConfig::OnlyDirectLighting){
+                return L;
             }
+        }
+
+        if(DebugConfig::OnlyIndirectLighting && bounces==0){
+            L = Spectrum (0.f);
         }
     //   return L;
         Float pdf;
         BXDFType flags;
         vec3 wi;
-        Spectrum f = its->bsdf->sampleF(its->wo, & wi, sampler.getNext2D(), & pdf,
-                                        BSDF_ALL, &flags);
-        throughPut *= f;
+        Spectrum f = its->bsdf->sampleF(its->wo, & wi, sampler.getNext2D(), & pdf,BSDF_ALL, &flags);
+
+        specularBounce = (flags & BSDF_SPECULAR)!=0;
+
+        vec3 newDir = its->toWorld(wi);
+        if(specularBounce) throughPut *= f;
+        else throughPut *= f * absDot(newDir,its->getNormal()) / pdf;
+
+        if ((flags & BSDF_SPECULAR) && (flags & BSDF_TRANSMISSION)){
+           Float  eta = 1.31;
+           Float  etaScale = (dot(newDir, its->getNormal()) > 0) ? (eta * eta) : 1 / (eta * eta);
+           throughPut *= etaScale;
+        }
+
+       //throughPut*=f;
+       // spdlog::info(toColorStr(wi));
+
+        _ray = Ray(its->p+newDir * Constant::EPSILON, newDir);
+
+       auto  tempIts = scene.intersect(_ray);
+        if(tempIts.has_value() && tempIts->primitive->bsdf->name=="IceAir" && bounces==0){
+            int k=1;
+        }
 
         ///Russian roulette to avoid Long distance path tracing(Unbiased estimation)
         Float roulettePdf = std::max(throughPut.x, std::max(throughPut.y, throughPut.z));
@@ -64,16 +112,13 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
                 break;
         }
 
-        _ray = Ray(its->p, its->toWorld(wi));
-//         auto wo = its.shFrame.toLocal(-ray.d);
-//
-//         BsdfSample bsdfSample;
-//         its->bsdf->sample(bsdfSample);
-//
-//         throughPut *= bsdfSample.val * cositem;
-//         ray = Ray(its->pos,dir);
     }
+//    if()
+   // spdlog::info("{0}", toColorStr(L));
 
+//    if( firstHitName=="IceAir")  {
+//        spdlog::info("bounce count {0} {1} {2}  ",bounces, toColorStr(L),Path);
+//    }
     return L;
 }
 

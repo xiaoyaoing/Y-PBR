@@ -2,7 +2,7 @@
 
 namespace Fresnel {
 
-static inline  Float DielectricReflectance(Float eta,Float cosThetaI,Float cosThetaT){
+static inline  Float DielectricReflectance(Float eta,Float cosThetaI,Float &  cosThetaT){
     if (cosThetaI < 0.0) {
         eta = 1.0/eta;
         cosThetaI = -cosThetaI;

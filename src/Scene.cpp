@@ -9,6 +9,11 @@
 #include "Primitives/Sphere.hpp"
 #include "Primitives/Quad.hpp"
 #include "Primitives/Cube.hpp"
+
+static int occludedCount =0 ;
+static int occludedCount1 =0;
+
+
 Scene::Scene(const nlohmann::json j) {
 //    std::unordered_map<std::string,nlohmann::json> bsdf_jsons =j.at("bsdfs");
 //
@@ -103,8 +108,9 @@ Scene::Scene(const nlohmann::json j) {
         std::shared_ptr<Primitive>  primitive= loadMap[type](p,bsdf);
 
         if(transform) primitive->transform(*transform);
-        if(primitive->bsdf->name=="light" || primitive->bsdf->name=="shortBox" || primitive->bsdf->name=="tallBox"
-        || true
+        if(//primitive->bsdf->name=="light" || primitive->bsdf->name=="shortBox" || primitive->bsdf->name=="tallBox"
+         type!="sphere" || true
+      // type=="quad"
         )
         {    primitives.push_back(primitive);
              handleAddLight(p,primitives.size()-1,primitives.size());
@@ -166,7 +172,7 @@ void Scene::handleAddLight(const nlohmann::json & p,size_t l,size_t r){
 
 std::optional<Intersection> Scene::intersect(const Ray &ray) const {
     if(_useBVH){
-      //  return bvh->intersect(ray);
+        return bvh->intersect(ray);
     }
 
     std::optional<Intersection> minIntersection;
@@ -188,18 +194,25 @@ std::optional<Intersection> Scene::intersect(const Ray &ray) const {
 }
 
 bool Scene::intersectP(const Ray & ray) const {
-    if(_useBVH && false){
-        return bvh->intersectP(ray);
+    if(_useBVH ){
+        //return bvh->intersectP(ray);
     }
     else
     {
         Ray _ray(ray);
+        assert(_ray.farT ==ray.farT);
         for(auto primitive:primitives){
          auto its = primitive->intersect(_ray);
          if(its.has_value())
-            return true;
+         {
+             return true;
+         }
          }
     }
 
     return false;
+}
+
+void Scene::logDebugInfo() {
+    spdlog::info("Occluded {0} {1}",occludedCount,occludedCount1);
 }
