@@ -53,6 +53,17 @@ std::shared_ptr<Material> LoadDielectricMaterial(nlohmann::json j){
     return material;
 }
 
+std::shared_ptr<Material> LoadConductMaterial(nlohmann::json j){
+        std::shared_ptr<Material> material =std::make_shared <Material>();
+        Float k  =j["k"];
+        Float eta   = j["eta"];
+        Spectrum  albedo = getOptional(j,"abledo",Spectrum(1));
+        material->Add(new Conductor(albedo,eta,k));
+        return material;
+    }
+
+
+
 
 
 std::shared_ptr<Material> LoadDefualtMaterial(){
@@ -69,7 +80,8 @@ std::unordered_map<std::string,
             MaterialLoadTable  = {
             {"lambert" , LoadLambertainMaterial},
             {"mirror", LoadMirrorMaterial},
-            {"dielectric", LoadDielectricMaterial}
+            {"dielectric", LoadDielectricMaterial},
+            {"conductor", LoadConductMaterial}
     };
 
 
@@ -81,7 +93,6 @@ std::shared_ptr <Bsdf> LoadBsdfFromJson(nlohmann::json j) {
     if(MaterialLoadTable.contains(j["type"])){
         return MaterialLoadTable[j["type"]](j);
     }
-
     //todo  support other bsdfs
     else{
         spdlog::info("{} bsdf not loaded correctly.Used Default Bsdf",

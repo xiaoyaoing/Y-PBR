@@ -46,6 +46,10 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
             }
         }
 
+        if(its->bsdf->name == "lighting" && bounces!=0){
+            int k=1;
+        }
+
         if(specularBounce)
         L += throughPut * its->Le(- ray.d);   //hit emssive
 

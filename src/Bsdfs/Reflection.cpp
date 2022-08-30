@@ -9,8 +9,8 @@ Spectrum Bsdf::f(const vec3 & wo, const vec3 & wi, BXDFType flags) const {
     Spectrum f(0.f);
     for ( int i = 0 ; i < nBXDFs ; ++ i )
         if ( BXDFs[i]->MatchesFlags(flags) &&
-             ( ( reflect && ( BXDFs[i]->type & BSDF_REFLECTION ) ) ||
-               ( ! reflect && ( BXDFs[i]->type & BSDF_TRANSMISSION ) ) ) )
+             ( ( reflect && ( BXDFs[i]->m_type & BSDF_REFLECTION ) ) ||
+               ( ! reflect && ( BXDFs[i]->m_type & BSDF_TRANSMISSION ) ) ) )
             f += BXDFs[i]->f(wo, wi);
     return f;
 }
@@ -55,19 +55,19 @@ Spectrum Bsdf::sampleF(const vec3 & wo, vec3 * wi, const vec2 & u, Float * pdf,
     }
 
     // avoid calculate Specular pdf directly
-    if ( ! ( bxdf->type & BSDF_SPECULAR ) && matchingComps > 1 )
+    if ( ! ( bxdf->m_type & BSDF_SPECULAR ) && matchingComps > 1 )
         for ( int i = 0 ; i < nBXDFs ; ++ i )
             if ( BXDFs[i] != bxdf && BXDFs[i]->MatchesFlags(type) )
                 * pdf += BXDFs[i]->Pdf(wo, * wi);
     if ( matchingComps > 1 ) * pdf /= matchingComps;
 
-    if ( ! ( bxdf->type & BSDF_SPECULAR ) ) {
+    if ( ! ( bxdf->m_type & BSDF_SPECULAR ) ) {
         bool reflect = Frame::cosTheta(wo) * Frame::cosTheta(* wi) > 0;
         f = Spectrum(0);
         for ( int i = 0 ; i < nBXDFs ; ++ i )
             if ( BXDFs[i]->MatchesFlags(type) &&
-                 ( ( reflect && ( BXDFs[i]->type & BSDF_REFLECTION ) ) ||
-                   ( ! reflect && ( BXDFs[i]->type & BSDF_TRANSMISSION ) ) ) )
+                 ( ( reflect && ( BXDFs[i]->m_type & BSDF_REFLECTION ) ) ||
+                   ( ! reflect && ( BXDFs[i]->m_type & BSDF_TRANSMISSION ) ) ) )
                 f += BXDFs[i]->f(wo, * wi);
     }
 
@@ -220,7 +220,7 @@ void Dielectric::LogInfo( ) const {
 }
 
 Spectrum Conductor::f(const vec3 & wo, const vec3 & wi) const {
-    return Spectrum();
+   return Spectrum();
 }
 
 Float Conductor::Pdf(const vec3 & wo, const vec3 & wi) const {
@@ -228,7 +228,11 @@ Float Conductor::Pdf(const vec3 & wo, const vec3 & wi) const {
 }
 
 Spectrum Conductor::sampleF(const vec3 & wo, vec3 * wi, const vec2 & u, Float * pdf, BXDFType * sampledType) const {
-    return Spectrum();
+    * wi = Frame::Reflect(wo);
+    *pdf = 1;
+    Spectrum  f = m_albedo *  Fresnel::conductorReflectance(m_eta, m_k, wo.z);
+    *sampledType = m_type;
+    return f;
 }
 
 void Conductor::LogInfo( ) const {

@@ -53,7 +53,7 @@ private:
 class BXDF{
 public:
 
-    BXDF(BXDFType type) :type(type) {};
+    BXDF(BXDFType type) : m_type(type) {};
 
     virtual Spectrum f(const vec3 & wo,const vec3 & wi) const =0;
 
@@ -65,9 +65,9 @@ public:
 
     virtual void LogInfo() const =0;
 
-    bool MatchesFlags(BXDFType t) const { return (type & t) == type; }
+    bool MatchesFlags(BXDFType t) const { return ( m_type & t) == m_type; }
 
-    BXDFType type;
+    BXDFType m_type;
 
 };
 
@@ -154,7 +154,9 @@ private:
 
 class Conductor : public BXDF {
 public:
-    Conductor();
+    Conductor(Spectrum  albedo,Float eta,Float k) :
+                    BXDF(BXDFType(BSDF_SPECULAR | BSDF_REFLECTION)),
+                    m_albedo(albedo),m_eta(eta),m_k(k){}
 
     Spectrum f(const vec3 & wo, const vec3 & wi) const override;
 
@@ -163,6 +165,10 @@ public:
     Spectrum sampleF(const vec3 & wo, vec3 * wi, const vec2 & u, Float * pdf, BXDFType * sampledType) const override;
 
     void LogInfo( ) const override;
+private:
+    Spectrum m_albedo;
+    Float m_eta;
+    Float m_k;
 };
 
 class OrenNayar : public  BXDF{

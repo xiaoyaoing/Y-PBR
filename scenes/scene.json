@@ -17,6 +17,14 @@
         },
 
         {
+            "name": "conductor",
+            "albedo" : 1.0,
+             "type" : "conductor",
+            "eta" : 1.31,
+             "k": 0.5
+        },
+
+        {
             "name": "leftWall",
             "albedo": [
                 0.63,
@@ -267,7 +275,7 @@
         ,{
             "type": "sphere",
             "radius": 1,
-            "bsdf": "IceAir",
+            "bsdf": "conductor",
             "transfrom" :{
             "position": [5.72, -3.73, 3.5]}
 
