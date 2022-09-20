@@ -72,7 +72,7 @@ public:
     UniformSampler(uint64_t seed) : Sampler(seed) {}
 
     std::unique_ptr<Sampler> clone() const override {
-        return std::make_unique<UniformSampler>();
+        return std::make_unique <UniformSampler>();
     }
 
     Float getNext1D() override { return rng.getNext(); }

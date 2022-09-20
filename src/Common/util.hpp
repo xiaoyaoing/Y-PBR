@@ -14,7 +14,8 @@ struct Transform
 {
     Transform(const vec3 &position, const vec3 &scale, const vec3 &rotation);
 
-    Transform():position(),scale(),rotation() {}
+    Transform():position(),scale(),rotation(),matrix(1) {
+    }
 
 
     vec3 transformNormal(const vec3 & normal) const;
@@ -30,6 +31,11 @@ struct Transform
 
     vec3 transformVector(const vec3 & vec) const {
         return mult(matrix,vec4(vec,0));
+    }
+
+    mat4 TransformNormalMat() const {
+        vec3 scaleVector(length2(Right(matrix)), length2(Up(matrix)), length2(Forward(matrix)));
+        return mult(glm::scale(1.0f/scaleVector),matrix);
     }
 
     mat4 matrix, rotation_matrix;
@@ -61,6 +67,13 @@ inline  bool containsAndGet(const nlohmann::json &j, std::string field, T & valu
     }
     return false;
 }
+
+inline  bool contains(const nlohmann::json &j, std::string field)
+{
+    return (j.find(field) != j.end());
+}
+
+
 
 
 

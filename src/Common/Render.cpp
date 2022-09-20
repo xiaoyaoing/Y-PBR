@@ -2,23 +2,30 @@
 #include <thread>
 #include <spdlog/spdlog.h>
 #include "Common/Debug.hpp"
+#include "IO/FileUtils.hpp"
 Render::Render(nlohmann::json j) {
     camera = std::make_unique<Camera>(j.at("camera"));
-    image = std::make_unique<Image>(j.at("image"));
+    image = std::make_unique<Image>(j.at("camera").at("resolution"));
     scene= std::make_unique<Scene>(j);
     integrator=std::make_unique<PathIntegrator>(j);
-    integrator->Preprocess(*scene,*sampler);
-    sampler=std::make_shared <UniformSampler>();
-
+    sampler=std::make_shared<UniformSampler>();
     auto renderJson= j["renderer"];
+    outputFile = getOptional(renderJson,"output_file",std::string("result"));
+    if(outputFile.find(".")!=std::string::npos){
+        outputFile = std::string(outputFile.begin(),outputFile.begin()+outputFile.find("."));
+    }
     spp = getOptional(renderJson,"spp",32);
 }
 
-void Render::sampleImageThread(){
+void Render::sampleImageThread(Sampler * threadSampler){
 
     Bucket bucket;
     Ray ray;
-    std::unique_ptr<Sampler>  threadSampler(sampler->clone());
+    Sampler * sampler2 = sampler.get();
+    //UniformSampler sampler1 = *(reinterpret_cast<UniformSampler *>(sampler.get()));
+  //  std::unique_ptr<Sampler>  threadSampler(sampler->clone());
+  //  std::shared_ptr<Sampler> threadSampler = sampler;
+
     while(render_queue->getWork(bucket)){
 
         for(size_t y=bucket.min.y;y<bucket.max.y;y++)
@@ -26,7 +33,9 @@ void Render::sampleImageThread(){
             for(uint32 count=0;count<spp;count++)
             {
                 camera->sampleRay(x,y,ray,threadSampler->getNext2D());
-                image->addPixel(x,y,integrator->integrate(ray,*scene,*threadSampler));
+              //  if(count!=0) image->addPixel(x,y,vec3(0)); else
+                Spectrum  pixelResult = integrator->integrate(ray,*scene,*threadSampler);
+                image->addPixel(x,y,pixelResult);
             }
             image->dividePixel(x,y,spp);
         }
@@ -43,7 +52,7 @@ void Render::sampleImage(){
         {
             size_t y_end = y + bucketSize;
             if (y_end >= image->height) y_end = image->height;
-            buckets.push_back(Bucket(glm::ivec2(x, y), glm::ivec2(x_end, y_end)));
+            buckets.emplace_back(Bucket(glm::ivec2(x, y), glm::ivec2(x_end, y_end)));
         }
     }
     
@@ -51,7 +60,7 @@ void Render::sampleImage(){
     buckets.clear();
 
 
-    std::function<void(Render*)> f = &Render::sampleImageThread;
+    std::function<void(Render*,Sampler * )> f = &Render::sampleImageThread;
     size_t max_threads = std::thread::hardware_concurrency();
 
     if(DebugConfig::OnlyOneThread) //debug mode  only one  thread
@@ -59,11 +68,15 @@ void Render::sampleImage(){
 
     spdlog::info("Thread Count {}",max_threads);
     std::vector<std::unique_ptr<std::thread>> threads(max_threads);
+    std::vector<std::unique_ptr<Sampler>> samplers(max_threads);
+    for(auto & threadSampler : samplers){
+        threadSampler = sampler->clone();
+    }
+
+    int threadCount=0;
     for (auto& thread : threads)
     {
-       // std::unique_ptr<Sampler> threadSampler(sampler->clone());
-//        std::make_shared<std::thread>(f, this, std::ref(buckets));
-        thread = std::make_unique<std::thread>(f, this);
+        thread = std::make_unique<std::thread>(f, this,samplers[threadCount++].get());
     }
 
     for (auto& thread : threads)
@@ -72,9 +85,10 @@ void Render::sampleImage(){
     }
 }
 void Render::Go(){
+    scene->setUp();
+    integrator->Preprocess(*scene,*sampler);
     sampleImage();
     image->postProgress();
-    image->savePNG();
-    image->saveTGA();
+    image->savePNG(FileUtils::WorkingDir+outputFile+ std::to_string(spp)+"spp");
     scene->logDebugInfo();
 }

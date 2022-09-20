@@ -9,15 +9,15 @@ struct BVHPrimitiveInfo;
 class BVHAccel
 {
 
-    BuildNode * RecursiveBuild( std::vector<BVHPrimitiveInfo> &primitiveInfo, int start, int end,
+   BuildNode * RecursiveBuild( std::vector<BVHPrimitiveInfo> &primitiveInfo, int start, int end,
                                 std::vector<std::shared_ptr<Primitive>> &orderedPrims );
 
-    enum SplitMethod { SAH, HLBVH, Middle, EqualCounts };
+    enum SplitMethod { SAH, HLBVH, Middle, EqualCounts,PBRTSAH };
 
 public:
     BVHAccel( //const BoundingBox &BB,
         std::vector < std::shared_ptr < Primitive>>   p,
-        const SplitMethod splitMethod = Middle,
+        const SplitMethod splitMethod = PBRTSAH,
         const uint32 maxPrimInNode = 4
         );
 
@@ -29,6 +29,7 @@ private:
     int FlattenTree(BuildNode *node, int *offset);
 
     std::vector<std::shared_ptr<Primitive>> primitives;
+    const int maxPrimNode;
     SplitMethod splitMethod;
     LinearNode *nodes = nullptr;
     BuildNode * root;

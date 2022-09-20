@@ -1,10 +1,11 @@
 #include "Reflection.hpp"
+#include "Conductor.hpp"
 
-namespace BsdfFactory{
+namespace BSDFFactory{
 
-std::shared_ptr<Bsdf> LoadBsdfFromJson(nlohmann::json j);
+std::shared_ptr<BSDF> LoadBsdfFromJson(nlohmann::json j);
 
-std::unordered_map<std::string,std::shared_ptr<Bsdf>>
+std::unordered_map<std::string,std::shared_ptr<BSDF>>
                       LoadBsdfsFromJson(nlohmann::json j);
 
 }

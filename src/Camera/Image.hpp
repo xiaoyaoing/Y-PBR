@@ -45,7 +45,6 @@ class Image{
 
     uint32 getIndex(uint32 x,uint32 y) const ;
 
-    std::string  outputFileName;
     std::vector<Pixel> pixels;
     ToneMap::ToneMapType toneMapType;
     bool plain;
@@ -54,17 +53,17 @@ class Image{
 
 
 public:
-    Image(nlohmann::json json);
+    Image(const ivec2 &  res);
 
     void addPixel(uint32 x,uint32 y,vec3 rgb)  ;
 
     void dividePixel(uint32 x,uint32 y,uint32);
 
-    void savePPM() const;
+    void savePPM(const std::string &  outPutPath) const;
 
-    void saveTGA() const;
+    void saveTGA(const std::string &  outPutPath) const;
 
-    void savePNG() const ;
+    void savePNG(const std::string &  outPutPath) const ;
 
     void postProgress();
 

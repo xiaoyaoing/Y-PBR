@@ -44,14 +44,14 @@ void Camera::preCompute( ) {
 }
 
 void Camera::sampleRay(size_t x, size_t y , Ray & ray, vec2 sample) const {
-
+    sample = vec2(0.5,0.5);
     vec3 localD = normalize(vec3(
             - 1.0 + ( x + 0.5f + sample.x ) * 2.0f * _pixelSize.x,
             _ratio - ( y + 0.5f + sample.y ) * 2.0f * _pixelSize.x,
             _planeDist
     ));
-
-    vec3 d =_transform.matrix * vec4(localD,0);
+    std::string s = Mat4ToStr(_transform.matrix);
+    vec3 d = mult(_transform.matrix  ,vec4(localD,0));
     d = normalize(d);
 
     ray = Ray(_pos,d);

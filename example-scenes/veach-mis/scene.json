@@ -1,0 +1,260 @@
+{
+    "media": [],
+    "bsdfs": [
+        {
+            "name": "Diffuse",
+            "albedo": 0.5,
+            "type": "lambert"
+        },
+        {
+            "name": "Smooth",
+            "albedo": 0.3,
+            "type": "rough_conductor",
+            "material": "Cu",
+            "distribution": "beckmann",
+            "roughness": 0.01
+        },
+        {
+            "name": "Glossy",
+            "albedo": 0.3,
+            "type": "rough_conductor",
+            "material": "Cu",
+            "distribution": "beckmann",
+            "roughness": 0.05
+        },
+        {
+            "name": "Rough",
+            "albedo": 0.3,
+            "type": "rough_conductor",
+            "material": "Cu",
+            "distribution": "beckmann",
+            "roughness": 0.1
+        },
+        {
+            "name": "Null",
+            "albedo": 1,
+            "type": "null"
+        },
+        {
+            "name": "SuperRough",
+            "albedo": 0.3,
+            "type": "rough_conductor",
+            "material": "Cu",
+            "distribution": "beckmann",
+            "roughness": 0.25
+        }
+    ],
+    "primitives": [
+        {
+            "transform": {
+                "position": [
+                    0.264069,
+                    4.09801,
+                    0
+                ],
+                "scale": [
+                    2.1,
+                    0.3,
+                    8
+                ],
+                "rotation": [
+                    0,
+                    0,
+                    -39.8801
+                ]
+            },
+            "type": "cube",
+            "bsdf": "Smooth"
+        },
+        {
+            "transform": {
+                "position": [
+                    3.06163,
+                    2.71702,
+                    0
+                ],
+                "scale": [
+                    2.1,
+                    0.3,
+                    8
+                ],
+                "rotation": [
+                    0,
+                    0,
+                    -22.2154
+                ]
+            },
+            "type": "cube",
+            "bsdf": "Glossy"
+        },
+        {
+            "transform": {
+                "position": [
+                    7.09981,
+                    1.81891,
+                    0
+                ],
+                "scale": [
+                    2.1,
+                    0.3,
+                    8
+                ],
+                "rotation": [
+                    0,
+                    0,
+                    -10.6515
+                ]
+            },
+            "type": "cube",
+            "bsdf": "Rough"
+        },
+        {
+            "transform": {
+                "position": [
+                    4.9,
+                    0,
+                    0
+                ],
+                "scale": [
+                    19.8,
+                    19.8,
+                    47.52
+                ]
+            },
+            "type": "quad",
+            "bsdf": "Diffuse"
+        },
+        {
+            "transform": {
+                "position": [
+                    -5,
+                    9.9,
+                    0
+                ],
+                "scale": [
+                    19.8,
+                    19.8,
+                    47.52
+                ],
+                "rotation": [
+                    0,
+                    0,
+                    -90
+                ]
+            },
+            "type": "quad",
+            "bsdf": "Diffuse"
+        },
+        {
+            "transform": {
+                "position": [
+                    0,
+                    6.5,
+                    -2.8
+                ]
+            },
+            "power": 300,
+            "type": "sphere",
+            "bsdf": "Null"
+        },
+        {
+            "transform": {
+                "position": [
+                    0,
+                    6.5,
+                    0
+                ],
+                "scale": 0.5
+            },
+            "power": 300,
+            "type": "sphere",
+            "bsdf": "Null"
+        },
+        {
+            "transform": {
+                "position": [
+                    0,
+                    6.5,
+                    2.7
+                ],
+                "scale": 0.05
+            },
+            "power": 300,
+            "type": "sphere",
+            "bsdf": "Null"
+        },
+        {
+            "transform": {
+                "position": [
+                    10.6769,
+                    1.23376,
+                    0
+                ],
+                "scale": [
+                    2.1,
+                    0.3,
+                    8
+                ],
+                "rotation": [
+                    0,
+                    0,
+                    -7.00104
+                ]
+            },
+            "type": "cube",
+            "bsdf": "SuperRough"
+        }
+    ],
+    "camera": {
+        "tonemap": "filmic",
+        "resolution": [
+            1280,
+            720
+        ],
+        "reconstruction_filter": "tent",
+        "transform": {
+            "position": [
+                28.2792,
+                3.5,
+                1.23612e-06
+            ],
+            "look_at": [
+                0,
+                3.5,
+                0
+            ],
+            "up": [
+                0,
+                1,
+                0
+            ]
+        },
+        "type": "pinhole",
+        "fov": 35
+    },
+    "integrator": {
+        "min_bounces": 0,
+        "max_bounces": 2,
+        "enable_consistency_checks": false,
+        "enable_two_sided_shading": true,
+        "type": "path_tracer",
+        "enable_light_sampling": true,
+        "enable_mis": true,
+        "enable_volume_light_sampling": true,
+        "enable_light_is": false
+    },
+    "renderer": {
+        "output_file": "veach-mis.png",
+        "resume_render_file": "TungstenRenderState.dat",
+        "overwrite_output_files": true,
+        "adaptive_sampling": true,
+        "enable_resume_render": false,
+        "stratified_sampler": true,
+        "scene_bvh": true,
+        "spp": 64,
+        "spp_step": 16,
+        "checkpoint_interval": "0",
+        "timeout": "0",
+        "hdr_output_file": "veach-mis.exr"
+    }
+}

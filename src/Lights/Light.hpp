@@ -6,6 +6,14 @@
 class Scene;
 class Primitive;
 
+// LightFlags Declarations
+enum class LightFlags : int {
+    DeltaPosition = 1,
+    DeltaDirection = 2,
+    Area = 4,
+    Infinite = 8
+};
+
 class VisibilityTester {
 public:
     VisibilityTester() {}
@@ -27,12 +35,22 @@ public:
                                 vec3 *wi, Float *pdf,
                                VisibilityTester *vis) const = 0;
 
-
+    Light(int _flags) : flags(_flags){};
     /// compute radiance in position with dir w
     /// \param intr info
-    /// \param w  dir
     /// \return radiance
-    virtual Spectrum L(const Intersection &intr, const vec3 &w) const=0;
+    virtual Spectrum directLighting(const Intersection & intr) const=0;
+
+    /// returns total power of the light
+    virtual  Float Power() { return 0; }
+    virtual  void Preprocess(const Scene & scene) {}
+    virtual  Float directPdf(const Intersection & pShape, const vec3 & ref) const {
+        _NOT_IMPLEMENT_ERROR
+    }
+//    virtual  Spectrum  directLighting(const Intersection & pShape) const {return Spectrum(0);}
+    virtual  bool isDeltaLight() const {return false;}
+
+    const int  flags;
 };
 
 
@@ -41,14 +59,17 @@ class AreaLight : public  Light{
     Sample_Li(const Intersection & ref, const vec2 & u, vec3 * wi, Float * pdf, VisibilityTester * vis) const override;
 
 public:
-    Spectrum L(const Intersection & intr, const vec3 & w) const override;
+    Spectrum directLighting(const Intersection & intr) const override;
 
 
     AreaLight(const std::shared_ptr < Primitive > & primitive,
                          const Spectrum & albedo,
                          bool twoSide=false);
 
-private:
+    Float directPdf(const Intersection & pShape, const vec3 & ref) const override;
+
+
+protected:
     std::shared_ptr<Primitive> primitive;
     Spectrum  albedo;
     bool twoSide;

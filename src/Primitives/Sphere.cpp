@@ -3,7 +3,7 @@
 #include "Sphere.hpp"
 #include "../Sampler/Warp.hpp"
 
-Sphere::Sphere(double radius, std::shared_ptr < Bsdf > bsdf) : Primitive(bsdf), radius(radius), origin(0.0) {
+Sphere::Sphere(double radius, std::shared_ptr < BSDF > bsdf) : Primitive(bsdf), radius(radius), origin(0.0) {
     computeArea();
     computeBoundingBox();
 }
@@ -23,21 +23,34 @@ std::optional < Intersection > Sphere::intersect(Ray & ray) const {
             if(t > ray.farT || t  < ray.nearT)
             return std::nullopt;
         }
-
-
-
-//        if ( t < ray.nearT )
-//            t = t + 2 * det;
-
         ray.farT=t;
         intersection.p = ray(t);
-        intersection.setNormal(normal(intersection.p));
+        intersection.Ns = intersection.Ng = normal(intersection.p);
         intersection.primitive = this;
         intersection.bsdf = bsdf.get();
+        intersection.w = ray.d;
         return {intersection};
     }
     return std::nullopt;
+}
 
+bool Sphere::occluded(const Ray & ray) const {
+    vec3 p = ray.o - origin;
+    float B = dot(p, ray.d);
+    float C = length2(p) - pow2(radius);
+    float detSq = B * B - C;
+    if ( detSq >= 0.0f ) {
+        float det = std::sqrt(detSq);
+        float t = - B - det;
+
+        if ( t > ray.farT || t  < ray.nearT ) {
+            t+=2 * det;
+            if(t > ray.farT || t  < ray.nearT)
+                return false;
+        }
+        return true;
+    }
+    return false;
 }
 
 vec3 Sphere::operator ()(Float u, Float v) const {
@@ -70,7 +83,7 @@ void Sphere::computeBoundingBox( ) {
 Intersection Sphere::Sample(const vec2 & u, Float * pdf) const {
     Intersection it;
     it.p = origin + radius * Warp::squareToUniformSphere(u);
-    it.setNormal(normal(it.p));
+    it.Ng=normal(it.p);
     * pdf = inv_area;
     return it;
 }

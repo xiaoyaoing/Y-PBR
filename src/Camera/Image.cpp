@@ -4,9 +4,9 @@
 #include <spdlog/spdlog.h>
 #include "../Common/histogram.hpp"
 #include "../Common/util.hpp"
-#include "ImageIO.hpp"
-void Image::savePPM() const {
-        std::ofstream file(outputFileName+".ppm");
+#include "IO/ImageIO.hpp"
+void Image::savePPM(const std::string &  outPutPath) const {
+        std::ofstream file(outPutPath+".ppm");
 
         file << "P3" << std::endl;
         file << width << " " << height << std::endl;
@@ -25,14 +25,14 @@ void Image::savePPM() const {
             }
         }
         file.close();
-        spdlog::info("Write to {0}",outputFileName+".ppm");
+        spdlog::info("Write to {0}",outPutPath+".ppm");
 }
 
 
 
-void Image::saveTGA( ) const {
+void Image::saveTGA( const std::string &  outPutPath) const {
     HeaderTGA header((uint16_t)width, (uint16_t)height);
-    std::ofstream file(outputFileName + ".tga", std::ios::binary);
+    std::ofstream file(outPutPath + ".tga", std::ios::binary);
     file.write(reinterpret_cast<char*>(&header), sizeof(header));
     vec3 averageRadiance(0);
     for (unsigned int i = 0; i < height; ++i) {
@@ -48,25 +48,31 @@ void Image::saveTGA( ) const {
 
     file.close();
     spdlog::info("Average Radiance {0} {1} {2}",averageRadiance.r,averageRadiance.g,averageRadiance.b);
-    spdlog::info("Write to {0}",outputFileName+".tga");
+    spdlog::info("Write to {0}",outPutPath+".tga");
 }
 
 
-void Image::savePNG( ) const {
+void Image::savePNG(const std::string &  outPutPath ) const {
     std::vector<unsigned  char>  image;
     image.resize(4*width*height);
-
+    vec3 averageRadiance(0);
     for(unsigned y = 0; y < height; y++)
-        for(unsigned x = 0; x < width; x++) {
+        for(unsigned x = 0; x < width; x++)
+        {
             vec3  rgb = getPixel(x,y);
+            averageRadiance+=rgb/Float(width * height);
+            if(rgb.x>0)
+            {
+                int k=1;
+            }
             image[4 * width * y + 4 * x + 0] = uint8(rgb.r);
             image[4 * width * y + 4 * x + 1] = uint8(rgb.g);
             image[4 * width * y + 4 * x + 2] = uint8(rgb.b);
             image[4 * width * y + 4 * x + 3] = 255;
         }
-
-    savePng(outputFileName+".png",image,width,height,4);
-    spdlog::info("Write to {0}",outputFileName+".png");
+    spdlog::info("Average Radiance {0} {1} {2}",averageRadiance.r,averageRadiance.g,averageRadiance.b);
+    ImageIO::savePng(outPutPath+".png",image,width,height,4);
+    spdlog::info("Write to {0}",outPutPath+".png");
 
 
 }
@@ -84,8 +90,8 @@ uint32 Image::getIndex(uint32 x, uint32 y) const {
 
 void Image::addPixel(uint32 x, uint32 y, vec3 rgb) {
     auto idx = getIndex(x,y);
-if( isnan(rgb.x) || (x==0 && y==0)){
-        int k=1;
+    if(rgb.x>0 && abs(rgb.x-0.222587913)>0.000001){
+        int k =1;
     }
     if(rgb.x<0 || rgb.y<0 || rgb.z<0 || rgb.x>1|| rgb.y>1 || rgb.z>1){
       //  spdlog::error("Invalid radiance R:{} G:{} B:{}",rgb.x,rgb.y,rgb.z);
@@ -93,26 +99,26 @@ if( isnan(rgb.x) || (x==0 && y==0)){
 //        rgb.y=std::min(rgb.y,Float(1));
 //        rgb.z=std::min(rgb.z,Float(1));
     }
-    auto t= pixels[idx].rgb;
     pixels[idx].rgb+=rgb;
 }
 
-Image::Image(nlohmann::json j) {
-    width=j.at("width");
-    height=j.at("height");
-    outputFileName=j.at("output_file");
+Image::Image(const ivec2 &  res) {
+    width=res.x;
+    height=res.y;
     plain=false;
-    Float exposure_EV = getOptional(j, "exposure_compensation", 0.0);
-    Float gain_EV = getOptional(j, "gain_compensation", 0.0);
-    exposure_scale = std::pow(2, exposure_EV);
-    gain_scale = std::pow(2, gain_EV);
-
+//    Float exposure_EV = getOptional(j, "exposure_compensation", 0.0);
+//    Float gain_EV = getOptional(j, "gain_compensation", 0.0);
+//    exposure_scale = std::pow(2, exposure_EV);
+//    gain_scale = std::pow(2, gain_EV);
     toneMapType=ToneMap::Filmic;
     pixels.resize(width*height,Pixel());
 }
 
 void Image::dividePixel(uint32 x, uint32 y, uint32 count) {
     auto t=pixels[getIndex(x,y)].rgb;
+    if(t.x>0){
+        int k=1;
+    }
     pixels[getIndex(x,y)].rgb/=Float(count);
 }
 
@@ -124,7 +130,10 @@ void Image::postProgress(){
     spdlog::info("Exposure {0} Gain {1} ",exposure_factor,gain_factor);
     for(int i=0;i<pixels.size();i++){
         pixels[i].rgb = clamp(255.f * ToneMap::toneMap(toneMapType,pixels[i].rgb),vec3(0),255.f*vec3(1));
-       // pixels[i].rgb=ToneMap::toneMap(ToneMap::Filmic,pixels[i].rgb);
+      // pixels[i].rgb = 255.f * pixels[i].rgb;
+      // pixels[i].rgb  = gammaCompress(ToneMap::toneMap(toneMapType,pixels[i].rgb * exposure_factor) * gain_factor);
+
+        // pixels[i].rgb=ToneMap::toneMap(ToneMap::Filmic,pixels[i].rgb);
     }
 }
 

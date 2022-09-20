@@ -37,14 +37,20 @@ typedef std::int16_t int16;
 typedef std::int32_t int32;
 typedef std::int64_t int64;
 
+#define _POS_INFINY std::numeric_limits<Float>::infinity()
+#define _NEG_INFINY -std::numeric_limits<Float>::infinity()
+#define _NOT_IMPLEMENT_ERROR throw("This not implemented yet!");
 
 namespace Constant {
     inline constexpr Float PI = 3.14159265358979323846;
     inline constexpr Float INV_PI = 0.31830988618379067154;
+    inline constexpr Float INV_TWO_PI = INV_PI / 2;
     inline constexpr Float HALF_PI = 1.57079632679489661923;
     inline constexpr Float TWO_PI = 6.283185307179586476925;
-    inline constexpr Float EPSILON = 1e-5;
+    inline constexpr Float EPSILON = 5e-4f;
 }
+
+
 
 inline Float dot(vec3 a, vec3 b) {
     return glm::dot(a, b);
@@ -62,6 +68,9 @@ inline Float length2(vec3 a) {
     return dot(a, a);
 }
 
+inline Float length(vec3 a) {
+    return glm::length(a);
+}
 
 inline vec3 normalize(vec3 a) {
     return glm::normalize(a);
@@ -114,6 +123,21 @@ Float max(const glm::vec < num, Float, glm::defaultp > & v) {
     return maxVal;
 }
 
+template <typename Predicate>
+int FindInterval(int size, const Predicate &pred) {
+    int first = 0, len = size;
+    while (len > 0) {
+        int half = len >> 1, middle = first + half;
+        // Bisect range based on value of _pred_ at _middle_
+        if (pred(middle)) {
+            first = middle + 1;
+            len -= half + 1;
+        } else
+            len = half;
+    }
+    return clamp(first - 1, 0, size - 2);
+}
+
 
 template < uint32 num >
 bool AllInRange(const glm::vec < num, Float, glm::defaultp > & v,
@@ -133,6 +157,24 @@ glm::vec < size, Float, glm::defaultp > pow(const glm::vec < size, Float, glm::d
     glm::vec < size, Float, glm::defaultp > res;
     for ( uint32 i = 0 ; i < size ; i ++ ) {
         res[i] = std::pow(v[i], e);
+    }
+    return res;
+}
+
+template < glm::length_t size >
+Float maxElement(const glm::vec < size, Float, glm::defaultp > & v1) {
+    Float res = -1e5;
+    for ( uint32 i = 0 ; i < size ; i ++ ) {
+        res = std::max(v1[i], res);
+    }
+    return res;
+}
+
+template < glm::length_t size >
+Float minElement(const glm::vec < size, Float, glm::defaultp > & v1) {
+    Float res = 1e5;
+    for ( uint32 i = 0 ; i < size ; i ++ ) {
+        res = min(v1[i], res);
     }
     return res;
 }
@@ -191,6 +233,14 @@ glm::vec < size, Float, glm::defaultp > lerp(const glm::vec < size, Float, glm::
     return res;
 }
 
+template < class T >
+T  lerp(const T & x00, const T & x01, const T & x10, const T & x11, Float u, Float v
+) {
+
+    return (x00*(1.0f - u) + x01*u)*(1.0f - v) +
+           (x10*(1.0f - u) + x11*u)*v;
+}
+
 template < glm::length_t size >
 Float compAdd(const glm::vec < size, Float, glm::defaultp > & v) {
     Float res = 0;
@@ -221,6 +271,11 @@ int maxDim(const glm::vec < size, Float, glm::defaultp > & v) {
         }
     }
     return dim;
+}
+
+template <class T>
+T interpolate3(const T & a,const T & b,const T & c,const vec2 & uv){
+    return uv.x * a + uv.y * b + (1-uv.x-uv.y)*c;
 }
 
 namespace Angle {
@@ -268,6 +323,23 @@ inline vec3 mult(const mat4 & a ,const vec4  point ){
             a[1][0]*point.x + a[1][1]*point.y + a[1][2]*point.z + a[1][3] * point.w,
             a[2][0]*point.x + a[2][1]*point.y + a[2][2]*point.z + a[2][3] * point.w
     );
+}
+
+inline  mat4 mult(const mat4 & a,const mat4 & b){
+    mat4 result;
+    for (int i = 0; i < 4; i++)
+        for (int t = 0; t < 4; t++)
+            result[i][t]=
+                    a[i][0]*b[0][t] +
+                    a[i][1]*b[1][t] +
+                    a[i][2]*b[2][t] +
+                    a[i][3]*b[3][t];
+
+    return result;
+}
+
+inline Float PowerHeuristic(Float a,Float b){
+    return a*a/(a*a + b*b);
 }
 
 

@@ -1,3 +1,6 @@
+#pragma  once
+
+
 #include "math.hpp"
 #include "util.hpp"
 
@@ -26,7 +29,12 @@ struct Frame {
 
     /// Construct a new coordinate frame from a single vector
     Frame(const vec3 n) : n(n){
-        coordinateSystem(n, s, t);
+        float sign = copysignf(1.0f, n.z);
+        const float a = -1.0f/(sign + n.z);
+        const float b = n.x*n.y*a;
+        s = vec3(1.0f + sign*n.x*n.x*a, sign*b, -sign*n.x);
+        t = vec3(b, sign + n.y*n.y*a, -n.y);
+       // coordinateSystem(n, s, t);
     }
 
     /// Convert from world coordinates to local coordinates

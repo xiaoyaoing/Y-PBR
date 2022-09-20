@@ -1,7 +1,12 @@
 #include "PathIntegrator.hpp"
-#include "optional"
-#include "spdlog/spdlog.h"
+
+#include "Bsdfs/Reflection.hpp"
 #include "Common/Debug.hpp"
+#include "SampleRecords/SurfaceScatterEvent.hpp"
+
+#include <optional>
+#include <spdlog/spdlog.h>
+
 //2022/7/15
 Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler & sampler) const {
 //    Intersection intersection =
@@ -22,90 +27,72 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
     std::string firstHitName ;
     std::string Path;
     for ( bounces = 0 ;; ++ bounces ) {
-       if(firstHitName=="IceAir" && bounces==1){
-           int k=1;
-       }
+        if(abs(_ray.d.x- -0.027210)<0.01){
+            int k=1;
+        }
         its = scene.intersect(_ray);
 
         if ( ! its.has_value() || bounces >= maxDepth ) break;
 
+        char raydirStr[128];
+        sprintf(raydirStr,"%1f %1f %1f",_ray.d.x,_ray.d.y,_ray.d.z);
+        if(bounces == 0)
+        firstHitName = its->bsdf->name;
+        Path+=" "+its->bsdf->name+" "+std::string(raydirStr);
 
-        Path +=its->bsdf->name+" ";
-        if(Path =="IceAir IceAir "){
+            if(DebugConfig::OnlyShowNormal){
+            return (its->Ns+vec3(1))/2.f;
+        }
+
+
+        if(firstHitName == "water" && its->bsdf->name == "leftWall"){
             int k=1;
         }
 
-        if(DebugConfig::OnlyShowNormal){
-           return (its->getNormal()+1.0f)/2.f;
-        }
 
-        if(bounces==0){
-            firstHitName = its->bsdf->name;
-            if(firstHitName=="IceAir"){
-                int k=1;
-            }
-        }
-
-        if(its->bsdf->name == "lighting" && bounces!=0){
-            int k=1;
-        }
 
         if(specularBounce)
-        L += throughPut * its->Le(- ray.d);   //hit emssive
+        L += throughPut * its->Le(-_ray.d);   //hit emssive
 
-        if(!its->bsdf->NumComponents(BSDF_TRANSMISSION) && dot(its->getNormal(),_ray.d )>0 )
-        {
-            its->shFrame. n = - its->shFrame.n;
-//            its->setNormal(-its->getNormal());
-            its->shFrame. s = - its->shFrame.s;
-        }
+        SurfaceScatterEvent localScatter = makeLocalScatterEvent(&its.value());
 
         ///sample direct lighting for no specular bxdf
-        its->wo = normalize(its->toLocal(- _ray.d));
-        if ( its->bsdf->NumComponents(BXDFType(BSDF_ALL & ~ BSDF_SPECULAR)) >
-             0 ) {
+        if ( its->bsdf->MatchesFlags(BXDFType(BSDF_ALL & ~ BSDF_SPECULAR)) ) {
 
             const Distribution1D *distrib = lightDistribution->Lookup(its->p);
             auto Ld = UniformSampleOneLight
-                    (its.value(), scene, sampler,distrib);  //direct lighting
-
+                    (localScatter, scene, sampler,distrib);  //direct lighting
+//            if(DebugConfig::OnlyDirectLighting)
+//                return Ld;
             L += throughPut * Ld;
 
-            if(DebugConfig::OnlyDirectLighting){
-                return L;
-            }
         }
 
         if(DebugConfig::OnlyIndirectLighting && bounces==0){
             L = Spectrum (0.f);
         }
-    //   return L;
-        Float pdf;
-        BXDFType flags;
-        vec3 wi;
-        Spectrum f = its->bsdf->sampleF(its->wo, & wi, sampler.getNext2D(), & pdf,BSDF_ALL, &flags);
 
+
+        //   return L;
+
+        Spectrum  f =its->bsdf->sampleF(localScatter,sampler.getNext2D());
+        BXDFType flags = localScatter.sampleType;
         specularBounce = (flags & BSDF_SPECULAR)!=0;
 
-        vec3 newDir = its->toWorld(wi);
+        vec3 newDir = localScatter.toWorld(localScatter.wi);
         if(specularBounce) throughPut *= f;
-        else throughPut *= f * absDot(newDir,its->getNormal()) / pdf;
+        else throughPut *= f * absDot(newDir,its->Ns) / localScatter.pdf;
 
         if ((flags & BSDF_SPECULAR) && (flags & BSDF_TRANSMISSION)){
-           Float  eta = 1.31;
-           Float  etaScale = (dot(newDir, its->getNormal()) > 0) ? (eta * eta) : 1 / (eta * eta);
+           Float  eta = its->bsdf->eta();
+           Float  etaScale = (dot(newDir, its->Ng) > 0) ? (eta * eta) : 1 / (eta * eta);
            throughPut *= etaScale;
         }
-
-       //throughPut*=f;
-       // spdlog::info(toColorStr(wi));
 
         _ray = Ray(its->p+newDir * Constant::EPSILON, newDir);
 
        auto  tempIts = scene.intersect(_ray);
-        if(tempIts.has_value() && tempIts->primitive->bsdf->name=="IceAir" && bounces==0){
-            int k=1;
-        }
+
 
         ///Russian roulette to avoid Long distance path tracing(Unbiased estimation)
         Float roulettePdf = std::max(throughPut.x, std::max(throughPut.y, throughPut.z));
@@ -120,13 +107,14 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
 //    if()
    // spdlog::info("{0}", toColorStr(L));
 
-//    if( firstHitName=="IceAir")  {
-//        spdlog::info("bounce count {0} {1} {2}  ",bounces, toColorStr(L),Path);
-//    }
+    if( firstHitName=="water")  {
+      //  spdlog::info("bounce count {0} {1} {2}  ",bounces, toColorStr(L),Path);
+        //L*=10;
+    }
     return L;
 }
 
-PathIntegrator::PathIntegrator(nlohmann::json j) : Integrator(j) ,
+PathIntegrator::PathIntegrator(nlohmann::json j) : AbstractPathTracer(j) ,
                                                    //lightSampleStrategy(j["lightSampleStrategy"])
                                                    lightSampleStrategy("uniform")
                                                    {

@@ -53,6 +53,8 @@ public:
 
     /// Probability density of \ref squareToBeckmann()
     static Float squareToBeckmannPdf(const vec3 &m, Float alpha);
+
+
 };
 
 

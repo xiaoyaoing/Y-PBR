@@ -86,9 +86,17 @@ public:
 //    explicit operator Bounds3 < U >( ) const {
 //        return Bounds3 < U >((Point3 <U>) pMin, (Point3 <U>) pMax);
 //    }
+    bool Contains(const vec3 & p) const {
+        return (p.x >= pMin.x && p.x <= pMax.x && p.y >= pMin.y &&
+                p.y <= pMax.y && p.z >= pMin.z && p.z <= pMax.z);
+    }
 
-    bool IntersectP(const Ray & ray, Float * hitt0 = nullptr,
-                    Float * hitt1 = nullptr) const;
+    void BoundingSphere(vec3 *center, Float *radius) const {
+        *center = (pMin + pMax) /2.f ;
+        *radius = Contains(*center) ?length(*center- pMax) : 0;
+    }
+
+
 
      bool IntersectP(const Ray & ray, const vec3 & invDir,
                            const int dirIsNeg[3]) const;
@@ -107,6 +115,11 @@ inline  Bounds3  Union(const Bounds3 & a,const Bounds3 & b){
 
 inline  Bounds3  Union(const Bounds3 & a,const vec3 & v){
     return Bounds3(min(a.pMin,v),max(a.pMax,v));
+}
+
+inline  bool Inside(const Bounds3 & b,const vec3 & p){
+    return (p.x >= b.pMin.x && p.x <= b.pMax.x && p.y >= b.pMin.y &&
+            p.y <= b.pMax.y && p.z >= b.pMin.z && p.z <= b.pMax.z);
 }
 
 

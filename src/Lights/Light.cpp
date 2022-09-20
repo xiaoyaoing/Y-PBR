@@ -12,18 +12,18 @@ AreaLight::Sample_Li(const Intersection & ref, const vec2 & u, vec3 * wi, Float 
         return Spectrum();
     }
 
-    *wi = normalize(ref.p-pShape.p);
+    *wi = normalize(pShape.p-ref.p);
+    pShape.w = *wi;
     *vis = VisibilityTester(ref, pShape);
 
-    auto dotN = dot(*wi,pShape.getNormal());
-    if(ref.bsdf->name=="shortBox")
-        int k=1;
-    return L(pShape,*wi);
+    return directLighting(pShape);
 
 }
 
-Spectrum AreaLight::L(const Intersection & intr, const vec3 & w) const {
-    return (twoSide || dot(intr.getNormal(), w) > 0) ? albedo : Spectrum(0.f);
+
+
+Spectrum AreaLight::directLighting(const Intersection & intr) const {
+    return (twoSide || dot(intr.Ng, -intr.w) > 0) ? albedo : Spectrum(0.f);
 }
 
 
@@ -31,16 +31,20 @@ Spectrum AreaLight::L(const Intersection & intr, const vec3 & w) const {
 AreaLight::AreaLight(const std::shared_ptr< Primitive > & primitive,
                      const Spectrum & albedo,
                      bool twoSide)
-                        :primitive(primitive),albedo(albedo),twoSide(twoSide)
+                        :Light((int)LightFlags::Area),
+                        primitive(primitive),albedo(albedo),twoSide(twoSide)
 {
 
+}
+
+Float AreaLight::directPdf(const Intersection & pShape, const vec3 & ref) const {
+    return primitive->directPdf(pShape,ref);
 }
 
 bool VisibilityTester::Unoccluded(const Scene & scene) const {
     vec3 dir =(p1.p-p0.p);
     Float distance = length(dir);
     dir= normalize(dir);
-    Ray ray(p0.p+Constant::EPSILON * dir ,dir,Constant::EPSILON,distance-10*Constant::EPSILON);
+    Ray ray(p0.p ,dir,Constant::EPSILON,distance-Constant::EPSILON);
     return !scene.intersectP(ray);
-
 }

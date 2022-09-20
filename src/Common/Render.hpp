@@ -17,7 +17,7 @@ struct Bucket
 class Render {
 public:
     Render(nlohmann::json);
-    void sampleImageThread();
+    void sampleImageThread(Sampler * threadSampler);
     void sampleImage();
     void Go();
 private:
@@ -26,6 +26,7 @@ private:
     std::unique_ptr<Scene>  scene;
     std::unique_ptr<PathIntegrator> integrator;
     std::shared_ptr<Sampler> sampler;
+    std::string outputFile;
     size_t thread_num;
     std::unique_ptr<WorkQueue<Bucket>> render_queue;
     const size_t bucketSize =32;

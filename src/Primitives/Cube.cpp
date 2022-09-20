@@ -1,6 +1,6 @@
 #include "Cube.hpp"
 #include "spdlog/spdlog.h"
-Cube::Cube(std::shared_ptr < Bsdf > bsdf) : Primitive(bsdf) {
+Cube::Cube(std::shared_ptr < BSDF > bsdf) : Primitive(bsdf) {
     _pos = vec3(0);
     _scale=vec3 (1);
     _rot = mat4(1);
@@ -39,7 +39,7 @@ std::optional < Intersection > Cube::intersect(Ray & ray) const {
         }
         ray.farT = t;
         its.p= ray(t);
-        its.setNormal(normal(its.p));
+        its.Ns = its.Ng = normal(its.p);
         its.primitive = this;
         its.bsdf=bsdf.get();
         return {its};
@@ -47,17 +47,34 @@ std::optional < Intersection > Cube::intersect(Ray & ray) const {
     return std::nullopt;
 }
 
+bool Cube::occluded(const Ray & ray) const {
+
+    vec3 p = mult(_invRot ,vec4((ray.o - _pos),1));
+    vec3 d = mult(_invRot , vec4(ray.d,1));
+
+    vec3 invD = 1.0f /  d;
+    vec3 relMin((-_scale - p));
+    vec3 relMax(( _scale - p));
+
+    float ttMin = ray.nearT, ttMax = ray.farT;
+    for (int i = 0; i < 3; ++i) {
+        if (invD[i] >= 0.0f) {
+            ttMin = std::max(ttMin, relMin[i]*invD[i]);
+            ttMax = std::min(ttMax, relMax[i]*invD[i]);
+        } else {
+            ttMax = std::min(ttMax, relMin[i]*invD[i]);
+            ttMin = std::max(ttMin, relMax[i]*invD[i]);
+        }
+    }
+    return ttMin <= ttMax;
+}
+
 vec3 Cube::normal(const vec3 & pos) const {
     vec3 p = mult(_invRot , vec4((pos - _pos),1));
-    const std::string s = Mat4ToStr(_invRot);
-   std::string s1= Mat4ToStr(_rot);
     vec3  n(0.0f);
     int dim = maxDim((abs(p) - _scale));
     n[dim] = p[dim] < 0.0f ? -1.0f : 1.0f;
     n = mult(_rot , vec4(n,1));
-    if( length2(n)==0){
-        int k=1;
-    }
     return n;
 }
 
@@ -93,5 +110,5 @@ vec3 Cube::operator ()(Float u, Float v) const {
 }
 
 Intersection Cube::Sample(const vec2 & u, Float * pdf) const {
-
+    //to do
 }

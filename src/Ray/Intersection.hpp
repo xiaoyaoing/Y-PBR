@@ -1,29 +1,25 @@
 #pragma  once
 #include "../Common/math.hpp"
-#include "../Bsdfs/Reflection.hpp"
-#include "../Common/Frame.hpp"
+//#include "../Bsdfs/Reflection.hpp"
+
 #include "../Colors/Spectrum.hpp"
 
 class Primitive ;
+class BSDF;
+
 
 struct Intersection {
-    vec3 p;                    //position
-    vec3 wo;                   //-ray.d(world space)
-    Bsdf * bsdf;
-    const Primitive * primitive;// Primitive ptr
-
-    void setNormal(const vec3 & n); //set normalAndFrame
-    vec3 getNormal() const  {return n; }
-
-    vec3 toLocal(const vec3 & w) const ;
-
-    vec3 toWorld(const vec3 & w) const ;
+    vec3 p;
+    vec3 w;  //dir of the indicent ray
+    BSDF * bsdf;
+    const Primitive * primitive;
+    vec3 Ns ;                    //Geometric Normal
+    vec3 Ng ;                    //Shading Normal
+    vec2 uv;
 
     Spectrum Le(const vec3 & w) const;
+};
 
-    Frame shFrame;
-private:
-    vec3 n;                    //normal
-    //shading Frame
+struct SurfaceIntersection : Intersection{
 
 };

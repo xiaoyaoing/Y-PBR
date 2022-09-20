@@ -1,13 +1,12 @@
 #pragma  once
 
-#include "Integrator.hpp"
 #include "../Sampler/LightDistrib.hpp"
-
+#include "AbstractPathTracer.hpp"
 struct PathTraceSettings {
     bool enableTwoSide;
 };
 
-class PathIntegrator :   Integrator{
+class PathIntegrator :   AbstractPathTracer{
 public:
     vec3 integrate(const Ray &ray, const Scene &scene, Sampler &sampler) const override;
 

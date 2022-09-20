@@ -4,12 +4,13 @@
 #include "iostream"
 #include "spdlog/spdlog.h"
 static int BuildNodeCount = 0;
-
+static int IntersectionCount = 0;
 struct BuildNode {
     BuildNode( ) {}
 
-    std::optional<Intersection> intersect(    std::vector < std::shared_ptr < Primitive>> primitives
+    std::optional<Intersection> intersect(  const   std::vector < std::shared_ptr < Primitive>> & primitives
     ,Ray & ray){
+        IntersectionCount ++;
         std::optional<Intersection> val;
         if(nPrimitives){
             for(int i=firstPrimOffset;i<firstPrimOffset+nPrimitives;i++){
@@ -18,18 +19,23 @@ struct BuildNode {
             }
         }
         else {
+        vec3 invDir(1/ray.d.x,1/ray.d.y,1/ray.d.z);
+        int dirIsNeg[3] = {ray.d.x<0 ,ray.d.y<0 ,ray.d.z<0};
+        if(!BB.IntersectP(ray,invDir,dirIsNeg))
+            return std::nullopt;
+
         auto val1=children[0]->intersect(primitives,ray);
-        if(val1.has_value()) val=val1;
-         val1=children[1]->intersect(primitives,ray);
-            if(val1.has_value()) val=val1;
-        }
+        if(val1.has_value())
+            val=val1;
+            val1=children[1]->intersect(primitives,ray);
+        if(val1.has_value())
+            val=val1;
+
         return val;
+    }
     }
 
     void initLeaf(int off, int n, Bounds3 bounds3) {
-        if(off<=14 && 14<off+n){
-            int k=1;
-        }
         firstPrimOffset = off;
         nPrimitives = n;
         bounds3 = std::move(bounds3);
@@ -73,9 +79,23 @@ struct BVHPrimitiveInfo {
               bounds(bounds),
               centroid(.5f * bounds.pMin + .5f * bounds.pMax) {}
 
+    static Float computeSurfaceArea(std::vector<BVHPrimitiveInfo> & infos,int start,int end){
+        if(start==end) return 0;
+        Bounds3 bounds3;
+        for(int idx=start;idx<end;idx++){
+            bounds3 = Union(bounds3,infos[idx].bounds);
+        }
+        return bounds3.SurfaceArea();
+    }
     size_t primitiveNumber;
     Bounds3 bounds;
     vec3 centroid;
+};
+
+
+struct SAHBucketInfo {
+    int count = 0;
+    Bounds3 bounds;
 };
 
 struct alignas(32) LinearNode {
@@ -91,7 +111,7 @@ struct alignas(32) LinearNode {
 
 BVHAccel::BVHAccel( std::vector < std::shared_ptr < Primitive>>   p,
                    const SplitMethod splitMethod,
-                   const uint32 maxPrimInNode) : splitMethod(splitMethod),primitives(std::move(p))
+                   const uint32 maxPrimInNode) : splitMethod(splitMethod),primitives(std::move(p)),maxPrimNode(maxPrimInNode)
                    {
     if ( primitives.empty() ) return;
 
@@ -102,6 +122,7 @@ BVHAccel::BVHAccel( std::vector < std::shared_ptr < Primitive>>   p,
 
     std::vector < std::shared_ptr < Primitive>> orderedPrims;
     BuildNode * node = RecursiveBuild(primitiveInfo, 0, primitives.size(), orderedPrims);
+    root = node;
     node->logInfo(true,true);
     spdlog::info("Build Num {0}", BuildNodeCount);
     primitives.swap(orderedPrims);
@@ -144,7 +165,7 @@ BuildNode * BVHAccel::RecursiveBuild(std::vector < BVHPrimitiveInfo > & primitiv
 
     int nPrimitives = end - start;
     //Only single primitive
-    if ( nPrimitives == 1 ) {
+    if ( nPrimitives <= 10 ) {
         node->initLeaf(orderedPrims.size(), nPrimitives, bounds);
         for ( int i = start ; i < end ; ++ i ) {
             orderedPrims.push_back(primitives[primitiveInfo[i].primitiveNumber]);
@@ -190,7 +211,101 @@ BuildNode * BVHAccel::RecursiveBuild(std::vector < BVHPrimitiveInfo > & primitiv
                                  return a.centroid[dim] < b.centroid[dim];
                              });
         }
+        case SAH : {
+              int axis = centroidBounds.MaximumExtent();
+              Float pMin = centroidBounds[0][dim];
+              Float pMax = centroidBounds[1][dim];
+
+              std::sort(primitiveInfo.begin()+start,primitiveInfo.begin()+end,
+                        [dim](const BVHPrimitiveInfo & p1,const BVHPrimitiveInfo & p2){
+                  return p1.centroid[dim] < p2.centroid[dim];
+              });
+              const int bucketNum = 20;
+
+              Float minCost=std::numeric_limits<Float>::max();
+              int bestSplitPos;
+              for(int curBucket = 0; curBucket<bucketNum;curBucket++){
+                  Float curP = pMin + curBucket * (pMax-pMin) / bucketNum;
+                  BVHPrimitiveInfo tempInfo;
+                  tempInfo.centroid[dim]  = curP;
+                  int  splitPos = std::lower_bound(primitiveInfo.begin()+start,primitiveInfo.begin()+end,tempInfo,
+                                             [&dim](const BVHPrimitiveInfo & info,const BVHPrimitiveInfo & tempInfo){
+                      return info.centroid[dim]<tempInfo.centroid[dim];
+                  }) - primitiveInfo.begin();
+
+                  Float splitCost= BVHPrimitiveInfo::computeSurfaceArea(primitiveInfo,start,splitPos) * (splitPos-start)
+                          + BVHPrimitiveInfo::computeSurfaceArea(primitiveInfo,splitPos,end) * (end-splitPos);
+                  if(splitCost<minCost){
+                      bestSplitPos = splitPos;
+                      minCost = splitCost;
+                  }
+              }
+              mid = bestSplitPos;
+        }
             break;
+        case PBRTSAH : {
+            const int  nBuckets = 12;
+            SAHBucketInfo buckets[nBuckets];
+            for (int i = start; i < end; ++i) {
+                int b = nBuckets *
+                        centroidBounds.Offset(
+                                primitiveInfo[i].centroid)[dim];
+                if (b == nBuckets) b = nBuckets - 1;
+                buckets[b].count++;
+                buckets[b].bounds =
+                        Union(buckets[b].bounds, primitiveInfo[i].bounds);
+            }
+
+            Float cost[nBuckets - 1];
+            for (int i = 0; i < nBuckets - 1; ++i) {
+                Bounds3 b0, b1;
+                int count0 = 0, count1 = 0;
+                for (int j = 0; j <= i; ++j) {
+                    b0 = Union(b0, buckets[j].bounds);
+                    count0 += buckets[j].count;
+                }
+                for (int j = i + 1; j < nBuckets; ++j) {
+                    b1 = Union(b1, buckets[j].bounds);
+                    count1 += buckets[j].count;
+                }
+                cost[i] = 1 +
+                          (count0 * b0.SurfaceArea() +
+                           count1 * b1.SurfaceArea()) /
+                          bounds.SurfaceArea();
+            }
+
+            Float minCost = cost[0];
+            int minCostSplitBucket = 0;
+            for (int i = 1; i < nBuckets - 1; ++i) {
+                if (cost[i] < minCost) {
+                    minCost = cost[i];
+                    minCostSplitBucket = i;
+                }
+            }
+
+            Float leafCost = nPrimitives;
+            if (nPrimitives > maxPrimNode || minCost < leafCost) {
+                BVHPrimitiveInfo *pmid = std::partition(
+                        &primitiveInfo[start], &primitiveInfo[end - 1] + 1,
+                        [=](const BVHPrimitiveInfo &pi) {
+                            int b = nBuckets *
+                                    centroidBounds.Offset(pi.centroid)[dim];
+                            if (b == nBuckets) b = nBuckets - 1;
+                            return b <= minCostSplitBucket;
+                        });
+                mid = pmid - &primitiveInfo[0];
+            } else {
+                // Create leaf _BVHBuildNode_
+                int firstPrimOffset = orderedPrims.size();
+                for (int i = start; i < end; ++i) {
+                    int primNum = primitiveInfo[i].primitiveNumber;
+                    orderedPrims.push_back(primitives[primNum]);
+                }
+                node->initLeaf(firstPrimOffset, nPrimitives, bounds);
+                return node;
+            }
+
+        }
         default:; //todo
     }
 
@@ -225,6 +340,11 @@ std::optional < Intersection > BVHAccel::intersect(const Ray & ray) const {
         return std::nullopt;
     }
     Ray _ray(ray);
+  //  auto temp=root->intersect(primitives,_ray);
+  //  spdlog::info("Search Count {0}",IntersectionCount);
+    //IntersectionCount = 0;
+  //  return temp;
+
 
     vec3 invDir(1 / ray.d.x, 1 / ray.d.y, 1 / ray.d.z);
     int dirIsNeg[3] = {invDir.x < 0, invDir.y < 0, invDir.z < 0};
@@ -261,7 +381,6 @@ std::optional < Intersection > BVHAccel::intersect(const Ray & ray) const {
                     toVisit[visitIdx ++] = curNodeIdx + 1;
                     curNodeIdx = curNode.secondChildOffset;
                     //spdlog::info("push {0} to visitList",curNodeIdx+1);
-
                 }
             }
         } else {
@@ -271,7 +390,7 @@ std::optional < Intersection > BVHAccel::intersect(const Ray & ray) const {
         }
     }
 
-    // spdlog::info("SearchCount :{0}",searchCount);
+     spdlog::info("SearchCount :{0}",searchCount);
     return res;
 
 }
