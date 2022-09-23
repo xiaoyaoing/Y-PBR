@@ -40,7 +40,7 @@ typedef std::int64_t int64;
 #define _POS_INFINY std::numeric_limits<Float>::infinity()
 #define _NEG_INFINY -std::numeric_limits<Float>::infinity()
 #define _NOT_IMPLEMENT_ERROR throw("This not implemented yet!");
-
+#define _ERROR(message) throw(message);
 namespace Constant {
     inline constexpr Float PI = 3.14159265358979323846;
     inline constexpr Float INV_PI = 0.31830988618379067154;
@@ -78,6 +78,10 @@ inline vec3 normalize(vec3 a) {
 
 inline auto radians(vec3 a) {
     return glm::radians(a);
+}
+
+inline vec3 faceForward(const vec3 & a,const vec3 & b){
+    return dot(a,b)>0?a:-a;
 }
 
 inline vec3 intToColor(uint32_t i) {

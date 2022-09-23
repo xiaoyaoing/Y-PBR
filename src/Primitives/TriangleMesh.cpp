@@ -20,6 +20,7 @@ void TriangleMesh::Load(const nlohmann::json j, const Scene & scene,const Transf
     }
 
     useSoomth = getOptional(j,"use_smooth",true);
+   // useSoomth = false;
     if(transform != nullptr)
     {
         mat4  transformNormalMat = transform->TransformNormalMat();
@@ -29,6 +30,10 @@ void TriangleMesh::Load(const nlohmann::json j, const Scene & scene,const Transf
         vertex.normal() = mult(transformNormalMat,vec4(vertex.normal(),0));
         }
     }
+
+    std::vector<vec3> normals;
+    for(int i=0;i<10000;i++)
+        normals.push_back(m_vertexs[i].normal());
 
     computeBoundingBox();
     computeArea();
@@ -118,14 +123,15 @@ std::optional < Intersection > TriangleMesh::intersect(Ray & ray) const {
         ray.farT = rayHit.ray.tfar;
 
         Intersection its;
+        its.p = ray.operator ()(ray.farT);
         const TriangleI tri = m_tris[rayHit.hit.primID];
         its.bsdf = Bsdf(tri.material).get();
-        its.uv = vec2(rayHit.hit.u, rayHit.hit.v);
+        its.uv =  uvAt(rayHit.hit.primID, rayHit.hit.u, rayHit.hit.v);
+
 
         const vec3 & p0 = m_vertexs[tri.v0].pos();
         const vec3 & p1 = m_vertexs[tri.v1].pos();
         const vec3 & p2 = m_vertexs[tri.v2].pos();
-        its.p = interpolate3(p0,p1,p2,its.uv);
 
         its.Ns =  its.Ng = normalize(cross(p1-p0, p2-p0));
         if(useSoomth)
@@ -133,7 +139,10 @@ std::optional < Intersection > TriangleMesh::intersect(Ray & ray) const {
         const vec3 & n1 = m_vertexs[tri.v0].normal();
         const vec3 & n2 = m_vertexs[tri.v1].normal();
         const vec3 & n3 = m_vertexs[tri.v2].normal();
-        its.Ns = normalize(interpolate3(n1,n2,n3,its.uv));
+        its.Ns = normalize(interpolate3(n2,n3,n1,vec2(rayHit.hit.u,rayHit.hit.v)));
+      //  its.Ns = vec3(rayHit.hit.u, rayHit.hit.v,0);
+       // its.Ns = normalize(n1);
+       // its.Ns = vec3(Float(tri.v0)/100000,(float)tri.v1 / 100000,(float)tri.v2 / 100000);
         }
         its.primitive = this;
         return {its};
@@ -149,7 +158,9 @@ bool TriangleMesh::occluded(const Ray & ray) const {
     rtcInitIntersectContext(&context);
     EmbreeUtils::convertRay(&ray,&rtcRay);
     rtcOccluded1(m_scene,&context,&rtcRay);
-    return rtcRay.tfar == -std::numeric_limits<Float>::infinity();
+    if(rtcRay.tfar == -std::numeric_limits<Float>::infinity())
+        return false;
+    return true;
 }
 
 vec3 TriangleMesh::normal(const vec3 & pos) const {
@@ -166,6 +177,14 @@ void TriangleMesh::transform(const Transform & T) {
 
 Intersection TriangleMesh::Sample(const vec2 & u, Float * pdf) const {
     return Intersection();
+}
+
+vec2 TriangleMesh::uvAt(int triID, Float u, Float v) const{
+    const TriangleI &t = m_tris[triID];
+    vec2 uv0 = m_vertexs[t.v0].uv();
+    vec2 uv1 = m_vertexs[t.v1].uv();
+    vec2 uv2 = m_vertexs[t.v2].uv();
+    return (1.0f - u - v)*uv0 + u*uv1 + v*uv2;
 }
 
 

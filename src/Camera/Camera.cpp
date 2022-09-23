@@ -44,7 +44,7 @@ void Camera::preCompute( ) {
 }
 
 void Camera::sampleRay(size_t x, size_t y , Ray & ray, vec2 sample) const {
-    sample = vec2(0.5,0.5);
+    //sample = vec2(0.5);
     vec3 localD = normalize(vec3(
             - 1.0 + ( x + 0.5f + sample.x ) * 2.0f * _pixelSize.x,
             _ratio - ( y + 0.5f + sample.y ) * 2.0f * _pixelSize.x,

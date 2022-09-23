@@ -93,7 +93,8 @@ vec2 BitMapTexture::sample(TextureMapJacobian jacobian, const vec2 & uv) const {
 }
 
 Float BitMapTexture::pdf(TextureMapJacobian jacobian, const vec2 & uv) const {
-    return _distribution[jacobian]->Pdf(uv);
+    vec2 newuv(uv);
+    return _distribution[jacobian]->Pdf(vec2(newuv.x,(1-newuv.y))) * _w * _h;
 }
 
 vec3 BitMapTexture::getRGB(int x, int y) const {

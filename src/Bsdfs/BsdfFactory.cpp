@@ -31,13 +31,37 @@ std::shared_ptr<Material> LoadDielectricMaterial(nlohmann::json j){
 }
 
 std::shared_ptr<Material> LoadConductorMaterial(nlohmann::json j){
-        if( contains(j,"material"))  {
+        if(contains(j,"material"))  {
             return std::make_shared <Conductor>(j["material"]);
         }
-        vec3 k  =j["k"];
-        vec3 eta   = j["eta"];
+        vec3 eta  = getOptional(j,"eta",vec3(0.2004376970f, 0.9240334304f, 1.1022119527f));
+        vec3 k  =   getOptional(j,"k",vec3(3.9129485033f, 2.4528477015f,2.1421879552f));
         return std::make_shared <Conductor> (eta,k);
 }
+
+std::shared_ptr<Material> LoadRoughConductorMaterial(nlohmann::json j){
+    vec3 eta  = getOptional(j,"eta",vec3(0.2004376970f, 0.9240334304f, 1.1022119527f));
+    vec3 k  =   getOptional(j,"k",vec3(3.9129485033f, 2.4528477015f,2.1421879552f));
+    std::string distribStr = getOptional(j,"distribution",std::string("beckMann"));
+    MircroDistributionEnum distribEnum = getOptional("j","distribution",Beckmann);
+    std::shared_ptr<Texture<Float>>  roughness = TextureFactory::LoadTexture<Float>(j["roughness"],0.f);
+    std::shared_ptr<Texture<Float>>  urounghness =  TextureFactory::LoadTexture<Float>(j["urounghness"]);
+    std::shared_ptr<Texture<Float>>  vrounghness =  TextureFactory::LoadTexture<Float>(j["vrounghness"]);
+
+    auto roughCounductorMaterial = std::make_shared<RoughConductor>(eta,k,distribEnum,roughness,urounghness,vrounghness);
+
+    if( contains(j,"material"))
+        roughCounductorMaterial->setCoundctorByName(j["material"]);
+
+    return roughCounductorMaterial;
+}
+
+
+//todo
+std::shared_ptr<Material> LoadRoughDielectricMaterial(nlohmann::json j) {
+    return nullptr;
+}
+
 
 
 
@@ -58,7 +82,9 @@ std::unordered_map<std::string,
             {"lambert" , LoadLambertainMaterial},
             {"mirror", LoadMirrorMaterial},
             {"dielectric", LoadDielectricMaterial},
-            {"conductor", LoadConductorMaterial}
+            {"conductor", LoadConductorMaterial},
+            {"rough_conductor", LoadRoughConductorMaterial},
+            {"rough_dielectric", LoadRoughDielectricMaterial}
     };
 
 

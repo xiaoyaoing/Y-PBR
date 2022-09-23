@@ -27,6 +27,8 @@ public:
     bool occluded(const Ray & ray) const override;
 
 protected:
+    vec2 uvAt(int triID,Float u,Float v) const ;
+
     std::vector<Vertex> m_vertexs;
     std::vector<TriangleI> m_tris;
     std::vector<std::shared_ptr<BSDF>> m_bsdfs;

@@ -14,8 +14,7 @@ public:
     Float pdf(TextureMapJacobian jacobian, const vec2 & uv) const override {
         return 1;
     }
+
 protected:
     T value;
-public:
-
 };

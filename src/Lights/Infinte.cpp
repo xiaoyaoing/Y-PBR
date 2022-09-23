@@ -10,22 +10,15 @@ Spectrum InfinteSphere::Sample_Li(const Intersection & ref, const vec2 & u, vec3
                                   VisibilityTester * vis) const {
 
     vec2 uv = _emission->sample(MAP_SPHERICAL, u);
-
     float sinTheta;
-    * wi = uvToDirection(uv, sinTheta);
+    *wi = uvToDirection(uv, sinTheta);
     * pdf = _emission->pdf(MAP_SPHERICAL, uv) / ( 2 * Constant::PI * Constant::PI * sinTheta );
 
     Intersection pShape;
     pShape.p = ref.p + 2 * _worldRadius * ( * wi );
     * vis = VisibilityTester(ref, pShape);
 
-   // uv = vec2(0.1);
-    //return vec3(u.x,u.y,0);
-    vec3 ans = _emission->Evaluate(uv);
-    rgb +=ans ; count++;
-    if(abs(ans.x-0.222587913)>0.000001)
-        int k=1;
-    return ans;
+    return _emission->Evaluate(uv);
 }
 
 Spectrum InfinteSphere::directLighting(const Intersection & intr) const {
@@ -72,6 +65,7 @@ Float InfinteSphere::directPdf(const Intersection & pShape, const vec3 /*ref*/&)
     Float sinTheta;
     vec2 uv = directionToUV(pShape.w, sinTheta);
     return Constant::INV_PI*Constant::INV_TWO_PI*_emission->pdf(MAP_SPHERICAL, uv)/sinTheta;
+
 //    vec2 uv = directionToUV(- pShape.w);
 //    return _emission->pdf(MAP_SPHERICAL, uv);
 }

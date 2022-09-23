@@ -8,9 +8,8 @@ class Ray {
 public:
     Ray();
 
-    Ray(vec3 start,vec3 direction);
 
-    Ray(vec3 start,vec3 direction,Float nt,Float ft);
+    Ray(vec3 start,vec3 direction,Float nt = 0,Float ft = std::numeric_limits<Float>::max());
 
     vec3  operator()(Float  t) const {
         return o + t * d;

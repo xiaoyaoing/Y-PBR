@@ -3,9 +3,8 @@
 #include "Bsdfs/Reflection.hpp"
 
 //static bool useMis = false;
-static bool sampleBSDF = true;
+static bool sampleBSDF =true;
 static bool sampleLgiht = true;
-
 
 
 Integrator::Integrator(nlohmann::json j) {
@@ -27,73 +26,70 @@ Integrator::EstimateDirect(SurfaceScatterEvent & event, const vec2 & uShading,
     VisibilityTester visibility;
 
     Spectrum Ld(0);
-    //return Spectrum(17,12,4)/20.f;
-    //sample light
-    if(sampleLgiht)
-    {
+    if ( sampleLgiht ) {
         Spectrum Li = light.Sample_Li(* ( event.its ), uLight, & wi, & lightPdf, & visibility);
+
         if ( ! isBlack(Li) && lightPdf != 0 ) {
-            if ( visibility.Unoccluded(scene) ) {
-              //  return Li;
-                event.wi =  event.toLocal(wi);
+            if ( visibility.Unoccluded(scene)  )  {
+                //return Li;
+                event.wi = event.toLocal(wi);
                 scatteringPdf = event.its->bsdf->Pdf(event);
-                Spectrum f = event.its->bsdf->f(event) * abs(event.wi.z) ;
+                Spectrum f = event.its->bsdf->f(event) * abs(event.wi.z);
                 if ( ! isBlack(f) ) {
-                    if ( light.isDeltaLight() ) Ld += f * Li ;/// lightPdf;
+                    if ( light.isDeltaLight() ) Ld += f * Li;/// lightPdf;
                     else {
                         Float weight =
                                 PowerHeuristic(lightPdf, scatteringPdf);
-                        if ( !sampleBSDF ) weight = 1;
-                        Ld += f * weight * Li /lightPdf;/// lightPdf;
+                        if ( ! sampleBSDF ) weight = 1;
+                        Ld += f * weight * Li / lightPdf;
+                        if( isnan(Ld.x)){
+                            int k=1;
+                        }
                     }
                 }
             }
         }
     }
 
-    if(sampleBSDF)
-    //sample bsdf
+    if ( sampleBSDF )
+        //sample bsdf
     {
         if ( ! light.isDeltaLight() ) {
+           // return event.its->Ns;
             Spectrum f = event.its->bsdf->sampleF(event, uShading);
             scatteringPdf = event.pdf;
             f *= abs(event.wi.z);
-         //   return event.toWorld(event.wi);
-         //  return f;
-            Float weight = 1;
-            vec3 worldShadowRayDir = event.toWorld(event.wi);
-          //  return (worldShadowRayDir+vec3(1))/2.f;
-            Ray shaowRay(event.its->p + worldShadowRayDir  * Constant::EPSILON, worldShadowRayDir);
-            //shaowRay.farT =100;
-            std::optional < Intersection > its = scene.intersect(shaowRay);
-            bool isLightInfinite = (light.flags & (int)LightFlags::Infinite);
-            if ( (its.has_value() && its->primitive->areaLight.get() == & light) || isLightInfinite  ) {
-                if(isLightInfinite){
-                    if(its.has_value())
-                    {
-                          return Ld;
+
+            if ( !isBlack(f) )
+            {
+                Float weight = 1;
+                vec3 worldShadowRayDir = event.toWorld(event.wi);
+                Ray shaowRay(event.its->p, worldShadowRayDir,Constant::EPSILON);
+                std::optional < Intersection > its = scene.intersect(shaowRay);
+                bool isLightInfinite = ( light.flags & (int) LightFlags::Infinite );
+                if ( ( its.has_value() && its->primitive->areaLight.get() == & light ) || isLightInfinite ) {
+                    if ( isLightInfinite ) {
+                        if ( its.has_value() ) { return Ld; }
+                        Intersection infinteIts;
+                        its = std::make_optional(infinteIts);
                     }
-                    Intersection infinteIts;
-                    its = std::make_optional(infinteIts);
+                    its->w = shaowRay.d;
+                    if (!isSpecualr(event.sampleType) ) {
+                        lightPdf = light.directPdf(its.value(), event.its->p);
+                        weight = PowerHeuristic(scatteringPdf, lightPdf);
+                        if ( ! sampleLgiht ) weight = 1;
+                    }
+                } else {
+                    return Ld;
                 }
-                its->w = shaowRay.d;
-                if (!isSpecualr(event.sampleType) ) {
-
-                    lightPdf = light.directPdf(its.value(), event.its->p);
-
-//                    if ( lightPdf == 0 )
-//                        return Ld;
-                    weight = PowerHeuristic(scatteringPdf, lightPdf);
-                    if(!sampleLgiht) weight = 1;
+                Spectrum Li = light.directLighting(its.value());
+                //return  its->w;
+                Ld += f * weight * Li / scatteringPdf;
+                if( isnan(Ld.x)){
+                    int k=1;
                 }
-            } else {
-                return Ld;
             }
-           // its->w = normalize(vec3(0.1));
-            Spectrum Li = light.directLighting(its.value());
-            Ld += f * weight * Li / scatteringPdf;
         }
-
     }
     return Ld;
 }

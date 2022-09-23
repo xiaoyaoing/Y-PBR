@@ -172,12 +172,23 @@ std::optional < Intersection > Scene::intersect(const Ray & ray) const {
 
 bool Scene::intersectP(const Ray & ray) const {
     if ( _useBVH ) {
+        auto res = intersect(ray).has_value();
+        if(res){
+            int k=1;
+            return res;
+        }
+        return res;
         RTCRay shadowRay;
         EmbreeUtils::convertRay(& ray, & shadowRay);
         RTCIntersectContext context;
         rtcInitIntersectContext(& context);
         rtcOccluded1(_scene, &context, &shadowRay);
-        return  shadowRay.tfar == _NEG_INFINY ;
+        if(shadowRay.tfar == _NEG_INFINY) {
+            int k =1;
+            return false;
+        }
+        auto its = intersect(ray);
+        return true;
     } else {
         Ray _ray(ray);
         for ( auto primitive: primitives ) {

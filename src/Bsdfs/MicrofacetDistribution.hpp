@@ -1,28 +1,78 @@
 // MicrofacetDistribution Declarations
 #include "Common/math.hpp"
+#include <nlohmann/json.hpp>
+
+
+enum MircroDistributionEnum
+{
+    Beckmann,
+    GGx,
+    TrowbridgeReitz
+};
+
+void from_json(const nlohmann::json & j,MircroDistributionEnum & type);
+
+
+
 
 class MicrofacetDistribution {
 public:
     // MicrofacetDistribution Public Methods
     virtual ~MicrofacetDistribution();
-    virtual Float D(const vec3 &wh) const = 0;
-    virtual Float Lambda(const vec3 &w) const = 0;
-    Float G1(const vec3 &w) const {
+   // https://www.pbr-book.org/3ed-2018/Reflection_Models/Microfacet_Models
+    virtual Float roughnessToAlpha(Float roughness) const =0;
+    virtual Float D(const vec3 & wh, const vec2 & alphaxy) const = 0;
+    virtual Float Lambda(const vec3 & w, const vec2 & alphaxy) const = 0;
+    Float G1(const vec3 & w, const vec2 & alphaxy) const {
         //    if (Dot(w, wh) * CosTheta(w) < 0.) return 0.;
-        return 1 / (1 + Lambda(w));
+        return 1 / (1 + Lambda(w, alphaxy) );
     }
-    virtual Float G(const vec3 &wo, const vec3 &wi) const {
-        return 1 / (1 + Lambda(wo) + Lambda(wi));
+    virtual Float G(const vec3 & wo, const vec3 & wi, const vec2 & alphaxy) const {
+        return 1 / ( 1 + Lambda(wo, alphaxy) + Lambda(wi, alphaxy) );
     }
-    virtual vec3 Sample_wh(const vec3 &wo, const vec2 &u) const = 0;
-    Float Pdf(const vec3 &wo, const vec3 &wh) const;
+    virtual vec3 Sample_wh(const vec3 & wo, const vec2 & u, const vec2 & alphaxy) const = 0;
+    Float Pdf(const vec3 & wo, const vec3 & wh, const vec2 & alphaxy) const;
     virtual std::string ToString() const = 0;
 
 protected:
     // MicrofacetDistribution Protected Methods
     MicrofacetDistribution(bool sampleVisibleArea)
-            : sampleVisibleArea(sampleVisibleArea) {}
+            : sampleVisibleArea(sampleVisibleArea) {
+    }
 
     // MicrofacetDistribution Protected Data
     const bool sampleVisibleArea;
 };
+
+class BeckmannDistribution : public  MicrofacetDistribution{
+public:
+    BeckmannDistribution(bool sampleVis = false): MicrofacetDistribution(sampleVis)
+    {}
+    Float roughnessToAlpha(float roughness) const override;
+    Float D(const vec3 & wh, const vec2 & alphaxy) const override;
+    vec3 Sample_wh(const vec3 & wo, const vec2 & u, const vec2 & alphaxy) const override;
+    std::string ToString( ) const override;
+protected:
+    Float Lambda(const vec3 & w, const vec2 & alphaxy) const override;
+};
+
+class TrowbridgeReitzDistribution : public MicrofacetDistribution {
+public:
+    Float roughnessToAlpha(float roughness) const override;
+
+    Float D(const vec3 & wh, const vec2 & alphaxy) const override;
+
+    Float Lambda(const vec3 & w, const vec2 & alphaxy) const override;
+
+    vec3 Sample_wh(const vec3 & wo, const vec2 & u, const vec2 & alphaxy) const override;
+
+    std::string ToString( ) const override;
+};
+
+
+
+//namespace  Mirofacet {
+//    class Distribution{
+//
+//    };
+//}
