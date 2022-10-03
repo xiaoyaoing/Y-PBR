@@ -53,7 +53,7 @@ vec3 BitMapTexture::Evaluate(const Intersection * si) const {
 
 vec3 BitMapTexture::Evaluate(const vec2 & uv) const {
     float u = uv.x*_w;
-    float v = (1.0f - uv.y)*_h;
+    float v = (uv.y)*_h;
     bool linear = true;
     if (linear) {
         u -= 0.5f;
@@ -105,7 +105,6 @@ void BitMapTexture::LoadResources( ) {
     int w, h;
     void *pixels = nullptr;
     pixels = ImageIO::loadHdr(_path, TexelConversion::REQUEST_RGB, w, h).release();
-
     _texels = pixels;
     _w = w;
     _h = h;

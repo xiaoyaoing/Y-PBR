@@ -2,10 +2,12 @@ cmake_minimum_required(VERSION 3.12)
 
 set(TEST_NAME test-bvh)
 
+message( ${YPBR_SOURCES})
 AddTestModule(
         ModuleName ${TEST_NAME}
         Src Main.cpp
         ${YPBR_SOURCES}
+
 )
 
 set(EXCNAME ${PROJECT_NAME}_${TEST_NAME})

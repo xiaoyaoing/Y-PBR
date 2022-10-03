@@ -6,6 +6,10 @@
 static vec3 rgb(0);
 static int count=0;
 
+Spectrum InfinteSphere::environmentLighting(const Ray & ray) const {
+    return _emission->Evaluate(directionToUV(ray.d));
+}
+
 Spectrum InfinteSphere::Sample_Li(const Intersection & ref, const vec2 & u, vec3 * wi, Float * pdf,
                                   VisibilityTester * vis) const {
 

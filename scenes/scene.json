@@ -277,7 +277,8 @@
             "radius": 1,
             "bsdf": "conductor",
             "transfrom" :{
-            "position": [5.72, -3.73, 3.5]}
+            "position": [5.72, -3.73, 3.5]
+                }
 
         }
     ],
@@ -317,13 +318,9 @@
         "enable_light_sampling": true,
         "enable_volume_light_sampling": true
     },
-    "image": {
-        "output_file": "cornell-box",
-        "width": 1000,
-        "height" : 563
-    },
+
     "renderer": {
-        "output_file": "cornell-box.png",
+        "output_file": "cornell-box",
         "resume_render_file": "TungstenRenderState.dat",
         "overwrite_output_files": false,
         "adaptive_sampling": false,

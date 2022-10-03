@@ -16,11 +16,11 @@ void Image::savePPM(const std::string &  outPutPath) const {
             for (unsigned int j = 0; j < width; ++j) {
                 const vec3 rgb = getPixel(j, i);
                 const unsigned int R =
-                        std::clamp(static_cast<unsigned int>(255.0f * rgb[0]), 0u, 255u);
+                        std::clamp(static_cast<unsigned int>( rgb[0]), 0u, 255u);
                 const unsigned int G =
-                        std::clamp(static_cast<unsigned int>(255.0f * rgb[1]), 0u, 255u);
+                        std::clamp(static_cast<unsigned int>(rgb[1]), 0u, 255u);
                 const unsigned int B =
-                        std::clamp(static_cast<unsigned int>(255.0f * rgb[2]), 0u, 255u);
+                        std::clamp(static_cast<unsigned int>(rgb[2]), 0u, 255u);
                 file << R << " " << G << " " << B << std::endl;
             }
         }
@@ -28,6 +28,20 @@ void Image::savePPM(const std::string &  outPutPath) const {
         spdlog::info("Write to {0}",outPutPath+".ppm");
 }
 
+void Image::saveTXT(const std::string & outPutPath) const {
+    std::ofstream file(outPutPath + "txt");
+    for ( unsigned int i = 0 ; i < height ; ++ i ) {
+        for ( unsigned int j = 0 ; j < width ; ++ j ) {
+            const vec3 rgb = getPixel(j, i);
+            file << toColorStr(rgb) << std::endl;
+        }
+        file.close();
+    }
+}
+
+void Image::saveBMP(const std::string & outPutPath) const {
+
+}
 
 
 void Image::saveTGA( const std::string &  outPutPath) const {
@@ -38,9 +52,8 @@ void Image::saveTGA( const std::string &  outPutPath) const {
     for (unsigned int i = 0; i < height; ++i) {
         for (unsigned int j = 0; j < width; ++j){
             const vec3 rgb = getPixel(j, i);
-
             averageRadiance+=rgb/Float(pixels.size());
-            vec3 c = glm::clamp(rgb, vec3(0.0), vec3(1.0)) * Float(255.0);
+            vec3 c = glm::clamp(rgb, vec3(0.0), vec3(255.0));
             std::vector<uint8_t> fp={ (uint8_t)c.b, (uint8_t)c.g, (uint8_t)c.r };
             file.write(reinterpret_cast<char*>(fp.data()), fp.size() * sizeof(uint8_t));
         }
@@ -73,8 +86,6 @@ void Image::savePNG(const std::string &  outPutPath ) const {
     spdlog::info("Average Radiance {0} {1} {2}",averageRadiance.r,averageRadiance.g,averageRadiance.b);
     ImageIO::savePng(outPutPath+".png",image,width,height,4);
     spdlog::info("Write to {0}",outPutPath+".png");
-
-
 }
 
 

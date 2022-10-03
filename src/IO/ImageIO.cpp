@@ -4,6 +4,7 @@
 #include "fstream"
 #include <stbi/stb_image.h>
 
+
 static int stbiReadCallback(void *user, char *data, int size)
 {
     std::istream &in = *static_cast<std::istream *>(user);
@@ -52,7 +53,16 @@ namespace ImageIO {
         encodeOneStep(path.c_str(), image, width, height);
     }
 
+    bool saveBMP(const std::string & path, const std::vector < unsigned char > & image, int width, int height,
+                 int channels) {
+        //todo
+    }
+
     std::unique_ptr < float[] > loadHdr(const std::string & path, TexelConversion request, int & w, int & h) {
+        int c ;
+        auto temp = stbi_load(path.c_str(), &w, &h, &c, 3);
+
+
         std::shared_ptr < std::ifstream > in = std::make_shared < std::ifstream >(path);
         if ( ! in )
             return nullptr;
@@ -65,6 +75,7 @@ namespace ImageIO {
         // We only expect Radiance HDR for now, which only has RGB support.
         if ( ! img || channels != 3 )
             return nullptr;
+
 
         int targetChannels = ( request == TexelConversion::REQUEST_RGB ) ? 3 : 1;
 

@@ -17,6 +17,9 @@ public:
 
     Float directPdf(const Intersection & pShape, const vec3 & ref) const override;
     void logDebugInfo() const ;
+
+    Spectrum environmentLighting(const Ray & ray) const override;
+
 private:
     Float Power( ) override;
 

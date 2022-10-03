@@ -3,7 +3,7 @@
 
 #include "scene.hpp"
 #include "IO/MeshIO.hpp"
-#include "Io/FileUtils.hpp"
+#include "IO/FileUtils.hpp"
 
 #include "Bsdfs/Reflection.hpp"
 #include "Bsdfs/BsdfFactory.hpp"
@@ -14,6 +14,8 @@
 #include "Primitives/Cube.hpp"
 
 #include "Lights/Infinte.hpp"
+
+#include "Texture/TextureFactory.hpp"
 
 static int occludedCount = 0;
 static int occludedCount1 = 0;
@@ -31,7 +33,8 @@ Scene::Scene(const nlohmann::json j) {
 //    }
 
     auto loadSphere = [](const nlohmann::json & json, std::shared_ptr < BSDF > bsdf) {
-        return std::make_shared < Sphere >(json.at("radius"), bsdf);
+        Float radius = getOptional(json,"radius",1.f);
+        return std::make_shared < Sphere >(radius, bsdf);
     };
 
     auto loadQuad = [](const nlohmann::json & json, std::shared_ptr < BSDF > bsdf) {
@@ -103,33 +106,47 @@ Scene::Scene(const nlohmann::json j) {
 }
 
 
-void Scene::handleAddLight(const nlohmann::json & p, size_t l, size_t r) {
-    if ( p.find("light") != p.end() ) {
-        auto lightJson = p.at("light");
-        std::string lightType = lightJson.at("type");
-
-        if ( lightType == "area" ) {
-            Spectrum albedo = lightJson.at("albedo");
-            Float totalArea = 0, invArea;
-            for ( size_t i = l ; i < r ; i ++ ) totalArea += primitives[i]->Area();
-            invArea = 1 / totalArea;
-            for ( size_t i = l ; i < r ; i ++ ) {
-                // flux to radiosity
-                auto light = std::make_shared < AreaLight >(this->primitives[i], albedo * invArea);
-
-                this->primitives[i]->areaLight = light;
-                lights.push_back(light);
-            }
-        }
-    }
-    Spectrum emission;
-    if ( containsAndGet(p, "emission", emission) ) {
+void Scene::handleAddLight(const nlohmann::json & p,int l,int r) {
+//    if ( p.find("light") != p.end() ) {
+//        auto lightJson = p.at("light");
+//        std::string lightType = lightJson.at("type");
+//
+//        if ( lightType == "area" ) {
+//            Spectrum albedo = lightJson.at("albedo");
+//            Float totalArea = 0, invArea;
+//            for ( size_t i = l ; i < r ; i ++ ) totalArea += primitives[i]->Area();
+//            invArea = 1 / totalArea;
+//            for ( size_t i = l ; i < r ; i ++ ) {
+//                // flux to radiosity
+//                auto light = std::make_shared < AreaLight >(this->primitives[i], albedo * invArea);
+//                this->primitives[i]->areaLight = light;
+//                lights.push_back(light);
+//            }
+//        }
+//    }
+    if( contains(p,"emission")){
+        std::shared_ptr<Texture<Spectrum>> emission =  TextureFactory::LoadTexture <Spectrum>(p["emission"],Spectrum(1));
         for ( size_t i = l ; i < r ; i ++ ) {
             auto light = std::make_shared < AreaLight >(this->primitives[i], emission);
             this->primitives[i]->areaLight = light;
             lights.push_back(light);
         }
     }
+
+    else if( contains(p,"power")){
+        std::shared_ptr<Texture<Spectrum>> power =  TextureFactory::LoadTexture <Spectrum>(p["power"],Spectrum(1));
+        Float totalScale=0;
+        for(size_t i = l ; i < r ; i ++){
+            totalScale+=primitives[i]->PowerToRadianceScale();
+        }
+
+        for ( size_t i = l ; i < r ; i ++ ) {
+            auto light = std::make_shared < AreaLight >(this->primitives[i], power);
+            this->primitives[i]->areaLight = light;
+            lights.push_back(light);
+        }
+    }
+
     return;
 }
 
@@ -172,23 +189,12 @@ std::optional < Intersection > Scene::intersect(const Ray & ray) const {
 
 bool Scene::intersectP(const Ray & ray) const {
     if ( _useBVH ) {
-        auto res = intersect(ray).has_value();
-        if(res){
-            int k=1;
-            return res;
-        }
-        return res;
         RTCRay shadowRay;
         EmbreeUtils::convertRay(& ray, & shadowRay);
         RTCIntersectContext context;
         rtcInitIntersectContext(& context);
         rtcOccluded1(_scene, &context, &shadowRay);
-        if(shadowRay.tfar == _NEG_INFINY) {
-            int k =1;
-            return false;
-        }
-        auto its = intersect(ray);
-        return true;
+        return shadowRay.tfar != _NEG_INFINY;
     } else {
         Ray _ray(ray);
         for ( auto primitive: primitives ) {

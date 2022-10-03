@@ -28,7 +28,7 @@ void TriangleMesh::Load(const nlohmann::json j, const Scene & scene,const Transf
         for(Vertex & vertex:m_vertexs){
         vertex.pos() = transform ->operator *(vertex.pos());
         vertex.normal() = mult(transformNormalMat,vec4(vertex.normal(),0));
-        }
+       }
     }
 
     std::vector<vec3> normals;

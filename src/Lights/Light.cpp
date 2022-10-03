@@ -3,6 +3,8 @@
 #include "../scene.hpp"
 
 
+#include "Common/Texture.hpp"
+
 Spectrum
 AreaLight::Sample_Li(const Intersection & ref, const vec2 & u, vec3 * wi, Float * pdf, VisibilityTester * vis) const {
 
@@ -23,16 +25,16 @@ AreaLight::Sample_Li(const Intersection & ref, const vec2 & u, vec3 * wi, Float 
 
 
 Spectrum AreaLight::directLighting(const Intersection & intr) const {
-    return (twoSide || dot(intr.Ng, -intr.w) > 0) ? albedo : Spectrum(0.f);
+    return (twoSide || dot(intr.Ng, -intr.w) > 0) ? emssision->Evaluate(&intr): Spectrum(0.f);
 }
 
 
 
-AreaLight::AreaLight(const std::shared_ptr< Primitive > & primitive,
-                     const Spectrum & albedo,
+AreaLight::AreaLight(const std::shared_ptr < Primitive > & _primitive,
+                     const std::shared_ptr<Texture<Spectrum>> _emssision,
                      bool twoSide)
                         :Light((int)LightFlags::Area),
-                        primitive(primitive),albedo(albedo),twoSide(twoSide)
+                        primitive(_primitive),emssision(_emssision),twoSide(twoSide)
 {
 
 }

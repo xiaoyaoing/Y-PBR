@@ -85,6 +85,12 @@
             "name": "light",
             "albedo": 1,
             "type": "null"
+        },
+        {
+            "name" : "water",
+            "albedo":[1, 1, 1],
+            "ior" : 1.31,
+            "type":"dielectric"
         }
     ],
     "primitives": [
@@ -265,13 +271,27 @@
             "type": "quad",
             "bsdf": "light"
         },
+
         {
-            "name" : "sphere",
-            "type": "sphere",
-            "radius": 2,
-            "bsdf": "AirIce",
-            "transfrom" :{
-            "position": [5.72, -3.73, 3.5]}
+            "name" : "sphere1",
+            "transform" : {
+                "position": [0.4, 0.31, 0],
+                 "scale" : [0.3,0.3,0.3]
+            },
+            "radius" : 0.3,
+            "type" : "sphere",
+            "bsdf" : "water"
+        },
+        {
+            "name" : "sphere2",
+            "transform" :{
+                "position": [-0.4, 0.51, 0],
+                "scale" : [0.5,0.5,0.5]
+
+            },
+            "radius" : 0.5,
+            "type" : "sphere",
+            "bsdf" : "backWall"
         }
 
     ],
@@ -319,7 +339,7 @@
         "enable_resume_render": false,
         "stratified_sampler": false,
         "scene_bvh": true,
-        "spp": 1,
+        "spp": 2,
         "spp_step": 16,
         "checkpoint_interval": "0",
         "timeout": "0"

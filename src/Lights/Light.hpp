@@ -5,6 +5,10 @@
 
 class Scene;
 class Primitive;
+class Ray;
+
+template<class T>
+class Texture;
 
 // LightFlags Declarations
 enum class LightFlags : int {
@@ -36,10 +40,14 @@ public:
                                VisibilityTester *vis) const = 0;
 
     Light(int _flags) : flags(_flags){};
+
     /// compute radiance in position with dir w
     /// \param intr info
     /// \return radiance
     virtual Spectrum directLighting(const Intersection & intr) const=0;
+
+    ///compute environment radiance
+    virtual Spectrum environmentLighting(const Ray & ray) const  {return Spectrum(0);};
 
     /// returns total power of the light
     virtual  Float Power() { return 0; }
@@ -62,16 +70,15 @@ public:
     Spectrum directLighting(const Intersection & intr) const override;
 
 
-    AreaLight(const std::shared_ptr < Primitive > & primitive,
-                         const Spectrum & albedo,
+    AreaLight(const std::shared_ptr < Primitive > & _primitive,
+                         const std::shared_ptr<Texture<Spectrum>> _emssision,
                          bool twoSide=false);
-
     Float directPdf(const Intersection & pShape, const vec3 & ref) const override;
 
 
 protected:
     std::shared_ptr<Primitive> primitive;
-    Spectrum  albedo;
+    std::shared_ptr<Texture<Spectrum>>  emssision;
     bool twoSide;
     Float area;
 };

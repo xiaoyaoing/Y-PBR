@@ -95,6 +95,11 @@ void Render::Go( ) {
     integrator->Preprocess(* scene, * sampler);
     sampleImage();
     image->postProgress();
+
     image->savePNG(FileUtils::WorkingDir + outputFile + std::to_string(spp) + "spp");
+    image->saveTGA(FileUtils::WorkingDir + outputFile + std::to_string(spp) + "spp");
+    image->savePPM(FileUtils::WorkingDir + outputFile + std::to_string(spp) + "spp");
+    image->saveTXT(FileUtils::WorkingDir + outputFile + std::to_string(spp) + "spp");
+
     scene->logDebugInfo();
 }

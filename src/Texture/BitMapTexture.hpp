@@ -1,3 +1,4 @@
+#pragma  once
 #include "Common/Texture.hpp"
 #include "Sampler/Distrib.hpp"
 #include "Colors/Spectrum.hpp"

@@ -5,12 +5,10 @@
 #include "ToneMap.hpp"
 #include "spdlog/spdlog.h"
 
-inline  vec3 gammaCompress(const vec3 &in)
-{
+inline vec3 gammaCompress(const vec3 & in) {
 
     vec3 out;
-    for (uint8_t c = 0; c < 3; c++)
-    {
+    for ( uint8_t c = 0 ; c < 3 ; c ++ ) {
         out[c] = in[c] <= 0.0031308 ? 12.92 * in[c] : 1.055 * std::pow(in[c], 1.0 / 2.4) - 0.055;
     }
 
@@ -18,9 +16,9 @@ inline  vec3 gammaCompress(const vec3 &in)
     return out;
 }
 
-class Image{
+class Image {
 
-    struct Pixel{
+    struct Pixel {
         vec3 rgb = vec3(0);
     };
 
@@ -29,23 +27,22 @@ class Image{
     After writing this to file, the RGB bytes can be dumped in sequence
     (left to right, top to bottom) to create a TGA image.
     ***************************************************************************/
-    struct HeaderTGA
-    {
+    struct HeaderTGA {
         HeaderTGA(uint16_t width, uint16_t height)
                 : width(width), height(height) {}
 
     private:
-        uint8_t begin[12] = { 0, 0, 2 };
+        uint8_t begin[12] = {0, 0, 2};
         uint16_t width;
         uint16_t height;
-        uint8_t end[2] = { 24, 32 };
+        uint8_t end[2] = {24, 32};
     };
 
-    vec3 getPixel(int x,int y) const ;
+    vec3 getPixel(int x, int y) const;
 
-    uint32 getIndex(uint32 x,uint32 y) const ;
+    uint32 getIndex(uint32 x, uint32 y) const;
 
-    std::vector<Pixel> pixels;
+    std::vector < Pixel > pixels;
     ToneMap::ToneMapType toneMapType;
     bool plain;
     Float exposure_scale;
@@ -53,19 +50,20 @@ class Image{
 
 
 public:
-    Image(const ivec2 &  res);
+    Image(const ivec2 & res);
 
-    void addPixel(uint32 x,uint32 y,vec3 rgb)  ;
+    void addPixel(uint32 x, uint32 y, vec3 rgb);
 
-    void dividePixel(uint32 x,uint32 y,uint32);
+    void dividePixel(uint32 x, uint32 y, uint32);
 
-    void savePPM(const std::string &  outPutPath) const;
+    void savePPM(const std::string & outPutPath) const;
+    void saveTGA(const std::string & outPutPath) const;
+    void savePNG(const std::string & outPutPath) const;
+    void saveBMP(const std::string & outPutPath) const;
+    void saveTXT(const std::string & outPutPath) const;
 
-    void saveTGA(const std::string &  outPutPath) const;
 
-    void savePNG(const std::string &  outPutPath) const ;
-
-    void postProgress();
+    void postProgress( );
 
     uint32 width;
     uint32 height;

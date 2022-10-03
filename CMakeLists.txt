@@ -12,24 +12,35 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(YPBR_DEPENDENCIES_DIR ${PROJECT_SOURCE_DIR}/lib)
 set(YPBR_SOURCES_DIR ${PROJECT_SOURCE_DIR}/src)
 
+
 include_directories(${PROJECT_SOURCE_DIR}/lib/nlohmann/)
 include_directories(${PROJECT_SOURCE_DIR}/lib/loadpng/)
+include_directories(${PROJECT_SOURCE_DIR}/lib/stbi/)
+
+
 
 include_directories(${YPBR_DEPENDENCIES_DIR})
 include_directories(${YPBR_SOURCE_DIR})
+include_directories($<BUILD_INTERFACE:${EMBREE_INCLUDE_DIRS}>)
+
+
 
 ## complie for dependencies
 set(ASSIMP_BUILD_ASSIMP_TOOLS OFF)
 add_subdirectory(${YPBR_DEPENDENCIES_DIR})
 
+
 if(NOT TARGET spdlog)
     find_package(spdlog REQUIRED)
 endif()
 
+find_package(Embree 3.0 REQUIRED)
+message(${EMBREE_LIBRARIES})
 
 ## complie for Zero
-file(GLOB_RECURSE YPBR_SOURCES ${YPBR_SOURCES_DIR}/*.cpp lib/lodepng/lodepng.cpp)
+file(GLOB_RECURSE YPBR_SOURCES ${YPBR_SOURCES_DIR}/*.cpp src/Bsdfs/Conductor.cpp lib/lodepng/lodepng.cpp lib/stbi/stb_image.c )
 link_libraries(spdlog::spdlog )
+link_libraries(${EMBREE_LIBRARIES})
 add_subdirectory(./test)
 #
 #
@@ -64,6 +75,6 @@ add_subdirectory(./test)
 #message(${_source_list})
 #
 #
-#add_executable(${PROJECT_NAME} ${_source_list} src/Primitives/Cube.hpp  )
+#add_executable(${PROJECT_NAME} ${_source_list} src/Primitives/Cube.hpp  src/Primitives/TriangleMesh.hpp src/Primitives/TriangleMesh.cpp )
 #target_link_libraries(${PROJECT_NAME}  spdlog::spdlog)
 

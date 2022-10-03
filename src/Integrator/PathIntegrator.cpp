@@ -32,26 +32,28 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
         }
         its = scene.intersect(_ray);
 
+        if(specularBounce)
+        {
+            if(its.has_value())
+                L += throughPut * its->Le(-_ray.d);
+            else for(auto light :scene.lights){
+                if(light->flags == int(LightFlags::Infinite)){
+                    L +=light->environmentLighting(_ray);
+                }
+            }
+        }  //hit emssive
         if ( ! its.has_value() || bounces >= maxDepth ) break;
 
-        char raydirStr[128];
-        sprintf(raydirStr,"%1f %1f %1f",_ray.d.x,_ray.d.y,_ray.d.z);
-        if(bounces == 0)
-        firstHitName = its->bsdf->name;
-        Path+=" "+its->bsdf->name+" "+std::string(raydirStr);
+//        char raydirStr[128];
+//        sprintf(raydirStr,"%1f %1f %1f",_ray.d.x,_ray.d.y,_ray.d.z);
+//        if(bounces == 0)
+//        firstHitName = its->bsdf->name;
+//        Path+=" "+its->bsdf->name+" "+std::string(raydirStr);
         if(DebugConfig::OnlyShowNormal){
-                return its->Ns;
+                return its->Ng;
         }
 
 
-        if(firstHitName == "water" && its->bsdf->name == "leftWall"){
-            int k=1;
-        }
-
-
-
-        if(specularBounce)
-        L += throughPut * its->Le(-_ray.d);   //hit emssive
 
         SurfaceScatterEvent localScatter = makeLocalScatterEvent(&its.value());
 

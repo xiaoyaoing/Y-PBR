@@ -48,7 +48,7 @@ protected:
     /// \param p the   object json
     /// \param l left  bound  idx of the
     /// \param r right bound  idx of the object
-    void handleAddLight(const nlohmann::json & j,size_t l,size_t r);
+    void handleAddLight(const nlohmann::json & j,int l,int r);
 
     std::vector<std::shared_ptr<Primitive>> primitives;
     std::unordered_map<std::string,std::shared_ptr<BSDF>>  bsdfs;

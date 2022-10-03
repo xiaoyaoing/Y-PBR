@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/example-scenes/material-testball-2/models/Mesh000.wo3" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/example-scenes/test-ball/models/Mesh000.wo3" charset="US-ASCII" />
     <file url="file://$PROJECT_DIR$/example-scenes/water-caustic/front.wo3" charset="ISO-8859-1" />
   </component>
 </project>

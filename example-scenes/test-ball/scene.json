@@ -1,5 +1,4 @@
 {
-    "media": [],
     "bsdfs": [
         {
             "name": "RoughMetal",
@@ -25,7 +24,8 @@
         {
             "name": "Stand",
             "albedo": 0.2,
-            "type": "lambert"
+            "type": "lambert",
+            "material" : "Cu"
         },
         {
             "name": "Floor",
@@ -70,24 +70,7 @@
                 "type": "null"
             }
         },
-        {
-            "transform": {
-                "position": [
-                    -0.708772,
-                    0,
-                    -0.732108
-                ],
-                "scale": 5.43618,
-                "rotation": [
-                    0,
-                    46.1511,
-                    180
-                ]
-            },
-            "bump_strength": 1,
-            "type": "quad",
-            "bsdf": "Floor"
-        },
+
         {
             "transform": {
                 "position": [
@@ -103,7 +86,7 @@
             "smooth": true,
             "backface_culling": false,
             "recompute_normals": false,
-            "bsdf": "Material"
+            "bsdf": "RoughMetal"
         },
         {
             "transform": {
@@ -120,7 +103,7 @@
             "smooth": true,
             "backface_culling": false,
             "recompute_normals": false,
-            "bsdf": "Material"
+            "bsdf": "RoughMetal"
         },
         {
             "transform": {
@@ -184,7 +167,7 @@
         "enable_resume_render": false,
         "stratified_sampler": true,
         "scene_bvh": true,
-        "spp": 64,
+        "spp": 4,
         "spp_step": 16,
         "checkpoint_interval": "0",
         "hdr_output_file": "material-testball.exr"
