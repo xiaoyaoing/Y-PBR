@@ -23,7 +23,7 @@ public:
 
     vec3 Evaluate(const Intersection * si) const override ;
     void makeSamplable(TextureMapJacobian jacobian) override ;
-    vec2 sample(TextureMapJacobian jacobian, const vec2 & uv) const override;
+    vec2 sample(TextureMapJacobian jacobian, const vec2 & uv,Float * pdf) const override;
     Float pdf(TextureMapJacobian jacobian, const vec2 & uv) const override;
     vec3 Evaluate(const vec2 & uv) const override;
     void LoadResources();
@@ -35,9 +35,14 @@ protected:
     template<typename T>
     inline const T * as() const;
 
+public:
+    vec3 average( ) override;
+
+protected:
     void *_texels;
     TexelType _texelType;
     std::unique_ptr<Distribution2D> _distribution[MAP_JACOBIAN_COUNT];
     int _w,_h;
+    vec3 _average;
     std::string _path;
 };

@@ -19,6 +19,9 @@ Spectrum Conductor::sampleF(SurfaceScatterEvent & event, const vec2 & u) const {
     event.pdf = 1;
     Spectrum  alebdo = m_albedo->Evaluate();
     Spectrum  f = alebdo  *  Fresnel::conductorReflectance(m_eta, m_k, event.wo.z);
+  //  f= Spectrum(1);
+//    f= Spectrum(0.5);
+    //f= Spectrum(0);
     event.sampleType = m_type;
     return f;
 }
@@ -50,11 +53,7 @@ Spectrum RoughConductor::f(const SurfaceScatterEvent & event) const {
     // as the surface normal, so that TIR is handled correctly.
     Float cosI = dot(event.wi,faceForward(wh,vec3(0,0,1)));
     Spectrum F= Fresnel::conductorReflectance(m_eta,m_k,cosI);
-    auto res= m_albedo->Evaluate(event.its) * m_distrib->D(wh,alphaxy)  * F * m_distrib->G(event.wo, event.wi,alphaxy)/ (4 * cosThetaI * cosThetaO);
-    if( isnan(res.x)){
-        int k=1;
-    }
-    return res;
+    return  m_albedo->Evaluate(event.its) * m_distrib->D(wh,alphaxy)  * F * m_distrib->G(event.wo, event.wi,alphaxy)/ (4 * cosThetaI * cosThetaO);
 }
 
 Float RoughConductor::Pdf(const SurfaceScatterEvent & event) const {

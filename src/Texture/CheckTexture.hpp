@@ -17,7 +17,7 @@ public:
         return on ? _onColor : _offColor;
     }
 
-    vec2 sample(TextureMapJacobian jacobian, const vec2 & uv) const override {
+    vec2 sample(TextureMapJacobian jacobian, const vec2 & uv,Float * pdf) const override {
         return vec2();
     }
 

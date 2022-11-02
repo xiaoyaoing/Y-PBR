@@ -4,12 +4,12 @@
 #include "BitMapTexture.hpp"
 #include "Colors/Spectrum.hpp"
 #include "Common/math.hpp"
-#include "nlohmann/json.hpp"
-#include "Common/util.hpp"
+#include "Common/Json.hpp"
+#include "Common/Json.hpp"
 
 namespace  TextureFactory{
     template <class T>
-    std::shared_ptr<Texture<T>> LoadTexture(const nlohmann::json & texturJson){
+    std::shared_ptr<Texture<T>> LoadTexture(const Json & texturJson){
         if(texturJson.is_null()){
             return nullptr;
         }
@@ -20,17 +20,6 @@ namespace  TextureFactory{
             return std::make_shared <ConstantTexture<T>>(texturJson);
         }
         if(texturJson.is_string()){
-//            std::string hex_string = texturJson.get<std::string>();
-//            if (hex_string.size() == 7 && hex_string[0] == '#')
-//            {
-//                hex_string.erase(0, 1);
-//                std::stringstream ss;
-//                ss << std::hex << hex_string;
-//                uint32_t color_int;
-//                ss >> color_int;
-//                Spectrum  albedo = intToColor(color_int);
-//                return std::make_shared <ConstantTexture<T>>(albedo);
-//            }
 
               return nullptr;
         }
@@ -50,10 +39,9 @@ namespace  TextureFactory{
     }
 
     template <class T>
-    std::shared_ptr<Texture<T>> LoadTexture(const nlohmann::json & texturJson,T defaultValue){
+    std::shared_ptr<Texture<T>> LoadTexture(const Json & texturJson,T defaultValue){
         if(auto texture = LoadTexture<T>(texturJson))
             return texture;
-
         return std::make_shared<ConstantTexture<T>>(defaultValue);
     }
 }

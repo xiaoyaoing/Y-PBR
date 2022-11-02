@@ -35,6 +35,6 @@ private:
     BuildNode * root;
 };
 
-std::unique_ptr<BVHAccel> CreateBVH(const nlohmann::json &j,
+std::unique_ptr<BVHAccel> CreateBVH(const Json &j,
                                     const std::vector<std::shared_ptr<Primitive>> &
                                     );

@@ -3,9 +3,9 @@
 
 namespace BSDFFactory{
 
-std::shared_ptr<BSDF> LoadBsdfFromJson(nlohmann::json j);
+std::shared_ptr<BSDF> LoadBsdfFromJson(Json j);
 
 std::unordered_map<std::string,std::shared_ptr<BSDF>>
-                      LoadBsdfsFromJson(nlohmann::json j);
+                      LoadBsdfsFromJson(Json j);
 
 }

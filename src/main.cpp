@@ -7,7 +7,7 @@
 //
 //    std::ifstream scene_file("/Users/yjp/nju/大三下/graphics/Y-PBR/scenes/standford_box.json");
 //
-//    nlohmann::json j;
+//    Json j;
 //    scene_file >> j;
 //    scene_file.close();
 //
@@ -19,11 +19,11 @@
 ////    std::unique_ptr<Scene>  scene= std::make_unique<Scene>(j);
 ////    std::unique_ptr<PathIntegrator> integrator=std::make_unique<PathIntegrator>(j);
 ////    UniformSampler sampler;
-////    integrator->Preprocess(*scene,sampler);
+////    integrator->process(*scene,sampler);
 ////
 ////    Ray ray;
 ////
-////    spdlog::info("Sample count per pixel:{0}",camera->sample_count);
+////    spdlog::info("sample count per pixel:{0}",camera->sample_count);
 ////    for(uint32 y=0;y<outputImage->height;y++)
 ////    {
 ////        for(uint32 x=0;x<outputImage->width;x++)

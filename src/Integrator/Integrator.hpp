@@ -1,39 +1,53 @@
 #pragma  once
 
-#include "../scene.hpp"
-#include "../Common/math.hpp"
-#include "../Sampler/Sampler.hpp"
-#include "../Ray/Ray.hpp"
-#include "../Sampler/Distrib.hpp"
+#include "scene.hpp"
+#include "Ray/Ray.hpp"
+#include "Camera/Camera.hpp"
+#include "Sampler/Distrib.hpp"
+#include "Sampler/Sampler.hpp"
 #include "SampleRecords/SurfaceScatterEvent.hpp"
 
-#include <nlohmann/json.hpp>
 
-struct LightSample{
 
-};
+
+//class Sampler;
+
+//class Image;
+
 
 class Integrator{
 public:
-   Integrator(nlohmann::json j);
+  // Integrator(Json j);
+   virtual void render(const Scene & scene) const = 0 ;
 
-   virtual vec3  integrate(const Ray& ray, const Scene& scene, Sampler& sampler) const =0;
+   virtual void  process(const Scene &scene, Sampler & sampler )  =0;
 
-
-   virtual void  Preprocess(const Scene &scene, Sampler & sampler )  =0;
-
-    Spectrum UniformSampleOneLight(SurfaceScatterEvent & event, const Scene &scene,
+    Spectrum uniformSampleOneLight(SurfaceScatterEvent & event, const Scene &scene,
                                    Sampler &sampler,
-                                   const Distribution1D *lightDistrib,
+                                   const Distribution1D *lightDistrib = nullptr,
                                    bool handleMedia = false) const;
 
-    Spectrum UniformSampleAllLights(SurfaceScatterEvent & it, const Scene &scene, Sampler &sampler,
+    Spectrum uniformSampleAllLights(SurfaceScatterEvent & it, const Scene &scene, Sampler &sampler,
                                     const std::vector<int> &nLightSamples,
                                     bool handleMedia = false);
 
-    Spectrum EstimateDirect(SurfaceScatterEvent & event, const vec2 &uShading,
+    Spectrum estimateDirect(SurfaceScatterEvent & event, const vec2 &uShading,
                             const Light &light, const vec2 &uLight,
                             const Scene &scene, Sampler &sampler,
                             bool specular = false) const;
 
+    SurfaceScatterEvent makeLocalScatterEvent(const Intersection * its) const ;
+    std::unique_ptr<Distribution1D> computeLightPowerDistrib(const Scene & scene) const;
+};
+
+//Integrator Based Sampler
+class SamplerIntegrator : public  Integrator{
+
+public:
+    SamplerIntegrator(std::shared_ptr<Camera> camera,std::shared_ptr<Sampler> sampler):_camera(camera),_sampler(sampler){}
+    void render(const Scene & scene) const override;
+    virtual vec3  integrate(const Ray& ray, const Scene& scene, Sampler& sampler) const = 0 ;
+private:
+    std::shared_ptr<Camera> _camera;
+    std::shared_ptr<Sampler> _sampler;
 };

@@ -1,7 +1,7 @@
 #include "Integrator.hpp"
 #include "SampleRecords/SurfaceScatterEvent.hpp"
-class AbstractPathTracer : public  Integrator{
+class AbstractPathTracer : public SamplerIntegrator{
 protected:
     SurfaceScatterEvent makeLocalScatterEvent(const Intersection * its) const  ;
-    AbstractPathTracer(nlohmann::json j) :Integrator(j){ }
+//    AbstractPathTracer(Json j) :Integrator(j){ }
 };

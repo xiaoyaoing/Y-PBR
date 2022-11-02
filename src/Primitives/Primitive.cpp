@@ -1,8 +1,8 @@
 #include "Primitive.hpp"
 
 
-Intersection Primitive::Sample(const Intersection & ref, const vec2 & u, Float * pdf) const {
-    auto intr =  Sample(u,pdf);
+Intersection Primitive::sample(const Intersection & ref, const vec2 & u, Float * pdf) const {
+    auto intr = sample(u, pdf);
 
     vec3 wi = intr.p - ref.p;
     if (length2(wi) == 0)

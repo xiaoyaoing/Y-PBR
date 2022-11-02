@@ -1,7 +1,7 @@
 #include "BsdfFactory.hpp"
 #include "Reflection.hpp"
 #include <spdlog/spdlog.h>
-#include "../Common/util.hpp"
+#include "../Common/Json.hpp"
 #include "Texture/TextureFactory.hpp"
 #include "sstream"
 
@@ -13,24 +13,24 @@ static Spectrum  DefaultALbedo =  Spectrum(0.9,0.9,0.9);
 
 
 
-std::shared_ptr<Material> LoadLambertainMaterial(nlohmann::json & j){
+std::shared_ptr<Material> LoadLambertainMaterial(Json & j){
 
     return  std::make_shared<LambertainR>();
    //  material->Add(new LambertainT(albedo));
 }
 
-std::shared_ptr<Material> LoadMirrorMaterial(nlohmann::json j){
+std::shared_ptr<Material> LoadMirrorMaterial(Json j){
     return std::make_shared <SpecularR>();
     //todo support fresnel specular and uRoughness
 }
 
-std::shared_ptr<Material> LoadDielectricMaterial(nlohmann::json j){
+std::shared_ptr<Material> LoadDielectricMaterial(Json j){
     bool enalbeT = getOptional(j,"enable_refraction",true);
     Float ior   = j["ior"];
     return std::make_shared <Dielectric>(ior,enalbeT);
 }
 
-std::shared_ptr<Material> LoadConductorMaterial(nlohmann::json j){
+std::shared_ptr<Material> LoadConductorMaterial(Json j){
         if(contains(j,"material"))  {
             return std::make_shared <Conductor>(j["material"]);
         }
@@ -39,7 +39,7 @@ std::shared_ptr<Material> LoadConductorMaterial(nlohmann::json j){
         return std::make_shared <Conductor> (eta,k);
 }
 
-std::shared_ptr<Material> LoadRoughConductorMaterial(nlohmann::json j){
+std::shared_ptr<Material> LoadRoughConductorMaterial(Json j){
     vec3 eta  = getOptional(j,"eta",vec3(0.2004376970f, 0.9240334304f, 1.1022119527f));
     vec3 k  =   getOptional(j,"k",vec3(3.9129485033f, 2.4528477015f,2.1421879552f));
     std::string distribStr = getOptional(j,"distribution",std::string("beckMann"));
@@ -58,7 +58,7 @@ std::shared_ptr<Material> LoadRoughConductorMaterial(nlohmann::json j){
 
 
 //todo
-std::shared_ptr<Material> LoadRoughDielectricMaterial(nlohmann::json j) {
+std::shared_ptr<Material> LoadRoughDielectricMaterial(Json j) {
     return nullptr;
 }
 
@@ -77,7 +77,7 @@ std::shared_ptr<Material> LoadDefualtMaterial(){
 
 
 std::unordered_map<std::string,
-            std::function<std::shared_ptr<Material>(nlohmann::json & j)>>
+            std::function<std::shared_ptr<Material>(Json & j)>>
             MaterialLoadTable  = {
             {"lambert" , LoadLambertainMaterial},
             {"mirror", LoadMirrorMaterial},
@@ -91,7 +91,7 @@ std::unordered_map<std::string,
 /**********************************************************************************************************************/
 /*********************************************************************************************************************/
 
-std::shared_ptr <BSDF> LoadBsdfFromJson(nlohmann::json j) {
+std::shared_ptr <BSDF> LoadBsdfFromJson(Json j) {
    // Spectrum  albedo= getOptional(j,"albedo",DefaultALbedo);
     std::shared_ptr<Texture<Spectrum>> albedoTexture = TextureFactory::LoadTexture(j["albedo"],DefaultALbedo);
     //    std::shared_ptr<ConstantTexture<Spectrum>> albedoTexture = std::make_shared<ConstantTexture<Spectrum>>(albedo);
@@ -113,7 +113,7 @@ std::shared_ptr <BSDF> LoadBsdfFromJson(nlohmann::json j) {
 }
 
 std::unordered_map < std::string, std::shared_ptr<BSDF>>
-    LoadBsdfsFromJson(nlohmann::json j) {
+    LoadBsdfsFromJson(Json j) {
         //spdlog::info(to_string(j));
         std::unordered_map < std::string, std::shared_ptr<BSDF>> bsdf_maps;
 

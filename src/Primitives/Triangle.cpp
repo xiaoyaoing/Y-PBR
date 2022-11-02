@@ -5,7 +5,7 @@
 //#include "scene.hpp"
 //
 //
-//void TriangleMesh::Load(const nlohmann::json j, const Scene & scene,const Transform * transform) {
+//void TriangleMesh::Load(const Json j, const Scene & scene,const Transform * transform) {
 //    auto & bsdf_json = j["bsdf"];
 //
 //    if(bsdf_json.is_array()){

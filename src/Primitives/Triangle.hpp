@@ -15,7 +15,7 @@
 //        m_vertexs = std::move(vertexs);
 //    }
 //
-//    void Load(const nlohmann::json j,const Scene & scene,const Transform * transform);
+//    void Load(const Json j,const Scene & scene,const Transform * transform);
 //
 //    int BsdfCount() const {return m_bsdfs.size();}
 //

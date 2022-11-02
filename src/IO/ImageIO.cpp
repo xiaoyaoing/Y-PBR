@@ -50,6 +50,7 @@ namespace ImageIO {
 
     bool savePng(const std::string & path, const std::vector < unsigned char > & image, int width, int height,
                  int channels) {
+
         encodeOneStep(path.c_str(), image, width, height);
     }
 
@@ -57,6 +58,8 @@ namespace ImageIO {
                  int channels) {
         //todo
     }
+
+
 
     std::unique_ptr < float[] > loadHdr(const std::string & path, TexelConversion request, int & w, int & h) {
         int c ;

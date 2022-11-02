@@ -1,6 +1,6 @@
 // MicrofacetDistribution Declarations
 #include "Common/math.hpp"
-#include <nlohmann/json.hpp>
+#include "Common/Json.hpp"
 
 
 enum MircroDistributionEnum
@@ -10,7 +10,7 @@ enum MircroDistributionEnum
     TrowbridgeReitz
 };
 
-void from_json(const nlohmann::json & j,MircroDistributionEnum & type);
+void from_json(const Json & j,MircroDistributionEnum & type);
 
 
 

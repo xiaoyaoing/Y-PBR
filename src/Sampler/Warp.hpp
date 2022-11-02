@@ -18,7 +18,7 @@ public:
     /// Probability density of \ref squareToUniformSquare()
     static Float squareToUniformSquarePdf(const vec2 &p);
 
-    /// Sample a 2D tent distribution
+    /// sample a 2D tent distribution
     static vec2 squareToTent(const vec2 &sample);
 
     /// Probability density of \ref squareToTent()
@@ -29,6 +29,8 @@ public:
 
     /// Probability density of \ref squareToUniformDisk()
     static Float squareToUniformDiskPdf(const vec2 &p);
+
+    static vec2 ConcentricSampleDisk(const vec2 & u);
 
     /// Uniformly sample a vector on the unit sphere with respect to solid angles
     static vec3 squareToUniformSphere(const vec2 &sample);

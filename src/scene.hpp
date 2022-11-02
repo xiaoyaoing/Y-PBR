@@ -1,6 +1,6 @@
 #pragma  once
 
-#include "nlohmann/json.hpp"
+#include "Common/Json.hpp"
 #include "Primitives/Primitive.hpp"
 #include "Lights/Light.hpp"
 #include "Hierancy/BVH.hpp"
@@ -9,9 +9,16 @@
 class Light;
 class Primitive;
 
+struct RenderOptions{
+    int spp;
+    RenderOptions(const Json & renderJson){
+        spp = getOptional(renderJson,"spp",64);
+    }
+};
+
 class Scene {
 public:
-    Scene(const nlohmann::json j);
+    Scene(const Json sceneJson);
 
     // Scene and Light Intersection - Records the most recent intersection
     std::optional<Intersection>  intersect(const Ray& ray) const;
@@ -20,7 +27,7 @@ public:
     bool intersectP(const Ray & ray) const ;
     //log some info for debug
     void logDebugInfo();
-    void setUp();
+    void build();
     Bounds3 getWorldBound() const {
         return worldBound;
     }
@@ -32,7 +39,7 @@ public:
         return  bsdfs.at("default");
     }
 
-    std::shared_ptr<BSDF> fetchBSDFFromJson(const nlohmann::json & bsdfJson){
+    std::shared_ptr<BSDF> fetchBSDFFromJson(const Json & bsdfJson){
         if(bsdfJson.is_string()){
             return fetchBSDF(bsdfJson.get <std::string>());
         }
@@ -41,6 +48,7 @@ public:
         }
     }
 
+    RenderOptions options;
 public :
     std::vector<std::shared_ptr<Light>> lights;
 protected:
@@ -48,7 +56,7 @@ protected:
     /// \param p the   object json
     /// \param l left  bound  idx of the
     /// \param r right bound  idx of the object
-    void handleAddLight(const nlohmann::json & j,int l,int r);
+    void handleAddLight(const Json & j,int l,int r);
 
     std::vector<std::shared_ptr<Primitive>> primitives;
     std::unordered_map<std::string,std::shared_ptr<BSDF>>  bsdfs;
@@ -57,7 +65,6 @@ protected:
     Bounds3 worldBound;
     RTCScene  _scene = nullptr;
     bool _useBVH;
-
 
     /*** debug variables ***/
 };

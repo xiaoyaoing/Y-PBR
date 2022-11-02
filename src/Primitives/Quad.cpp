@@ -3,8 +3,10 @@
 #include "Quad.hpp"
 #include "Bsdfs/Reflection.hpp"
 #include "iostream"
+#include "Common/Transform.hpp"
 
-Quad::Quad(const nlohmann::json & j, std::shared_ptr < BSDF > bsdf) : Primitive(bsdf) {
+Quad::Quad(const Json & j, std::shared_ptr < BSDF > bsdf) : Primitive(bsdf) {
+
 }
 
 void Quad::preCompute( ) {
@@ -72,7 +74,7 @@ bool Quad::occluded(const Ray & ray) const {
 }
 
 
-Intersection Quad::Sample(const vec2 & u, Float * pdf) const {
+Intersection Quad::sample(const vec2 & u, Float * pdf) const {
     Intersection its;
     its.p = _base + _edge0 * u[0] + _edge1 * u[1];
     its.Ng = normal(its.p);
@@ -85,19 +87,16 @@ vec3 Quad::normal(const vec3 & pos) const {
     return normalize(cross(_edge1, _edge0));
 }
 
-void Quad::transform(const Transform & T) {
-    if ( this->bsdf->name == "backWall" ) {
-        int k = 1;
-    }
-    std::string s = Mat4ToStr(T.matrix);
-    _base = T * vec3(0.0f);
-    _edge0 = T.transformVector(vec3(1.0f, 0.0f, 0.0f));
-    _edge1 = T.transformVector(vec3(0.0f, 0.0f, 1.0f));
+void Quad::transform(const mat4 & T) {
+
+    _base = transformPoint(T,vec3(0.0f));
+    _edge0 = transformVector(T,vec3(1.0f, 0.0f, 0.0f));
+    _edge1 = transformVector(T,vec3(0.0f, 0.0f, 1.0f));
+
     _base -= _edge0 * 0.5f;
     _base -= _edge1 * 0.5f;
     std::cout << _base.x << " " << _base.y << " " << _base.z << " " << _edge0.x << " " << _edge0.y << " " << _edge0.z
               << " " << _edge1.x << " " << _edge1.y << " " << _edge1.z << " " << std::endl;
-
     preCompute();
 }
 

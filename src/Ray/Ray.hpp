@@ -9,7 +9,7 @@ public:
     Ray();
 
 
-    Ray(vec3 start,vec3 direction,Float nt = 0,Float ft = std::numeric_limits<Float>::max());
+    Ray(vec3 start,vec3 direction,Float nt = Constant::EPSILON,Float ft = std::numeric_limits<Float>::max());
 
     vec3  operator()(Float  t) const {
         return o + t * d;

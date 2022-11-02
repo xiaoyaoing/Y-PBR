@@ -2,6 +2,7 @@
 
 #include "../Colors/Spectrum.hpp"
 #include "../Ray/Intersection.hpp"
+#include "Ray/Ray.hpp"
 
 class Scene;
 class Primitive;
@@ -33,12 +34,21 @@ private:
    Intersection p0, p1;
 };
 
+
+struct LightSampleResult{
+    vec3 lightN;
+    Float lightPosPdf;
+    Float lightDirPdf;
+    Spectrum radiance;
+    Ray ray;
+};
+
 class Light {
 public:
-    virtual Spectrum Sample_Li(const Intersection &ref, const vec2 &u,
-                                vec3 *wi, Float *pdf,
-                               VisibilityTester *vis) const = 0;
-
+    virtual Spectrum sampleLi(const Intersection &ref, const vec2 &u,
+                              vec3 *wi, Float *pdf,
+                              VisibilityTester *vis) const = 0;
+    virtual  LightSampleResult sampleDirect(const vec2 & positionSample, const vec2 & dirSample) = 0;
     Light(int _flags) : flags(_flags){};
 
     /// compute radiance in position with dir w
@@ -50,7 +60,7 @@ public:
     virtual Spectrum environmentLighting(const Ray & ray) const  {return Spectrum(0);};
 
     /// returns total power of the light
-    virtual  Float Power() { return 0; }
+    virtual Spectrum Power() { return Spectrum(); }
     virtual  void Preprocess(const Scene & scene) {}
     virtual  Float directPdf(const Intersection & pShape, const vec3 & ref) const {
         _NOT_IMPLEMENT_ERROR
@@ -64,7 +74,10 @@ public:
 
 class AreaLight : public  Light{
     Spectrum
-    Sample_Li(const Intersection & ref, const vec2 & u, vec3 * wi, Float * pdf, VisibilityTester * vis) const override;
+    sampleLi(const Intersection & ref, const vec2 & u, vec3 * wi, Float * pdf, VisibilityTester * vis) const override;
+
+public:
+    LightSampleResult sampleDirect(const vec2 & positionSample, const vec2 & dirSample) override;
 
 public:
     Spectrum directLighting(const Intersection & intr) const override;

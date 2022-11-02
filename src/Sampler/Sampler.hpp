@@ -4,7 +4,7 @@
 #include <limits>
 #include <memory>
 
-#include "../Common/math.hpp"
+#include "Common/math.hpp"
 
 // *Really* minimal PCG32 code / (c) 2014 M.E. O'Neill / pcg-random.org
 // Licensed under Apache License 2.0 (NO WARRANTY, etc. see website)
@@ -77,6 +77,10 @@ public:
 
     Float getNext1D() override { return rng.getNext(); }
     vec2 getNext2D() override { return vec2 (rng.getNext(), rng.getNext()); }
+};
+
+class HaltonSampler : public Sampler{
+
 };
 
 //// sample direction in the hemisphere

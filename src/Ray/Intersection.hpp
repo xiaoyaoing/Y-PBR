@@ -18,6 +18,10 @@ struct Intersection {
     vec2 uv;
 
     Spectrum Le(const vec3 & w) const;
+    Intersection(){}
+    Intersection(const Intersection & its):p(its.p),w(its.w),bsdf(its.bsdf),Ns(its.Ns),Ng(its.Ng),uv(its.uv),primitive(its.primitive){
+
+    }
 };
 
 struct SurfaceIntersection : Intersection{

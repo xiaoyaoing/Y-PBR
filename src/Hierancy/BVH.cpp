@@ -440,7 +440,7 @@ bool BVHAccel::intersectP(const Ray & ray) const {
     return false;
 }
 
-std::unique_ptr < BVHAccel > CreateBVH(const nlohmann::json & j,
+std::unique_ptr < BVHAccel > CreateBVH(const Json & j,
                                        const std::vector < std::shared_ptr < Primitive>> & primitives
 ) {
 

@@ -2,6 +2,7 @@
 
 #include "Sphere.hpp"
 #include "../Sampler/Warp.hpp"
+#include "Common/Transform.hpp"
 
 Sphere::Sphere(double radius, std::shared_ptr < BSDF > bsdf) : Primitive(bsdf), radius(radius), origin(0.0) {
     computeArea();
@@ -61,10 +62,10 @@ vec3 Sphere::normal(const vec3 & pos) const {
     return normalize(pos - origin);
 }
 
-void Sphere::transform(const Transform & T) {
-    origin = T * vec3(0,0,0);
-    vec3  scale = extractScale(T.matrix) * vec4(vec3(1.0),0);
-    radius = max(scale);
+void Sphere::transform(const mat4 & T) {
+    origin = transformPoint(T,vec3(0));
+    vec3  scale = extractScale(T) * vec4(vec3(1.0),0);
+    radius = max(scale) * radius;
     computeBoundingBox();
     computeArea();
 
@@ -80,7 +81,7 @@ void Sphere::computeBoundingBox( ) {
     //todo
 }
 
-Intersection Sphere::Sample(const vec2 & u, Float * pdf) const {
+Intersection Sphere::sample(const vec2 & u, Float * pdf) const {
     Intersection it;
     it.p = origin + radius * Warp::squareToUniformSphere(u);
     it.Ng=normal(it.p);

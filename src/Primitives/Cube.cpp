@@ -1,5 +1,7 @@
 #include "Cube.hpp"
 #include "spdlog/spdlog.h"
+#include "Common/Transform.hpp"
+
 Cube::Cube(std::shared_ptr < BSDF > bsdf) : Primitive(bsdf) {
     _pos = vec3(0);
     _scale=vec3 (1);
@@ -49,8 +51,8 @@ std::optional < Intersection > Cube::intersect(Ray & ray) const {
 
 bool Cube::occluded(const Ray & ray) const {
 
-    vec3 p = mult(_invRot ,vec4((ray.o - _pos),1));
-    vec3 d = mult(_invRot , vec4(ray.d,1));
+    vec3 p = transformVector(_invRot ,ray.o - _pos);
+    vec3 d = transformVector(_invRot , ray.d);
 
     vec3 invD = 1.0f /  d;
     vec3 relMin((-_scale - p));
@@ -70,7 +72,7 @@ bool Cube::occluded(const Ray & ray) const {
 }
 
 vec3 Cube::normal(const vec3 & pos) const {
-    vec3 p = mult(_invRot , vec4((pos - _pos),1));
+    vec3 p = transformPoint(_invRot ,pos-_pos);
     vec3  n(0.0f);
     int dim = maxDim((abs(p) - _scale));
     n[dim] = p[dim] < 0.0f ? -1.0f : 1.0f;
@@ -95,10 +97,10 @@ void Cube::computeBoundingBox( ) {
     BB_ = box;
 }
 
-void Cube::transform(const Transform & T) {
-    _pos = T * vec3(0.0f);
-    _scale = extractScale(T.matrix) * vec4(vec3(0.5f),1);
-    _rot=extractRotation(T.matrix);
+void Cube::transform(const mat4 & T) {
+    _pos = transformPoint(T,vec3(0.0f));
+    _scale = extractScale(T) * vec4(vec3(0.5f),1);
+    _rot=extractRotation(T);
     _invRot = glm::transpose(_rot);
     auto s1 = Mat4ToStr(_rot);
     auto s2 = Mat4ToStr(_invRot);
@@ -109,6 +111,6 @@ vec3 Cube::operator ()(Float u, Float v) const {
     return vec3(0);
 }
 
-Intersection Cube::Sample(const vec2 & u, Float * pdf) const {
+Intersection Cube::sample(const vec2 & u, Float * pdf) const {
     //to do
 }

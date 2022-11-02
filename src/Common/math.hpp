@@ -7,25 +7,25 @@
 #include "sstream"
 #include "string"
 
-#define  _USE_DOUBLE false
 #ifdef  _USE_DOUBLE
-typedef float Float;
-typedef glm::vec2 vec2;
-typedef glm::vec3 vec3;
-typedef glm::vec4 vec4;
-typedef glm::mat4 mat4;
-typedef glm::mat3 mat3;
-typedef glm::ivec2 ivec2;
-#else
+
 typedef  double Float;
 typedef  glm::dvec2  vec2;
 typedef  glm::dvec3  vec3;
 typedef  glm::dvec4  vec4;
 typedef  glm::dmat3  mat3;
 typedef  glm::dmat4  mat4;
+#else
+typedef float Float;
+typedef glm::vec2 vec2;
+typedef glm::vec3 vec3;
+typedef glm::vec4 vec4;
+typedef glm::mat4 mat4;
+typedef glm::mat3 mat3;
 #endif
 
 typedef glm::ivec2 ivec2;
+typedef glm::ivec3 ivec3;
 
 typedef std::uint8_t uint8;
 typedef std::uint16_t uint16;
@@ -43,11 +43,13 @@ typedef std::int64_t int64;
 #define _ERROR(message) throw(message);
 namespace Constant {
     inline constexpr Float PI = 3.14159265358979323846;
+    inline constexpr Float PiOver2 = 1.57079632679489661923;
+    inline constexpr Float PiOver4 = 0.78539816339744830961;
     inline constexpr Float INV_PI = 0.31830988618379067154;
     inline constexpr Float INV_TWO_PI = INV_PI / 2;
     inline constexpr Float HALF_PI = 1.57079632679489661923;
     inline constexpr Float TWO_PI = 6.283185307179586476925;
-    inline constexpr Float EPSILON = 5e-4f;
+    inline constexpr Float EPSILON = 1e-3f;
 }
 
 
@@ -292,55 +294,7 @@ namespace Angle {
     }
 }
 
-inline vec3 Right(const mat4 & m) {
-    return vec3(m[0][0], m[1][0], m[2][0]);
-}
 
-inline vec3 Up(const mat4 & m) {
-    return vec3(m[0][1], m[1][1], m[2][1]);
-}
-
-inline vec3 Forward(const mat4 & m) {
-    return vec3(m[0][2], m[1][2], m[2][2]);
-}
-
-inline mat4 extractScale(const mat4 & mat) {
-    return glm::scale(vec3(glm::length(Right(mat)), glm::length(Up(mat)), glm::length(Forward(mat))));
-}
-
-inline mat4 extractRotation(const mat4 & mat){
-    vec3 r = normalize(Right(mat));
-    vec3 up = normalize(Up(mat));
-    vec3 fwd= normalize(Forward(mat));
-
-    return {r[0],up[0],fwd[0],0,
-                r[1],up[1],fwd[1],0,
-                r[2],up[2],fwd[2],0,
-                0,0,0,1};
-}
-
-
-//some errors in glm * ,so use this
-inline vec3 mult(const mat4 & a ,const vec4  point ){
-    return vec3(
-            a[0][0]*point.x + a[0][1]*point.y + a[0][2]*point.z + a[0][3] * point.w,
-            a[1][0]*point.x + a[1][1]*point.y + a[1][2]*point.z + a[1][3] * point.w,
-            a[2][0]*point.x + a[2][1]*point.y + a[2][2]*point.z + a[2][3] * point.w
-    );
-}
-
-inline  mat4 mult(const mat4 & a,const mat4 & b){
-    mat4 result;
-    for (int i = 0; i < 4; i++)
-        for (int t = 0; t < 4; t++)
-            result[i][t]=
-                    a[i][0]*b[0][t] +
-                    a[i][1]*b[1][t] +
-                    a[i][2]*b[2][t] +
-                    a[i][3]*b[3][t];
-
-    return result;
-}
 
 inline Float PowerHeuristic(Float a,Float b){
     return a*a/(a*a + b*b);

@@ -4,6 +4,7 @@
 //todo power distribution
 std::unique_ptr<LightDistribution> CreateLightSampleDistribution(
         const std::string &name, const Scene &scene){
+    return std::make_unique<UniformLightDistribution>(scene);
     if(name=="uniform"){
         return std::make_unique<UniformLightDistribution>(scene);
     }

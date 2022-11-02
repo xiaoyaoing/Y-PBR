@@ -4,11 +4,11 @@
 
 
 #include "Common/Texture.hpp"
-
+#include "Sampler/Warp.hpp"
 Spectrum
-AreaLight::Sample_Li(const Intersection & ref, const vec2 & u, vec3 * wi, Float * pdf, VisibilityTester * vis) const {
+AreaLight::sampleLi(const Intersection & ref, const vec2 & u, vec3 * wi, Float * pdf, VisibilityTester * vis) const {
 
-    Intersection pShape = primitive->Sample(ref,u,pdf);
+    Intersection pShape = primitive->sample(ref, u, pdf);
 
     if(*pdf==0){
         return Spectrum();
@@ -17,7 +17,6 @@ AreaLight::Sample_Li(const Intersection & ref, const vec2 & u, vec3 * wi, Float 
     *wi = normalize(pShape.p-ref.p);
     pShape.w = *wi;
     *vis = VisibilityTester(ref, pShape);
-
     return directLighting(pShape);
 
 }
@@ -41,6 +40,37 @@ AreaLight::AreaLight(const std::shared_ptr < Primitive > & _primitive,
 
 Float AreaLight::directPdf(const Intersection & pShape, const vec3 & ref) const {
     return primitive->directPdf(pShape,ref);
+}
+
+LightSampleResult AreaLight::sampleDirect(const vec2 & positionSample, const vec2 & dirSample) {
+    LightSampleResult result;
+    Intersection pshape = primitive->sample(positionSample, & result.lightPosPdf);
+    vec3 w;
+    if(twoSide){
+        vec2 u = dirSample;
+        if(u[0]<0.5){
+            u[0] *=2;
+            w = Warp::squareToUniformHemisphere(u);
+            result.lightDirPdf = Warp::squareToCosineHemispherePdf(w);
+        }
+        else {
+            u[0] = u[0] *2-1;
+            w = Warp::squareToUniformHemisphere(u);
+            result.lightDirPdf = Warp::squareToCosineHemispherePdf(w);
+            w=-w;
+        }
+    }
+    else {
+        w = Warp::squareToUniformHemisphere(dirSample);
+        result.lightDirPdf = Warp::squareToCosineHemispherePdf(w);
+    }
+    result.lightN = pshape.Ng;
+    result.radiance = directLighting(pshape);
+
+    vec3 s,t;
+    coordinateSystem(result.lightN,s,t);
+    result.ray = Ray(pshape.p,w.x * s+w.y * t+w.z*result.lightN);
+    return result;
 }
 
 bool VisibilityTester::Unoccluded(const Scene & scene) const {

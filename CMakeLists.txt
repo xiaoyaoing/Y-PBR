@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.10)
 project(Y-PBR)
 
 
+set( CMAKE_BUILD_TYPE Debug )
+
 
 #set (CMAKE_C_COMPILER "/usr/local/bin/gcc-11")
 #set (CMAKE_CXX_COMPILER "/usr/local/bin/g++-11")
@@ -38,7 +40,7 @@ find_package(Embree 3.0 REQUIRED)
 message(${EMBREE_LIBRARIES})
 
 ## complie for Zero
-file(GLOB_RECURSE YPBR_SOURCES ${YPBR_SOURCES_DIR}/*.cpp src/Bsdfs/Conductor.cpp lib/lodepng/lodepng.cpp lib/stbi/stb_image.c )
+file(GLOB_RECURSE YPBR_SOURCES ${YPBR_SOURCES_DIR}/*.cpp src/Common/Parallel.cpp lib/lodepng/lodepng.cpp lib/stbi/stb_image.c )
 link_libraries(spdlog::spdlog )
 link_libraries(${EMBREE_LIBRARIES})
 add_subdirectory(./test)

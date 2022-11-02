@@ -16,55 +16,45 @@
 #include "Lights/Infinte.hpp"
 
 #include "Texture/TextureFactory.hpp"
+#include "Common/Transform.hpp"
 
 static int occludedCount = 0;
 static int occludedCount1 = 0;
 
 
-Scene::Scene(const nlohmann::json j) {
-//    std::unordered_map<std::string,nlohmann::json> bsdf_jsons =j.at("bsdfs");
-//
-//    std::vector<nlohmann::json> bsdf_jsons = j.at("bsdfs");
-//
-//    std::unordered_map<std::string,std::shared_ptr<Bsdf>> bsdfs;
-    bsdfs = BSDFFactory::LoadBsdfsFromJson(j.at("bsdfs"));
-//    for(auto item:bsdf_jsons){
-//        bsdfs[item.first]=BsdfFactory::LoadBsdfFromJson(item.second);
-//    }
+Scene::Scene(const Json sceneJson) : options(RenderOptions(sceneJson.at("renderer"))){
+    bsdfs = BSDFFactory::LoadBsdfsFromJson(sceneJson.at("bsdfs"));
 
-    auto loadSphere = [](const nlohmann::json & json, std::shared_ptr < BSDF > bsdf) {
+
+    auto loadSphere = [](const Json & json, std::shared_ptr < BSDF > bsdf) {
         Float radius = getOptional(json,"radius",1.f);
         return std::make_shared < Sphere >(radius, bsdf);
     };
 
-    auto loadQuad = [](const nlohmann::json & json, std::shared_ptr < BSDF > bsdf) {
+    auto loadQuad = [](const Json & json, std::shared_ptr < BSDF > bsdf) {
         return std::make_shared < Quad >(bsdf);
     };
-    auto loadCube = [](const nlohmann::json & j, std::shared_ptr < BSDF > bsdf) {
+    auto loadCube = [](const Json & j, std::shared_ptr < BSDF > bsdf) {
         return std::make_shared < Cube >(bsdf);
     };
-    auto loadInfiniteSphere = [](const nlohmann::json & j, std::shared_ptr < BSDF > bsdf) {
+    auto loadInfiniteSphere = [](const Json & j, std::shared_ptr < BSDF > bsdf) {
         return nullptr;
     };
 
 
     std::unordered_map < std::string,
-            std::function < std::shared_ptr < Primitive >(const nlohmann::json, std::shared_ptr < BSDF > bsdf) >
+            std::function < std::shared_ptr < Primitive >(const Json, std::shared_ptr < BSDF > bsdf) >
     > loadMap{{"sphere",          loadSphere},
               {"quad",            loadQuad},
               {"cube",            loadCube},
               {"infinite_sphere", loadInfiniteSphere},
     };
 
-
-    for ( auto p: j.at("primitives") ) {
-        //get bsdf
+    //load primiteives
+    for ( auto p: sceneJson.at("primitives") ) {
         std::shared_ptr < BSDF > bsdf = fetchBSDFFromJson(p.at("bsdf"));
 
-
-        Transform * transform = nullptr;
-        if ( p.contains("transform") )
-            transform = new Transform(p["transform"]);
+        mat4 transform = getOptional(p,"transform",getIndentifyTransform());
 
 
         std::string type = p.at("type");
@@ -77,8 +67,8 @@ Scene::Scene(const nlohmann::json j) {
             handleAddLight(p, primitives.size() - 1, primitives.size());
         } else {
             std::shared_ptr < Primitive > primitive = loadMap[type](p, bsdf);
-            if ( transform && primitive ) primitive->transform(* transform);
-            if ( primitive && type != "cube"
+            if ( primitive ) primitive->transform(transform);
+            if ( primitive
            // && (primitive->bsdf->name=="backWall" ||primitive->bsdf->name=="light" )
            // && type!="quad"
             ) {
@@ -88,7 +78,8 @@ Scene::Scene(const nlohmann::json j) {
                 if ( type == "infinite_sphere" ) {
                     auto bitMap = std::make_shared < BitMapTexture >
                             (FileUtils::WorkingDir + p.at("emission").get < std::string >());
-                    lights.push_back(std::make_shared < InfinteSphere >(bitMap));
+                    mat4 toWorld = getOptional(p,"transform",getIndentifyTransform());
+                    lights.push_back(std::make_shared <InfinteSphere>(bitMap,toWorld));
                 }
             }
         }
@@ -100,13 +91,13 @@ Scene::Scene(const nlohmann::json j) {
     spdlog::info("{} lights", lights.size());
     spdlog::info("{} Bsdfs", bsdfs.size());
 
-    _useBVH = getOptional(j["renderer"], "scene_bvh", true);
+    _useBVH = getOptional(sceneJson["renderer"], "scene_bvh", true);
    // _useBVH = false;
 
 }
 
 
-void Scene::handleAddLight(const nlohmann::json & p,int l,int r) {
+void Scene::handleAddLight(const Json & p,int l,int r) {
 //    if ( p.find("light") != p.end() ) {
 //        auto lightJson = p.at("light");
 //        std::string lightType = lightJson.at("type");
@@ -137,7 +128,7 @@ void Scene::handleAddLight(const nlohmann::json & p,int l,int r) {
         std::shared_ptr<Texture<Spectrum>> power =  TextureFactory::LoadTexture <Spectrum>(p["power"],Spectrum(1));
         Float totalScale=0;
         for(size_t i = l ; i < r ; i ++){
-            totalScale+=primitives[i]->PowerToRadianceScale();
+            totalScale+=primitives[i]->powerToRadianceScale();
         }
 
         for ( size_t i = l ; i < r ; i ++ ) {
@@ -160,13 +151,9 @@ std::optional < Intersection > Scene::intersect(const Ray & ray) const {
         RTCIntersectContext context;
         rtcInitIntersectContext(& context);
         rtcIntersect1(_scene, &context, &rayHit);
-        if(ray.farT == 100)
-            int k=1;
         if ( rayHit.hit.geomID == RTC_INVALID_GEOMETRY_ID ) {
             return std::nullopt;
         }
-        if(ray.farT == 100)
-            int k=1;
         Intersection * its = EmbreeUtils::RTCRayHit1_(& rayHit)->its;
         its->w =  ray.d;
         return {*its};
@@ -194,7 +181,7 @@ bool Scene::intersectP(const Ray & ray) const {
         RTCIntersectContext context;
         rtcInitIntersectContext(& context);
         rtcOccluded1(_scene, &context, &shadowRay);
-        return shadowRay.tfar != _NEG_INFINY;
+        return shadowRay.tfar != ray.farT;
     } else {
         Ray _ray(ray);
         for ( auto primitive: primitives ) {
@@ -212,12 +199,11 @@ void Scene::logDebugInfo( ) {
 }
 
 
-void Scene::setUp( ) {
+void Scene::build( ) {
 
 
     if ( _useBVH ) {
         _scene = rtcNewScene(EmbreeUtils::getDevice());
-        auto temp = rtcGetDeviceError(EmbreeUtils::getDevice());
         for ( const auto & primitve: primitives ) {
             RTCGeometry geometry = primitve->initRTC();
             auto geom = rtcNewGeometry(EmbreeUtils::getDevice(), RTC_GEOMETRY_TYPE_USER);
@@ -225,11 +211,8 @@ void Scene::setUp( ) {
             rtcSetGeometryUserPrimitiveCount(geom, 1);
             rtcSetGeometryUserData(geom, primitve.get());
             rtcSetGeometryBoundsFunction(geom, & EmbreeUtils::instanceBoundsFunc, nullptr);
-            auto error = rtcGetDeviceError(EmbreeUtils::getDevice());
             rtcSetGeometryIntersectFunction(geom, & EmbreeUtils::instanceIntersectFunc);
-            error = rtcGetDeviceError(EmbreeUtils::getDevice());
             rtcSetGeometryOccludedFunction(geom, & EmbreeUtils::instanceOccludedFunc);
-            error = rtcGetDeviceError(EmbreeUtils::getDevice());
             rtcCommitGeometry(geom);
             int res = rtcAttachGeometry(_scene, geom);
             spdlog::info(res);

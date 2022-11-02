@@ -5,7 +5,7 @@
 #include "BsdfTypes.hpp"
 #include "Common/Texture.hpp"
 
-#include <nlohmann/json.hpp>
+#include "Common/Json.hpp"
 #include <spdlog/spdlog.h>
 
 
@@ -87,6 +87,7 @@ public:
 
     virtual Spectrum f(const SurfaceScatterEvent & event) const =0;
 
+
     virtual Float Pdf(const SurfaceScatterEvent & event) const =0;
 
     virtual Spectrum sampleF(SurfaceScatterEvent & event, const vec2 & u) const =0;
@@ -96,6 +97,10 @@ public:
 
     bool MatchesFlags(BXDFType t) const {
         return ( m_type & t)  == m_type;
+    }
+
+    bool hasFlag(BXDFType t) const {
+        return ( m_type & t)  == t;
     }
 
     virtual  Float eta() const { return 1; }
@@ -168,50 +173,9 @@ public:
     Float Pdf(const SurfaceScatterEvent & event) const override;
 };
 
-class Dielectric : public  BSDF {
-public:
-
-    Dielectric(Float ior,bool enableT=true) : BSDF(BXDFType(BSDF_SPECULAR | BSDF_REFLECTION |
-                                                                            (enableT?BSDF_TRANSMISSION:0)) ),
-                                                              ior(ior), enableT(enableT){
-       invIor = 1.0f/ior;
-    }
-
-    Spectrum f(const SurfaceScatterEvent & event) const override;
-
-    Float Pdf(const SurfaceScatterEvent & event) const override;
-
-    Spectrum sampleF(SurfaceScatterEvent & event, const vec2 & u) const override;
-
-    void LogInfo( ) const override;
-
-    Float eta( ) const override {
-        return ior;
-    }
-
-private:
-    Float  ior,invIor;
-    bool  enableT;
-};
 
 
 
-
-
-class RoughDielectric : public  BSDF{
-public:
-    Spectrum f(const SurfaceScatterEvent & event) const override;
-
-    Float Pdf(const SurfaceScatterEvent & event) const override;
-
-    Spectrum sampleF(SurfaceScatterEvent & event, const vec2 & u) const override;
-
-    void LogInfo( ) const override;
-};
-
-class Metal : public  BSDF{
-
-};
 
 
 class OrenNayar : public  BSDF{

@@ -3,20 +3,22 @@
 #include "Primitive.hpp"
 #include "TriangleHelper.hpp"
 #include "Sampler/Distrib.hpp"
+#include "Common/Transform.hpp"
+
 class TriangleMesh : public Primitive {
 public:
     TriangleMesh();
     virtual ~ TriangleMesh() = default;
-    Intersection Sample(const vec2 & u, Float * pdf) const override;
+    Intersection sample(const vec2 & u, Float * pdf) const override;
     std::optional<Intersection> intersect(Ray& ray) const override;
     vec3 normal(const vec3& pos) const override;
-    void transform(const Transform &T) override;
+    void transform(const mat4 & T) override;
     vec3 operator()(Float u, Float v) const override;
     void computeBoundingBox() override;
     void computeArea() override;
 
 
-    void Load(const nlohmann::json j,const Scene & scene,const Transform * transform);
+    void Load(const Json j,const Scene & scene,const mat4 & transform);
     Bounds3 getTriBounds(int idx);
     Float getTriArea(int idx);
     int BsdfCount() const {return m_bsdfs.size();}

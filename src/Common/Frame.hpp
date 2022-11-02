@@ -2,7 +2,7 @@
 
 
 #include "math.hpp"
-#include "util.hpp"
+#include "Json.hpp"
 
 static void coordinateSystem(const vec3 &a, vec3  &b, vec3  &c) {
     if (std::abs(a.x) > std::abs(a.y)) {
@@ -36,6 +36,8 @@ struct Frame {
         t = vec3(b, sign + n.y*n.y*a, -n.y);
        // coordinateSystem(n, s, t);
     }
+
+    Frame(const Frame & frame):s(frame.s),t(frame.t),n(frame.n){}
 
     /// Convert from world coordinates to local coordinates
     vec3 toLocal(const vec3 &v) const {

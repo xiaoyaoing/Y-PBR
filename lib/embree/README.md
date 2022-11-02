@@ -1979,7 +1979,7 @@ The intersection and occlusion filter functions of type `RTCFilterFunc`
 are only called by the `rtcIntersect` and `rtcOccluded`
 functions. Similar the filter functions of type `FilterFunc4`,
 `FilterFunc8`, and `FilterFunc16` are called by `rtcIntersect4/8/16`
-and `rtcOccluded4/8/16` of matching width.
+and `rtcOccluded4/8/16` of matching _width.
 
 ### Stream Mode
 

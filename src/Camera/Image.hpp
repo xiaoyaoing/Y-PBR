@@ -1,6 +1,6 @@
 #pragma  once
 
-#include <nlohmann/json.hpp>
+#include "Common/Json.hpp"
 #include "../Common/math.hpp"
 #include "ToneMap.hpp"
 #include "spdlog/spdlog.h"
@@ -43,33 +43,38 @@ class Image {
     uint32 getIndex(uint32 x, uint32 y) const;
 
     std::vector < Pixel > pixels;
-    ToneMap::ToneMapType toneMapType;
-    bool plain;
+    ToneMap::ToneMapType _tonemapType;
     Float exposure_scale;
     Float gain_scale;
-
-
+    
+    std::string  fileName;
+    uint32 _width;
+    uint32 _height;
 public:
-    Image(const ivec2 & res);
+    Image(const ivec2 & res,const std::string & fileName,ToneMap::ToneMapType toneMapType = ToneMap::Filmic )
+          : _width(res.x), _height(res.y), fileName(fileName), _tonemapType(toneMapType){
+        pixels.resize(_width * _height, Pixel());
+    }
 
     void addPixel(uint32 x, uint32 y, vec3 rgb);
-
     void dividePixel(uint32 x, uint32 y, uint32);
 
-    void savePPM(const std::string & outPutPath) const;
-    void saveTGA(const std::string & outPutPath) const;
-    void savePNG(const std::string & outPutPath) const;
-    void saveBMP(const std::string & outPutPath) const;
-    void saveTXT(const std::string & outPutPath) const;
+
+    void savePPM() const;
+    void saveTGA() const;
+    void savePNG() const;
+    void saveBMP() const;
+    void saveTXT() const;
 
 
     void postProgress( );
+    void fill(const Spectrum & spectrum){
+        std::fill(pixels.begin(),pixels.end(),Pixel{spectrum});
+    }
+//    Float getExposure( ) const;
+//    Float getGain(Float exposure_factor) const;
 
-    uint32 width;
-    uint32 height;
-
-
-    Float getExposure( ) const;
-
-    Float getGain(Float exposure_factor) const;
+    ivec2 resoulation(){ return ivec2(_width, _height);}
+    int width(){return _width;}
+    int height(){return _height;}
 };

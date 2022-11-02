@@ -117,6 +117,10 @@ inline  Bounds3  Union(const Bounds3 & a,const vec3 & v){
     return Bounds3(min(a.pMin,v),max(a.pMax,v));
 }
 
+inline  Bounds3  Expand(const Bounds3 & a,Float length){
+    return Bounds3(a.pMin-length,a.pMax + length);
+}
+
 inline  bool Inside(const Bounds3 & b,const vec3 & p){
     return (p.x >= b.pMin.x && p.x <= b.pMax.x && p.y >= b.pMin.y &&
             p.y <= b.pMax.y && p.z >= b.pMin.z && p.z <= b.pMax.z);

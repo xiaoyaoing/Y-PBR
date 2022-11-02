@@ -8,7 +8,7 @@ const static std::unordered_map<std::string,MircroDistributionEnum> distribMap =
         {"trowbridge_reitz",TrowbridgeReitz}
 };
 
-void from_json(const nlohmann::json & j, MircroDistributionEnum & type) {
+void from_json(const Json & j, MircroDistributionEnum & type) {
     if(!j.is_string()){
         _ERROR("Should be a distribution string")
     }
