@@ -76,8 +76,9 @@ Scene::Scene(const Json sceneJson) : options(RenderOptions(sceneJson.at("rendere
                 handleAddLight(p, primitives.size() - 1, primitives.size());
             } else {
                 if ( type == "infinite_sphere" ) {
-                    auto bitMap = std::make_shared < BitMapTexture >
+                    auto bitMap = std::make_shared < BitMapTexture<Spectrum> >
                             (FileUtils::WorkingDir + p.at("emission").get < std::string >());
+                    bitMap->LoadResources();
                     mat4 toWorld = getOptional(p,"transform",getIndentifyTransform());
                     lights.push_back(std::make_shared <InfinteSphere>(bitMap,toWorld));
                 }

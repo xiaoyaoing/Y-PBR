@@ -5,9 +5,12 @@
 
 #include <iostream>
 #include <sstream>
-#include <jpeglib.h>
-#include <csetjmp>
 #include <spdlog/spdlog.h>
+
+#if JPEG_AVAILABLE
+#include <csetjmp>
+#include <jpeglib.h>
+#endif
 
 //Image read and write,mainly learned from Tungsten.
 
@@ -135,8 +138,8 @@ namespace ImageIO {
         lodepng_decode_memory(&dst,&uw,&uh,file.get(),size, LCT_RGBA, 8);
         return dst;
     }
-
-    uint8 * loadJpg(const std::string & path,int & w,int & h,int & channels){
+#if JPEG_AVAILABLE
+uint8 * loadJpg(const std::string & path,int & w,int & h,int & channels){
 
         struct jpeg_decompress_struct cinfo;
         struct CustomJerr : jpeg_error_mgr {
@@ -205,16 +208,18 @@ namespace ImageIO {
 
         return std::move(result);
     }
-
+#endif
 
     std::unique_ptr < uint8[] >
     loadLdr(const std::string & path, TexelConversion request, int & w, int & h, bool gammaCorrect) {
         int channels;
         std::unique_ptr<uint8[], void(*)(void *)> img((uint8 *)0,&nop);
+#if JPEG_AVAILABLE
         if(path.ends_with("jpg") || path.ends_with("jpeg")){
             img = std::unique_ptr<uint8[], void(*)(void *)>(loadJpg(path,w,h,channels),free);
         }
-        else if(path.ends_with("png")){
+#endif
+        if(path.ends_with("png")){
             img = std::unique_ptr<uint8[], void(*)(void *)>(loadPng(path,w,h,channels),free);
         }
         else {

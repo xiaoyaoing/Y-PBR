@@ -40,7 +40,6 @@ Spectrum InfinteSphere::Power( ) {
 
 void InfinteSphere::Preprocess(const Scene & scene) {
     scene.getWorldBound().BoundingSphere(& _worldCenter, & _worldRadius);
-    this->_emission->LoadResources();
     this->_emission->makeSamplable(MAP_SPHERICAL);
 }
 
@@ -75,7 +74,6 @@ Float InfinteSphere::directPdf(const Intersection & pShape, const vec3 /*ref*/&)
 }
 
 void InfinteSphere::logDebugInfo( ) const {
-    {   _emission->debugLoginfo(); }
     spdlog::info("infinite"+toColorStr(rgb/(float)count));
 }
 

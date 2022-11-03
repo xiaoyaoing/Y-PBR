@@ -49,7 +49,7 @@ namespace Constant {
     inline constexpr Float INV_TWO_PI = INV_PI / 2;
     inline constexpr Float HALF_PI = 1.57079632679489661923;
     inline constexpr Float TWO_PI = 6.283185307179586476925;
-    inline constexpr Float EPSILON = 1e-3f;
+    inline constexpr Float EPSILON = 1e-4f;
 }
 
 

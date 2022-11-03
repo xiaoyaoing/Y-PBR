@@ -5,7 +5,7 @@
 
 class InfinteSphere : public  Light {
 public:
-    InfinteSphere(const std::shared_ptr<BitMapTexture> emssision,const mat4 & toWorld) :
+    InfinteSphere(const std::shared_ptr<BitMapTexture<Spectrum>> emssision,const mat4 & toWorld) :
                  Light((int)LightFlags::Infinite),_emission(emssision),_toWorld(toWorld),_toLocal(glm::transpose(toWorld)){}
 
     Spectrum
@@ -26,7 +26,7 @@ private:
     Spectrum Power( ) override;
     void Preprocess(const Scene & scene) override;
 protected:
-    std::shared_ptr<BitMapTexture> _emission;
+    std::shared_ptr<BitMapTexture<Spectrum>> _emission;
     vec3 _worldCenter;
     Float _worldRadius;
     mat4 _toWorld;
