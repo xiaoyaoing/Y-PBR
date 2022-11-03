@@ -1,5 +1,6 @@
 #include "BsdfFactory.hpp"
 #include "Reflection.hpp"
+#include "Dielectric.hpp"
 #include <spdlog/spdlog.h>
 #include "../Common/Json.hpp"
 #include "Texture/TextureFactory.hpp"

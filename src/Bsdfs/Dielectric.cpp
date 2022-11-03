@@ -1,5 +1,5 @@
 #include "Dielectric.hpp"
-
+#include "Fresnel.hpp"
 
 Spectrum Dielectric::f(const SurfaceScatterEvent & event) const {
     return Spectrum(0);

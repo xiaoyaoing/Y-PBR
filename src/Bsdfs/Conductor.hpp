@@ -1,3 +1,4 @@
+#pragma once
 #include "Reflection.hpp"
 #include "MicrofacetDistribution.hpp"
 class Conductor : public BSDF {

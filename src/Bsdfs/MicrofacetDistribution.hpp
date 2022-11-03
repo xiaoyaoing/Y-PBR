@@ -1,4 +1,6 @@
 // MicrofacetDistribution Declarations
+#pragma  once
+
 #include "Common/math.hpp"
 #include "Common/Json.hpp"
 

@@ -31,4 +31,11 @@ std::string FileUtils::getFilePath(const std::string & path,const std::string & 
     return std::move(destPath);
 }
 
+size_t FileUtils::getFileSize(const std::string & path) {
+    struct stat statbuf;
+    stat(path.c_str(), &statbuf);
+    size_t filesize = statbuf.st_size;
+    return filesize;
+}
+
 

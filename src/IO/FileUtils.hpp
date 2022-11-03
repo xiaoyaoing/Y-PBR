@@ -20,5 +20,13 @@ public:
         in.read(reinterpret_cast<char *>(&dst[0]), dst.size()*sizeof(T));
     }
 
+    template<typename T>
+    static inline void streamRead(std::istream &in, T * dst,size_t n)
+    {
+        in.read(reinterpret_cast<char *>(dst), n*sizeof(T));
+    }
+
+
     static std::string getFilePath(const std::string & path,const std::string & suffix,bool overwrite);
+    static size_t getFileSize(const std::string & path);
 };

@@ -25,7 +25,7 @@
         {
             "name": "Stand",
             "albedo": 1,
-            "type": "conductor",
+            "type": "mirror",
             "material" : "Cu"
         },
         {
@@ -71,6 +71,24 @@
                 "type": "null"
             }
         },
+        {
+            "transform": {
+                "position": [
+                    -0.708772,
+                    0,
+                    -0.732108
+                ],
+                "scale": 5.43618,
+                "rotation": [
+                    0,
+                    46.1511,
+                    180
+                ]
+            },
+            "bump_strength": 0,
+            "type": "quad",
+            "bsdf": "Floor"
+        },
 
         {
             "transform": {
@@ -87,7 +105,7 @@
             "smooth": true,
             "backface_culling": false,
             "recompute_normals": false,
-            "bsdf": "Stand"
+            "bsdf": "RoughMetal"
         },
         {
             "transform": {
@@ -104,7 +122,7 @@
             "smooth": true,
             "backface_culling": false,
             "recompute_normals": false,
-            "bsdf": "Stand"
+            "bsdf": "RoughMetal"
         },
         {
             "transform": {
@@ -121,7 +139,7 @@
             "smooth": true,
             "backface_culling": false,
             "recompute_normals": false,
-            "bsdf": "Stand"
+            "bsdf": "RoughMetal"
         }
     ],
     "camera": {
@@ -168,7 +186,7 @@
         "enable_resume_render": false,
         "stratified_sampler": true,
         "scene_bvh": true,
-        "spp": 2,
+        "spp": 128,
         "spp_step": 16,
         "checkpoint_interval": "0",
         "hdr_output_file": "material-testball.exr"
