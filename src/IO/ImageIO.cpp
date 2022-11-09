@@ -136,6 +136,7 @@ namespace ImageIO {
         uint8 * dst;
         uint32 uw,uh;
         lodepng_decode_memory(&dst,&uw,&uh,file.get(),size, LCT_RGBA, 8);
+        w =uw;h=uh;
         return dst;
     }
 #if JPEG_AVAILABLE

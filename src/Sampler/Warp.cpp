@@ -90,7 +90,6 @@ vec3 Warp::squareToCosineHemisphere(const vec2 & sample) {
     Float phi = sample.y * 2 * M_PI;
 
     return {sqrt(sample.x) * cos(phi), sqrt(sample.x) * sin(phi), z};
-//    throw NoriException("Warp::squareToCosineHemisphere() is not yet implemented!");
 }
 
 Float Warp::squareToCosineHemispherePdf(const vec3 & v) {

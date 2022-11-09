@@ -84,7 +84,7 @@ void Image::savePNG( ) const {
         }
     const std::string imagePath = FileUtils::getFilePath(FileUtils::WorkingDir+fileName,"png",false);
     ImageIO::savePng(imagePath, image, _width, _height, 4);
-    //    spdlog::info("Average Radiance {0} {1} {2}",averageRadiance.r,averageRadiance.g,averageRadiance.b);
+        spdlog::info("Average Radiance {0} {1} {2}",averageRadiance.r,averageRadiance.g,averageRadiance.b);
     //    spdlog::info("Write to {0}",imagePath);
 }
 

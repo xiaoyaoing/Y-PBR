@@ -125,6 +125,7 @@ protected:
             const vec3 v = as < vec3 >()[x + y * _w];
             return luminace(v);
         }
+        return 1;
     }
 
     inline T getValue(int x, int y) const {

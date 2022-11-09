@@ -17,6 +17,10 @@ Intersection Primitive::sample(const Intersection & ref, const vec2 & u, Float *
     return intr;
 }
 
+Float Primitive::directPdf(const Intersection & pShape, vec3 ref) const {
+    return distance2(pShape.p,ref) * InvArea()/ (absDot(pShape.Ng,-pShape.w));
+}
+
 RTCGeometry Primitive::initRTC( ) {
     _geom = rtcNewGeometry(EmbreeUtils::getDevice(), RTC_GEOMETRY_TYPE_USER);
 

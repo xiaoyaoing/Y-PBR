@@ -15,6 +15,10 @@ public:
         return 1;
     }
 
+    void setScale(Float scale) override {
+        value *= scale;
+    }
+
 protected:
     T value;
 };

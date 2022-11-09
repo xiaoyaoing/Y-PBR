@@ -10,6 +10,24 @@
             "roughness": 0.1
         },
         {
+            "name": "RoughDielectric",
+            "albedo": 1,
+            "type": "mirror",
+            "ior" : 1.5,
+            "distribution": "beckmann",
+            "roughness": 0.1
+        },
+        {
+            "name": "RoughPlastic",
+            "specular_reflection" :1,
+            "diffuse_reflection": [0.21 ,0.27, 0.39],
+            "albedo": [0.21 ,0.27, 0.39],
+            "type": "rough_plastic",
+            "ior" : 1.5,
+            "distribution": "beckmann",
+            "roughness": 0.1
+        },
+        {
             "name": "Material",
             "albedo": 1,
             "type": "smooth_coat",
@@ -51,13 +69,13 @@
     "primitives": [
         {
             "bump_strength": 1,
-            "emission": "textures/envmap.hdr",
+            "emission": "textures/envmap1.hdr",
             "type": "infinite_sphere",
+            "transform": {
+                "rotation" : [0,0,0]
+            },
             "sample": true,
-            "bsdf": {
-                "albedo": 1,
-                "type": "null"
-            }
+            "bsdf": "null"
         },
 
 
@@ -76,7 +94,7 @@
             "smooth": true,
             "backface_culling": false,
             "recompute_normals": false,
-            "bsdf": "Stand"
+            "bsdf": "RoughPlastic"
         },
         {
             "transform": {
@@ -93,7 +111,7 @@
             "smooth": true,
             "backface_culling": false,
             "recompute_normals": false,
-            "bsdf": "Stand"
+            "bsdf": "RoughPlastic"
         },
         {
             "transform": {
@@ -111,6 +129,24 @@
             "backface_culling": false,
             "recompute_normals": false,
             "bsdf": "Stand"
+        },
+        {
+            "transform": {
+                "position": [
+                    -0.708772,
+                    0,
+                    -0.732108
+                ],
+                "scale": 0.001,
+                "rotation": [
+                    0,
+                    46.1511,
+                    180
+                ]
+            },
+            "bump_strength": 0,
+            "type": "quad",
+            "bsdf": "Floor"
         }
     ],
     "camera": {
@@ -157,7 +193,7 @@
         "enable_resume_render": false,
         "stratified_sampler": true,
         "scene_bvh": true,
-        "spp": 4,
+        "spp": 16,
         "spp_step": 16,
         "checkpoint_interval": "0",
         "hdr_output_file": "material-testball.exr"

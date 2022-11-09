@@ -30,9 +30,6 @@ void TriangleMesh::Load(const Json j, const Scene & scene, const mat4 & transfor
         }
     }
 
-    std::vector < vec3 > normals;
-    for ( int i = 0 ; i < 10000 ; i ++ )
-        normals.push_back(m_vertexs[i].normal());
 
     computeBoundingBox();
     computeArea();
@@ -155,7 +152,7 @@ bool TriangleMesh::occluded(const Ray & ray) const {
     rtcInitIntersectContext(& context);
     EmbreeUtils::convertRay(& ray, & rtcRay);
     rtcOccluded1(m_scene, & context, & rtcRay);
-    if ( rtcRay.tfar == - std::numeric_limits < Float >::infinity() )
+    if ( rtcRay.tfar != - std::numeric_limits < Float >::infinity() )
         return false;
     return true;
 }

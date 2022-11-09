@@ -13,7 +13,7 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
     std::optional < Intersection > its;
     Spectrum throughPut(1.0);
     Spectrum L(0);
-    int bounces = 0, maxDepth = 10;
+    int bounces = 0, maxDepth = 8;
     bool specularBounce = true;
     Ray _ray(ray);
 
@@ -27,15 +27,15 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
             else
                 for ( auto light: scene.lights ) {
                     if ( light->flags == int(LightFlags::Infinite) ) {
+                        if ( bounces == 0 )
+                            bounces = 0;
                         L += throughPut * light->environmentLighting(_ray);
                     }
                 }
+        }
 
-            if ( hasNan(L) ) {
-                int k = 1;
-            }
-        }  //hit emssive
-        if ( ! its.has_value() || bounces >= maxDepth ) break;
+        if ( ! its.has_value() || bounces >= maxDepth )
+            break;
 
         if ( DebugConfig::OnlyShowNormal ) {
             return its->Ng;
@@ -44,7 +44,7 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
         SurfaceScatterEvent localScatter = makeLocalScatterEvent(& its.value());
 
         ///sample direct lighting for no specular bxdf
-        if ( its->bsdf->MatchesFlags(BXDFType(BSDF_ALL & ~ BSDF_SPECULAR)) ) {
+        if ( its->bsdf->MatchesFlags(BXDFType(BSDF_ALL & ~ BSDF_SPECULAR)) && bounces<maxDepth-1 ) {
 
             const Distribution1D * distrib = lightDistribution->Lookup(its->p);
             Spectrum Ld = uniformSampleOneLight
@@ -70,7 +70,12 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
 
         vec3 newDir = localScatter.toWorld(localScatter.wi);
 
-        throughPut *= f * abs(localScatter.wi) / localScatter.pdf;
+        throughPut *= f * abs(localScatter.wi.z) / localScatter.pdf;
+        if(throughPut.x>10000){
+
+        }
+        if(throughPut.x<=0 || throughPut.y<=0 || throughPut.z<=0)
+            int k = 1;
 
         if ( ( flags & BSDF_SPECULAR ) && ( flags & BSDF_TRANSMISSION ) ) {
             Float eta = its->bsdf->eta();
@@ -78,10 +83,11 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
             throughPut *= etaScale;
         }
         _ray = localScatter.sctterRay(_ray);
+        _ray = Ray(its->p+newDir * Constant::EPSILON,newDir);
 
         std::optional < Intersection > tempIts = scene.intersect(_ray);
         Float roulettePdf = std::max(throughPut.x, std::max(throughPut.y, throughPut.z));
-        if ( bounces > 4 && roulettePdf < 0.1 ) {
+        if ( bounces > 2 && roulettePdf < 0.1 ) {
             if ( sampler.getNext1D() < roulettePdf )
                 throughPut /= roulettePdf;
             else

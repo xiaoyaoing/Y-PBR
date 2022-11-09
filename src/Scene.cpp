@@ -52,7 +52,7 @@ Scene::Scene(const Json sceneJson) : options(RenderOptions(sceneJson.at("rendere
 
     //load primiteives
     for ( auto p: sceneJson.at("primitives") ) {
-        std::shared_ptr < BSDF > bsdf = fetchBSDFFromJson(p.at("bsdf"));
+        std::shared_ptr < BSDF > bsdf = fetchBSDFFromJson(getOptional(p,"bsdf",std::string("null")));
 
         mat4 transform = getOptional(p,"transform",getIndentifyTransform());
 
@@ -66,11 +66,10 @@ Scene::Scene(const Json sceneJson) : options(RenderOptions(sceneJson.at("rendere
             // primitives.insert(primitives.end(),triangles.begin(),triangles.end());
             handleAddLight(p, primitives.size() - 1, primitives.size());
         } else {
+            if(!loadMap.contains(type)) continue;
             std::shared_ptr < Primitive > primitive = loadMap[type](p, bsdf);
             if ( primitive ) primitive->transform(transform);
-            if ( primitive
-           // && (primitive->bsdf->name=="backWall" ||primitive->bsdf->name=="light" )
-           // && type!="quad"
+            if ( primitive //&& type!="cube"
             ) {
                 primitives.push_back(primitive);
                 handleAddLight(p, primitives.size() - 1, primitives.size());
@@ -117,7 +116,7 @@ void Scene::handleAddLight(const Json & p,int l,int r) {
 //        }
 //    }
     if( contains(p,"emission")){
-        std::shared_ptr<Texture<Spectrum>> emission =  TextureFactory::LoadTexture <Spectrum>(p["emission"],Spectrum(1));
+        std::shared_ptr<Texture<Spectrum>> emission =  TextureFactory::LoadTexture <Spectrum>(p,"emission",Spectrum(1));
         for ( size_t i = l ; i < r ; i ++ ) {
             auto light = std::make_shared < AreaLight >(this->primitives[i], emission);
             this->primitives[i]->areaLight = light;
@@ -126,11 +125,13 @@ void Scene::handleAddLight(const Json & p,int l,int r) {
     }
 
     else if( contains(p,"power")){
-        std::shared_ptr<Texture<Spectrum>> power =  TextureFactory::LoadTexture <Spectrum>(p["power"],Spectrum(1));
+        std::shared_ptr<Texture<Spectrum>> power =  TextureFactory::LoadTexture <Spectrum>(p,"power",Spectrum(1));
         Float totalScale=0;
         for(size_t i = l ; i < r ; i ++){
-            totalScale+=primitives[i]->powerToRadianceScale();
+            totalScale+=1 / primitives[i]->powerToRadianceScale();
         }
+        totalScale = 1/totalScale;
+        power->setScale(totalScale);
 
         for ( size_t i = l ; i < r ; i ++ ) {
             auto light = std::make_shared < AreaLight >(this->primitives[i], power);

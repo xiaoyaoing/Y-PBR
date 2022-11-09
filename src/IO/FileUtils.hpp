@@ -1,7 +1,7 @@
 #include "fstream"
 #include "vector"
 
-
+#pragma once
 
 class  FileUtils{
 

@@ -15,7 +15,11 @@ AreaLight::sampleLi(const Intersection & ref, const vec2 & u, vec3 * wi, Float *
     }
 
     *wi = normalize(pShape.p-ref.p);
-    pShape.w = *wi;
+    if( hasNan(*wi))
+        return Spectrum();
+    auto t = pShape.p - ref.p;
+    t = normalize(t);
+    pShape.w = t;
     *vis = VisibilityTester(ref, pShape);
     return directLighting(pShape);
 
@@ -78,5 +82,7 @@ bool VisibilityTester::Unoccluded(const Scene & scene) const {
     Float distance = length(dir);
     dir= normalize(dir);
     Ray ray(p0.p ,dir,Constant::EPSILON,distance-Constant::EPSILON);
+    auto t = scene.intersect(ray);
+   // return !t;
     return !scene.intersectP(ray);
 }

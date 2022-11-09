@@ -2,7 +2,7 @@
 
 namespace Fresnel {
 
-static inline  Float DielectricReflectance(Float eta,Float cosThetaI,Float & cosThetaT){
+static inline  Float dielectricReflectance(Float eta,Float cosThetaI,Float & cosThetaT){
     if (cosThetaI < 0.0) {
         eta = 1.0/eta;
         cosThetaI = -cosThetaI;
@@ -19,6 +19,12 @@ static inline  Float DielectricReflectance(Float eta,Float cosThetaI,Float & cos
 
     return (Rs*Rs + Rp*Rp)*0.5;
 }
+
+
+    static inline  Float dielectricReflectance(Float eta,Float cosThetaI){
+        Float cosThetaT;
+        return dielectricReflectance(eta,cosThetaI,cosThetaT);
+    }
 
 static inline Float SchlickApproxFresnel(Float eta,Float cosTheta){
     float r0 = (eta*eta - 2*eta +1)/(eta*eta+2*eta+1);

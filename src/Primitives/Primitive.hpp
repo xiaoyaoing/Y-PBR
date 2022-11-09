@@ -42,9 +42,8 @@ public:
     virtual Intersection sample(const Intersection & ref, const vec2 & u,
                                 Float * pdf) const;
     virtual Intersection sample(const vec2 & u, Float * pdf) const = 0;
-    virtual Float powerToRadianceScale() const {return Constant::INV_PI * inv_area;}
-    virtual  Float directPdf(const Intersection & pShape,vec3 ref) const {throw("This function not implemented!");
-    }
+    virtual Float powerToRadianceScale() const { return inv_area;}
+    virtual  Float directPdf(const Intersection & pShape,vec3 ref) const ;
     virtual Frame setTangentFrame(const Intersection * its) const {
         //todo add bump map
         return Frame(its->Ns);

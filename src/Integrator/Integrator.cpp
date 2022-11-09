@@ -36,7 +36,7 @@ Integrator::estimateDirect(SurfaceScatterEvent & event, const vec2 & uShading,
     Spectrum Ld(0);
     if ( sampleLgiht ) {
         Spectrum Li = light.sampleLi(* ( event.its ), uLight, & wi, & lightPdf, & visibility);
-     //   return (wi)/2.f;
+
         if ( ! isBlack(Li) && lightPdf != 0  ) {
             if ( visibility.Unoccluded(scene)  )  {
                 event.wi = event.toLocal(wi);
@@ -55,6 +55,10 @@ Integrator::estimateDirect(SurfaceScatterEvent & event, const vec2 & uShading,
                     }
                 }
             }
+            else {
+              auto t = visibility.Unoccluded(scene);
+              int k=1;
+            }
         }
     }
 
@@ -66,7 +70,7 @@ Integrator::estimateDirect(SurfaceScatterEvent & event, const vec2 & uShading,
             Spectrum f = event.its->bsdf->sampleF(event, uShading);
             f *= abs(event.wi.z);
             scatteringPdf = event.pdf;
-            if ( !isBlack(f) )
+            if ( !isBlack(f) && scatteringPdf )
             {
                 Float weight = 1;
                 vec3 worldShadowRayDir = event.toWorld(event.wi);
@@ -99,6 +103,9 @@ Integrator::estimateDirect(SurfaceScatterEvent & event, const vec2 & uShading,
             }
         }
     }
+    if( hasNan(Ld)){
+
+    }
    // assert(isBlack(Ld));
     return Ld;
 }
@@ -128,6 +135,16 @@ Integrator::uniformSampleOneLight(SurfaceScatterEvent & event,
     vec2 uLight = sampler.getNext2D();
     return estimateDirect(event, uScattering, * light, uLight,
                           scene, sampler, handleMedia) / lightPdf;
+}
+
+Spectrum Integrator::uniformSampleAllLights(SurfaceScatterEvent & event, const Scene &scene,
+                                            Sampler &sampler, bool handleMedia) const {
+    Spectrum L(0);
+    for(auto & light : scene.lights){
+        L +=estimateDirect(event,sampler.getNext2D(), * light, sampler.getNext2D(),
+                           scene, sampler, handleMedia);
+    }
+    return L;
 }
 
 SurfaceScatterEvent Integrator::makeLocalScatterEvent(const Intersection * its) const {
@@ -190,8 +207,6 @@ void SamplerIntegrator::render(const Scene & scene) const {
                        // Spectrum  radiance = Spectrum(tileSampler->getNext1D(),tileSampler->getNext1D(),tileSampler->getNext1D());
                         Spectrum radiance = integrate(ray,scene,*tileSampler);
                         assert(!hasNan(radiance));
-                        if( luminace(radiance)> luminace(Spectrum(10)))
-                            radiance *= luminace(Spectrum(10))/ luminace(radiance);
                         _camera->image->addPixel(x,y,radiance);
                     }
             }

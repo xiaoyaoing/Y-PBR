@@ -27,9 +27,8 @@ public:
                                    const Distribution1D *lightDistrib = nullptr,
                                    bool handleMedia = false) const;
 
-    Spectrum uniformSampleAllLights(SurfaceScatterEvent & it, const Scene &scene, Sampler &sampler,
-                                    const std::vector<int> &nLightSamples,
-                                    bool handleMedia = false);
+    Spectrum uniformSampleAllLights(SurfaceScatterEvent & event, const Scene &scene,
+                                    Sampler &sampler,bool handleMedia = false) const ;
 
     Spectrum estimateDirect(SurfaceScatterEvent & event, const vec2 &uShading,
                             const Light &light, const vec2 &uLight,

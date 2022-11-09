@@ -280,7 +280,7 @@
         "fov": 35
     },
     "integrator": {
-        "type": "sppm",
+        "type": "path_tracer",
         "min_bounces": 0,
         "max_bounces": 64,
         "enable_consistency_checks": true,

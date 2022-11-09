@@ -49,7 +49,7 @@ namespace Constant {
     inline constexpr Float INV_TWO_PI = INV_PI / 2;
     inline constexpr Float HALF_PI = 1.57079632679489661923;
     inline constexpr Float TWO_PI = 6.283185307179586476925;
-    inline constexpr Float EPSILON = 1e-4f;
+    inline constexpr Float EPSILON = 5e-4f;
 }
 
 
@@ -72,6 +72,14 @@ inline Float length2(vec3 a) {
 
 inline Float length(vec3 a) {
     return glm::length(a);
+}
+
+inline Float distance2(vec3 a,vec3 b){
+    return length2(a-b);
+}
+
+inline Float distance(vec3 a,vec3 b){
+    return length(a-b);
 }
 
 inline vec3 normalize(vec3 a) {

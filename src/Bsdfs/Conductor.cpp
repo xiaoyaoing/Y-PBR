@@ -18,10 +18,7 @@ Spectrum Conductor::sampleF(SurfaceScatterEvent & event, const vec2 & u) const {
     event.wi = Frame::Reflect(event.wo);
     event.pdf = 1;
     Spectrum  alebdo = m_albedo->Evaluate();
-    Spectrum  f = alebdo  *  Fresnel::conductorReflectance(m_eta, m_k, event.wo.z);
-  //  f= Spectrum(1);
-//    f= Spectrum(0.5);
-    //f= Spectrum(0);
+    Spectrum  f = alebdo  *  Fresnel::conductorReflectance(m_eta, m_k, event.wo.z) / abs(event.wi.z);
     event.sampleType = m_type;
     return f;
 }
@@ -96,19 +93,13 @@ Float RoughConductor::eta( ) const {
     return BSDF::eta();
 }
 
-RoughConductor::RoughConductor(vec3 eta, vec3 k, MircroDistributionEnum distribType,
+RoughConductor::RoughConductor(vec3 eta, vec3 k, std::shared_ptr<MicrofacetDistribution> distrib,
                                std::shared_ptr < Texture<Float> > roughness, std::shared_ptr < Texture<Float> > uroughness,
                                std::shared_ptr < Texture<Float> > vroughness):
+                               m_distrib(distrib),
                                BSDF(BXDFType(BSDF_GLOSSY | BSDF_REFLECTION)),
                                m_eta(eta), m_k(k),m_roughness(roughness),m_uRoughness(uroughness),m_vRoughness(vroughness)
                                {
-    if(distribType ==  GGx){
-
-    }
-    else if(distribType == Beckmann){
-        this->m_distrib = std::make_shared<BeckmannDistribution>();
-    }
-
 }
 
 void RoughConductor::setCoundctorByName(const std::string & conductorName) {

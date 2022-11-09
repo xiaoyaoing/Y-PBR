@@ -2,20 +2,29 @@
 #include "Reflection.hpp"
 
 
-const static std::unordered_map<std::string,MircroDistributionEnum> distribMap = {
-        {"beckmann",Beckmann},
-        {"ggx",GGx},
-        {"trowbridge_reitz",TrowbridgeReitz}
-};
-
-void from_json(const Json & j, MircroDistributionEnum & type) {
-    if(!j.is_string()){
-        _ERROR("Should be a distribution string")
-    }
-    if(!distribMap.count(j))
-        _ERROR("Not supported distribution");
-    type =  distribMap.at(j);
-}
+//const static std::unordered_map<std::string,MircroDistributionEnum> distribMap = {
+//        {"beckmann",Beckmann},
+//        {"ggx",GGx},
+//        {"trowbridge_reitz",TrowbridgeReitz}
+//};
+//
+//
+//
+//
+//const static std::unordered_map<std::string,std::function<std::shared_ptr<MicrofacetDistribution>()>> _distribMap = {
+//        {"beckmann",std::make_shared<Beckmann>},
+//        {"ggx",std::make_shared<GGX>}
+//};
+//
+//
+//void from_json(const Json & j, MircroDistributionEnum & type) {
+//    if(!j.is_string()){
+//        _ERROR("Should be a distribution string")
+//    }
+//    if(!distribMap.count(j))
+//        _ERROR("Not supported distribution");
+//    type =  distribMap.at(j);
+//}
 
 MicrofacetDistribution::~MicrofacetDistribution( ) noexcept {}
 
@@ -26,7 +35,7 @@ Float MicrofacetDistribution::Pdf(const vec3 & wo, const vec3 & wh, const vec2 &
         return D(wh, alphaxy) * AbsCosTheta(wh);
 }
 
-Float BeckmannDistribution::roughnessToAlpha(float roughness) const {
+Float Beckmann::roughnessToAlpha(float roughness) const {
     roughness = std::max(roughness, (Float)1e-3);
     return roughness;
     Float x = std::log(roughness);
@@ -34,7 +43,7 @@ Float BeckmannDistribution::roughnessToAlpha(float roughness) const {
            0.0171201f * x * x * x + 0.000640711f * x * x * x * x;
 }
 
-Float BeckmannDistribution::D(const vec3 & wh, const vec2 & alphaxy) const {
+Float Beckmann::D(const vec3 & wh, const vec2 & alphaxy) const {
     Float alphax =alphaxy.x;
     Float alphay =alphaxy.y;
     Float tan2Theta = Tan2Theta(wh);
@@ -45,7 +54,7 @@ Float BeckmannDistribution::D(const vec3 & wh, const vec2 & alphaxy) const {
            (Constant::PI * alphax * alphay * cos4Theta);
 }
 
-Float BeckmannDistribution::Lambda(const vec3 & w, const vec2 & alphaxy) const {
+Float Beckmann::Lambda(const vec3 & w, const vec2 & alphaxy) const {
     Float alphax =alphaxy.x;
     Float alphay =alphaxy.y;
 
@@ -59,7 +68,7 @@ Float BeckmannDistribution::Lambda(const vec3 & w, const vec2 & alphaxy) const {
     return (1 - 1.259f * a + 0.396f * a * a) / (3.535f * a + 2.181f * a * a);
 }
 
-vec3 BeckmannDistribution::Sample_wh(const vec3 & wo, const vec2 & u, const vec2 & alphaxy) const {
+vec3 Beckmann::Sample_wh(const vec3 & wo, const vec2 & u, const vec2 & alphaxy) const {
     Float alphax =alphaxy.x;
     Float alphay =alphaxy.y;
 
@@ -87,27 +96,35 @@ vec3 BeckmannDistribution::Sample_wh(const vec3 & wo, const vec2 & u, const vec2
     }
 }
 
-std::string BeckmannDistribution::ToString( ) const {
+std::string Beckmann::ToString( ) const {
     return std::string();
 }
 
-Float TrowbridgeReitzDistribution::roughnessToAlpha(float roughness) const {
+Float GGX::roughnessToAlpha(float roughness) const {
     return 0;
 }
 
-Float TrowbridgeReitzDistribution::D(const vec3 & wh, const vec2 & alphaxy) const {
+Float GGX::D(const vec3 & wh, const vec2 & alphaxy) const {
     return 0;
 }
 
-Float TrowbridgeReitzDistribution::Lambda(const vec3 & w, const vec2 & alphaxy) const {
+Float GGX::Lambda(const vec3 & w, const vec2 & alphaxy) const {
     return 0;
 }
 
-vec3 TrowbridgeReitzDistribution::Sample_wh(const vec3 & wo, const vec2 & u, const vec2 & alphaxy) const {
+vec3 GGX::Sample_wh(const vec3 & wo, const vec2 & u, const vec2 & alphaxy) const {
     return vec3();
 }
 
-std::string TrowbridgeReitzDistribution::ToString( ) const {
+std::string GGX::ToString( ) const {
     return std::string();
 }
+
+std::shared_ptr<MicrofacetDistribution>  LoadMicrofacetDistribution(const std::string & type){
+    if(type == "beckmann")
+        return std::make_shared <Beckmann>();
+    if(type == "ggx")
+        return std::make_shared <GGX>();
+}
+
 

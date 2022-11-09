@@ -5,14 +5,8 @@
 #include "Common/Json.hpp"
 
 
-enum MircroDistributionEnum
-{
-    Beckmann,
-    GGx,
-    TrowbridgeReitz
-};
 
-void from_json(const Json & j,MircroDistributionEnum & type);
+
 
 
 
@@ -46,9 +40,9 @@ protected:
     const bool sampleVisibleArea;
 };
 
-class BeckmannDistribution : public  MicrofacetDistribution{
+class Beckmann : public  MicrofacetDistribution{
 public:
-    BeckmannDistribution(bool sampleVis = false): MicrofacetDistribution(sampleVis)
+    Beckmann(bool sampleVis = false): MicrofacetDistribution(sampleVis)
     {}
     Float roughnessToAlpha(float roughness) const override;
     Float D(const vec3 & wh, const vec2 & alphaxy) const override;
@@ -58,8 +52,10 @@ protected:
     Float Lambda(const vec3 & w, const vec2 & alphaxy) const override;
 };
 
-class TrowbridgeReitzDistribution : public MicrofacetDistribution {
+class GGX : public MicrofacetDistribution {
 public:
+    GGX(): MicrofacetDistribution(true){}
+
     Float roughnessToAlpha(float roughness) const override;
 
     Float D(const vec3 & wh, const vec2 & alphaxy) const override;
@@ -70,6 +66,9 @@ public:
 
     std::string ToString( ) const override;
 };
+
+std::shared_ptr<MicrofacetDistribution>  LoadMicrofacetDistribution(const std::string & type);
+
 
 
 

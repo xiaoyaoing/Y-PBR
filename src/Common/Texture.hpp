@@ -19,5 +19,6 @@ public:
     virtual vec2 sample(TextureMapJacobian jacobian, const vec2 &uv,Float * pdf) const = 0;
     virtual Float pdf(TextureMapJacobian jacobian,const vec2 & uv) const = 0;
     virtual T average() {return T();}
+    virtual void setScale(Float scale){}
 };
 

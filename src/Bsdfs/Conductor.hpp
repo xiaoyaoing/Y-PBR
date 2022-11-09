@@ -24,7 +24,7 @@ protected:
 
 class RoughConductor : public BSDF{
 public:
-    RoughConductor(vec3 eta, vec3 k, MircroDistributionEnum distribType,
+    RoughConductor(vec3 eta, vec3 k,  std::shared_ptr<MicrofacetDistribution> distrib,
                    std::shared_ptr < Texture<Float> > roughness,
                    std::shared_ptr < Texture<Float> > uroughness = nullptr,
                    std::shared_ptr < Texture<Float> > vroughness = nullptr

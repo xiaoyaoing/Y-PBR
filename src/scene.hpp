@@ -11,6 +11,7 @@ class Primitive;
 
 struct RenderOptions{
     int spp;
+    int maxBounces;
     RenderOptions(const Json & renderJson){
         spp = getOptional(renderJson,"spp",64);
     }
