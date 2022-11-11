@@ -17,18 +17,15 @@ AreaLight::sampleLi(const Intersection & ref, const vec2 & u, vec3 * wi, Float *
     *wi = normalize(pShape.p-ref.p);
     if( hasNan(*wi))
         return Spectrum();
-    auto t = pShape.p - ref.p;
-    t = normalize(t);
-    pShape.w = t;
     *vis = VisibilityTester(ref, pShape);
-    return directLighting(pShape);
+    return directLighting(pShape, normalize(ref.p-pShape.p));
 
 }
 
 
 
-Spectrum AreaLight::directLighting(const Intersection & intr) const {
-    return (twoSide || dot(intr.Ng, -intr.w) > 0) ? emssision->Evaluate(&intr): Spectrum(0.f);
+Spectrum AreaLight::directLighting(const Intersection & intr,const vec3 & wo) const {
+    return (twoSide || dot(intr.Ng, wo) > 0) ? emssision->Evaluate(&intr): Spectrum(0.f);
 }
 
 
@@ -42,7 +39,7 @@ AreaLight::AreaLight(const std::shared_ptr < Primitive > & _primitive,
 
 }
 
-Float AreaLight::directPdf(const Intersection & pShape, const vec3 & ref) const {
+Float AreaLight::PdfLi(const Intersection & pShape, const vec3 & ref) const {
     return primitive->directPdf(pShape,ref);
 }
 
@@ -69,7 +66,7 @@ LightSampleResult AreaLight::sampleDirect(const vec2 & positionSample, const vec
         result.lightDirPdf = Warp::squareToCosineHemispherePdf(w);
     }
     result.lightN = pshape.Ng;
-    result.radiance = directLighting(pshape);
+    result.radiance = directLighting(pshape,result.lightN);
 
     vec3 s,t;
     coordinateSystem(result.lightN,s,t);
@@ -82,7 +79,6 @@ bool VisibilityTester::Unoccluded(const Scene & scene) const {
     Float distance = length(dir);
     dir= normalize(dir);
     Ray ray(p0.p ,dir,Constant::EPSILON,distance-Constant::EPSILON);
-    auto t = scene.intersect(ray);
-   // return !t;
+    return !scene.intersect(ray);
     return !scene.intersectP(ray);
 }

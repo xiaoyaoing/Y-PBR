@@ -17,7 +17,7 @@ struct Intersection {
     vec3 Ng ;                    //Shading Normal
     vec2 uv;
 
-    Spectrum Le(const vec3 & w) const;
+    Spectrum Le(const vec3 & wo) const;
     Intersection(){}
     Intersection(const Intersection & its):p(its.p),w(its.w),bsdf(its.bsdf),Ns(its.Ns),Ng(its.Ng),uv(its.uv),primitive(its.primitive){
 

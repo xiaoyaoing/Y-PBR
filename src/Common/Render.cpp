@@ -21,7 +21,10 @@ Render::Render(const Json & json) {
        const Json & integratorJson = json.at("integrator");
        const std::string & type = getOptional(integratorJson,"type",std::string("path_tracer"));
        if(type == "path_tracer")
-           integrator = std::make_unique<PathIntegrator>(camera,sampler);
+       {
+           std::string lightSampleStrategy = getOptional(integratorJson,"light_sample",std::string("uniform"));
+           integrator = std::make_unique<PathIntegrator>(camera,sampler,lightSampleStrategy);
+       }
        else if(type == "sppm")
        {
             Float radius = getOptional(integratorJson,"radius",0.05);

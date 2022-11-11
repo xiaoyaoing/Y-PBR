@@ -4,7 +4,7 @@
 #include "Sampler/Sampler.hpp"
 #include "Common/Parallel.h"
 #include "Camera/Camera.hpp"
-
+#include "PathIntegrator.hpp"
 #include <thread>
 #include <iostream>
 
@@ -39,6 +39,7 @@ Integrator::estimateDirect(SurfaceScatterEvent & event, const vec2 & uShading,
 
         if ( ! isBlack(Li) && lightPdf != 0  ) {
             if ( visibility.Unoccluded(scene)  )  {
+
                 event.wi = event.toLocal(wi);
                 scatteringPdf = event.its->bsdf->Pdf(event);
                 Spectrum f = event.its->bsdf->f(event) * abs(event.wi.z);
@@ -56,8 +57,6 @@ Integrator::estimateDirect(SurfaceScatterEvent & event, const vec2 & uShading,
                 }
             }
             else {
-              auto t = visibility.Unoccluded(scene);
-              int k=1;
             }
         }
     }
@@ -77,25 +76,30 @@ Integrator::estimateDirect(SurfaceScatterEvent & event, const vec2 & uShading,
                 Ray shaowRay(event.its->p, worldShadowRayDir,Constant::EPSILON);
                 std::optional < Intersection > its = scene.intersect(shaowRay);
                 bool isLightInfinite = ( light.flags & (int) LightFlags::Infinite );
+                Spectrum  Li(0);
                 if ( ( its.has_value() && its->primitive->areaLight.get() == & light ) || isLightInfinite ) {
                     if ( isLightInfinite ) {
                         if ( its.has_value() ) { return Ld; }
                         Intersection infinteIts;
                         its = std::make_optional(infinteIts);
+                        its->w=-worldShadowRayDir;
+                        Li = light.Le(shaowRay);
                     }
-                    its->w = shaowRay.d;
+                    else {
+                        Li = its->Le(-shaowRay.d);
+                    }
                     if (!isSpecualr(event.sampleType) ) {
-                        lightPdf = light.directPdf(its.value(), event.its->p);
+                        lightPdf = light.PdfLi(its.value(), event.its->p);
                         weight = PowerHeuristic(scatteringPdf, lightPdf);
                         if( isnan(weight))
-                            lightPdf = light.directPdf(its.value(), event.its->p);
+                            lightPdf = light.PdfLi(its.value(), event.its->p);
                         if ( ! sampleLgiht ) weight = 1;
                     }
                 } else {
                     return Ld;
                 }
-                Spectrum Li = light.directLighting(its.value());
-                //return  its->w;
+
+//                Spectrum Li = light.directLighting(its.value());
                 Ld += f * weight * Li / scatteringPdf;
                 if( hasNan(Ld)){
                     int k=1;

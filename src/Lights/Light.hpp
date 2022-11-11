@@ -16,7 +16,8 @@ enum class LightFlags : int {
     DeltaPosition = 1,
     DeltaDirection = 2,
     Area = 4,
-    Infinite = 8
+    Infinite = 8,
+    Distant = 16
 };
 
 class VisibilityTester {
@@ -45,29 +46,23 @@ struct LightSampleResult{
 
 class Light {
 public:
+    Light(int _flags) : flags(_flags){};
+    ///given a intersection,sample light
     virtual Spectrum sampleLi(const Intersection &ref, const vec2 &u,
                               vec3 *wi, Float *pdf,
                               VisibilityTester *vis) const = 0;
+    ///sample from light
     virtual  LightSampleResult sampleDirect(const vec2 & positionSample, const vec2 & dirSample) = 0;
-    Light(int _flags) : flags(_flags){};
-
-    /// compute radiance in position with dir w
-    /// \param intr info
-    /// \return radiance
-    virtual Spectrum directLighting(const Intersection & intr) const=0;
-
     ///compute environment radiance
-    virtual Spectrum environmentLighting(const Ray & ray) const  {return Spectrum(0);};
-
+    virtual Spectrum Le(const Ray & ray) const  {return Spectrum(0);};
     /// returns total power of the light
     virtual Spectrum Power() { return Spectrum(); }
     virtual  void Preprocess(const Scene & scene) {}
-    virtual  Float directPdf(const Intersection & pShape, const vec3 & ref) const {
+    ///given a intersection compute lightPdf.Mainly used in mis
+    virtual  Float PdfLi(const Intersection & pShape, const vec3 & ref) const {
         _NOT_IMPLEMENT_ERROR
     }
-//    virtual  Spectrum  directLighting(const Intersection & pShape) const {return Spectrum(0);}
     virtual  bool isDeltaLight() const {return false;}
-
     const int  flags;
 };
 
@@ -80,13 +75,13 @@ public:
     LightSampleResult sampleDirect(const vec2 & positionSample, const vec2 & dirSample) override;
 
 public:
-    Spectrum directLighting(const Intersection & intr) const override;
+    virtual  Spectrum directLighting(const Intersection & intr,const vec3 & wo) const ;
 
 
     AreaLight(const std::shared_ptr < Primitive > & _primitive,
                          const std::shared_ptr<Texture<Spectrum>> _emssision,
                          bool twoSide=false);
-    Float directPdf(const Intersection & pShape, const vec3 & ref) const override;
+    Float PdfLi(const Intersection & pShape, const vec3 & ref) const override;
 
 
 protected:

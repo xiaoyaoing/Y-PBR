@@ -4,15 +4,25 @@
 #include "Sampler/Warp.hpp"
 #include <spdlog/spdlog.h>
 
+#include "Common/Transform.hpp"
 static vec3 rgb(0);
 static int count=0;
 
-Spectrum InfinteSphere::environmentLighting(const Ray & ray) const {
-    return _emission->Evaluate(directionToUV(ray.d));
+Spectrum InfinteSphere::Le(const Ray & ray) const {
+
+    vec2 uv = directionToUV(ray.d);
+    Spectrum L = _emission->Evaluate(uv);
+    if( hasNan(L)){
+        directionToUV(ray.d);
+    }
+    return  L;
 }
 
 Spectrum InfinteSphere::sampleLi(const Intersection & ref, const vec2 & u, vec3 * wi, Float * pdf,
                                  VisibilityTester * vis) const {
+
+//    auto t = getTransFormMatrix(vec3(0),vec3(1),vec3(270,270,270)) * this->_toWorld;
+//    auto s = Mat4ToStr(t);
     Float mapPdf;
     vec2 uv = _emission->sample(MAP_SPHERICAL, u,&mapPdf);
     if(!mapPdf)
@@ -30,9 +40,9 @@ Spectrum InfinteSphere::sampleLi(const Intersection & ref, const vec2 & u, vec3 
     return _emission->Evaluate(uv);
 }
 
-Spectrum InfinteSphere::directLighting(const Intersection & intr) const {
-    return _emission->Evaluate(directionToUV(intr.w));
-}
+//Spectrum InfinteSphere::directLighting(const Intersection & intr) const {
+//    return _emission->Evaluate(directionToUV(intr.w));
+//}
 
 Spectrum InfinteSphere::Power( ) {
     return 4 * Constant::PI * _worldRadius * _worldRadius * _emission->average();
@@ -45,6 +55,11 @@ void InfinteSphere::Preprocess(const Scene & scene) {
 
 vec2 InfinteSphere::directionToUV(const vec3 & wi) const {
     vec3  wLocal = transformVector(_toLocal,wi);
+    auto t = length(wi);
+    auto t1= length(wLocal);
+    if(abs(wLocal.y)>1){
+
+    }
     return vec2 (std::atan2(wLocal.z, wLocal.x)*Constant::INV_TWO_PI+ 0.5f, std::acos(-wLocal.y)*Constant::INV_PI);
 }
 
@@ -65,7 +80,7 @@ vec3 InfinteSphere::uvToDirection(vec2 uv, float & sinTheta) const {
     return transformVector(_toWorld,wLocal);
 }
 
-Float InfinteSphere::directPdf(const Intersection & pShape, const vec3 /*ref*/&) const {
+Float InfinteSphere::PdfLi(const Intersection & pShape, const vec3 /*ref*/&) const {
 
     Float sinTheta;
     vec2 uv = directionToUV(pShape.w, sinTheta);

@@ -84,7 +84,7 @@ namespace BSDFFactory {
 
     std::shared_ptr < Material > LoadRoughPlasticMaterial(const Json & j) {
         std::shared_ptr < Texture < Spectrum>> specularReflection = TextureFactory::LoadTexture < Spectrum >(
-                j, "specular_reflection", Spectrum(0.5));
+                j, "specular_reflection", Spectrum(1));
         std::shared_ptr < Texture < Spectrum>> diffuseReflection = TextureFactory::LoadTexture < Spectrum >(
                 j, "diffuse_reflection", Spectrum(0.5));
         Float ior = getOptional(j, "ior", 1.5);

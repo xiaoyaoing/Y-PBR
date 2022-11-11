@@ -1,21 +1,19 @@
 #include "Light.hpp"
 #include "Texture/BitMapTexture.hpp"
+#include "Common/Frame.hpp"
 
 
-class InfinteSphere : public  Light {
+class InfinteSphereCap : public  Light {
 public:
-    InfinteSphere(const std::shared_ptr<BitMapTexture<Spectrum>> emssision,const mat4 & toWorld) :
-                 Light((int)LightFlags::Infinite),_emission(emssision),_toWorld(toWorld),_toLocal(glm::transpose(toWorld)){}
+//    InfinteSphere(const std::shared_ptr<BitMapTexture<Spectrum>> emssision,const mat4 & toWorld) :
+//            Light((int)LightFlags::Infinite),_emission(emssision),_toWorld(toWorld),_toLocal(glm::transpose(toWorld)){}
+    InfinteSphereCap(const Json & json);
 
     Spectrum
     sampleLi(const Intersection & ref, const vec2 & u, vec3 * wi, Float * pdf, VisibilityTester * vis) const override;
     LightSampleResult sampleDirect(const vec2 & positionSample, const vec2 & u2) override;
     Spectrum Le(const Ray & ray) const override;
 
-
-    vec2 directionToUV(const vec3 &wi) const;
-    vec2 directionToUV(const vec3 &wi, float &sinTheta) const;
-    vec3 uvToDirection(vec2 uv, float &sinTheta) const;
 
     Float PdfLi(const Intersection & pShape, const vec3 & ref) const override;
 
@@ -24,10 +22,15 @@ private:
     Spectrum Power( ) override;
     void Preprocess(const Scene & scene) override;
 protected:
-    std::shared_ptr<BitMapTexture<Spectrum>> _emission;
+    Spectrum _emission;
+
+    vec3 _capDir;
+    Float _capAngle;
+    Float _cosCapAngle;
+
     vec3 _worldCenter;
     Float _worldRadius;
-    mat4 _toWorld;
-    mat4 _toLocal;
+
+    Frame _capFrame;
 };
 

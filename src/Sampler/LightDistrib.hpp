@@ -20,7 +20,7 @@ private:
     std::unique_ptr<Distribution1D> distrib;
 };
 
-std::unique_ptr<LightDistribution> CreateLightSampleDistribution(
+std::unique_ptr<Distribution1D> CreateLightSampleDistribution(
         const std::string &name, const Scene &scene);
 
 

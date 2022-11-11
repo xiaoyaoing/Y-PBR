@@ -69,7 +69,7 @@
     "primitives": [
         {
             "bump_strength": 1,
-            "emission": "textures/envmap1.hdr",
+            "emission": "textures/envmap.hdr",
             "type": "infinite_sphere",
             "transform": {
                 "rotation" : [0,0,0]
@@ -77,6 +77,43 @@
             "sample": true,
             "bsdf": "null"
         },
+        {
+            "type" : "distant1",
+            "from" : [-0.865804 ,0.416766 ,-0.276929 ],
+            "to": [0,0,0] ,
+            "radiance" : [10,10,10]
+        },
+
+        {
+            "transform": {
+                "rotation": [
+                    -10.17397689819336,
+                    13.017423629760742,
+                    64.94903564453125
+                ]
+            },
+            "power": 10.0,
+            "type": "infinite_sphere_cap1",
+            "sample": true,
+            "cap_angle": 5.0
+        },
+
+        {
+            "transform": {
+                "rotation": [
+                    -10.17397689819336,
+                    13.017423629760742,
+                    64.94903564453125
+                ]
+            },
+            "type": "skydome1",
+            "temperature": 5777.0,
+            "gamma_scale": 1.0,
+            "turbidity": 3.0,
+            "intensity": 6.0,
+            "sample": false
+        },
+
 
 
         {
@@ -94,7 +131,7 @@
             "smooth": true,
             "backface_culling": false,
             "recompute_normals": false,
-            "bsdf": "RoughPlastic"
+            "bsdf": "Stand"
         },
         {
             "transform": {
@@ -111,7 +148,7 @@
             "smooth": true,
             "backface_culling": false,
             "recompute_normals": false,
-            "bsdf": "RoughPlastic"
+            "bsdf": "Stand"
         },
         {
             "transform": {

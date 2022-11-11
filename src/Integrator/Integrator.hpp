@@ -46,7 +46,8 @@ public:
     SamplerIntegrator(std::shared_ptr<Camera> camera,std::shared_ptr<Sampler> sampler):_camera(camera),_sampler(sampler){}
     void render(const Scene & scene) const override;
     virtual vec3  integrate(const Ray& ray, const Scene& scene, Sampler& sampler) const = 0 ;
-private:
+
+public:
     std::shared_ptr<Camera> _camera;
     std::shared_ptr<Sampler> _sampler;
 };

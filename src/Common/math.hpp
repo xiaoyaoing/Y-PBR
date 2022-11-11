@@ -118,11 +118,12 @@ inline std::string toColorStr(const vec3 & v) {
 }
 
 inline std::string Mat4ToStr(const mat4 & mat) {
+   // return std::string();
     std::string s;
     std::ostringstream buffer;
     for(int i=0;i<4;i++)
         for(int j=0;j<4;j++)
-            buffer<<mat[i][j]<<" ";
+            buffer<<mat[i][j]<<", ";
     buffer<<std::endl;
     return buffer.str();
 }

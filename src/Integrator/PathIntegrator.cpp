@@ -29,7 +29,10 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
                     if ( light->flags == int(LightFlags::Infinite) ) {
                         if ( bounces == 0 )
                             bounces = 0;
-                        L += throughPut * light->environmentLighting(_ray);
+                        L += throughPut * light->Le(_ray);
+                        if( hasNan(L)){
+                            light->Le(_ray);
+                        }
                     }
                 }
         }
@@ -38,7 +41,7 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
             break;
 
         if ( DebugConfig::OnlyShowNormal ) {
-            return its->Ng;
+            return (its->Ng+Spectrum(1.f))/2.f;
         }
 
         SurfaceScatterEvent localScatter = makeLocalScatterEvent(& its.value());
@@ -46,9 +49,8 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
         ///sample direct lighting for no specular bxdf
         if ( its->bsdf->MatchesFlags(BXDFType(BSDF_ALL & ~ BSDF_SPECULAR)) && bounces<maxDepth-1 ) {
 
-            const Distribution1D * distrib = lightDistribution->Lookup(its->p);
             Spectrum Ld = uniformSampleOneLight
-                    (localScatter, scene, sampler, distrib);  //direct lighting
+                    (localScatter, scene, sampler, lightDistribution.get());  //direct lighting
             if ( DebugConfig::OnlyDirectLighting )
                 return Ld;
             L += throughPut * Ld;
@@ -71,9 +73,6 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
         vec3 newDir = localScatter.toWorld(localScatter.wi);
 
         throughPut *= f * abs(localScatter.wi.z) / localScatter.pdf;
-        if(throughPut.x>10000){
-
-        }
         if(throughPut.x<=0 || throughPut.y<=0 || throughPut.z<=0)
             int k = 1;
 
@@ -82,7 +81,6 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
             Float etaScale = ( dot(newDir, its->Ng) > 0 ) ? ( eta * eta ) : 1 / ( eta * eta );
             throughPut *= etaScale;
         }
-        _ray = localScatter.sctterRay(_ray);
         _ray = Ray(its->p+newDir * Constant::EPSILON,newDir);
 
         std::optional < Intersection > tempIts = scene.intersect(_ray);
