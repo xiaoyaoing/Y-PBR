@@ -24,7 +24,7 @@
                 0.065,
                 0.05
             ],
-            "type": "lambert"
+            "type": "mirror"
         },
         
         {
@@ -70,7 +70,7 @@
                 0.71,
                 0.68
             ],
-            "type": "lambert"
+            "type": "mirror"
         },
         {
             "name": "tallBox",
@@ -233,24 +233,49 @@
         },
 
         {
-            "name" : "sphere1",
-            "transform" : {
-                "position": [-0.4, 0.3, 0.2]
+            "name": "shortBox",
+            "transform": {
+                "position": [
+                    0.328631,
+                    0.3,
+                    0.374592
+                ],
+                "scale": [
+                    0.594811,
+                    0.604394,
+                    0.6
+                ],
+                "rotation": [
+                    90,
+                    90,
+                    -163.36
+                ]
             },
-            "radius" : 0.3,
-            "type" : "sphere",
-            "bsdf" : "water"
+            "type": "cube",
+            "bsdf": "shortBox"
         },
         {
-            "name" : "sphere2",
-            "transform" :{
-                "position": [0.4, 0.3, -0.2]
+            "name": "tallBox",
+            "transform": {
+                "position": [
+                    -0.335439,
+                    0.6,
+                    -0.291415
+                ],
+                "scale": [
+                    0.607289,
+                    0.597739,
+                    1.2
+                ],
+                "rotation": [
+                    90,
+                    180,
+                    160.812
+                ]
             },
-            "radius" : 0.3,
-            "type" : "sphere",
-            "bsdf" : "mirror"
+            "type": "cube",
+            "bsdf": "tallBox"
         }
-
     ],
     "camera": {
         "tonemap": "filmic",
@@ -296,7 +321,7 @@
         "enable_resume_render": false,
         "stratified_sampler": false,
         "scene_bvh": true,
-        "spp": 4,
+        "spp": 16,
         "spp_step": 16,
         "checkpoint_interval": "0",
         "timeout": "0"

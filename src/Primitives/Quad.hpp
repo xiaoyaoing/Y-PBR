@@ -6,8 +6,7 @@
 class Quad : public Primitive
 {
 public:
-    Quad(const Json &j, std::shared_ptr<BSDF> bsdf);
-    Quad(std::shared_ptr<BSDF> bsdf);
+    Quad(const Json & json):Primitive(json) {}
     virtual std::optional < Intersection > intersect(Ray & ray) const;
     virtual vec3 operator()(Float  u, Float  v) const {
         return _base + _edge0 * u + _edge1 * v;
@@ -30,4 +29,5 @@ private:
     vec3  _base;
     vec3 _edge0, _edge1;
     vec2 _invSq;
+    vec3 _normal;
 };

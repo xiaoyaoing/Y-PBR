@@ -18,6 +18,16 @@
             "roughness": 0.1
         },
         {
+            "name": "ChairWood",
+            "diffuse_reflection": "textures/wood2.png",
+            "type": "rough_plastic",
+            "ior": 1.5,
+            "thickness": 1.0,
+            "sigma_a": 0.0,
+            "distribution": "beckmann",
+            "roughness": 0.05
+        },
+        {
             "name": "RoughPlastic",
             "specular_reflection" :1,
             "diffuse_reflection": [0.21 ,0.27, 0.39],
@@ -93,7 +103,7 @@
                 ]
             },
             "power": 10.0,
-            "type": "infinite_sphere_cap1",
+            "type": "infinite_sphere_cap_1",
             "sample": true,
             "cap_angle": 5.0
         },
@@ -131,7 +141,7 @@
             "smooth": true,
             "backface_culling": false,
             "recompute_normals": false,
-            "bsdf": "Stand"
+            "bsdf": "ChairWood"
         },
         {
             "transform": {
@@ -148,7 +158,7 @@
             "smooth": true,
             "backface_culling": false,
             "recompute_normals": false,
-            "bsdf": "Stand"
+            "bsdf": "ChairWood"
         },
         {
             "transform": {
@@ -230,7 +240,7 @@
         "enable_resume_render": false,
         "stratified_sampler": true,
         "scene_bvh": true,
-        "spp": 16,
+        "spp": 8,
         "spp_step": 16,
         "checkpoint_interval": "0",
         "hdr_output_file": "material-testball.exr"

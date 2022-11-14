@@ -20,7 +20,7 @@ namespace  TextureFactory{
             return std::make_shared <ConstantTexture<T>>(texturJson);
         }
         if(texturJson.is_string()){
-              auto bmt =  std::make_shared <BitMapTexture<T>>(FileUtils::WorkingDir+texturJson.get<std::string>());
+              auto bmt =  std::make_shared <BitMapTexture<T>>(texturJson.get<std::string>());
               bmt->LoadResources();
               return bmt;
         }

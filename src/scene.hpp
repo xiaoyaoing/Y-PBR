@@ -11,9 +11,11 @@ class Primitive;
 
 struct RenderOptions{
     int spp;
+    int sppStep;
     int maxBounces;
     RenderOptions(const Json & renderJson){
         spp = getOptional(renderJson,"spp",64);
+        sppStep = getOptional(renderJson,"spp_step",1);
     }
 };
 
@@ -39,7 +41,6 @@ public:
         }
         return  bsdfs.at("default");
     }
-
     std::shared_ptr<BSDF> fetchBSDFFromJson(const Json & bsdfJson){
         if(bsdfJson.is_string()){
             return fetchBSDF(bsdfJson.get <std::string>());
@@ -48,7 +49,8 @@ public:
             return fetchBSDF("default");
         }
     }
-
+    void AddPrimitive(std::shared_ptr<Primitive> prim) {primitives.push_back(prim);}
+    void AddLight(std::shared_ptr<Light> light) {lights.push_back(light);}
     RenderOptions options;
 public :
     std::vector<std::shared_ptr<Light>> lights;

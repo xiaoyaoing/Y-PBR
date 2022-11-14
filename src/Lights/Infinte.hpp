@@ -1,12 +1,13 @@
 #include "Light.hpp"
 #include "Texture/BitMapTexture.hpp"
-
+#include "Common/Json.hpp"
 
 class InfinteSphere : public  Light {
 public:
     InfinteSphere(const std::shared_ptr<BitMapTexture<Spectrum>> emssision,const mat4 & toWorld) :
                  Light((int)LightFlags::Infinite),_emission(emssision),_toWorld(toWorld),_toLocal(glm::transpose(toWorld)){}
 
+    InfinteSphere(const Json & json);
     Spectrum
     sampleLi(const Intersection & ref, const vec2 & u, vec3 * wi, Float * pdf, VisibilityTester * vis) const override;
     LightSampleResult sampleDirect(const vec2 & positionSample, const vec2 & u2) override;

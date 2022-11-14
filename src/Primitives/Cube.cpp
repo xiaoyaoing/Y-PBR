@@ -2,12 +2,7 @@
 #include "spdlog/spdlog.h"
 #include "Common/Transform.hpp"
 
-Cube::Cube(std::shared_ptr < BSDF > bsdf) : Primitive(bsdf) {
-    _pos = vec3(0);
-    _scale=vec3 (1);
-    _rot = mat4(1);
-    _invRot = mat4(1);
-}
+
 
 std::optional < Intersection > Cube::intersect(Ray & ray) const {
     Intersection its;

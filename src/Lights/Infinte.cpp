@@ -113,3 +113,10 @@ LightSampleResult InfinteSphere::sampleDirect(const vec2 & positionSample, const
     return result;
 }
 
+InfinteSphere::InfinteSphere(const Json & json) : Light(int(LightFlags::Infinite)){
+    auto bitMap = std::make_shared < BitMapTexture < Spectrum > >
+            (json.at("emission").get < std::string >());
+    bitMap->LoadResources();
+    mat4 toWorld = getOptional(json, "transform", getIndentifyTransform());
+}
+

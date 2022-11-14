@@ -11,12 +11,14 @@
 Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler & sampler) const {
 
     std::optional < Intersection > its;
+    SurfaceScatterEvent surfaceScatter;
     Spectrum throughPut(1.0);
     Spectrum L(0);
-    int bounces = 0, maxDepth = 8;
+    
+    int bounces = 0, maxDepth = 16;
     bool specularBounce = true;
     Ray _ray(ray);
-
+    
     std::string firstHitName;
     std::string Path;
     for ( bounces = 0 ;; ++ bounces ) {
@@ -44,13 +46,13 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
             return (its->Ng+Spectrum(1.f))/2.f;
         }
 
-        SurfaceScatterEvent localScatter = makeLocalScatterEvent(& its.value());
+         surfaceScatter= makeLocalScatterEvent(&its.value());
 
         ///sample direct lighting for no specular bxdf
         if ( its->bsdf->MatchesFlags(BXDFType(BSDF_ALL & ~ BSDF_SPECULAR)) && bounces<maxDepth-1 ) {
 
-            Spectrum Ld = uniformSampleOneLight
-                    (localScatter, scene, sampler, lightDistribution.get());  //direct lighting
+            Spectrum Ld = uniformSampleAllLights
+                    (surfaceScatter, scene, sampler, lightDistribution.get());  //direct lighting
             if ( DebugConfig::OnlyDirectLighting )
                 return Ld;
             L += throughPut * Ld;
@@ -63,16 +65,17 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
             L = Spectrum(0.f);
         }
 
-        Spectrum f = its->bsdf->sampleF(localScatter, sampler.getNext2D());
-        if ( isBlack(f) || localScatter.pdf == 0 )
+        Spectrum f = its->bsdf->sampleF(surfaceScatter, sampler.getNext2D());
+        if ( isBlack(f) || surfaceScatter.pdf == 0 )
             break;
 
-        BXDFType flags = localScatter.sampleType;
+        BXDFType flags = surfaceScatter.sampleType;
         specularBounce = ( flags & BSDF_SPECULAR ) != 0;
 
-        vec3 newDir = localScatter.toWorld(localScatter.wi);
 
-        throughPut *= f * abs(localScatter.wi.z) / localScatter.pdf;
+        vec3 newDir = surfaceScatter.toWorld(surfaceScatter.wi);
+
+        throughPut *= f * abs(surfaceScatter.wi.z) / surfaceScatter.pdf;
         if(throughPut.x<=0 || throughPut.y<=0 || throughPut.z<=0)
             int k = 1;
 

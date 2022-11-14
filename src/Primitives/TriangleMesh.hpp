@@ -18,7 +18,7 @@ public:
     void computeArea() override;
 
 
-    void Load(const Json j,const Scene & scene,const mat4 & transform);
+    void Load(const Json & json, const Scene & scene);
     Bounds3 getTriBounds(int idx);
     Float getTriArea(int idx);
     int BsdfCount() const {return m_bsdfs.size();}

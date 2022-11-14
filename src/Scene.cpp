@@ -5,6 +5,7 @@
 #include "Bsdfs/Reflection.hpp"
 #include "Bsdfs/BsdfFactory.hpp"
 
+#include "Primitives/PrimitiveFactory.hpp"
 #include "Primitives/TriangleMesh.hpp"
 #include "Primitives/Sphere.hpp"
 #include "Primitives/Quad.hpp"
@@ -27,108 +28,18 @@ static int occludedCount1 = 0;
 
 Scene::Scene(const Json sceneJson) : options(RenderOptions(sceneJson.at("renderer"))) {
     bsdfs = BSDFFactory::LoadBsdfsFromJson(sceneJson.at("bsdfs"));
-
-
-    auto loadSphere = [](const Json & json, std::shared_ptr < BSDF > bsdf) {
-        Float radius = getOptional(json, "radius", 1.f);
-        return std::make_shared < Sphere >(radius, bsdf);
-    };
-
-    auto loadQuad = [](const Json & json, std::shared_ptr < BSDF > bsdf) {
-        return std::make_shared < Quad >(bsdf);
-    };
-    auto loadCube = [](const Json & j, std::shared_ptr < BSDF > bsdf) {
-        return std::make_shared < Cube >(bsdf);
-    };
-    auto loadNull = [](const Json & j, std::shared_ptr < BSDF > bsdf) {
-        return nullptr;
-    };
-
-
-    std::unordered_map < std::string,
-            std::function < std::shared_ptr < Primitive >(const Json, std::shared_ptr < BSDF > bsdf) >
-    > loadMap{{"sphere",          loadSphere},
-              {"quad",            loadQuad},
-              {"cube",            loadCube},
-              {"infinite_sphere", loadNull},
-              {"skydome",loadNull},
-              {"distant",loadNull},
-              {"infinite_sphere_cap",loadNull}
-    };
-
-    //load primiteives
-    for ( auto p: sceneJson.at("primitives") ) {
-        std::shared_ptr < BSDF > bsdf = fetchBSDFFromJson(getOptional(p, "bsdf", std::string("null")));
-
-        mat4 transform = getOptional(p, "transform", getIndentifyTransform());
-
-
-        std::string type = p.at("type");
-//        if(type !="skydome")
-//            continue;
-        spdlog::info(type);
-        if ( type == "mesh" ) {
-            std::shared_ptr < TriangleMesh > mesh = std::make_shared < TriangleMesh >();
-            mesh->Load(p, * this, transform);
-            primitives.push_back(mesh);
-            handleAddLight(p, primitives.size() - 1, primitives.size());
-        } else {
-            if ( ! loadMap.contains(type) ) continue;
-            std::shared_ptr < Primitive > primitive = loadMap[type](p, bsdf);
-            if ( primitive ) primitive->transform(transform);
-            if ( primitive) {
-                primitives.push_back(primitive);
-                handleAddLight(p, primitives.size() - 1, primitives.size());
-            } else {
-                if ( type == "infinite_sphere" ) {
-                    auto bitMap = std::make_shared < BitMapTexture < Spectrum > >
-                            (FileUtils::WorkingDir + p.at("emission").get < std::string >());
-                    bitMap->LoadResources();
-                    mat4 toWorld = getOptional(p, "transform", getIndentifyTransform());
-                    lights.push_back(std::make_shared < InfinteSphere >(bitMap, extractRotation(toWorld)));
-                }
-                if ( type == "skydome" )
-                    lights.push_back(std::make_shared < SkyDome >(p));
-                if(type == "distant")
-                    lights.push_back(std::make_shared <DistantLight>(p));
-                if(type == "infinite_sphere_cap")
-                    lights.push_back(std::make_shared <InfinteSphereCap>(p));
-
-
-            }
-        }
-    }
-
-//    primitives=std::vector<std::shared_ptr<Primitive>>(primitives.begin(),primitives.begin()+2);
+    PrimitiveFactory::LoadPrimitivesFromJson(sceneJson.at("primitives"), * this);
 
     spdlog::info("{} Primitives", primitives.size());
     spdlog::info("{} lights", lights.size());
     spdlog::info("{} Bsdfs", bsdfs.size());
 
     _useBVH = getOptional(sceneJson["renderer"], "scene_bvh", true);
-    // _useBVH = false;
 
 }
 
 
 void Scene::handleAddLight(const Json & p, int l, int r) {
-//    if ( p.find("light") != p.end() ) {
-//        auto lightJson = p.at("light");
-//        std::string lightType = lightJson.at("type");
-//
-//        if ( lightType == "area" ) {
-//            Spectrum albedo = lightJson.at("albedo");
-//            Float totalArea = 0, invArea;
-//            for ( size_t i = l ; i < r ; i ++ ) totalArea += primitives[i]->Area();
-//            invArea = 1 / totalArea;
-//            for ( size_t i = l ; i < r ; i ++ ) {
-//                // flux to radiosity
-//                auto light = std::make_shared < AreaLight >(this->primitives[i], albedo * invArea);
-//                this->primitives[i]->areaLight = light;
-//                lights.push_back(light);
-//            }
-//        }
-//    }
     if ( contains(p, "emission") ) {
         std::shared_ptr < Texture < Spectrum>> emission = TextureFactory::LoadTexture < Spectrum >(p, "emission",
                                                                                                    Spectrum(1));

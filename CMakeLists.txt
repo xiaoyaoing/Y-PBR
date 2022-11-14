@@ -44,7 +44,13 @@ file(GLOB_RECURSE YPBR_SOURCES ${YPBR_SOURCES_DIR}/*.cpp src/Common/Parallel.cpp
         lib/skylight/ArHosekSkyModel.cpp)
 link_libraries(spdlog::spdlog )
 link_libraries(${EMBREE_LIBRARIES})
-add_subdirectory(./test)
+
+add_executable(Y_PBR src/main.cpp ${YPBR_SOURCES})
+target_include_directories(Y_PBR PUBLIC ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/lib)
+
+
+
+#add_subdirectory(./test)
 #
 #
 #

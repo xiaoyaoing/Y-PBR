@@ -35,6 +35,7 @@ public:
                             const Scene &scene, Sampler &sampler,
                             bool specular = false) const;
 
+    Spectrum evalLightDirect(const Scene & scene,const Light & light,const Ray & ray,Float * lightPdf) const;
     SurfaceScatterEvent makeLocalScatterEvent(const Intersection * its) const ;
     std::unique_ptr<Distribution1D> computeLightPowerDistrib(const Scene & scene) const;
 };

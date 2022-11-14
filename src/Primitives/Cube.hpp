@@ -3,7 +3,7 @@
 
 class Cube : public  Primitive{
 public:
-    Cube(std::shared_ptr<BSDF> material);
+    Cube(const Json & json):Primitive(json) {};
     virtual std::optional < Intersection > intersect(Ray & ray) const;
     virtual vec3 operator()(Float u, Float v) const;
     virtual vec3 normal(const vec3& pos) const;

@@ -4,7 +4,7 @@
 class Sphere : public Primitive
 {
 public:
-    Sphere(double radius, std::shared_ptr<BSDF> bsdf);
+    Sphere(const Json & json):Primitive(json){}
     Intersection sample(const vec2 & u, Float * pdf) const override;
 
     Intersection sample(const Intersection & ref, const vec2 & u, Float * pdf) const override;

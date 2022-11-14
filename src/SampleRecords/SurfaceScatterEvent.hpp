@@ -15,11 +15,11 @@ struct SurfaceScatterEvent{
     bool flippedFrame;
 public:
     vec3  toLocal(const vec3 & w) const {
-        return normalize(frame.toLocal(w));
+        return frame.toLocal(w);
     }
 
     vec3  toWorld(const vec3 & w) const {
-       return normalize(frame.toWorld(w));
+       return  frame.toWorld(w);
     }
 
     SurfaceScatterEvent(const SurfaceScatterEvent & event): its(new Intersection(*event.its)),
@@ -31,7 +31,7 @@ public:
 
     SurfaceScatterEvent(){}
     ~SurfaceScatterEvent(){
-        delete its;
+        //delete its;
     }
 
     Ray sctterRay(const Ray & ray){

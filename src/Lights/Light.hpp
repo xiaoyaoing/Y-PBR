@@ -4,6 +4,8 @@
 #include "../Ray/Intersection.hpp"
 #include "Ray/Ray.hpp"
 
+#include <optional>
+
 class Scene;
 class Primitive;
 class Ray;
@@ -83,6 +85,7 @@ public:
                          bool twoSide=false);
     Float PdfLi(const Intersection & pShape, const vec3 & ref) const override;
 
+    std::optional<Intersection> intersect(const Ray & ray) const;
 
 protected:
     std::shared_ptr<Primitive> primitive;

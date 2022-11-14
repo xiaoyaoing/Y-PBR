@@ -24,7 +24,7 @@ Spectrum InfinteSphereCap::sampleLi(const Intersection & ref, const vec2 & u, ve
 
    Intersection pShape;
    pShape.p = ref.p + _worldRadius * 2 * *wi;
-   vis = new VisibilityTester(ref,pShape);
+    * vis = VisibilityTester(ref, pShape);
 
    return _emission;
 }
@@ -44,7 +44,7 @@ Float InfinteSphereCap::PdfLi(const Intersection & pShape, const vec3 & ref) con
     vec3 rayDir = -pShape.w;
     if(dot(rayDir,_capDir)<_cosCapAngle)
         return 0;
-    return uniformSphericalCapPdf(_capAngle);
+    return uniformSphericalCapPdf(_cosCapAngle);
 }
 
 void InfinteSphereCap::logDebugInfo( ) const {

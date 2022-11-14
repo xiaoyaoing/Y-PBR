@@ -81,7 +81,11 @@ RoughConductor::sampleF(SurfaceScatterEvent & event, const vec2 & u) const {
     // Compute PDF of _wi_ for microfacet reflection
     //这里除法是要转换分布（法线到入射光）
     event.pdf =m_distrib->Pdf(event.wo, wh,alphaxy) / (4 * dot(event.wo, wh));
-    return  f(event);
+
+    Float cosI = dot(event.wi,faceForward(wh,vec3(0,0,1)));
+    Spectrum F= Fresnel::conductorReflectance(m_eta,m_k,cosI);
+    return     m_albedo->Evaluate(event.its) * m_distrib->D(wh,alphaxy)  * F * m_distrib->G(event.wo, event.wi,alphaxy)/ (4 * event.wi.z * event.wo.z);
+
 
 }
 

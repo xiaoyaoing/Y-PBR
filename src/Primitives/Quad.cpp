@@ -5,22 +5,15 @@
 #include "iostream"
 #include "Common/Transform.hpp"
 
-Quad::Quad(const Json & j, std::shared_ptr < BSDF > bsdf) : Primitive(bsdf) {
-
-}
 
 void Quad::preCompute( ) {
     computeArea();
     computeBoundingBox();
     _invSq = vec2(1 / length2(_edge0), 1 / length2(_edge1));
+    _normal = normalize(cross(_edge1, _edge0));
+
 }
 
-Quad::Quad(std::shared_ptr < BSDF > bsdf) : Primitive(bsdf) {
-    _base = vec3(0, 0, 0);
-    _edge0 = vec3(1, 0, 0);
-    _edge1 = vec3(0, 0, 1);
-    preCompute();
-}
 
 std::optional < Intersection > Quad::intersect(Ray & ray) const {
     Intersection its;
@@ -84,7 +77,7 @@ Intersection Quad::sample(const vec2 & u, Float * pdf) const {
 
 
 vec3 Quad::normal(const vec3 & pos) const {
-    return normalize(cross(_edge1, _edge0));
+    return _normal;
 }
 
 void Quad::transform(const mat4 & T) {
@@ -95,8 +88,7 @@ void Quad::transform(const mat4 & T) {
 
     _base -= _edge0 * 0.5f;
     _base -= _edge1 * 0.5f;
-    std::cout << _base.x << " " << _base.y << " " << _base.z << " " << _edge0.x << " " << _edge0.y << " " << _edge0.z
-              << " " << _edge1.x << " " << _edge1.y << " " << _edge1.z << " " << std::endl;
+
     preCompute();
 }
 

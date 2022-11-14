@@ -69,22 +69,38 @@ Spectrum RoughPlastic::sampleF(SurfaceScatterEvent & event, const vec2 & u) cons
         return {};
     }
     Float specProb = lS / (lS + lR);
+
+    vec2 alphaxy = getAlphaXY(event);
+    vec3 wh;
     if(u[0]<specProb){
         Float remapU0= (specProb-u[0])/specProb;
         vec2 newU(remapU0,u[1]);
-        vec2 alphaxy = getAlphaXY(event);
-        vec3 wh = m_distrib->Sample_wh(event.wo,newU,alphaxy);
+        wh = m_distrib->Sample_wh(event.wo,newU,alphaxy);
         event.wi = Reflect(event.wo,wh);
+        if(event.wi.z<=0)
+            return Spectrum(0);
         event.sampleType= BXDFType(BSDF_REFLECTION | BSDF_GLOSSY);
+        event.pdf = specProb *  m_distrib->D(wh,alphaxy) /(4 * absDot(out,wh)) + (1-specProb) * event.wi.z / Constant::PI;
+
     }
     else {
         Float remapU0= (u[0]-specProb)/(1-specProb);
         vec2 newU(remapU0,u[1]);
         event.wi = Warp::squareToCosineHemisphere(newU);
+        if(event.wi.z<=0)
+            return Spectrum(0);
         event.sampleType= BXDFType(BSDF_REFLECTION | BSDF_DIFFUSE);
+        wh = normalize((event.wi+out));
+        event.pdf = specProb *  m_distrib->D(wh,alphaxy) /(4 * absDot(out,wh)) + (1-specProb) * event.wi.z / Constant::PI;
     }
-    event.pdf = Pdf(event);
-    return f(event);
+
+    Float FOut = Fresnel::dielectricReflectance(1/m_ior,dot(out,wh));
+    Float D = m_distrib->D(wh,alphaxy);
+    Float G = m_distrib->G(event.wo,event.wi,alphaxy);
+    Spectrum specularContrib = Ks * Spectrum(FOut * D * G / (4 * out.z * event.wi.z));
+    Float FIn = Fresnel::dielectricReflectance(1/m_ior,dot(event.wi,wh));
+    Spectrum diffuseContrib =Kd * (1-FOut) * (1-FIn) *(1/(m_ior * m_ior)) / Constant::PI;
+    return specularContrib+diffuseContrib;
 }
 
 void RoughPlastic::LogInfo( ) const {

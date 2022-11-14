@@ -7,10 +7,11 @@
 TriangleMesh::TriangleMesh( ) : Primitive(nullptr) {}
 
 
-void TriangleMesh::Load(const Json j, const Scene & scene, const mat4 & transform) {
-    MeshIO::LoadMeshFromFile(j["file"].get < std::string >(), m_vertexs, m_tris);
+void TriangleMesh::Load(const Json & json, const Scene & scene) {
+    MeshIO::LoadMeshFromFile(json["file"].get < std::string >(), m_vertexs, m_tris);
+    mat4 transformMatrix = getOptional(json, "transform", getIndentifyTransform());
 
-    Json bsdf_json = j["bsdf"];
+    Json bsdf_json = json["bsdf"];
     if ( bsdf_json.is_array() ) {
         for ( const std::string & bsdf_str: bsdf_json ) {
             m_bsdfs.push_back(scene.fetchBSDF(bsdf_str));
@@ -19,13 +20,13 @@ void TriangleMesh::Load(const Json j, const Scene & scene, const mat4 & transfor
         m_bsdfs.push_back(scene.fetchBSDF(bsdf_json));
     }
 
-    useSoomth = getOptional(j, "use_smooth", true);
+    useSoomth = getOptional(json, "use_smooth", true);
     // useSoomth = false;
-    if ( transform!=mat4() ) {
-        mat4 transformNormalMat = getTransformNormalMat(transform);
+    if ( transformMatrix!=mat4() ) {
+        mat4 transformNormalMat = getTransformNormalMat(transformMatrix);
         std::string s = Mat4ToStr(transformNormalMat);
         for ( Vertex & vertex: m_vertexs ) {
-            vertex.pos() = transformPoint(transform, vertex.pos());
+            vertex.pos() = transformPoint(transformMatrix, vertex.pos());
             vertex.normal() = transformVector(transformNormalMat, vertex.normal());
         }
     }

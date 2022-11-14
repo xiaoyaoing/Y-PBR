@@ -13,10 +13,7 @@ AreaLight::sampleLi(const Intersection & ref, const vec2 & u, vec3 * wi, Float *
     if(*pdf==0){
         return Spectrum();
     }
-
     *wi = normalize(pShape.p-ref.p);
-    if( hasNan(*wi))
-        return Spectrum();
     *vis = VisibilityTester(ref, pShape);
     return directLighting(pShape, normalize(ref.p-pShape.p));
 
@@ -77,8 +74,7 @@ LightSampleResult AreaLight::sampleDirect(const vec2 & positionSample, const vec
 bool VisibilityTester::Unoccluded(const Scene & scene) const {
     vec3 dir =(p1.p-p0.p);
     Float distance = length(dir);
-    dir= normalize(dir);
+    dir= dir/distance;
     Ray ray(p0.p ,dir,Constant::EPSILON,distance-Constant::EPSILON);
-    return !scene.intersect(ray);
     return !scene.intersectP(ray);
 }

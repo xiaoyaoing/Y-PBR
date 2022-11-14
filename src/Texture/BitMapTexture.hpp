@@ -5,6 +5,7 @@
 #include "Colors/Spectrum.hpp"
 #include "IO/ImageIO.hpp"
 #include "stb_image.h"
+#include "IO/FileUtils.hpp"
 
 struct Rgba {
     uint8 c[4];
@@ -26,7 +27,7 @@ public:
     };
 
 
-    BitMapTexture(const std::string & path) : _path(path) {
+    BitMapTexture(const std::string & path) : _path(FileUtils::WorkingDir+path) {
     }
 
     BitMapTexture(void * texels, int w, int h, TexelType texelType, bool linear, bool clamp) :
@@ -63,15 +64,13 @@ public:
 
     vec2 sample(TextureMapJacobian jacobian, const vec2 & uv, Float * pdf) const override {
         vec2 newUv = _distribution[jacobian]->SampleContinuous(uv, pdf);
+        *pdf = *pdf * _w * _h;
         return vec2(newUv.x, newUv.y);
     }
 
     Float pdf(TextureMapJacobian jacobian, const vec2 & uv) const override {
         vec2 newuv(uv);
         Float res = _distribution[jacobian]->Pdf(vec2(newuv.x, newuv.y));
-        if ( isnan(res) || res == 0 ) {
-
-        }
         return res;
     }
 

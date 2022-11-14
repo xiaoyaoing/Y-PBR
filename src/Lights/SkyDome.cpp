@@ -18,11 +18,10 @@ SkyDome::sampleLi(const Intersection & ref, const vec2 & u, vec3 * wi, Float * p
     if(sinTheta ==0 )
         *pdf = 0;
     else
-        *pdf = _sky->pdf(MAP_SPHERICAL,uv)/( 2 * Constant::PI * Constant::PI * sinTheta );
+        *pdf = mapPdf/( 2 * Constant::PI * Constant::PI * sinTheta );
     Intersection pShape;
     pShape.p = ref.p + 2 * _worldRadius * ( * wi );
     * vis = VisibilityTester(ref, pShape);
-    auto t =  _sky->Evaluate(vec2(0.33,0.22));
     return _sky->Evaluate(uv);
 }
 
@@ -109,12 +108,12 @@ bool SkyDome::isDeltaLight( ) const {
 
 vec2 SkyDome::directionToUV(const vec3 & wi) const {
 
-    return vec2(std::atan2(wi.z, wi.x)*Constant::INV_TWO_PI + 0.5f, std::acos(-wi.y)*Constant::INV_PI);
+    return vec2(std::atan2(wi.z, wi.x)*Constant::INV_TWO_PI + 0.5f, std::acos(wi.y)*Constant::INV_PI);
 }
 
 vec2 SkyDome::directionToUV(const vec3 & wi, float & sinTheta) const {
     sinTheta = std::sqrt(std::max(1.0f - wi.y*wi.y, 0.0f));
-    return vec2(std::atan2(wi.z, wi.x)*Constant::INV_TWO_PI + 0.5f, std::acos(-wi.y)*Constant::INV_PI);
+    return vec2(std::atan2(wi.z, wi.x)*Constant::INV_TWO_PI + 0.5f, std::acos(wi.y)*Constant::INV_PI);
 }
 
 vec3 SkyDome::uvToDirection(vec2 uv, float & sinTheta) const {
@@ -123,7 +122,7 @@ vec3 SkyDome::uvToDirection(vec2 uv, float & sinTheta) const {
     sinTheta = std::sin(theta);
     return vec3(
             std::cos(phi)*sinTheta,
-            -std::cos(theta),
+            std::cos(theta),
             std::sin(phi)*sinTheta
     );
 }
