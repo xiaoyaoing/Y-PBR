@@ -3,6 +3,7 @@
 #include "Quad.hpp"
 #include "Sphere.hpp"
 #include "Cube.hpp"
+#include "Curve.hpp"
 
 #include "Lights/Infinte.hpp"
 #include "Lights/InfiniteSphereCap.h"

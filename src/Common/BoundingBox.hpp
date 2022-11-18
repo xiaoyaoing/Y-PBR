@@ -93,10 +93,12 @@ public:
 
     void BoundingSphere(vec3 *center, Float *radius) const {
         *center = (pMin + pMax) /2.f ;
-        *radius = Contains(*center) ?length(*center- pMax) : 0;
+        *radius = Contains(*center) ?distance(*center, pMax) : 0;
     }
 
-
+    Float BoundingRadius(){
+        return distance(pMin, pMax) * 0.25;
+    }
 
      bool IntersectP(const Ray & ray, const vec3 & invDir,
                            const int dirIsNeg[3]) const;

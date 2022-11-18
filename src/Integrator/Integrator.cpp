@@ -181,6 +181,7 @@ Integrator::evalLightDirect(const Scene & scene, const Light & light, const Ray 
         if ( ! hitDestLight )
             return Spectrum();
         *lightPdf = light.PdfLi(its.value(), ray.o);
+
         return its->Le(- ray.d) ;
     }
     if ( light.flags & int(LightFlags::Infinite) ) {
@@ -192,6 +193,11 @@ Integrator::evalLightDirect(const Scene & scene, const Light & light, const Ray 
         return light.Le(ray);
     }
 
+}
+
+Spectrum Integrator::evalShadowDirect(const Ray & ray, const Medium * medium, bool handleMedia) const {
+
+    return Spectrum();
 }
 
 void SamplerIntegrator::render(const Scene & scene) const {

@@ -2,6 +2,7 @@
 #include "Reflection.hpp"
 #include "Dielectric.hpp"
 #include "Plastic.hpp"
+#include "Hair.h"
 
 #include "Common/Json.hpp"
 #include "Texture/TextureFactory.hpp"

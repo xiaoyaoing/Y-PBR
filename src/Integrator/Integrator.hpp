@@ -7,8 +7,7 @@
 #include "Sampler/Sampler.hpp"
 #include "SampleRecords/SurfaceScatterEvent.hpp"
 
-
-
+class Medium;
 
 //class Sampler;
 
@@ -36,6 +35,8 @@ public:
                             bool specular = false) const;
 
     Spectrum evalLightDirect(const Scene & scene,const Light & light,const Ray & ray,Float * lightPdf) const;
+    Spectrum evalShadowDirect(const Ray & ray,const Medium * medium,bool handleMedia) const ;
+
     SurfaceScatterEvent makeLocalScatterEvent(const Intersection * its) const ;
     std::unique_ptr<Distribution1D> computeLightPowerDistrib(const Scene & scene) const;
 };
