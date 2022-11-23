@@ -68,7 +68,7 @@ InfinteSphereCap::InfinteSphereCap(const Json & json) : Light(int(LightFlags::In
     _capDir = transformVector(transform,vec3(0,1,0));
     _capFrame = Frame(_capDir);
 
-    _emission = getOptional(json,"radiance",Spectrum(1));
+    _emission = getOptional(json,"emission",Spectrum(1));
     if(json.contains("power")){
         Spectrum  power = json["power"];
         _emission = power * Constant::INV_TWO_PI/(1.0f - _cosCapAngle);

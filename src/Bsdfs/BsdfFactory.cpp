@@ -56,7 +56,7 @@ namespace BSDFFactory {
     std::shared_ptr < Material > LoadRoughConductorMaterial(const Json & j) {
         vec3 eta = getOptional(j, "eta", vec3(0.2004376970f, 0.9240334304f, 1.1022119527f));
         vec3 k = getOptional(j, "k", vec3(3.9129485033f, 2.4528477015f, 2.1421879552f));
-        std::string distribStr = getOptional(j, "distribution", std::string("beckMann"));
+        std::string distribStr = getOptional(j, "distribution", std::string("beckmann"));
         auto roughnessTuple = loadRoughness(j);
         auto roughCounductorMaterial = std::make_shared < RoughConductor >(eta, k,
                                                                            LoadMicrofacetDistribution(distribStr),
@@ -99,6 +99,10 @@ namespace BSDFFactory {
         return roughPlasticMaterial;
     }
 
+    std::shared_ptr < Material > LoadHairMaterial(const Json & j ) {
+        return std::make_shared <Hair>(j);
+    }
+
 
     std::shared_ptr < Material > LoadDefualtMaterial( ) {
         std::shared_ptr < Material > material = std::make_shared < LambertainR >();
@@ -106,7 +110,6 @@ namespace BSDFFactory {
         return material;
         //   material->Add(new LambertainT(DefaultALbedo));
     }
-
 
     std::unordered_map < std::string,
             std::function < std::shared_ptr < Material >(const Json & j)>>
@@ -117,7 +120,8 @@ namespace BSDFFactory {
             {"conductor",        LoadConductorMaterial},
             {"rough_conductor",  LoadRoughConductorMaterial},
             {"rough_dielectric", LoadRoughDielectricMaterial},
-            {"rough_plastic", LoadRoughPlasticMaterial}
+            {"rough_plastic", LoadRoughPlasticMaterial},
+            {"hair", LoadHairMaterial}
     };
 
 

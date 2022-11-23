@@ -42,6 +42,11 @@ inline mat4 extractRotation(const mat4 & mat) {
             0, 0, 0, 1};
 }
 
+inline vec3 extractScaleVec(const mat4 & a)
+{
+    return vec3(length(Right(a)), length(Up(a)), length(Forward(a)));
+}
+
 
 
 ////some errors in glm * ,so use this

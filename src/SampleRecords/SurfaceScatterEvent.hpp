@@ -34,10 +34,9 @@ public:
         //delete its;
     }
 
-    Ray sctterRay(const Ray & ray){
-        vec3 dir = normalize(toWorld(wi));
-        vec3 offsetPos = its->p + dir * Constant::EPSILON;
-        return Ray(offsetPos,dir,0);
+    Ray sctterRay(const vec3 & w){
+        vec3 offsetPos = its->p + w * its->epsilon;
+        return Ray(offsetPos,w,0);
     }
 };
 

@@ -54,31 +54,38 @@ namespace Constant {
 
 
 
-inline Float dot(vec3 a, vec3 b) {
-    return glm::dot(a, b);
+template < glm::length_t size >
+inline Float dot(glm::vec < size, Float, glm::defaultp >  a,glm::vec < size, Float, glm::defaultp > b){
+    return glm::dot(a,b);
 }
 
-inline  Float absDot(vec3 a,vec3 b){
+template < glm::length_t size >
+inline  Float absDot(glm::vec < size, Float, glm::defaultp >  a,glm::vec < size, Float, glm::defaultp > b){
     return abs(dot(a,b));
 }
 
-inline Float pow2(Float a) {
+inline Float sqr(Float a) {
     return a * a;
 }
 
-inline Float length2(vec3 a) {
+template < glm::length_t size >
+inline Float length2(glm::vec < size, Float, glm::defaultp >  a) {
     return dot(a, a);
 }
 
-inline Float length(vec3 a) {
+
+template < glm::length_t size >
+inline Float length(glm::vec < size, Float, glm::defaultp >  a) {
     return glm::length(a);
 }
 
-inline Float distance2(vec3 a,vec3 b){
+template < glm::length_t size >
+inline Float distance2(glm::vec < size, Float, glm::defaultp >  a,glm::vec < size, Float, glm::defaultp > b){
     return length2(a-b);
 }
 
-inline Float distance(vec3 a,vec3 b){
+template < glm::length_t size >
+inline Float distance(glm::vec < size, Float, glm::defaultp >  a,glm::vec < size, Float, glm::defaultp > b){
     return length(a-b);
 }
 
@@ -249,11 +256,16 @@ glm::vec < size, Float, glm::defaultp > lerp(const glm::vec < size, Float, glm::
 }
 
 template < class T >
-T  lerp(const T & x00, const T & x01, const T & x10, const T & x11, Float u, Float v
-) {
+T  lerp(const T & x00, const T & x01, const T & x10, const T & x11, Float u, Float v) {
 
     return (x00*(1.0f - u) + x01*u)*(1.0f - v) +
            (x10*(1.0f - u) + x11*u)*v;
+}
+
+template < class T >
+T  lerp(const T & x,const T & y, Float u) {
+
+    return x * (1-u) + y * u;
 }
 
 template < glm::length_t size >

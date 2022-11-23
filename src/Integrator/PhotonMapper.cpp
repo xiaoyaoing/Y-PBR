@@ -399,7 +399,8 @@ void PhotonMapper::render(const Scene & scene) const {
                 }
                 throughput = throughputNew / ( 1 - russProb );
 
-                photonRay = event.sctterRay(photonRay);
+                vec3 wi = event.toWorld(event.wi);
+                photonRay = event.sctterRay(wi);
                 if ( firstDielectric && bounce == 0 ) {
 
                 }

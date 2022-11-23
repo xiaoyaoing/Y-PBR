@@ -26,24 +26,27 @@ public:
     Primitive(const Json & json) {
         toWorld = getOptional(json, "transform", getIndentifyTransform());
     }
+    Primitive(){}
+
+    Primitive(const Bounds3 & bounds,uint32 id):BB_(bounds),primId(id){}
 
     virtual ~Primitive( ) {}
 
-    virtual std::optional < Intersection > intersect(Ray & ray) const = 0;
+    virtual std::optional < Intersection > intersect(Ray & ray) const {};
 
-    virtual bool occluded(const Ray & ray) const = 0;
+    virtual bool occluded(const Ray & ray) const {};
 
-    virtual vec3 operator ()(Float u, Float v) const = 0;
+    virtual vec3 operator ()(Float u, Float v) const {};
 
-    virtual vec3 normal(const vec3 & pos) const = 0;
+    virtual vec3 normal(const vec3 & pos) const {};
 
-    virtual void transform(const mat4 & T) = 0;
+    virtual void transform(const mat4 & T) {};
     void transform() { transform(toWorld); }
 
     virtual Intersection sample(const Intersection & ref, const vec2 & u,
                                 Float * pdf) const;
 
-    virtual Intersection sample(const vec2 & u, Float * pdf) const = 0;
+    virtual Intersection sample(const vec2 & u, Float * pdf) const {};
 
     virtual Float powerToRadianceScale( ) const { return inv_area; }
 
@@ -79,10 +82,11 @@ public:
     std::shared_ptr < BSDF > bsdf;
     std::shared_ptr < AreaLight > areaLight;
 
+    uint32 primId;
 protected:
-    virtual void computeArea( ) = 0;
+    virtual void computeArea( ) {};
 
-    virtual void computeBoundingBox( ) = 0;
+    virtual void computeBoundingBox( ) {};
 
     Float area;
     Float inv_area;

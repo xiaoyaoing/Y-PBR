@@ -57,6 +57,11 @@ namespace EmbreeUtils {
         rayhit->ray.tnear = ray->nearT;
         rayhit->ray.tfar = ray->farT;
         rayhit->hit.geomID = RTC_INVALID_GEOMETRY_ID;
+
+        rayhit->ray.time = 0.0f;
+        rayhit->ray.mask = -1;
+        rayhit->ray.id = 0;
+        rayhit->ray.flags = 0;
     }
 
     void instanceBoundsFunc(const struct RTCBoundsFunctionArguments * args) {

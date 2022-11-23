@@ -74,6 +74,13 @@ namespace PrimitiveFactory {
         }
     }
 
+    void LoadCurvesFromJson(const Json & json, Scene & scene ){
+        std::shared_ptr<Curve> curve = std::make_shared <Curve>(json,scene);
+        std::shared_ptr < BSDF > bsdf = scene.fetchBSDFFromJson(getOptional(json, "bsdf", std::string("null")));
+        curve->setBSDF(bsdf);
+        scene.AddPrimitive(curve);
+    }
+
     void LoadInfiniteFromJson(const Json & json, Scene & scene ) {
         auto type = json["type"];
         auto light = loadInfiniteMap[type](json);
@@ -88,7 +95,8 @@ namespace PrimitiveFactory {
             {"infinite_sphere", LoadInfiniteFromJson},
             {"infinite_sphere_cap", LoadInfiniteFromJson},
             {"skydome", LoadInfiniteFromJson},
-            {"distant", LoadInfiniteFromJson}
+            {"distant", LoadInfiniteFromJson},
+            {"curves", LoadCurvesFromJson}
     };
 
     void LoadPrimitiveFromJson(const Json & json, Scene & scene) {

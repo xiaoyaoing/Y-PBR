@@ -10,7 +10,7 @@
 
 #include "Mediums/Medium.hpp"
 
-static bool sampleBSDF = true;
+static bool sampleBSDF = false;
 static bool sampleLgiht = true;
 
 
@@ -38,6 +38,7 @@ Integrator::estimateDirect(SurfaceScatterEvent & event, const vec2 & uShading,
     Spectrum Ld(0);
     if ( sampleLgiht ) {
         Spectrum Li = light.sampleLi(* ( event.its ), uLight, & wi, & lightPdf, & visibility);
+   //     return event.frame.s;
         if(medium){
             Ray ray(event.its->p,wi,Constant::EPSILON, distance(visibility.P1().p,visibility.P0().p)-Constant::EPSILON);
             if(!visibility.Unoccluded(scene))
@@ -48,8 +49,9 @@ Integrator::estimateDirect(SurfaceScatterEvent & event, const vec2 & uShading,
             if(!visibility.Unoccluded(scene))
                 Li  = Spectrum(0);
         }
+
         if ( ! isBlack(Li) && lightPdf != 0 ) {
-                event.wi = event.toLocal(wi);
+            event.wi = event.toLocal(wi);
                 scatteringPdf = event.its->bsdf->Pdf(event);
                 Spectrum f = event.its->bsdf->f(event) * abs(event.wi.z);
                 if ( ! isBlack(f) ) {

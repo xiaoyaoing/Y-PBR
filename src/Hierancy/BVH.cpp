@@ -98,15 +98,7 @@ struct SAHBucketInfo {
     Bounds3 bounds;
 };
 
-struct alignas(32) LinearNode {
-    Bounds3 bounds;
-    union {
-        int primitivesOffset;   // leaf
-        int secondChildOffset;  // interior
-    };
-    uint16_t nPrimitives;  // 0 -> interior node
-    uint8_t axis;
-};
+
 
 
 BVHAccel::BVHAccel( std::vector < std::shared_ptr < Primitive>>   p,
@@ -165,7 +157,7 @@ BuildNode * BVHAccel::RecursiveBuild(std::vector < BVHPrimitiveInfo > & primitiv
 
     int nPrimitives = end - start;
     //Only single primitive
-    if ( nPrimitives <= 10 ) {
+    if ( nPrimitives <= maxPrimNode ) {
         node->initLeaf(orderedPrims.size(), nPrimitives, bounds);
         for ( int i = start ; i < end ; ++ i ) {
             orderedPrims.push_back(primitives[primitiveInfo[i].primitiveNumber]);
@@ -358,7 +350,7 @@ std::optional < Intersection > BVHAccel::intersect(const Ray & ray) const {
         //spdlog::info("CurNode {0}",curNodeIdx);
         LinearNode & curNode = nodes[curNodeIdx];
         searchCount ++;
-        if ( curNode.bounds.IntersectP(ray, invDir, dirIsNeg)   ) {
+        if ( curNode.bounds.IntersectP(_ray, invDir, dirIsNeg)   ) {
             // node case
             if ( curNode.nPrimitives > 0 ) {
                 //spdlog::info("LeafNode {0} ",curNodeIdx);
@@ -390,7 +382,6 @@ std::optional < Intersection > BVHAccel::intersect(const Ray & ray) const {
         }
     }
 
-     spdlog::info("SearchCount :{0}",searchCount);
     return res;
 
 }

@@ -15,6 +15,14 @@ public:
     }
 
     template<typename T>
+    static inline T streamRead(std::istream  &in)
+    {
+        T t;
+        streamRead(in, t);
+        return t;
+    }
+
+    template<typename T>
     static inline void streamRead(std::istream &in, std::vector<T> &dst)
     {
         in.read(reinterpret_cast<char *>(&dst[0]), dst.size()*sizeof(T));
@@ -28,5 +36,15 @@ public:
 
 
     static std::string getFilePath(const std::string & path,const std::string & suffix,bool overwrite);
+    static std::string getFileExtension(const std::string & path);
+
     static size_t getFileSize(const std::string & path);
 };
+
+template<>
+inline std::string FileUtils::streamRead<std::string>(std::istream  &in)
+{
+    std::string s;
+    std::getline(in, s, '\0');
+    return std::move(s);
+}

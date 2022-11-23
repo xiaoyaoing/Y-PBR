@@ -8,7 +8,7 @@ std::optional < Intersection > Sphere::intersect(Ray & ray) const {
     Intersection intersection;
     vec3 p = ray.o - center;
     float B = dot(p, ray.d);
-    float C = length2(p) - pow2(radius);
+    float C = length2(p) - sqr(radius);
     float detSq = B * B - C;
     if ( detSq >= 0.0f ) {
         float det = std::sqrt(detSq);
@@ -33,7 +33,7 @@ std::optional < Intersection > Sphere::intersect(Ray & ray) const {
 bool Sphere::occluded(const Ray & ray) const {
     vec3 p = ray.o - center;
     float B = dot(p, ray.d);
-    float C = length2(p) - pow2(radius);
+    float C = length2(p) - sqr(radius);
     float detSq = B * B - C;
     if ( detSq >= 0.0f ) {
         float det = std::sqrt(detSq);

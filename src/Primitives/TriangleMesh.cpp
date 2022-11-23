@@ -63,7 +63,6 @@ void TriangleMesh::Load(const Json & json, const Scene & scene) {
 
     rtcCommitGeometry(m_geometry);
     rtcAttachGeometry(m_scene, m_geometry);
-    // rtcReleaseGeometry(geom);
     rtcCommitScene(m_scene);
 }
 

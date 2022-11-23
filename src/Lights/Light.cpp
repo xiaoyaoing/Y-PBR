@@ -72,9 +72,10 @@ LightSampleResult AreaLight::sampleDirect(const vec2 & positionSample, const vec
 }
 
 bool VisibilityTester::Unoccluded(const Scene & scene) const {
+   // return true;
     vec3 dir =(p1.p-p0.p);
     Float distance = length(dir);
     dir= dir/distance;
-    Ray ray(p0.p ,dir,Constant::EPSILON,distance-Constant::EPSILON);
+    Ray ray(p0.p ,dir,p0.epsilon ,distance-p1.epsilon);
     return !scene.intersectP(ray);
 }

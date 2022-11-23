@@ -34,7 +34,7 @@ Scene::Scene(const Json sceneJson) : options(RenderOptions(sceneJson.at("rendere
     spdlog::info("{} lights", lights.size());
     spdlog::info("{} Bsdfs", bsdfs.size());
 
-    _useBVH = getOptional(sceneJson["renderer"], "scene_bvh", true);
+    _useBVH = getOptional(sceneJson["renderer"], "scene_bvh", false);
 
 }
 

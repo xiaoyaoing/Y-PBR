@@ -29,12 +29,7 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
             else
                 for ( auto light: scene.lights ) {
                     if ( light->flags == int(LightFlags::Infinite) ) {
-                        if ( bounces == 0 )
-                            bounces = 0;
                         L += throughPut * light->Le(_ray);
-                        if( hasNan(L)){
-                            light->Le(_ray);
-                        }
                     }
                 }
         }
@@ -73,20 +68,13 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
         specularBounce = ( flags & BSDF_SPECULAR ) != 0;
 
 
-        vec3 newDir = surfaceScatter.toWorld(surfaceScatter.wi);
 
         throughPut *= f * abs(surfaceScatter.wi.z) / surfaceScatter.pdf;
-        if(throughPut.x<=0 || throughPut.y<=0 || throughPut.z<=0)
-            int k = 1;
-
         if ( ( flags & BSDF_SPECULAR ) && ( flags & BSDF_TRANSMISSION ) ) {
             Float eta = its->bsdf->eta();
-            Float etaScale = ( dot(newDir, its->Ng) > 0 ) ? ( eta * eta ) : 1 / ( eta * eta );
+            Float etaScale = (dot(-ray.d,its->Ng) > 0 ) ? ( eta * eta ) : 1 / ( eta * eta );
             throughPut *= etaScale;
         }
-        _ray = Ray(its->p+newDir * Constant::EPSILON,newDir);
-
-        std::optional < Intersection > tempIts = scene.intersect(_ray);
         Float roulettePdf = std::max(throughPut.x, std::max(throughPut.y, throughPut.z));
         if ( bounces > 2 && roulettePdf < 0.1 ) {
             if ( sampler.getNext1D() < roulettePdf )
@@ -94,6 +82,10 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
             else
                 break;
         }
+
+        _ray = surfaceScatter.sctterRay(surfaceScatter.toWorld(surfaceScatter.wi));
+
+
     }
     return L;
 }
