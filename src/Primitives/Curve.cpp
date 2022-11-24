@@ -350,11 +350,14 @@ Curve::Curve(const Json & json,Scene & scene ) : Primitive(json) {
     mat4 toWorld = getOptional(json,"transform",getIndentifyTransform());
 
     _overrideThickness = containsAndGet(json,"curve_thickness",_curveThickness);
-    if (_overrideThickness) {
+    bool tapper = getOptional(json,"curve_taper",false);
+    if (_overrideThickness || tapper) {
         for (uint32 i = 0; i < _curveCount; ++i) {
             uint32 start = i ? _curveEnds[i - 1] : 0;
             for (uint32 t = start; t < _curveEnds[i]; ++t) {
                 float thickness = _overrideThickness ? _curveThickness : _nodeData[t].w;
+                if (tapper)
+                    thickness *= 1.0f - (t - start - 0.5f)/(_curveEnds[i] - start - 1);
                 _nodeData[t].w = thickness;
             }
         }

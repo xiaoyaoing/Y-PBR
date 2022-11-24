@@ -70,6 +70,9 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
 
 
         throughPut *= f * abs(surfaceScatter.wi.z) / surfaceScatter.pdf;
+        if( hasNan(throughPut)){
+
+        }
         if ( ( flags & BSDF_SPECULAR ) && ( flags & BSDF_TRANSMISSION ) ) {
             Float eta = its->bsdf->eta();
             Float etaScale = (dot(-ray.d,its->Ng) > 0 ) ? ( eta * eta ) : 1 / ( eta * eta );

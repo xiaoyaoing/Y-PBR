@@ -10,7 +10,7 @@
 
 #include "Mediums/Medium.hpp"
 
-static bool sampleBSDF = false;
+static bool sampleBSDF = true;
 static bool sampleLgiht = true;
 
 

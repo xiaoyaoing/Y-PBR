@@ -15,6 +15,7 @@ int main(){
    // FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/classroom/";
     //FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/veach-mis/";
     FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/hair/";
+    FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/curly-hair/";
     std::string s = FileUtils::WorkingDir + "scene.json";
     std::ifstream scene_file(FileUtils::WorkingDir + "scene.json");
 //    scene_file.seekg(0, std::ios_base::end);
