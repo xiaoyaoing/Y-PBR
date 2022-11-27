@@ -111,4 +111,8 @@ Float Quad::directPdf(const Intersection & pShape, vec3 ref) const {
     return length2(ref-pShape.p) * InvArea() / dot(-pShape.w,pShape.Ng) ;
 }
 
+Float Quad::powerToRadianceScale( ) const {
+    return Constant::INV_PI * inv_area;
+}
+
 

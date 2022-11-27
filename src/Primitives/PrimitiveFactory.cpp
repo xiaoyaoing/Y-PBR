@@ -64,7 +64,7 @@ namespace PrimitiveFactory {
 
     void LoadMeshFromJson(const Json & json, Scene & scene) {
         std::shared_ptr < TriangleMesh > prim = std::make_shared < TriangleMesh >();
-        prim->Load(json, scene);
+        prim->build(json, scene);
         scene.AddPrimitive(prim);
         auto emission = getEmission(json,prim);
         if( emission){

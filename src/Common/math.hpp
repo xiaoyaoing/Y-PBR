@@ -52,6 +52,35 @@ namespace Constant {
     inline constexpr Float EPSILON = 5e-4f;
 }
 
+class   BitManip {
+public :
+    static inline uint32 floatBitsToUint(float f)
+    {
+        union {
+            float f;
+            uint32 i;
+        } unionHack;
+        unionHack.f = f;
+        return unionHack.i;
+    }
+};
+
+namespace std {
+
+    template < glm::length_t Size >
+    class hash < glm::vec < Size, Float, glm::defaultp>> {
+    public:
+        std::size_t operator ()(const glm::vec < Size, Float, glm::defaultp > & v) const {
+            // See http://www.boost.org/doc/libs/1_33_1/doc/html/hash_combine.html
+            uint32 result = 0;
+            for ( unsigned i = 0 ; i < Size ; ++ i )
+                result ^= BitManip::floatBitsToUint(v[i]) + 0x9E3779B9 + ( result << 6 ) + ( result >> 2 );
+            return result;
+        }
+    };
+
+}
+
 
 
 template < glm::length_t size >

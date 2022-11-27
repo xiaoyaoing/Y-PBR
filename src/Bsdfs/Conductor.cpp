@@ -18,7 +18,7 @@ Spectrum Conductor::sampleF(SurfaceScatterEvent & event, const vec2 & u) const {
     event.wi = Frame::Reflect(event.wo);
     event.pdf = 1;
     Spectrum  alebdo = m_albedo->Evaluate();
-    Spectrum  f = alebdo  *  Fresnel::conductorReflectance(m_eta, m_k, event.wo.z) / abs(event.wi.z);
+    Spectrum  f = alebdo  *  Fresnel::conductorReflectance(m_eta, m_k, event.wo.z);
     event.sampleType = m_type;
     return f;
 }
@@ -50,7 +50,7 @@ Spectrum RoughConductor::f(const SurfaceScatterEvent & event) const {
     // as the surface normal, so that TIR is handled correctly.
     Float cosI = dot(event.wi,faceForward(wh,vec3(0,0,1)));
     Spectrum F= Fresnel::conductorReflectance(m_eta,m_k,cosI);
-    return  m_albedo->Evaluate(event.its) * m_distrib->D(wh,alphaxy)  * F * m_distrib->G(event.wo, event.wi,alphaxy)/ (4 * cosThetaI * cosThetaO);
+    return  m_albedo->Evaluate(event.its) * m_distrib->D(wh,alphaxy)  * F * m_distrib->G(event.wo, event.wi,alphaxy)/ (4 *  cosThetaO);
 }
 
 Float RoughConductor::Pdf(const SurfaceScatterEvent & event) const {
@@ -84,7 +84,7 @@ RoughConductor::sampleF(SurfaceScatterEvent & event, const vec2 & u) const {
 
     Float cosI = dot(event.wi,faceForward(wh,vec3(0,0,1)));
     Spectrum F= Fresnel::conductorReflectance(m_eta,m_k,cosI);
-    return     m_albedo->Evaluate(event.its) * m_distrib->D(wh,alphaxy)  * F * m_distrib->G(event.wo, event.wi,alphaxy)/ (4 * event.wi.z * event.wo.z);
+    return     m_albedo->Evaluate(event.its) * m_distrib->D(wh,alphaxy)  * F * m_distrib->G(event.wo, event.wi,alphaxy)/ (4 * event.wo.z);
 
 
 }
@@ -93,9 +93,6 @@ void RoughConductor::LogInfo( ) const {
 
 }
 
-Float RoughConductor::eta( ) const {
-    return BSDF::eta();
-}
 
 RoughConductor::RoughConductor(vec3 eta, vec3 k, std::shared_ptr<MicrofacetDistribution> distrib,
                                std::shared_ptr < Texture<Float> > roughness, std::shared_ptr < Texture<Float> > uroughness,

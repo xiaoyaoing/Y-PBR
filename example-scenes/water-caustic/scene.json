@@ -315,7 +315,7 @@
         "fov": 35
     },
     "integrator": {
-        "type": "progressive_photon_map",
+        "type": "sppm",
         "min_bounces": 0,
         "max_bounces": 8,
         "enable_consistency_checks": false,

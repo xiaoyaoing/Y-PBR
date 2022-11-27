@@ -71,7 +71,6 @@ void Scene::handleAddLight(const Json & p, int l, int r) {
 
 std::optional < Intersection > Scene::intersect(const Ray & ray) const {
     if ( _useBVH ) {
-        Ray tempRay(ray);
         RTCRayHit rayHit;
         EmbreeUtils::convertRay(& ray, & rayHit);
         //return bvh->intersect(ray);

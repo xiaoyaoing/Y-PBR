@@ -34,7 +34,6 @@ public:
     Float Pdf(const SurfaceScatterEvent & event) const override;
     Spectrum sampleF(SurfaceScatterEvent & event, const vec2 & u) const override;
     void LogInfo( ) const override;
-    Float eta() const override;
 protected:
     vec3 m_eta;
     vec3 m_k;

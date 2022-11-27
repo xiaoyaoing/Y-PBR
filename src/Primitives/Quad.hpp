@@ -19,6 +19,7 @@ public:
 
     bool occluded(const Ray & ray) const override;
 
+    Float powerToRadianceScale( ) const override;
 
 protected:
     virtual void computeArea();

@@ -3,7 +3,8 @@
 #include <iostream>
 
 static Float trigInverse(Float x) {
-    return sqrt(1 - x * x);
+    return std::min(std::sqrt(std::max(1.0f - x*x, 0.0f)), 1.0f);
+
 }
 
 static Float I0(Float x) {
@@ -148,6 +149,9 @@ Spectrum Hair::f(const SurfaceScatterEvent & event) const {
     vec3 fsum = MR * Nr + MTT * Ntt + MTRT * Ntrt;
     vec3 res =  fsum ;
     if( AbsCosTheta(event.wi)>0) res/= AbsCosTheta(event.wi);
+    if( hasNan(res)){
+
+    }
     return res;
 }
 
@@ -197,7 +201,7 @@ Spectrum Hair::sampleF(SurfaceScatterEvent & event, const vec2 & u) const {
     std::array < Float, pMax + 1 > apPdf = ComputeApPdf(costhetaO, h);
     int p;
     for ( p = 0 ; p < pMax ; ++ p ) {
-        if ( u0[0] < apPdf[p] )
+        if ( u0[0] <= apPdf[p] )
             break;
         u0[0] -= apPdf[p];
     }
@@ -218,7 +222,7 @@ Spectrum Hair::sampleF(SurfaceScatterEvent & event, const vec2 & u) const {
 
     Float phiO = std::atan2(event.wo.x, event.wo.z);
     Float deltaphi;
-    Float cosThetaD = cos(0.5 * ( std::asin(sinThetaI) - thetaO ));
+    Float cosThetaD = cos(0.5 * ( std::asin(clamp(sinThetaI,-1,1)) - thetaO ));
     Float iorPrime = std::sqrt(_eta * _eta - ( 1.0f - cosThetaD * cosThetaD )) / cosThetaD;
     Float gammaI = std::asin(clamp(h, - 1.0f, 1.0f));
     Float gammaT = std::asin(clamp(h / iorPrime, - 1.0f, 1.0f));
@@ -276,11 +280,12 @@ Hair::Hair(const Json & json) : BSDF(BXDFType(BSDF_GLOSSY | BSDF_TRANSMISSION | 
 
 }
 
+//return sinTheta
 Float Hair::sampleM(Float v, Float sinThetaO, Float cosThetaO, Float xi1, Float xi2) const {
     Float cosTheta = 1.0f + v * std::log(xi1 + ( 1.0f - xi1 ) * std::exp(- 2.0f / v));
     Float sinTheta = trigInverse(cosTheta);
     Float cosPhi = std::cos(Constant::TWO_PI * xi2);
-    return - cosTheta * sinThetaO + sinTheta * cosPhi * cosThetaO;
+    return clamp(-cosTheta * sinThetaO + sinTheta * cosPhi * cosThetaO,-1,1);
 }
 
 std::array < Float, pMax + 1 > Hair::ComputeApPdf(Float cosThetaO, Float h) const {

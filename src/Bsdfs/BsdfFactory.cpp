@@ -40,7 +40,7 @@ namespace BSDFFactory {
 
     std::shared_ptr < Material > LoadDielectricMaterial(const Json & j) {
         bool enalbeT = getOptional(j, "enable_refraction", true);
-        Float ior = j["ior"];
+        Float ior = getOptional(j,"ior",1.33);
         return std::make_shared < Dielectric >(ior, enalbeT);
     }
 

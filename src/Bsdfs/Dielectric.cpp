@@ -11,18 +11,19 @@ Float Dielectric::Pdf(const SurfaceScatterEvent & event) const {
 }
 
 Spectrum Dielectric::sampleF(SurfaceScatterEvent & event, const vec2 & u) const {
-    Spectrum  albedo = m_albedo->Evaluate();
+    Spectrum  albedo = m_albedo->Evaluate(event.its);
 
     bool sampleT = enableT;
     Float  eta = event.wo.z < 0.0f ? ior : invIor;
     Float cosThetaT;
     Float F=Fresnel::dielectricReflectance(eta, std::abs(event.wo.z), cosThetaT);
     Float reflectionProbability=sampleT?F:1;
+    Spectrum f;
     if(u[0]<=reflectionProbability) {   //reflection
         event.wi =Frame::Reflect(event.wo);
         event.pdf = reflectionProbability;
         event.sampleType = BXDFType(BSDF_REFLECTION | BSDF_SPECULAR);
-        return albedo * F / std::abs(event.wi.z);
+        f= albedo * F;
     }
     else {
         if(reflectionProbability == 1.0){
@@ -32,8 +33,9 @@ Spectrum Dielectric::sampleF(SurfaceScatterEvent & event, const vec2 & u) const 
         event.wi = vec3(-eta * event.wo.x, -eta * event.wo.y, -std::copysign(cosThetaT, event.wo.z));
         event.pdf = 1-reflectionProbability;
         event.sampleType = BXDFType(BSDF_TRANSMISSION | BSDF_SPECULAR);
-        return albedo * (1-F) / std::abs(event.wi.z);
+        f = albedo * (1-F) ;
     }
+    return f;
 }
 
 void Dielectric::LogInfo( ) const {
@@ -69,7 +71,7 @@ Spectrum RoughDielectric::f(const SurfaceScatterEvent & event) const {
     Float D = m_distrib->D(wh,alphaXY);
     Float G = m_distrib->G(in,out,alphaXY);
     if (reflect) {
-        return  albedo * F * D * G / ( 4* abs(in.z * out.z));
+        return  albedo * F * D * G / ( 4* abs(out.z));
     }
     else {
         Float whDotIn =  dot(wh,in);
@@ -77,7 +79,7 @@ Spectrum RoughDielectric::f(const SurfaceScatterEvent & event) const {
         Float sqrtDeom = eta * whDotOut  +  whDotIn;
         return  albedo * (1-F) *D * G  * std::abs(
                 whDotIn * whDotOut  /
-                (in.z * out.z * sqrtDeom * sqrtDeom)
+                (out.z * sqrtDeom * sqrtDeom)
         );
     }
 }
@@ -160,6 +162,8 @@ vec2 RoughDielectric::getAlphaXY(const SurfaceScatterEvent & event) const {
     return alphaXY;
 }
 
-Float RoughDielectric::eta( ) const {
-    return m_ior;
+Float RoughDielectric::eta(const SurfaceScatterEvent & event) const {
+    if(event.wi.z * event.wo.z >0)
+        return 1;
+    return event.wo.z>0?1/m_ior:m_ior;
 }

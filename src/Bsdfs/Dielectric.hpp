@@ -20,8 +20,10 @@ public:
 
     void LogInfo( ) const override;
 
-    Float eta( ) const override {
-        return ior;
+    Float eta(const SurfaceScatterEvent & event) const override {
+        if(event.wi.z * event.wo.z >0)
+            return 1;
+        return event.wo.z<0?ior:invIor;
     }
 
 private:
@@ -47,7 +49,7 @@ public:
 
     void LogInfo( ) const override;
 
-    Float eta( ) const override;
+    Float eta(const SurfaceScatterEvent & event) const override;
 
     Float m_ior;
     std::shared_ptr<MicrofacetDistribution> m_distrib;

@@ -17,6 +17,7 @@ public:
         start =  std::chrono::high_resolution_clock::now();
     }
     void update(uint64_t num) {
+        return;
         std::lock_guard<std::mutex> lock(mutex);
         work_done += num;
         Float work_ratio = (Float)work_done / (Float)total_work;

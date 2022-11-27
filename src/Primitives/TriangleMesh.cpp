@@ -4,66 +4,23 @@
 #include "scene.hpp"
 #include "Common/Transform.hpp"
 
+#include <unordered_map>
+
 TriangleMesh::TriangleMesh( ) : Primitive(nullptr) {}
 
 
-void TriangleMesh::Load(const Json & json, const Scene & scene) {
-    MeshIO::LoadMeshFromFile(json["file"].get < std::string >(), m_vertexs, m_tris);
-    mat4 transformMatrix = getOptional(json, "transform", getIndentifyTransform());
+void TriangleMesh::build(const Json & json, const Scene & scene) {
 
-    Json bsdf_json = json["bsdf"];
-    if ( bsdf_json.is_array() ) {
-        for ( const std::string & bsdf_str: bsdf_json ) {
-            m_bsdfs.push_back(scene.fetchBSDF(bsdf_str));
-        }
-    } else {
-        m_bsdfs.push_back(scene.fetchBSDF(bsdf_json));
-    }
+    loadResources(json,scene);
 
-    useSoomth = getOptional(json, "use_smooth", true);
-    // useSoomth = false;
-    if ( transformMatrix!=mat4() ) {
-        mat4 transformNormalMat = getTransformNormalMat(transformMatrix);
-        std::string s = Mat4ToStr(transformNormalMat);
-        for ( Vertex & vertex: m_vertexs ) {
-            vertex.pos() = transformPoint(transformMatrix, vertex.pos());
-            vertex.normal() = transformVector(transformNormalMat, vertex.normal());
-        }
-    }
-
+    useSoomth = getOptional(json, "smooth", true);
+    bool recomputeNormals = getOptional(json,"recompute_normals",false);
+    if(useSoomth && recomputeNormals)
+        recomputeSmoothNormals();
 
     computeBoundingBox();
     computeArea();
-
-    m_scene = rtcNewScene(EmbreeUtils::getDevice());
-
-    m_geometry = rtcNewGeometry(EmbreeUtils::getDevice(), RTC_GEOMETRY_TYPE_TRIANGLE);
-    // set vertices
-    float * vb = (float *) rtcSetNewGeometryBuffer(m_geometry, RTC_BUFFER_TYPE_VERTEX, 0,
-                                                   RTC_FORMAT_FLOAT3,
-                                                   3 * sizeof(float), m_vertexs.size());
-    for ( size_t i = 0 ; i < m_vertexs.size() ; i ++ ) {
-        vb[3 * i] = m_vertexs[i].pos().x;
-        vb[3 * i + 1] = m_vertexs[i].pos().y;
-        vb[3 * i + 2] = m_vertexs[i].pos().z;
-    }
-
-    // set indices
-    unsigned * ib = (unsigned *) rtcSetNewGeometryBuffer(m_geometry, RTC_BUFFER_TYPE_INDEX, 0,
-                                                         RTC_FORMAT_UINT3,
-                                                         3 * sizeof(unsigned), m_tris.size());
-    for ( size_t i = 0 ; i < m_tris.size() ; i ++ ) {
-        ib[i * 3] = m_tris[i].v0;
-        ib[i * 3 + 1] = m_tris[i].v1;
-        ib[i * 3 + 2] = m_tris[i].v2;
-    }
-
-
-    for ( TriangleI & triangleI: m_tris ) triangleI.material = clamp(triangleI.material, 0, m_bsdfs.size() - 1);
-
-    rtcCommitGeometry(m_geometry);
-    rtcAttachGeometry(m_scene, m_geometry);
-    rtcCommitScene(m_scene);
+    buildRTC();
 }
 
 
@@ -179,6 +136,114 @@ vec2 TriangleMesh::uvAt(int triID, Float u, Float v) const {
     vec2 uv1 = m_vertexs[t.v1].uv();
     vec2 uv2 = m_vertexs[t.v2].uv();
     return ( 1.0f - u - v ) * uv0 + u * uv1 + v * uv2;
+}
+
+void TriangleMesh::recomputeSmoothNormals( ){
+    static const float SplitLimit = std::cos(Constant::PI*0.15f);
+    //static CONSTEXPR float SplitLimit = -1.0f;
+
+    std::vector<vec3> geometricN(m_vertexs.size(), vec3(0));
+
+    std::unordered_multimap<vec3, uint32,std::hash<vec3>> posToVert;
+
+    for (uint32 i = 0; i < m_vertexs.size(); ++i) {
+        m_vertexs[i].normal() = vec3(0.0f);
+        posToVert.insert(std::make_pair(m_vertexs[i].pos(), i));
+    }
+
+    for (TriangleI &t : m_tris) {
+        const vec3 &p0 = m_vertexs[t.v0].pos();
+        const vec3 &p1 = m_vertexs[t.v1].pos();
+        const vec3 &p2 = m_vertexs[t.v2].pos();
+        vec3 normal = cross(p1 - p0,(p2 - p0));
+        if (normal == vec3(0))
+            normal = vec3(0.0f, 1.0f, 0.0f);
+        else
+            normal = normalize(normal);
+
+        for (int i = 0; i < 3; ++i) {
+            vec3 &n = geometricN[t.vs[i]];
+            if (n == vec3(0)) {
+                n = normal;
+            } else if (dot(n,normal) < SplitLimit) {
+                m_vertexs.push_back(m_vertexs[t.vs[i]]);
+                geometricN.push_back(normal);
+                t.vs[i] = m_vertexs.size() - 1;
+            }
+        }
+    }
+
+    for (TriangleI &t : m_tris) {
+        const vec3 &p0 = m_vertexs[t.v0].pos();
+        const vec3 &p1 = m_vertexs[t.v1].pos();
+        const vec3 &p2 = m_vertexs[t.v2].pos();
+        vec3 normal = cross(p1 - p0,(p2 - p0));
+        vec3 nN = normalize(normal);
+
+        for (int i = 0; i < 3; ++i) {
+            auto iters = posToVert.equal_range(m_vertexs[t.vs[i]].pos());
+
+            for (auto t = iters.first; t != iters.second; ++t)
+                if (dot(geometricN[t->second],nN) >= SplitLimit)
+                    m_vertexs[t->second].normal() += normal;
+        }
+    }
+
+    for (uint32 i = 0; i < m_vertexs.size(); ++i) {
+        if (m_vertexs[i].normal() == vec3(0))
+            m_vertexs[i].normal() = geometricN[i];
+        else
+            m_vertexs[i].normal() = normalize(m_vertexs[i].normal());
+    }
+}
+
+void TriangleMesh::loadResources(const Json & json, const Scene & scene) {
+    MeshIO::LoadMeshFromFile(json["file"].get < std::string >(), m_vertexs, m_tris);
+    mat4 transformMatrix = getOptional(json, "transform", getIndentifyTransform());
+    Json bsdf_json = json["bsdf"];
+    if ( bsdf_json.is_array() ) {
+        for ( const std::string & bsdf_str: bsdf_json ) {
+            m_bsdfs.push_back(scene.fetchBSDF(bsdf_str));
+        }
+    } else {
+        m_bsdfs.push_back(scene.fetchBSDF(bsdf_json));
+    }
+    if ( transformMatrix!=mat4() ) {
+        mat4 transformNormalMat = getTransformNormalMat(transformMatrix);
+        std::string s = Mat4ToStr(transformNormalMat);
+        for ( Vertex & vertex: m_vertexs ) {
+            vertex.pos() = transformPoint(transformMatrix, vertex.pos());
+            vertex.normal() = transformVector(transformNormalMat, vertex.normal());
+        }
+    }
+}
+
+void TriangleMesh::buildRTC( ) {
+    m_scene = rtcNewScene(EmbreeUtils::getDevice());
+    m_geometry = rtcNewGeometry(EmbreeUtils::getDevice(), RTC_GEOMETRY_TYPE_TRIANGLE);
+    // set vertices
+    float * vb = (float *) rtcSetNewGeometryBuffer(m_geometry, RTC_BUFFER_TYPE_VERTEX, 0,
+                                                   RTC_FORMAT_FLOAT3,
+                                                   3 * sizeof(float), m_vertexs.size());
+    for ( size_t i = 0 ; i < m_vertexs.size() ; i ++ ) {
+        vb[3 * i] = m_vertexs[i].pos().x;
+        vb[3 * i + 1] = m_vertexs[i].pos().y;
+        vb[3 * i + 2] = m_vertexs[i].pos().z;
+    }
+
+    // set indices
+    unsigned * ib = (unsigned *) rtcSetNewGeometryBuffer(m_geometry, RTC_BUFFER_TYPE_INDEX, 0,
+                                                         RTC_FORMAT_UINT3,
+                                                         3 * sizeof(unsigned), m_tris.size());
+    for ( size_t i = 0 ; i < m_tris.size() ; i ++ ) {
+        ib[i * 3] = m_tris[i].v0;
+        ib[i * 3 + 1] = m_tris[i].v1;
+        ib[i * 3 + 2] = m_tris[i].v2;
+    }
+    for ( TriangleI & triangleI: m_tris ) triangleI.material = clamp(triangleI.material, 0, m_bsdfs.size() - 1);
+    rtcCommitGeometry(m_geometry);
+    rtcAttachGeometry(m_scene, m_geometry);
+    rtcCommitScene(m_scene);
 }
 
 

@@ -9,13 +9,12 @@
 
 //2022/7/15
 Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler & sampler) const {
-
     std::optional < Intersection > its;
     SurfaceScatterEvent surfaceScatter;
     Spectrum throughPut(1.0);
     Spectrum L(0);
     
-    int bounces = 0, maxDepth = 16;
+    int bounces = 0, maxDepth = 8;
     bool specularBounce = true;
     Ray _ray(ray);
     
@@ -40,8 +39,12 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
         if ( DebugConfig::OnlyShowNormal ) {
             return (its->Ng+Spectrum(1.f))/2.f;
         }
+        if(abs(its->primitive->Area() - 2.96)<0.01){
+
+        }
 
          surfaceScatter= makeLocalScatterEvent(&its.value());
+        //return (surfaceScatter.wo+1.0f)/2.f;
 
         ///sample direct lighting for no specular bxdf
         if ( its->bsdf->MatchesFlags(BXDFType(BSDF_ALL & ~ BSDF_SPECULAR)) && bounces<maxDepth-1 ) {
@@ -56,11 +59,14 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
             }
         }
 
+        if ( DebugConfig::OnlyDirectLighting )
+            return L;
+
         if ( DebugConfig::OnlyIndirectLighting && bounces == 0 ) {
             L = Spectrum(0.f);
         }
 
-        Spectrum f = its->bsdf->sampleF(surfaceScatter, sampler.getNext2D());
+        Spectrum f = its->bsdf->sampleF(surfaceScatter, sampler.getNext2D(), false);
         if ( isBlack(f) || surfaceScatter.pdf == 0 )
             break;
 
@@ -69,14 +75,10 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
 
 
 
-        throughPut *= f * abs(surfaceScatter.wi.z) / surfaceScatter.pdf;
+        throughPut *= f  / surfaceScatter.pdf;
+//        if(!isSpecualr(surfaceScatter.sampleType))
+//            throughPut *= AbsCosTheta(surfaceScatter.wi);
         if( hasNan(throughPut)){
-
-        }
-        if ( ( flags & BSDF_SPECULAR ) && ( flags & BSDF_TRANSMISSION ) ) {
-            Float eta = its->bsdf->eta();
-            Float etaScale = (dot(-ray.d,its->Ng) > 0 ) ? ( eta * eta ) : 1 / ( eta * eta );
-            throughPut *= etaScale;
         }
         Float roulettePdf = std::max(throughPut.x, std::max(throughPut.y, throughPut.z));
         if ( bounces > 2 && roulettePdf < 0.1 ) {
@@ -85,7 +87,6 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
             else
                 break;
         }
-
         _ray = surfaceScatter.sctterRay(surfaceScatter.toWorld(surfaceScatter.wi));
 
 

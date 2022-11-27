@@ -18,19 +18,21 @@ public:
     void computeArea() override;
 
 
-    void Load(const Json & json, const Scene & scene);
+    void build(const Json & json, const Scene & scene);
     Bounds3 getTriBounds(int idx);
     Float getTriArea(int idx);
     int BsdfCount() const {return m_bsdfs.size();}
     std::shared_ptr<BSDF> Bsdf(uint32 idx) const {
         return m_bsdfs[idx];
     }
-
     bool occluded(const Ray & ray) const override;
 
 protected:
     vec2 uvAt(int triID,Float u,Float v) const ;
 
+    void recomputeSmoothNormals();
+    void loadResources(const Json & json, const Scene & scene);
+    void buildRTC();
     std::vector<Vertex> m_vertexs;
     std::vector<TriangleI> m_tris;
     std::vector<std::shared_ptr<BSDF>> m_bsdfs;

@@ -24,7 +24,7 @@
                 0.065,
                 0.05
             ],
-            "type": "mirror"
+            "type": "lambert"
         },
         
         {
@@ -70,7 +70,7 @@
                 0.71,
                 0.68
             ],
-            "type": "mirror"
+            "type": "lambert"
         },
         {
             "name": "tallBox",
@@ -321,7 +321,7 @@
         "enable_resume_render": false,
         "stratified_sampler": false,
         "scene_bvh": true,
-        "spp": 16,
+        "spp": 4,
         "spp_step": 16,
         "checkpoint_interval": "0",
         "timeout": "0"

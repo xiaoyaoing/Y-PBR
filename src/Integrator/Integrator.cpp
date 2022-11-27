@@ -41,9 +41,10 @@ Integrator::estimateDirect(SurfaceScatterEvent & event, const vec2 & uShading,
    //     return event.frame.s;
         if(medium){
             Ray ray(event.its->p,wi,Constant::EPSILON, distance(visibility.P1().p,visibility.P0().p)-Constant::EPSILON);
-            if(!visibility.Unoccluded(scene))
+            if(visibility.Unoccluded(scene))
+                Li *= medium->TR(ray);
+            else
                 Li  = Spectrum(0);
-            else Li *= medium->TR(ray);
         }
         else {
             if(!visibility.Unoccluded(scene))
@@ -53,7 +54,7 @@ Integrator::estimateDirect(SurfaceScatterEvent & event, const vec2 & uShading,
         if ( ! isBlack(Li) && lightPdf != 0 ) {
             event.wi = event.toLocal(wi);
                 scatteringPdf = event.its->bsdf->Pdf(event);
-                Spectrum f = event.its->bsdf->f(event) * abs(event.wi.z);
+                Spectrum f = event.its->bsdf->f(event, false);// * abs(event.wi.z);
                 if ( ! isBlack(f) ) {
                     if ( light.isDeltaLight() ) Ld += f * Li;/// lightPdf;
                     else {
@@ -72,8 +73,8 @@ Integrator::estimateDirect(SurfaceScatterEvent & event, const vec2 & uShading,
     {
         if ( ! light.isDeltaLight() ) {
             // return event.its->Ns;
-            Spectrum f = event.its->bsdf->sampleF(event, uShading);
-            f *= abs(event.wi.z);
+            Spectrum f = event.its->bsdf->sampleF(event, uShading, false);
+            //f *= abs(event.wi.z);
             scatteringPdf = event.pdf;
             if ( ! isBlack(f) && scatteringPdf ) {
 
@@ -156,7 +157,7 @@ SurfaceScatterEvent Integrator::makeLocalScatterEvent(const Intersection * its) 
     }
     event.frame = frame;
     event.its = its;
-    event.wo = event.toLocal(- its->w);
+    event.wo = event.toLocal(-its->w);
     event.flippedFrame = flippedFrame;
     return event;
 }

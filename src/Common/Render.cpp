@@ -28,10 +28,10 @@ Render::Render(const Json & json) {
        }
        else if(type == "sppm")
        {
-            Float radius = getOptional(integratorJson,"radius",0.05);
-            int iterations = getOptional(integratorJson,"interation_num",64);
+            Float radius = getOptional(integratorJson,"radius",0.01);
+            int iterations = getOptional(integratorJson,"interation_num",256);
             int photonsPerIteration = getOptional(integratorJson,"photons_per",camera->image->width() * camera->image->height());
-            int writeFrequency = getOptional(integratorJson,"write_frequency",32);
+            int writeFrequency = getOptional(integratorJson,"write_frequency",64);
             int maxBounces = getOptional(integratorJson,"max_bounces",8);
             integrator = std::make_unique<PhotonMapper>(camera,iterations,radius,maxBounces,photonsPerIteration,writeFrequency);
        }

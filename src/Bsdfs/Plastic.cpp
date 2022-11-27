@@ -23,11 +23,11 @@ Spectrum RoughPlastic::f(const SurfaceScatterEvent & event) const {
     Float D = m_distrib->D(wh,alphaXY);
     Float G = m_distrib->G(event.wo,event.wi,alphaXY);
     Spectrum Ks = specularReflectance->Evaluate(event.its);
-    Spectrum specularContrib = Ks * Spectrum(FOut * D * G / (4 * out.z * in.z));
+    Spectrum specularContrib = Ks * Spectrum(FOut * D * G / (4 * out.z));
 
     Float FIn = Fresnel::dielectricReflectance(1/m_ior,dot(in,wh));
     Spectrum Kd = diffuseReflectance->Evaluate(event.its);
-    Spectrum diffuseContrib =Kd * (1-FOut) * (1-FIn) *(1/(m_ior * m_ior)) / Constant::PI;
+    Spectrum diffuseContrib =Kd * (1-FOut) * (1-FIn) *(1/(m_ior * m_ior)) * * AbsCosTheta(event.wi) / Constant::PI;
 
     return specularContrib+diffuseContrib;
 }
@@ -97,9 +97,9 @@ Spectrum RoughPlastic::sampleF(SurfaceScatterEvent & event, const vec2 & u) cons
     Float FOut = Fresnel::dielectricReflectance(1/m_ior,dot(out,wh));
     Float D = m_distrib->D(wh,alphaxy);
     Float G = m_distrib->G(event.wo,event.wi,alphaxy);
-    Spectrum specularContrib = Ks * Spectrum(FOut * D * G / (4 * out.z * event.wi.z));
+    Spectrum specularContrib = Ks * Spectrum(FOut * D * G / (4 * out.z));
     Float FIn = Fresnel::dielectricReflectance(1/m_ior,dot(event.wi,wh));
-    Spectrum diffuseContrib =Kd * (1-FOut) * (1-FIn) *(1/(m_ior * m_ior)) / Constant::PI;
+    Spectrum diffuseContrib =Kd * (1-FOut) * (1-FIn) *(1/(m_ior * m_ior)) * AbsCosTheta(event.wi) / Constant::PI;
     return specularContrib+diffuseContrib;
 }
 
