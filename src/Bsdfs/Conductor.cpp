@@ -6,15 +6,15 @@ Conductor::Conductor(std::string conductorName) : BSDF(BXDFType(BSDF_SPECULAR | 
     ComplexIorList::lookup(conductorName, m_eta, m_k);
 }
 
-Float Conductor::Pdf(const SurfaceScatterEvent & event) const {
+Float Conductor::Pdf(const SurfaceEvent & event) const {
     return 0;
 }
 
-Spectrum Conductor::f(const SurfaceScatterEvent & event) const {
+Spectrum Conductor::f(const SurfaceEvent & event) const {
     return Spectrum();
 }
 
-Spectrum Conductor::sampleF(SurfaceScatterEvent & event, const vec2 & u) const {
+Spectrum Conductor::sampleF(SurfaceEvent & event, const vec2 & u) const {
     event.wi = Frame::Reflect(event.wo);
     event.pdf = 1;
     Spectrum  alebdo = m_albedo->Evaluate();
@@ -31,11 +31,7 @@ void Conductor::LogInfo( ) const {
 
 
 
-Spectrum RoughConductor::f(const SurfaceScatterEvent & event) const {
-    if(!MatchesFlags(event.sampleType)){
-        return Spectrum(0);
-    }
-
+Spectrum RoughConductor::f(const SurfaceEvent & event) const {
     Float roughnessx = m_uRoughness? m_uRoughness->Evaluate(event.its) : m_roughness->Evaluate(event.its);
     Float roughnessy = m_vRoughness? m_vRoughness->Evaluate(event.its) : m_roughness->Evaluate(event.its);
     vec2 alphaxy = vec2(m_distrib->roughnessToAlpha(roughnessx),m_distrib->roughnessToAlpha(roughnessy));
@@ -53,7 +49,7 @@ Spectrum RoughConductor::f(const SurfaceScatterEvent & event) const {
     return  m_albedo->Evaluate(event.its) * m_distrib->D(wh,alphaxy)  * F * m_distrib->G(event.wo, event.wi,alphaxy)/ (4 *  cosThetaO);
 }
 
-Float RoughConductor::Pdf(const SurfaceScatterEvent & event) const {
+Float RoughConductor::Pdf(const SurfaceEvent & event) const {
     if (!SameHemisphere(event.wo,event.wi)) return 0;
     Float roughnessx = m_uRoughness? m_uRoughness->Evaluate(event.its) : m_roughness->Evaluate(event.its);
     Float roughnessy = m_vRoughness? m_vRoughness->Evaluate(event.its) : m_roughness->Evaluate(event.its);
@@ -64,10 +60,7 @@ Float RoughConductor::Pdf(const SurfaceScatterEvent & event) const {
 }
 
 Spectrum
-RoughConductor::sampleF(SurfaceScatterEvent & event, const vec2 & u) const {
-    if(!MatchesFlags(event.sampleType)){
-        return Spectrum(0);
-    }
+RoughConductor::sampleF(SurfaceEvent & event, const vec2 & u) const {
     Float roughnessx = m_uRoughness? m_uRoughness->Evaluate(event.its) : m_roughness->Evaluate(event.its);
     Float roughnessy = m_vRoughness? m_vRoughness->Evaluate(event.its) : m_roughness->Evaluate(event.its);
 

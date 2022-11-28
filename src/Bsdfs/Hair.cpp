@@ -20,7 +20,7 @@ static Float I0(Float x) {
     return result;
 }
 
-static Float getH(const SurfaceScatterEvent & event){
+static Float getH(const SurfaceEvent & event){
     return std::fabs(event.its->uv.y);
     return 0.5 +(event.its->uv.y)/2;
 
@@ -117,7 +117,7 @@ vec3 Hair::NP(Float beta, Float cosThetaD, Float phi, int p, Float h) const {
     return Aph * TrimmedLogistic(deltaPhi, beta, - Constant::PI, Constant::PI);
 }
 
-Spectrum Hair::f(const SurfaceScatterEvent & event) const {
+Spectrum Hair::f(const SurfaceEvent & event) const {
     Float sinThetaO = event.wo.y;
     Float thetaO = std::asin(clamp(sinThetaO, - 1.0, 1.0));
 
@@ -155,7 +155,7 @@ Spectrum Hair::f(const SurfaceScatterEvent & event) const {
     return res;
 }
 
-Float Hair::Pdf(const SurfaceScatterEvent & event) const {
+Float Hair::Pdf(const SurfaceEvent & event) const {
     Float sinThetaO = event.wo.y;
     Float costhetaO = trigInverse(sinThetaO);
     Float thetaO = std::asin(clamp(sinThetaO, - 1, 1));
@@ -190,7 +190,7 @@ Float Hair::Pdf(const SurfaceScatterEvent & event) const {
     return pdf;
 }
 
-Spectrum Hair::sampleF(SurfaceScatterEvent & event, const vec2 & u) const {
+Spectrum Hair::sampleF(SurfaceEvent & event, const vec2 & u) const {
     //Hair-samplineg requires 4 randoms.
     vec2 u0 = DemuxFloat(u[0]), u1 = DemuxFloat(u[1]);
     Float sinThetaO = event.wo.y;

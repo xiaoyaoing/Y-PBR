@@ -12,15 +12,15 @@ public:
         invIor = 1.0f/ior;
     }
 
-    Spectrum f(const SurfaceScatterEvent & event) const override;
+    Spectrum f(const SurfaceEvent & event) const override;
 
-    Float Pdf(const SurfaceScatterEvent & event) const override;
+    Float Pdf(const SurfaceEvent & event) const override;
 
-    Spectrum sampleF(SurfaceScatterEvent & event, const vec2 & u) const override;
+    Spectrum sampleF(SurfaceEvent & event, const vec2 & u) const override;
 
     void LogInfo( ) const override;
 
-    Float eta(const SurfaceScatterEvent & event) const override {
+    Float eta(const SurfaceEvent & event) const override {
         if(event.wi.z * event.wo.z >0)
             return 1;
         return event.wo.z<0?ior:invIor;
@@ -39,17 +39,17 @@ public:
                     std::shared_ptr < Texture<Float> > uroughness = nullptr,
                     std::shared_ptr < Texture<Float> > vroughness = nullptr);
 
-    Spectrum f(const SurfaceScatterEvent & event) const override;
+    Spectrum f(const SurfaceEvent & event) const override;
 
-    Float Pdf(const SurfaceScatterEvent & event) const override;
+    Float Pdf(const SurfaceEvent & event) const override;
 
-    Spectrum sampleF(SurfaceScatterEvent & event, const vec2 & u) const override;
+    Spectrum sampleF(SurfaceEvent & event, const vec2 & u) const override;
 
-    vec2 getAlphaXY(const SurfaceScatterEvent & event) const;
+    vec2 getAlphaXY(const SurfaceEvent & event) const;
 
     void LogInfo( ) const override;
 
-    Float eta(const SurfaceScatterEvent & event) const override;
+    Float eta(const SurfaceEvent & event) const override;
 
     Float m_ior;
     std::shared_ptr<MicrofacetDistribution> m_distrib;

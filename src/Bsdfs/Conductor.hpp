@@ -8,11 +8,11 @@ public:
             m_eta(eta), m_k(k){}
 
     Conductor(std::string conductorName);
-    Spectrum f(const SurfaceScatterEvent & event) const override;
+    Spectrum f(const SurfaceEvent & event) const override;
 
-    Float Pdf(const SurfaceScatterEvent & event) const override;
+    Float Pdf(const SurfaceEvent & event) const override;
 
-    Spectrum sampleF(SurfaceScatterEvent & event, const vec2 & u) const override;
+    Spectrum sampleF(SurfaceEvent & event, const vec2 & u) const override;
 
     void LogInfo( ) const override;
 
@@ -30,9 +30,9 @@ public:
                    std::shared_ptr < Texture<Float> > vroughness = nullptr
                    );
     void setCoundctorByName(const std::string & conductorName);
-    Spectrum f(const SurfaceScatterEvent & event) const override;
-    Float Pdf(const SurfaceScatterEvent & event) const override;
-    Spectrum sampleF(SurfaceScatterEvent & event, const vec2 & u) const override;
+    Spectrum f(const SurfaceEvent & event) const override;
+    Float Pdf(const SurfaceEvent & event) const override;
+    Spectrum sampleF(SurfaceEvent & event, const vec2 & u) const override;
     void LogInfo( ) const override;
 protected:
     vec3 m_eta;

@@ -1,21 +1,20 @@
 #pragma once
 
-#include "../Common/math.hpp"
-#include "../Common/BoundingBox.hpp"
-#include "../Common/Json.hpp"
+#include "Common/math.hpp"
+#include "Common/BoundingBox.hpp"
 #include "Common/Frame.hpp"
-#include "../Ray/Ray.hpp"
-#include "../Ray/Intersection.hpp"
-#include "EmbreeUtils.hpp"
-
-#include "../Lights/Light.hpp"
-
-
-#include <optional>
-#include "glm/vec3.hpp"
-#include "glm/mat4x4.hpp"
 #include "Common/Json.hpp"
 #include "Common/Transform.hpp"
+
+#include "EmbreeUtils.hpp"
+
+#include "Ray/Ray.hpp"
+#include "Ray/Intersection.hpp"
+#include "Mediums/Medium.hpp"
+#include "Lights/Light.hpp"
+
+#include <optional>
+
 
 class AreaLight;
 
@@ -26,9 +25,10 @@ public:
     Primitive(const Json & json) {
         toWorld = getOptional(json, "transform", getIndentifyTransform());
     }
-    Primitive(){}
 
-    Primitive(const Bounds3 & bounds,uint32 id):BB_(bounds),primId(id){}
+    Primitive( ) {}
+
+    Primitive(const Bounds3 & bounds, uint32 id) : BB_(bounds), primId(id) {}
 
     virtual ~Primitive( ) {}
 
@@ -41,7 +41,8 @@ public:
     virtual vec3 normal(const vec3 & pos) const {};
 
     virtual void transform(const mat4 & T) {};
-    void transform() { transform(toWorld); }
+
+    void transform( ) { transform(toWorld); }
 
     virtual Intersection sample(const Intersection & ref, const vec2 & u,
                                 Float * pdf) const;
@@ -55,6 +56,10 @@ public:
     virtual Frame setTangentFrame(const Intersection * its) const {
         //todo add bump map
         return Frame(its->Ns);
+    }
+
+    const Medium * selectMedium(const Medium * currentMedium, bool geomBack) const  {
+
     }
 
     const mat4 & getTransform( ) {

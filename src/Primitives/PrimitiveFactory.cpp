@@ -47,7 +47,7 @@ namespace PrimitiveFactory {
 
 
     void LoadSimpleFromJson(const Json & json, Scene & scene) {
-        std::shared_ptr < BSDF > bsdf = scene.fetchBSDFFromJson(getOptional(json, "bsdf", std::string("null")));
+        std::shared_ptr < BSDF > bsdf = scene.fetchBSDF(getOptional(json, "bsdf", std::string("null")));
         auto type = getOptional(json,"type",std::string("sphere"));
         auto prim = loadSimpleMap[type](json);
         prim->setBSDF(bsdf);
@@ -76,7 +76,7 @@ namespace PrimitiveFactory {
 
     void LoadCurvesFromJson(const Json & json, Scene & scene ){
         std::shared_ptr<Curve> curve = std::make_shared <Curve>(json,scene);
-        std::shared_ptr < BSDF > bsdf = scene.fetchBSDFFromJson(getOptional(json, "bsdf", std::string("null")));
+        std::shared_ptr < BSDF > bsdf = scene.fetchBSDF(getOptional(json, "bsdf", std::string("null")));
         curve->setBSDF(bsdf);
         scene.AddPrimitive(curve);
     }

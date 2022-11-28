@@ -5,6 +5,8 @@
 #include "Bsdfs/Reflection.hpp"
 #include "Bsdfs/BsdfFactory.hpp"
 
+#include "Mediums/Medium.hpp"
+
 #include "Primitives/PrimitiveFactory.hpp"
 #include "Primitives/TriangleMesh.hpp"
 #include "Primitives/Sphere.hpp"
@@ -64,7 +66,6 @@ void Scene::handleAddLight(const Json & p, int l, int r) {
             lights.push_back(light);
         }
     }
-
     return;
 }
 
@@ -126,8 +127,6 @@ void Scene::logDebugInfo( ) {
 
 
 void Scene::build( ) {
-
-
     if ( _useBVH ) {
         _scene = rtcNewScene(EmbreeUtils::getDevice());
         for ( const auto & primitve: primitives ) {
@@ -153,4 +152,17 @@ void Scene::build( ) {
     for ( auto light: lights )
         light->Preprocess(* this);
 
+}
+
+std::shared_ptr < BSDF > Scene::fetchBSDF(const std::string & bsdfName) const {
+        return  bsdfs.contains(bsdfName)?bsdfs.at(bsdfName):bsdfs.at("default");
+}
+
+std::shared_ptr < Medium > Scene::fetchMedium(const std::string & mediumName) const {
+    if(!mediums.contains(mediumName))
+    {
+        spdlog::error("No such medium {0}",mediumName);
+        return nullptr;
+    }
+    return mediums.at(mediumName);
 }

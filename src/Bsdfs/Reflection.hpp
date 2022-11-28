@@ -88,39 +88,42 @@ public:
     BSDF(BXDFType type) : m_type(type), m_albedo(nullptr), m_bumpMap(nullptr) {};
 
 
+    virtual Float Pdf(const SurfaceEvent & event) const = 0;
 
 
-    virtual Float Pdf(const SurfaceScatterEvent & event) const = 0;
-
-
-    inline Spectrum sampleF(SurfaceScatterEvent & event, const vec2 & u, bool adjoint) const  {
-
+    inline Spectrum sampleF(SurfaceEvent & event, const vec2 & u, bool adjoint) const {
+        if(! MatchesFlags(event.requestType))
+            return Spectrum();
         Spectrum fResult = sampleF(event, u);
-
-        if(adjoint ) return fResult;
-
+        if ( adjoint ) return fResult;
         fResult *= sqr(eta(event));
         return fResult;
     }
 
-    inline Spectrum f(const SurfaceScatterEvent & event, bool adjoint) const {
+    inline Spectrum f(const SurfaceEvent & event, bool adjoint) const {
+        if(! MatchesFlags(event.requestType))
+            return Spectrum();
+
         Spectrum fResult = f(event);
         fResult *= sqr(eta(event));
         return fResult;
     }
 
-
     virtual void LogInfo( ) const = 0;
 
     bool MatchesFlags(BXDFType t) const {
-        return ( m_type & t ) == m_type;
+        return ( m_type & t ) != 0;
     }
 
-    bool hasFlag(BXDFType t) const {
+    bool HasFlag(BXDFType t) const {
         return ( m_type & t ) == t;
     }
 
-    virtual Float eta(const SurfaceScatterEvent & event) const { return 1; }
+    bool Pure(BXDFType t) const {
+        return m_type != 0 && ( m_type & BXDFType(~ t) ) == 0;
+    }
+
+    virtual Float eta(const SurfaceEvent & event) const { return 1; }
 
     void setAlbedo(const std::shared_ptr < Texture < Spectrum>> albedo) {
         m_albedo = std::move(albedo);
@@ -133,9 +136,8 @@ public:
     std::shared_ptr < Texture < Spectrum>> m_albedo = nullptr;
     int temp;
 protected:
-    virtual Spectrum sampleF(SurfaceScatterEvent & event, const vec2 & u) const = 0;
-    virtual Spectrum f(const SurfaceScatterEvent & event) const = 0;
-
+    virtual Spectrum sampleF(SurfaceEvent & event, const vec2 & u) const = 0;
+    virtual Spectrum f(const SurfaceEvent & event) const = 0;
 
     std::shared_ptr < Texture < Float>> m_bumpMap = nullptr;
     BXDFType m_type;
@@ -151,14 +153,14 @@ class LambertainR : public BSDF {
 public:
     LambertainR( ) : BSDF(BXDFType(BSDF_DIFFUSE | BSDF_REFLECTION)) {}
 
-    virtual Spectrum f(const SurfaceScatterEvent & event) const override;
+    virtual Spectrum f(const SurfaceEvent & event) const override;
 
-    Float Pdf(const SurfaceScatterEvent & event) const override;
+    Float Pdf(const SurfaceEvent & event) const override;
 
     virtual void LogInfo( ) const;
 
 
-    virtual Spectrum sampleF(SurfaceScatterEvent & event, const vec2 & u) const override;
+    virtual Spectrum sampleF(SurfaceEvent & event, const vec2 & u) const override;
 
 private:
     bool useCosineSample;
@@ -167,14 +169,14 @@ private:
 class LambertainT : public BSDF {
 public:
 
-    virtual Spectrum f(const SurfaceScatterEvent & event) const override;
+    virtual Spectrum f(const SurfaceEvent & event) const override;
 
     virtual void LogInfo( ) const override;
 
     LambertainT( ) : BSDF(BXDFType(BSDF_DIFFUSE | BSDF_TRANSMISSION)) {}
 
 
-    virtual Spectrum sampleF(SurfaceScatterEvent & event, const vec2 & u) const override;
+    virtual Spectrum sampleF(SurfaceEvent & event, const vec2 & u) const override;
 
 private:
 };
@@ -183,16 +185,16 @@ class SpecularR : public BSDF {
 public:
 
 
-    virtual Spectrum f(const SurfaceScatterEvent & event) const override;
+    virtual Spectrum f(const SurfaceEvent & event) const override;
 
     virtual void LogInfo( ) const override;
 
     SpecularR( ) : BSDF(BXDFType(BSDF_REFLECTION | BSDF_SPECULAR)) {}
 
-    virtual Spectrum sampleF(SurfaceScatterEvent & event, const vec2 & u) const override;
+    virtual Spectrum sampleF(SurfaceEvent & event, const vec2 & u) const override;
 
     // avoid calculate specular pdf directly
-    Float Pdf(const SurfaceScatterEvent & event) const override;
+    Float Pdf(const SurfaceEvent & event) const override;
 };
 
 

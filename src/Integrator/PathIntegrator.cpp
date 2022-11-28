@@ -10,14 +10,14 @@
 //2022/7/15
 Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler & sampler) const {
     std::optional < Intersection > its;
-    SurfaceScatterEvent surfaceScatter;
+    SurfaceEvent surfaceScatter;
     Spectrum throughPut(1.0);
     Spectrum L(0);
-    
+
     int bounces = 0, maxDepth = 8;
     bool specularBounce = true;
     Ray _ray(ray);
-    
+
     std::string firstHitName;
     std::string Path;
     for ( bounces = 0 ;; ++ bounces ) {
@@ -35,61 +35,55 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
 
         if ( ! its.has_value() || bounces >= maxDepth )
             break;
-
         if ( DebugConfig::OnlyShowNormal ) {
-            return (its->Ng+Spectrum(1.f))/2.f;
+            return ( its->Ng + Spectrum(1.f) ) / 2.f;
         }
-        if(abs(its->primitive->Area() - 2.96)<0.01){
+        surfaceScatter = makeLocalScatterEvent(& its.value());
 
-        }
+        if ( its->bsdf->Pure(BSDF_FORWARD) ) {
+            _ray = surfaceScatter.sctterRay(_ray.d);
+        } else
+            ///sample direct lighting for no specular bxdf
+        {
+            if ( its->bsdf->MatchesFlags(BXDFType(BSDF_NO_SPECULAR)) && bounces < maxDepth - 1 ) {
 
-         surfaceScatter= makeLocalScatterEvent(&its.value());
-        //return (surfaceScatter.wo+1.0f)/2.f;
-
-        ///sample direct lighting for no specular bxdf
-        if ( its->bsdf->MatchesFlags(BXDFType(BSDF_ALL & ~ BSDF_SPECULAR)) && bounces<maxDepth-1 ) {
-
-            Spectrum Ld = uniformSampleAllLights
-                    (surfaceScatter, scene, sampler, lightDistribution.get());  //direct lighting
-            if ( DebugConfig::OnlyDirectLighting )
-                return Ld;
-            L += throughPut * Ld;
-            if ( hasNan(L) ) {
-                int k = 1;
+                Spectrum Ld = uniformSampleAllLights
+                        (surfaceScatter, scene, sampler, lightDistribution.get());  //direct lighting
+                if ( DebugConfig::OnlyDirectLighting )
+                    return Ld;
+                L += throughPut * Ld;
+                if ( hasNan(L) ) {
+                    int k = 1;
+                }
             }
-        }
 
-        if ( DebugConfig::OnlyDirectLighting )
-            return L;
+            {
+                if ( DebugConfig::OnlyDirectLighting )
+                    return L;
+                if ( DebugConfig::OnlyIndirectLighting && bounces == 0 ) {
+                    L = Spectrum(0.f);
+                }
+            }
 
-        if ( DebugConfig::OnlyIndirectLighting && bounces == 0 ) {
-            L = Spectrum(0.f);
-        }
-
-        Spectrum f = its->bsdf->sampleF(surfaceScatter, sampler.getNext2D(), false);
-        if ( isBlack(f) || surfaceScatter.pdf == 0 )
-            break;
-
-        BXDFType flags = surfaceScatter.sampleType;
-        specularBounce = ( flags & BSDF_SPECULAR ) != 0;
-
-
-
-        throughPut *= f  / surfaceScatter.pdf;
-//        if(!isSpecualr(surfaceScatter.sampleType))
-//            throughPut *= AbsCosTheta(surfaceScatter.wi);
-        if( hasNan(throughPut)){
-        }
-        Float roulettePdf = std::max(throughPut.x, std::max(throughPut.y, throughPut.z));
-        if ( bounces > 2 && roulettePdf < 0.1 ) {
-            if ( sampler.getNext1D() < roulettePdf )
-                throughPut /= roulettePdf;
-            else
+            surfaceScatter.requestType = BSDF_ALL;
+            Spectrum f = its->bsdf->sampleF(surfaceScatter, sampler.getNext2D(), false);
+            if ( isBlack(f) || surfaceScatter.pdf == 0 )
                 break;
+
+            BXDFType flags = surfaceScatter.sampleType;
+            specularBounce = ( flags & BSDF_SPECULAR ) != 0;
+
+            throughPut *= f / surfaceScatter.pdf;
+
+            Float roulettePdf = std::max(throughPut.x, std::max(throughPut.y, throughPut.z));
+            if ( bounces > 2 && roulettePdf < 0.1 ) {
+                if ( sampler.getNext1D() < roulettePdf )
+                    throughPut /= roulettePdf;
+                else
+                    break;
+            }
+            _ray = surfaceScatter.sctterRay(surfaceScatter.toWorld(surfaceScatter.wi));
         }
-        _ray = surfaceScatter.sctterRay(surfaceScatter.toWorld(surfaceScatter.wi));
-
-
     }
     return L;
 }

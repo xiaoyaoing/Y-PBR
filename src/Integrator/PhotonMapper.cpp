@@ -27,14 +27,14 @@ struct SPPMPIxel {
     struct VisiblePoint {
         VisiblePoint( ) {}
 
-        VisiblePoint(SurfaceScatterEvent * _event, Spectrum throughPut) : throughPut(throughPut) {
+        VisiblePoint(SurfaceEvent * _event, Spectrum throughPut) : throughPut(throughPut) {
             event = _event;
         }
 
 
 //        VisiblePoint(const vec3 & p, const vec3 & wo, const BSDF * bsdf, const Spectrum & beta)
 //                : p(p), wo(wo), bsdf(bsdf), beta(beta) {}
-        SurfaceScatterEvent * event;
+        SurfaceEvent * event;
         Spectrum throughPut;
 
         ~VisiblePoint( ) {
@@ -180,25 +180,26 @@ void PhotonMapper::render(const Scene & scene) const {
                             for ( auto light: scene.lights );// pixel.Ld += throughput * light->environmentLighting(ray);
                             break;
                         }
-                        if ( bounce == 0 && its->bsdf->hasFlag(BSDF_SPECULAR) ) {
+                        if ( bounce == 0 && its->bsdf->HasFlag(BSDF_SPECULAR) ) {
                             isDielectric = true;
                         }
-                        SurfaceScatterEvent event = makeLocalScatterEvent(& its.value());
+                        SurfaceEvent event = makeLocalScatterEvent(& its.value());
                         const BSDF * bsdf = its->bsdf;
                         if ( specularBounce )
                             pixel.Ld += throughput * its->Le(- ray.d);
                         pixel.Ld += throughput * uniformSampleOneLight(event, scene, * tileSampler);
-                        bool isDiffuse = bsdf->hasFlag(BSDF_DIFFUSE);
-                        bool isGlossy = bsdf->hasFlag(BSDF_GLOSSY);
+                        bool isDiffuse = bsdf->HasFlag(BSDF_DIFFUSE);
+                        bool isGlossy = bsdf->HasFlag(BSDF_GLOSSY);
                         //find visible point
                         if ( isDiffuse || ( isGlossy && bounce == maxBounces - 1 ) ) {
-                            pixel.vp.event = new SurfaceScatterEvent(event);
+                            pixel.vp.event = new SurfaceEvent(event);
                             pixel.vp.throughPut = throughput;
                             pixel.isDielectric = isDielectric;
                             break;
                         }
 
                         if ( bounce < maxBounces - 1 ) {
+                            event.requestType = BSDF_ALL;
                             Spectrum f = bsdf->sampleF(event, tileSampler->getNext2D(),false);
                             //if(!specularBounce) f*=AbsCosTheta(event.wi);
                             if ( event.pdf == 0 || isBlack(f) ) break;
@@ -335,19 +336,19 @@ void PhotonMapper::render(const Scene & scene) const {
                     photonBounce0AverageDir.add(photonRay.d);
                 }
 
-                if ( bounce == 0 && its->bsdf->hasFlag(BSDF_SPECULAR) ) {
+                if ( bounce == 0 && its->bsdf->HasFlag(BSDF_SPECULAR) ) {
                     // photonDielectricBounce0Num ++;
                     firstDielectric = true;
                     photonS ++;
                 }
                 if ( bounce == 1 ) {
-                    if ( its->bsdf->hasFlag(BSDF_SPECULAR) ) {
+                    if ( its->bsdf->HasFlag(BSDF_SPECULAR) ) {
                         if ( firstDielectric ) photonSS ++;
                         else photonDS ++;
                     } else photonSD ++;
                 }
                 if ( bounce == 0 ) {
-                    drawLine = drawLine & its->bsdf->hasFlag(BSDF_SPECULAR);
+                    drawLine = drawLine & its->bsdf->HasFlag(BSDF_SPECULAR);
                 }
                 if ( drawLine )
                     _camera->drawLine(photonRay.o, its->p, lineColor);
@@ -374,7 +375,7 @@ void PhotonMapper::render(const Scene & scene) const {
 
                             SPPMPIxel * pixel = node->pixel;
                             SPPMPIxel::VisiblePoint & vp = pixel->vp;
-                            SurfaceScatterEvent * event = vp.event;
+                            SurfaceEvent * event = vp.event;
                             const vec3 & p = event->its->p;
                             if ( length2(p - photonP) > pixel->radius * pixel->radius )
                                 continue;
@@ -394,7 +395,8 @@ void PhotonMapper::render(const Scene & scene) const {
                     }
                 }
                 const BSDF * photonBsdf = its->bsdf;
-                SurfaceScatterEvent event = makeLocalScatterEvent(& its.value());
+                SurfaceEvent event = makeLocalScatterEvent(& its.value());
+                event.requestType = BSDF_ALL;
                 Spectrum f = photonBsdf->sampleF(event, vec2(RadicalInverse(haltonDim + 0, haltonIndex),
                                                              RadicalInverse(haltonDim + 1, haltonIndex)), true);
                 //if(!isSpecualr(event.sampleType)) f *=abs(event.wi.z);

@@ -20,17 +20,18 @@ static bool sampleLgiht = true;
 
 
 Spectrum
-Integrator::estimateDirect(SurfaceScatterEvent & event, const vec2 & uShading,
+Integrator::estimateDirect(SurfaceEvent & event, const vec2 & uShading,
                            const Light & light, const vec2 & uLight,
                            const Scene & scene, Sampler & sampler, bool specular) const {
-    Homogeneous *  medium = nullptr;
-    BXDFType bsdfFlags =
-            specular ? BSDF_ALL : BXDFType(BSDF_ALL & ~ BSDF_SPECULAR);
-    event.sampleType = bsdfFlags;
+    Homogeneous * medium = nullptr;
+    const BSDF * bsdf = event.its->bsdf;
 
-    if ( ! event.its->bsdf->MatchesFlags(bsdfFlags) )
-        return Spectrum(0);
+    //pure specular case
+    if ( ! bsdf->MatchesFlags(BSDF_NO_SPECULAR) )
+        return Spectrum();
 
+    event.requestType =
+            specular ? BSDF_ALL : BSDF_NO_SPECULAR;
     vec3 wi;
     Float lightPdf = 0, scatteringPdf = 0;
     VisibilityTester visibility;
@@ -38,42 +39,41 @@ Integrator::estimateDirect(SurfaceScatterEvent & event, const vec2 & uShading,
     Spectrum Ld(0);
     if ( sampleLgiht ) {
         Spectrum Li = light.sampleLi(* ( event.its ), uLight, & wi, & lightPdf, & visibility);
-   //     return event.frame.s;
-        if(medium){
-            Ray ray(event.its->p,wi,Constant::EPSILON, distance(visibility.P1().p,visibility.P0().p)-Constant::EPSILON);
-            if(visibility.Unoccluded(scene))
+        //     return event.frame.s;
+        if ( medium ) {
+            Ray ray(event.its->p, wi, Constant::EPSILON,
+                    distance(visibility.P1().p, visibility.P0().p) - Constant::EPSILON);
+            if ( visibility.Unoccluded(scene) )
                 Li *= medium->TR(ray);
             else
-                Li  = Spectrum(0);
-        }
-        else {
-            if(!visibility.Unoccluded(scene))
-                Li  = Spectrum(0);
+                Li = Spectrum(0);
+        } else {
+            if ( ! visibility.Unoccluded(scene) )
+                Li = Spectrum(0);
         }
 
         if ( ! isBlack(Li) && lightPdf != 0 ) {
             event.wi = event.toLocal(wi);
-                scatteringPdf = event.its->bsdf->Pdf(event);
-                Spectrum f = event.its->bsdf->f(event, false);// * abs(event.wi.z);
-                if ( ! isBlack(f) ) {
-                    if ( light.isDeltaLight() ) Ld += f * Li;/// lightPdf;
-                    else {
-                        Float weight =
-                                PowerHeuristic(lightPdf, scatteringPdf);
-                        if ( ! sampleBSDF ) weight = 1;
-                        Ld += f * weight * Li / lightPdf;
-                        if ( hasNan(Ld) ) {
-                            int k = 1;
-                        }
+            scatteringPdf = bsdf->Pdf(event);
+            Spectrum f = bsdf->f(event, false);// * abs(event.wi.z);
+            if ( ! isBlack(f) ) {
+                if ( light.isDeltaLight() ) Ld += f * Li;/// lightPdf;
+                else {
+                    Float weight =
+                            PowerHeuristic(lightPdf, scatteringPdf);
+                    if ( ! sampleBSDF ) weight = 1;
+                    Ld += f * weight * Li / lightPdf;
+                    if ( hasNan(Ld) ) {
+                        int k = 1;
                     }
                 }
             }
         }
-    if ( sampleBSDF )
-    {
+    }
+    if ( sampleBSDF ) {
         if ( ! light.isDeltaLight() ) {
             // return event.its->Ns;
-            Spectrum f = event.its->bsdf->sampleF(event, uShading, false);
+            Spectrum f = bsdf->sampleF(event, uShading, false);
             //f *= abs(event.wi.z);
             scatteringPdf = event.pdf;
             if ( ! isBlack(f) && scatteringPdf ) {
@@ -104,7 +104,7 @@ Integrator::estimateDirect(SurfaceScatterEvent & event, const vec2 & uShading,
 }
 
 Spectrum
-Integrator::uniformSampleOneLight(SurfaceScatterEvent & event,
+Integrator::uniformSampleOneLight(SurfaceEvent & event,
                                   const Scene & scene,
                                   Sampler & sampler,
                                   const Distribution1D * lightDistrib,
@@ -130,7 +130,7 @@ Integrator::uniformSampleOneLight(SurfaceScatterEvent & event,
                           scene, sampler, handleMedia) / lightPdf;
 }
 
-Spectrum Integrator::uniformSampleAllLights(SurfaceScatterEvent & event, const Scene & scene,
+Spectrum Integrator::uniformSampleAllLights(SurfaceEvent & event, const Scene & scene,
                                             Sampler & sampler, bool handleMedia) const {
     Spectrum L(0);
     for ( auto & light: scene.lights ) {
@@ -140,14 +140,16 @@ Spectrum Integrator::uniformSampleAllLights(SurfaceScatterEvent & event, const S
     return L;
 }
 
-SurfaceScatterEvent Integrator::makeLocalScatterEvent(const Intersection * its) const {
-    SurfaceScatterEvent event;
+
+
+SurfaceEvent Integrator::makeLocalScatterEvent(const Intersection * its) const {
+    SurfaceEvent event;
     Frame frame = its->primitive->setTangentFrame(its);
 
     bool enableTwoSideShading = true;
 
     bool hitBackSide = dot(its->w, its->Ng) > 0;
-    bool isTransmissive = its->bsdf->hasFlag(BSDF_TRANSMISSION);
+    bool isTransmissive = its->bsdf->HasFlag(BSDF_TRANSMISSION);
     bool flippedFrame = false;
     //todo add this to config class
     if ( enableTwoSideShading && hitBackSide && ! isTransmissive ) {
@@ -157,7 +159,7 @@ SurfaceScatterEvent Integrator::makeLocalScatterEvent(const Intersection * its) 
     }
     event.frame = frame;
     event.its = its;
-    event.wo = event.toLocal(-its->w);
+    event.wo = event.toLocal(- its->w);
     event.flippedFrame = flippedFrame;
     return event;
 }
@@ -183,9 +185,9 @@ Integrator::evalLightDirect(const Scene & scene, const Light & light, const Ray 
         bool hitDestLight = its->primitive->areaLight.get() == & light;
         if ( ! hitDestLight )
             return Spectrum();
-        *lightPdf = light.PdfLi(its.value(), ray.o);
+        * lightPdf = light.PdfLi(its.value(), ray.o);
 
-        return its->Le(- ray.d) ;
+        return its->Le(- ray.d);
     }
     if ( light.flags & int(LightFlags::Infinite) ) {
         if ( occluded )
@@ -201,6 +203,24 @@ Integrator::evalLightDirect(const Scene & scene, const Light & light, const Ray 
 Spectrum Integrator::evalShadowDirect(const Ray & ray, const Medium * medium, bool handleMedia) const {
 
     return Spectrum();
+}
+
+Spectrum Integrator::volumeUniformSampleOneLight(VolumeEvent & event, const Medium * medium, const Scene & scene,
+                                                 Sampler & sampler, const Distribution1D * lightDistrib) const {
+    return Spectrum();
+}
+
+Spectrum Integrator::volumeUniformSampleAllLights(VolumeEvent & event, const Medium * medium, const Scene & scene,
+                                                  Sampler & sampler) const {
+    return Spectrum();
+}
+
+Spectrum
+Integrator::volumeEstimateDirect(VolumeEvent & event, const Medium * medium, const vec2 & uShading, const Light & light,
+                                 const vec2 & uLight, const Scene & scene, Sampler & sampler) const {
+
+    //light.sampleLi(* ( event.its ), uLight, & wi, & lightPdf, & visibility);
+
 }
 
 void SamplerIntegrator::render(const Scene & scene) const {
@@ -240,7 +260,7 @@ void SamplerIntegrator::render(const Scene & scene) const {
                 _camera->image->dividePixel(x, y, spp);
             }
         }
-            reporter.update(1);
+        reporter.update(1);
     }, numTiles);
     _camera->image->postProgress();
     _camera->image->savePNG();

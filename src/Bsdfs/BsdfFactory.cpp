@@ -1,3 +1,4 @@
+#include "Forward.hpp"
 #include "BsdfFactory.hpp"
 #include "Reflection.hpp"
 #include "Dielectric.hpp"
@@ -28,14 +29,11 @@ namespace BSDFFactory {
 
 
     std::shared_ptr < Material > LoadLambertainMaterial(const Json & j) {
-
         return std::make_shared < LambertainR >();
-        //  material->Add(new LambertainT(albedo));
     }
 
     std::shared_ptr < Material > LoadMirrorMaterial(const Json & j) {
         return std::make_shared < SpecularR >();
-        //todo support fresnel specular and uRoughness
     }
 
     std::shared_ptr < Material > LoadDielectricMaterial(const Json & j) {
@@ -103,8 +101,12 @@ namespace BSDFFactory {
         return std::make_shared <Hair>(j);
     }
 
+    std::shared_ptr < Material > LoadForwardMaterial(const Json & j ) {
+        return std::make_shared <ForwardBSDF>();
+    }
 
-    std::shared_ptr < Material > LoadDefualtMaterial( ) {
+
+        std::shared_ptr < Material > LoadDefualtMaterial( ) {
         std::shared_ptr < Material > material = std::make_shared < LambertainR >();
         material->setAlbedo(std::make_shared < ConstantTexture < Spectrum>>(DefaultALbedo));
         return material;
@@ -121,7 +123,8 @@ namespace BSDFFactory {
             {"rough_conductor",  LoadRoughConductorMaterial},
             {"rough_dielectric", LoadRoughDielectricMaterial},
             {"rough_plastic", LoadRoughPlasticMaterial},
-            {"hair", LoadHairMaterial}
+            {"hair", LoadHairMaterial},
+            {"forward", LoadForwardMaterial}
     };
 
 

@@ -7,7 +7,7 @@
 
 #include <spdlog/spdlog.h>
 
-Spectrum LambertainR::f(const SurfaceScatterEvent & event) const {
+Spectrum LambertainR::f(const SurfaceEvent & event) const {
     if ( event.wo.z < 0 || event.wi.z < 0 ) {
         return Spectrum();
     }
@@ -22,7 +22,7 @@ void LambertainR::LogInfo( ) const {
 }
 
 
-Spectrum LambertainR::sampleF(SurfaceScatterEvent & event, const vec2 & u) const {
+Spectrum LambertainR::sampleF(SurfaceEvent & event, const vec2 & u) const {
 
     event.wi = Warp::squareToUniformHemisphere(u);
     event.pdf = Warp::squareToUniformHemispherePdf(event.wi);
@@ -32,7 +32,7 @@ Spectrum LambertainR::sampleF(SurfaceScatterEvent & event, const vec2 & u) const
 }
 
 
-Spectrum LambertainT::f(const SurfaceScatterEvent & event) const {
+Spectrum LambertainT::f(const SurfaceEvent & event) const {
     return m_albedo->Evaluate(event.its) * Constant::INV_PI;
 }
 
@@ -41,20 +41,18 @@ void LambertainT::LogInfo( ) const {
 }
 
 
-Spectrum LambertainT::sampleF(SurfaceScatterEvent & event, const vec2 & u) const {
+Spectrum LambertainT::sampleF(SurfaceEvent & event, const vec2 & u) const {
     return Spectrum();
 }
 
 
-Float LambertainR::Pdf(const SurfaceScatterEvent & event) const {
-    if ( ! MatchesFlags(event.sampleType) )
-        return 0.0f;
+Float LambertainR::Pdf(const SurfaceEvent & event) const {
     if ( event.wi.z <= 0.0f || event.wo.z <= 0.0f )
         return 0.0f;
     return Warp::squareToUniformHemispherePdf(event.wo);
 }
 
-Spectrum SpecularR::f(const SurfaceScatterEvent & event) const {
+Spectrum SpecularR::f(const SurfaceEvent & event) const {
     const vec3 & wi = event.wi;
     const vec3 & wo = event.wo;
     if ( Frame::Reflect(wi) == wo )
@@ -62,7 +60,7 @@ Spectrum SpecularR::f(const SurfaceScatterEvent & event) const {
     return Spectrum(0.0);
 }
 
-Float SpecularR::Pdf(const SurfaceScatterEvent & event) const {
+Float SpecularR::Pdf(const SurfaceEvent & event) const {
     return 0;
 }
 
@@ -73,7 +71,7 @@ void SpecularR::LogInfo( ) const {
 
 
 Spectrum
-SpecularR::sampleF(SurfaceScatterEvent & event, const vec2 & u) const {
+SpecularR::sampleF(SurfaceEvent & event, const vec2 & u) const {
 
     event.wi = Frame::Reflect(event.wo);
     event.pdf = 1;

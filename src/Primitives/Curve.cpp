@@ -386,7 +386,7 @@ Curve::Curve(const Json & json,Scene & scene ) : Primitive(json) {
                 if (_subSample > 0.0f && rand.getNext1D() < _subSample)
                     continue;
                 auto prim = std::make_shared <CurveI>(&_nodeData,t);
-                std::shared_ptr < BSDF > bsdf = scene.fetchBSDFFromJson(getOptional(json, "bsdf", std::string("null")));
+                std::shared_ptr < BSDF > bsdf = scene.fetchBSDF(getOptional(json, "bsdf", std::string("null")));
                 prim->setBSDF(bsdf);
               //  scene.AddPrimitive(prim);
                 prims.emplace_back(

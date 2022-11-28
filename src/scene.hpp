@@ -8,6 +8,7 @@
 
 class Light;
 class Primitive;
+class Medium;
 
 struct RenderOptions{
     int spp;
@@ -35,20 +36,9 @@ public:
         return worldBound;
     }
 
-    std::shared_ptr<BSDF> fetchBSDF(const std::string & bsdfName) const {
-        if(bsdfs.contains(bsdfName)){
-            return bsdfs.at(bsdfName);
-        }
-        return  bsdfs.at("default");
-    }
-    std::shared_ptr<BSDF> fetchBSDFFromJson(const Json & bsdfJson){
-        if(bsdfJson.is_string()){
-            return fetchBSDF(bsdfJson.get <std::string>());
-        }
-        if(bsdfJson.is_object()){
-            return fetchBSDF("default");
-        }
-    }
+    std::shared_ptr<BSDF> fetchBSDF(const std::string & bsdfName) const;
+    std::shared_ptr<Medium> fetchMedium(const std::string & mediumName) const;
+
     void AddPrimitive(std::shared_ptr<Primitive> prim) {primitives.push_back(prim);}
     void AddLight(std::shared_ptr<Light> light) {lights.push_back(light);}
     RenderOptions options;
@@ -63,13 +53,14 @@ protected:
 
     std::vector<std::shared_ptr<Primitive>> primitives;
     std::unordered_map<std::string,std::shared_ptr<BSDF>>  bsdfs;
+    std::unordered_map<std::string,std::shared_ptr<Medium>>  mediums;
 
-    std::unique_ptr<BVHAccel> bvh;
+
     Bounds3 worldBound;
     RTCScene  _scene = nullptr;
-    bool _useBVH;
 
-    /*** debug variables ***/
+    bool _useBVH;
+    std::unique_ptr<BVHAccel> bvh;
 };
 
 

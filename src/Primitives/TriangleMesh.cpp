@@ -206,7 +206,7 @@ void TriangleMesh::loadResources(const Json & json, const Scene & scene) {
             m_bsdfs.push_back(scene.fetchBSDF(bsdf_str));
         }
     } else {
-        m_bsdfs.push_back(scene.fetchBSDF(bsdf_json));
+        m_bsdfs.push_back(scene.fetchBSDF(bsdf_json.get <std::string>()));
     }
     if ( transformMatrix!=mat4() ) {
         mat4 transformNormalMat = getTransformNormalMat(transformMatrix);

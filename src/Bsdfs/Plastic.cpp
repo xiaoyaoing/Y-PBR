@@ -11,7 +11,7 @@ RoughPlastic::RoughPlastic(const std::shared_ptr < Texture < Spectrum>> & diffus
                            diffuseReflectance(diffuseReflectance), specularReflectance(specularReflectance),
                            m_ior(mIor), m_distrib(mDistrib),
                            m_roughness(mRoughness),m_vRoughness(mVRoughness),m_uRoughness(mURoughness) {}
-Spectrum RoughPlastic::f(const SurfaceScatterEvent & event) const {
+Spectrum RoughPlastic::f(const SurfaceEvent & event) const {
     const vec3 & out = event.wo;
     const vec3 & in = event.wi;
     if(out.z <=0 || in.z<=0){
@@ -27,12 +27,12 @@ Spectrum RoughPlastic::f(const SurfaceScatterEvent & event) const {
 
     Float FIn = Fresnel::dielectricReflectance(1/m_ior,dot(in,wh));
     Spectrum Kd = diffuseReflectance->Evaluate(event.its);
-    Spectrum diffuseContrib =Kd * (1-FOut) * (1-FIn) *(1/(m_ior * m_ior)) * * AbsCosTheta(event.wi) / Constant::PI;
+    Spectrum diffuseContrib =Kd * (1-FOut) * (1-FIn) *(1/(m_ior * m_ior)) * AbsCosTheta(event.wi) / Constant::PI;
 
     return specularContrib+diffuseContrib;
 }
 
-Float RoughPlastic::Pdf(const SurfaceScatterEvent & event) const {
+Float RoughPlastic::Pdf(const SurfaceEvent & event) const {
     const vec3 & out = event.wo;
     const vec3 & in = event.wi;
     if( CosTheta(out) <=0 || CosTheta(in)<=0)
@@ -54,7 +54,7 @@ Float RoughPlastic::Pdf(const SurfaceScatterEvent & event) const {
     return specProb+diffProb;
 }
 
-Spectrum RoughPlastic::sampleF(SurfaceScatterEvent & event, const vec2 & u) const {
+Spectrum RoughPlastic::sampleF(SurfaceEvent & event, const vec2 & u) const {
     const vec3 & out = event.wo;
     if(CosTheta(out)<=0){
         event.pdf = 0;
@@ -107,7 +107,7 @@ void RoughPlastic::LogInfo( ) const {
 
 }
 
-vec2 RoughPlastic::getAlphaXY(const SurfaceScatterEvent & event) const {
+vec2 RoughPlastic::getAlphaXY(const SurfaceEvent & event) const {
     Float roughnessx = m_uRoughness? m_uRoughness->Evaluate(event.its) : m_roughness->Evaluate(event.its);
     Float roughnessy = m_vRoughness? m_vRoughness->Evaluate(event.its) : m_roughness->Evaluate(event.its);
     vec2 alphaXY = vec2(m_distrib->roughnessToAlpha(roughnessx),m_distrib->roughnessToAlpha(roughnessy));

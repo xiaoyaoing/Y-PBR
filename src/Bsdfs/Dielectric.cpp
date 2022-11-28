@@ -1,16 +1,16 @@
 #include "Dielectric.hpp"
 #include "Fresnel.hpp"
 
-Spectrum Dielectric::f(const SurfaceScatterEvent & event) const {
+Spectrum Dielectric::f(const SurfaceEvent & event) const {
     return Spectrum(0);
 }
 
-Float Dielectric::Pdf(const SurfaceScatterEvent & event) const {
+Float Dielectric::Pdf(const SurfaceEvent & event) const {
     // avoid compute specular pdf
     return 0;
 }
 
-Spectrum Dielectric::sampleF(SurfaceScatterEvent & event, const vec2 & u) const {
+Spectrum Dielectric::sampleF(SurfaceEvent & event, const vec2 & u) const {
     Spectrum  albedo = m_albedo->Evaluate(event.its);
 
     bool sampleT = enableT;
@@ -52,7 +52,7 @@ void Dielectric::LogInfo( ) const {
 
 
 
-Spectrum RoughDielectric::f(const SurfaceScatterEvent & event) const {
+Spectrum RoughDielectric::f(const SurfaceEvent & event) const {
     const Spectrum albedo = m_albedo->Evaluate(event.its->uv);
     const vec3 & out = event.wo;
     const vec3 & in = event.wi;
@@ -84,7 +84,7 @@ Spectrum RoughDielectric::f(const SurfaceScatterEvent & event) const {
     }
 }
 
-Float RoughDielectric::Pdf(const SurfaceScatterEvent & event) const {
+Float RoughDielectric::Pdf(const SurfaceEvent & event) const {
     const vec3 & out = event.wo;
     const vec3 & in = event.wi;
     bool reflect = out.z * in.z > 0;
@@ -116,7 +116,7 @@ Float RoughDielectric::Pdf(const SurfaceScatterEvent & event) const {
     return pdf;
 }
 
-Spectrum RoughDielectric::sampleF(SurfaceScatterEvent & event, const vec2 & u) const {
+Spectrum RoughDielectric::sampleF(SurfaceEvent & event, const vec2 & u) const {
     const vec3  & out = event.wo;
 
     vec2 alphaXY  = getAlphaXY(event);
@@ -155,14 +155,14 @@ RoughDielectric::RoughDielectric(Float ior,  std::shared_ptr<MicrofacetDistribut
                                  {
 }
 
-vec2 RoughDielectric::getAlphaXY(const SurfaceScatterEvent & event) const {
+vec2 RoughDielectric::getAlphaXY(const SurfaceEvent & event) const {
     Float roughnessx = m_uRoughness? m_uRoughness->Evaluate(event.its) : m_roughness->Evaluate(event.its);
     Float roughnessy = m_vRoughness? m_vRoughness->Evaluate(event.its) : m_roughness->Evaluate(event.its);
     vec2 alphaXY = vec2(m_distrib->roughnessToAlpha(roughnessx),m_distrib->roughnessToAlpha(roughnessy));
     return alphaXY;
 }
 
-Float RoughDielectric::eta(const SurfaceScatterEvent & event) const {
+Float RoughDielectric::eta(const SurfaceEvent & event) const {
     if(event.wi.z * event.wo.z >0)
         return 1;
     return event.wo.z>0?1/m_ior:m_ior;

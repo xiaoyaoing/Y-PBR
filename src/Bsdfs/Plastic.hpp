@@ -19,14 +19,14 @@ public:
                  const std::shared_ptr < Texture < Float>> & mVRoughness,
                  const std::shared_ptr < Texture < Float>> & mURoughness);
 
-    Spectrum f(const SurfaceScatterEvent & event) const override;
+    Spectrum f(const SurfaceEvent & event) const override;
 
-    Float Pdf(const SurfaceScatterEvent & event) const override;
+    Float Pdf(const SurfaceEvent & event) const override;
 
-    Spectrum sampleF(SurfaceScatterEvent & event, const vec2 & u) const override;
+    Spectrum sampleF(SurfaceEvent & event, const vec2 & u) const override;
 
     void LogInfo( ) const override;
 
-    vec2 getAlphaXY(const SurfaceScatterEvent & event) const;
+    vec2 getAlphaXY(const SurfaceEvent & event) const;
 
 };

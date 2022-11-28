@@ -6,11 +6,11 @@ const int pMax = 3;
 
 class Hair : public  BSDF{
 public:
-    Spectrum f(const SurfaceScatterEvent & event) const override;
+    Spectrum f(const SurfaceEvent & event) const override;
 
-    Float Pdf(const SurfaceScatterEvent & event) const override;
+    Float Pdf(const SurfaceEvent & event) const override;
 
-    Spectrum sampleF(SurfaceScatterEvent & event, const vec2 & u) const override;
+    Spectrum sampleF(SurfaceEvent & event, const vec2 & u) const override;
 
     void LogInfo( ) const override;
     Hair(const Json & json);
