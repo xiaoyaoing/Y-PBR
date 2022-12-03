@@ -7,7 +7,7 @@ public:
     }
 
     T Evaluate(const Intersection * si = nullptr) const override { return value; }
-    T Evaluate(const vec2 & uv) const override {return value; }
+    T Evaluate(vec2 uv) const override {return value; }
     vec2 sample(TextureMapJacobian jacobian, const vec2 & uv,Float * pdf) const override {
         return vec2();
     }

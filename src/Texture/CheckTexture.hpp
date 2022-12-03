@@ -10,7 +10,7 @@ public:
 
     T Evaluate(const Intersection * si) const override;
 
-    T Evaluate(const vec2 & uv) const override {
+    T Evaluate(vec2 uv) const override {
 
         ivec2 uvI(uv*vec2(float(_resU), float(_resV)));
         bool on = (uvI.x ^ uvI.y) & 1;

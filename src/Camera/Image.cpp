@@ -111,7 +111,8 @@ void Image::dividePixel(uint32 x, uint32 y, uint32 count) {
 
 void Image::postProgress(){
     for(int i=0;i<pixels.size();i++){
-        pixels[i].rgb = clamp(255.f * ToneMap::toneMap(_tonemapType, pixels[i].rgb), vec3(0), 255.f * vec3(1));
+        Spectrum  rgb = clamp(255.f * ToneMap::toneMap(_tonemapType, pixels[i].rgb), vec3(0), 255.f * vec3(1));
+        pixels[i].rgb = rgb;
     }
 }
 

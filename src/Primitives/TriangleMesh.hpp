@@ -7,7 +7,7 @@
 
 class TriangleMesh : public Primitive {
 public:
-    TriangleMesh();
+    TriangleMesh(const Json & json) {}
     virtual ~ TriangleMesh() = default;
     Intersection sample(const vec2 & u, Float * pdf) const override;
     std::optional<Intersection> intersect(Ray& ray) const override;
@@ -18,7 +18,7 @@ public:
     void computeArea() override;
 
 
-    void build(const Json & json, const Scene & scene);
+    void load(const Json & json, const Scene & scene) override;
     Bounds3 getTriBounds(int idx);
     Float getTriArea(int idx);
     int BsdfCount() const {return m_bsdfs.size();}

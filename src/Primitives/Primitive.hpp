@@ -44,7 +44,7 @@ public:
 
     void transform( ) { transform(toWorld); }
 
-    virtual Intersection sample(const Intersection & ref, const vec2 & u,
+    virtual Intersection sample(const vec3 & ref, const vec2 & u,
                                 Float * pdf) const;
 
     virtual Intersection sample(const vec2 & u, Float * pdf) const {};
@@ -59,7 +59,9 @@ public:
     }
 
     const Medium * selectMedium(const Medium * currentMedium, bool geomBack) const  {
-
+        if(inMedium || outMedium)
+            return geomBack?inMedium.get():outMedium.get();
+        return currentMedium;
     }
 
     const mat4 & getTransform( ) {
@@ -78,9 +80,7 @@ public:
         return inv_area;
     }
 
-    void setBSDF(std::shared_ptr < BSDF > _bsdf) {
-        bsdf = _bsdf;
-    }
+    virtual  void load(const Json & json, const Scene & scene );
 
     RTCGeometry initRTC( );
 
@@ -98,6 +98,9 @@ protected:
     Bounds3 BB_;
     RTCGeometry _geom;
     mat4 toWorld;
+
+    std::shared_ptr <Medium > outMedium;
+    std::shared_ptr <Medium > inMedium;
     //mat4  toWorld;
 };
 

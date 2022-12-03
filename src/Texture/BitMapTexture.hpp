@@ -64,7 +64,7 @@ public:
 
     vec2 sample(TextureMapJacobian jacobian, const vec2 & uv, Float * pdf) const override {
         vec2 newUv = _distribution[jacobian]->SampleContinuous(uv, pdf);
-        *pdf = *pdf * _w * _h;
+      //  *pdf = *pdf * _w * _h;
         return vec2(newUv.x, newUv.y);
     }
 
@@ -74,7 +74,7 @@ public:
         return res;
     }
 
-    T Evaluate(const vec2 & uv) const override {
+    T Evaluate(vec2 uv) const override {
         float u = uv.x * _w;
         float v = uv.y * _h;
         if ( _linear ) {
@@ -99,8 +99,12 @@ public:
             iv0 = ( ( iv0 % _h ) + _h ) % _h;
             iv1 = ( ( iv1 % _h ) + _h ) % _h;
         }
+      //  return getValue(iu0, iv0);
+
         if ( ! _linear )
             return getValue(iu0, iv0);
+   //     iu0 = 255;iu1 =256; iv0 = 599;iv1 =600;
+     //   return getValue(iu0,iv0);
         return lerp(
                 getValue(iu0, iv0),
                 getValue(iu1, iv0),

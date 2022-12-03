@@ -2,9 +2,6 @@
 #include "Bsdfs/Reflection.hpp"
 #include "Mediums/Medium.hpp"
 
-void VolPathIntegrator::process(const Scene & scene, Sampler & sampler) {
-
-}
 
 vec3 VolPathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler & sampler) const {
     Spectrum L(0);
@@ -14,20 +11,22 @@ vec3 VolPathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler 
     SurfaceEvent surfaceEvent;
     bool specularBounce = true;
     int bounce;
-    int maxBounce = 8;
     Spectrum throughPut(1);
     Ray _ray(ray);
-    for ( bounce = 0 ; bounce < maxBounce ; bounce ++ ) {
+    for ( bounce = 0 ; bounce < maxBounces ; bounce ++ ) {
         std::optional < Intersection > its = scene.intersect(_ray);
         bool foundIntersection = its.has_value();
+        //if(foundIntersection) return (its->Ng +1.f)/2.f; else return L;
         if ( ! foundIntersection && ! medium ) break;
         bool hitSurface = true;
         if ( medium ) {
-            throughPut *= medium->sampleDistance(ray, sampler, voulumeEvent);
+//            return medium->sampleDistance(_ray, sampler, voulumeEvent);
+            throughPut *= medium->sampleDistance(_ray, sampler, voulumeEvent);
             if ( isBlack(throughPut) ) break;
             hitSurface = voulumeEvent.exited;
         }
         if ( hitSurface ) {
+//            return Spectrum(0);
             if ( specularBounce ) {
                 if ( foundIntersection )
                     L += throughPut * its->Le(- _ray.d);
@@ -42,36 +41,39 @@ vec3 VolPathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler 
             if ( its->bsdf->Pure(BSDF_FORWARD) ) {
                 _ray = surfaceEvent.sctterRay(_ray.d);
             } else {
-                if ( its->bsdf->MatchesFlags(BXDFType(BSDF_NO_SPECULAR)) && bounce < maxBounce - 1 ) {
+                if ( its->bsdf->MatchesFlags(BXDFType(BSDF_NO_SPECULAR)) && bounce < maxBounces - 1 ) {
 
-                    Spectrum Ld = uniformSampleAllLights
-                            (surfaceEvent, scene, sampler, lightDistribution.get());  //direct lighting
-                    L += throughPut * Ld;
+                    L += throughPut * uniformSampleAllLights
+                            (surfaceEvent, scene, sampler, medium);  //direct lighting
                 }
                 surfaceEvent.requestType = BSDF_ALL;
                 Spectrum f = its->bsdf->sampleF(surfaceEvent, sampler.getNext2D(), false);
                 if ( isBlack(f) || surfaceEvent.pdf == 0 )
                     break;
-
                 BXDFType flags = surfaceEvent.sampleType;
                 specularBounce = ( flags & BSDF_SPECULAR ) != 0;
-
                 throughPut *= f / surfaceEvent.pdf;
 
-                Float roulettePdf = std::max(throughPut.x, std::max(throughPut.y, throughPut.z));
-                if ( bounce > 2 && roulettePdf < 0.1 ) {
-                    if ( sampler.getNext1D() < roulettePdf )
-                        throughPut /= roulettePdf;
-                    else
-                        break;
-                }
                 _ray = surfaceEvent.sctterRay(surfaceEvent.toWorld(surfaceEvent.wi));
             }
-            medium = its->primitive->selectMedium(medium,dot(-_ray.d,its->Ng)>0);
+            medium = its->primitive->selectMedium(medium, dot(_ray.d, its->Ng) > 0);
         } else {
-           // L +=
+            //   return volumeUniformSampleOneLight(voulumeEvent,medium,scene,sampler,lightDistribution.get());
+            L += throughPut *
+                 volumeUniformSampleOneLight(voulumeEvent, medium, scene, sampler, lightDistribution.get());
+            PhaseSample phaseSample;
+            Spectrum p = voulumeEvent.phase->sampleP(_ray.d, sampler.getNext2D(), phaseSample);
+            //   throughPut *= p / voulumeEvent.pdf;
+            _ray = Ray(voulumeEvent.p, phaseSample.w);
+        }
+        //russian prob
+        Float roulettePdf = std::max(throughPut.x, std::max(throughPut.y, throughPut.z));
+        if ( bounce > 2 && roulettePdf < 0.1 ) {
+            if ( sampler.getNext1D() < roulettePdf )
+                throughPut /= roulettePdf;
+            else
+                break;
         }
     }
-
-    return vec3();
+    return L;
 }

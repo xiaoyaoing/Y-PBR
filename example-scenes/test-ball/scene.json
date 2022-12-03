@@ -1,5 +1,5 @@
 {
-    "media" : "",
+    "media" : [],
     "bsdfs": [
         {
             "name": "RoughMetal",
@@ -12,9 +12,9 @@
         {
             "name": "RoughDielectric",
             "albedo": 1,
-            "type": "mirror",
+            "type": "rough_dielectric",
             "ior" : 1.5,
-            "distribution": "beckmann",
+            "distribution": "ggx",
             "roughness": 0.1
         },
         {
@@ -52,7 +52,7 @@
         },
         {
             "name": "Stand",
-            "albedo": 0.8,
+            "albedo": 0.2,
             "type": "lambert",
             "material" : "Cu"
         },
@@ -141,7 +141,7 @@
             "smooth": true,
             "backface_culling": false,
             "recompute_normals": false,
-            "bsdf": "ChairWood"
+            "bsdf": "RoughDielectric"
         },
         {
             "transform": {
@@ -158,7 +158,7 @@
             "smooth": true,
             "backface_culling": false,
             "recompute_normals": false,
-            "bsdf": "ChairWood"
+            "bsdf": "RoughDielectric"
         },
         {
             "transform": {
@@ -176,24 +176,6 @@
             "backface_culling": false,
             "recompute_normals": false,
             "bsdf": "Stand"
-        },
-        {
-            "transform": {
-                "position": [
-                    -0.708772,
-                    0,
-                    -0.732108
-                ],
-                "scale": 0.001,
-                "rotation": [
-                    0,
-                    46.1511,
-                    180
-                ]
-            },
-            "bump_strength": 0,
-            "type": "quad",
-            "bsdf": "Floor"
         }
     ],
     "camera": {
@@ -240,7 +222,7 @@
         "enable_resume_render": false,
         "stratified_sampler": true,
         "scene_bvh": true,
-        "spp": 8,
+        "spp": 2,
         "spp_step": 16,
         "checkpoint_interval": "0",
         "hdr_output_file": "material-testball.exr"

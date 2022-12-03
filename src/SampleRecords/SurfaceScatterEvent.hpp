@@ -4,6 +4,7 @@
 #include "Ray/Ray.hpp"
 #include "Common/Frame.hpp"
 #include "Bsdfs/BsdfTypes.hpp"
+#include "Mediums/PhaseFunction.hpp"
 
 struct SurfaceEvent {
     const Intersection * its;
@@ -38,5 +39,8 @@ public:
 
 struct VolumeEvent {
     bool exited;
+    vec3 rayDir,p;
+    const PhaseFunction * phase;
+    Float pdf;
 };
 

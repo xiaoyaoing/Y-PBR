@@ -33,7 +33,7 @@ public:
     void drawLine(const vec3 & begin,const vec3 & end,const Spectrum & color);
     void drawLine(int x0,int x1,int y0,int y1, const Spectrum & color);
 
-    std::shared_ptr<Medium> _medium;
+    std::shared_ptr<Medium> _medium = nullptr;
     std::unique_ptr<Image> image;
 };
 

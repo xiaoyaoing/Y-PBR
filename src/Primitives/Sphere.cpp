@@ -93,21 +93,21 @@ Float Sphere::directPdf(const Intersection & pShape, vec3 ref) const {
     return 1/(2 * Constant::PI *(1-cosThetaMax));
 }
 
-Intersection Sphere::sample(const Intersection & ref, const vec2 & u, Float * pdf) const {
+Intersection Sphere::sample(const vec3 & ref, const vec2 & u, Float * pdf) const {
     //All points are visible
     Intersection it;
-    if( distance2(ref.p, center) <= radius * radius){
+    if( distance2(ref, center) <= radius * radius){
         *pdf = 0;
         return it;
     }
-    vec3 d(center-ref.p);
+    vec3 d(center-ref);
     Float dc = length(d);
     Float invDc = 1/dc;
     vec3 w = d * invDc;
     vec3 wx,wy;
     coordinateSystem(w,wx,wy);
 
-    Float sinThetaMax2 = radius * radius / distance2(ref.p, center);
+    Float sinThetaMax2 = radius * radius / distance2(ref, center);
     Float invSinThetaMax = 1/ sqrt(sinThetaMax2);
     Float cosThetaMax = std::sqrt(std::max((Float)0, 1 - sinThetaMax2));
 
@@ -128,10 +128,9 @@ Intersection Sphere::sample(const Intersection & ref, const vec2 & u, Float * pd
 
     vec3 nWorld = -(sinAlpha * cos(phi) * wx + sinAlpha * sin(phi) * wy +cosAlpha * w );
     vec3 pWorld = center + radius * nWorld;
-    if(pWorld == ref.p){
+    if(pWorld == ref){
 
     }
-
     it.p = pWorld;
     it.Ng = nWorld;
     *pdf = 1/(2 * Constant::PI *(1-cosThetaMax));

@@ -1,19 +1,18 @@
 #include "Light.hpp"
 #include "Common/Json.hpp"
 
-class DistantLight : public Light {
+class DistantLight : public Infinite {
 public:
 
     Float PdfLi(const Intersection & pShape, const vec3 & ref) const override;
 
     Spectrum
-    sampleLi(const Intersection & ref, const vec2 & u, vec3 * wi, Float * pdf, VisibilityTester * vis) const override;
+    sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf, Float * distance) const override;
 
     Spectrum Le(const Ray & ray) const override;
 
     Spectrum Power( ) override;
 
-    void Preprocess(const Scene & scene) override;
 
     LightSampleResult sampleDirect(const vec2 & positionSample, const vec2 & dirSample) override;
 
@@ -24,6 +23,5 @@ public:
 protected:
     Spectrum L;
     vec3 wLight;
-    vec3 worldCenter;
-    Float worldRadius;
+
 };

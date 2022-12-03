@@ -10,48 +10,50 @@
 //2022/7/15
 Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler & sampler) const {
     std::optional < Intersection > its;
-    SurfaceEvent surfaceScatter;
-    Spectrum throughPut(1.0);
+    SurfaceEvent surfaceEvent;
+    Spectrum throughput(1.0);
     Spectrum L(0);
 
-    int bounces = 0, maxDepth = 8;
+    int bounces = 0, maxDepth = maxBounces;
     bool specularBounce = true;
     Ray _ray(ray);
 
     std::string firstHitName;
     std::string Path;
     for ( bounces = 0 ;; ++ bounces ) {
+
         its = scene.intersect(_ray);
-        if ( specularBounce ) {
+        if ( specularBounce) {
             if ( its.has_value() )
-                L += throughPut * its->Le(- _ray.d);
+                L += throughput * its->Le(- _ray.d);
             else
                 for ( auto light: scene.lights ) {
                     if ( light->flags == int(LightFlags::Infinite) ) {
-                        L += throughPut * light->Le(_ray);
+                         L += throughput * light->Le(_ray);
                     }
                 }
         }
+      //  break;
 
         if ( ! its.has_value() || bounces >= maxDepth )
             break;
         if ( DebugConfig::OnlyShowNormal ) {
             return ( its->Ng + Spectrum(1.f) ) / 2.f;
         }
-        surfaceScatter = makeLocalScatterEvent(& its.value());
+        surfaceEvent = makeLocalScatterEvent(& its.value());
 
         if ( its->bsdf->Pure(BSDF_FORWARD) ) {
-            _ray = surfaceScatter.sctterRay(_ray.d);
+            _ray = surfaceEvent.sctterRay(_ray.d);
         } else
             ///sample direct lighting for no specular bxdf
         {
             if ( its->bsdf->MatchesFlags(BXDFType(BSDF_NO_SPECULAR)) && bounces < maxDepth - 1 ) {
 
                 Spectrum Ld = uniformSampleAllLights
-                        (surfaceScatter, scene, sampler, lightDistribution.get());  //direct lighting
+                        (surfaceEvent, scene, sampler, nullptr);  //direct lighting
                 if ( DebugConfig::OnlyDirectLighting )
                     return Ld;
-                L += throughPut * Ld;
+                L += throughput * Ld;
                 if ( hasNan(L) ) {
                     int k = 1;
                 }
@@ -65,26 +67,29 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
                 }
             }
 
-            surfaceScatter.requestType = BSDF_ALL;
-            Spectrum f = its->bsdf->sampleF(surfaceScatter, sampler.getNext2D(), false);
-            if ( isBlack(f) || surfaceScatter.pdf == 0 )
+            surfaceEvent.requestType = BSDF_ALL;
+            Spectrum f = its->bsdf->sampleF(surfaceEvent, sampler.getNext2D(), false);
+            if ( isBlack(f) || surfaceEvent.pdf == 0 )
                 break;
 
-            BXDFType flags = surfaceScatter.sampleType;
+            BXDFType flags = surfaceEvent.sampleType;
             specularBounce = ( flags & BSDF_SPECULAR ) != 0;
 
-            throughPut *= f / surfaceScatter.pdf;
+            throughput *= f / surfaceEvent.pdf;
+//            if(bounces == 1)
+//            return (surfaceEvent.toWorld(surfaceEvent.wi)+vec3(1.f))/2.f;
 
-            Float roulettePdf = std::max(throughPut.x, std::max(throughPut.y, throughPut.z));
+            Float roulettePdf = std::max(throughput.x, std::max(throughput.y, throughput.z));
             if ( bounces > 2 && roulettePdf < 0.1 ) {
                 if ( sampler.getNext1D() < roulettePdf )
-                    throughPut /= roulettePdf;
+                    throughput /= roulettePdf;
                 else
                     break;
             }
-            _ray = surfaceScatter.sctterRay(surfaceScatter.toWorld(surfaceScatter.wi));
+            _ray = surfaceEvent.sctterRay(surfaceEvent.toWorld(surfaceEvent.wi));
         }
     }
+    //return throughput;
     return L;
 }
 

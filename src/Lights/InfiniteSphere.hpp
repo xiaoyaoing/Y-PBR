@@ -2,14 +2,14 @@
 #include "Texture/BitMapTexture.hpp"
 #include "Common/Json.hpp"
 
-class InfinteSphere : public  Light {
+class InfinteSphere : public  Infinite {
 public:
     InfinteSphere(const std::shared_ptr<BitMapTexture<Spectrum>> emssision,const mat4 & toWorld) :
-                 Light((int)LightFlags::Infinite),_emission(emssision),_toWorld(toWorld),_toLocal(glm::transpose(toWorld)){}
+                _emission(emssision),_toWorld(toWorld),_toLocal(glm::transpose(toWorld)){}
 
     InfinteSphere(const Json & json);
     Spectrum
-    sampleLi(const Intersection & ref, const vec2 & u, vec3 * wi, Float * pdf, VisibilityTester * vis) const override;
+    sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf, Float * distance) const override;
     LightSampleResult sampleDirect(const vec2 & positionSample, const vec2 & u2) override;
     Spectrum Le(const Ray & ray) const override;
 
@@ -26,8 +26,6 @@ private:
     void Preprocess(const Scene & scene) override;
 protected:
     std::shared_ptr<BitMapTexture<Spectrum>> _emission;
-    vec3 _worldCenter;
-    Float _worldRadius;
     mat4 _toWorld;
     mat4 _toLocal;
 };

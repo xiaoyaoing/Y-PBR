@@ -387,7 +387,7 @@ Curve::Curve(const Json & json,Scene & scene ) : Primitive(json) {
                     continue;
                 auto prim = std::make_shared <CurveI>(&_nodeData,t);
                 std::shared_ptr < BSDF > bsdf = scene.fetchBSDF(getOptional(json, "bsdf", std::string("null")));
-                prim->setBSDF(bsdf);
+             //   prim->setBSDF(bsdf);
               //  scene.AddPrimitive(prim);
                 prims.emplace_back(
                         std::make_shared<Primitive>(curveBox(p0, p1, p2),

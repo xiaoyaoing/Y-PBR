@@ -137,6 +137,11 @@ namespace ImageIO {
         uint32 uw,uh;
         lodepng_decode_memory(&dst,&uw,&uh,file.get(),size, LCT_RGBA, 8);
         w =uw;h=uh;
+        //std::vector<
+//        std::vector < unsigned char > data(w * h * 4);
+//        for(int i=0;i<w * h * 4;i++) data[i] = dst[i];
+//        savePng(FileUtils::getFilePath(FileUtils::WorkingDir+"texture","png",false),data,w,h,4);
+
         return dst;
     }
 #if JPEG_AVAILABLE

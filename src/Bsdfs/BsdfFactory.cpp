@@ -71,7 +71,7 @@ namespace BSDFFactory {
 //todo
     std::shared_ptr < Material > LoadRoughDielectricMaterial(const Json & j) {
         Float ior = getOptional(j, "ior", 1.5);
-        std::string distribStr = getOptional(j, "distribution", std::string("beckMann"));
+        std::string distribStr = getOptional(j, "distribution", std::string("beckmann"));
         auto roughnessTuple = loadRoughness(j);
         auto roughDielectricMaterial = std::make_shared < RoughDielectric >(ior, LoadMicrofacetDistribution(distribStr),
                                                                             std::get < 0 >(roughnessTuple),

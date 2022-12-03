@@ -6,6 +6,7 @@
 #include "Bsdfs/BsdfFactory.hpp"
 
 #include "Mediums/Medium.hpp"
+#include "Mediums/MediumFactory.hpp"
 
 #include "Primitives/PrimitiveFactory.hpp"
 #include "Primitives/TriangleMesh.hpp"
@@ -13,7 +14,7 @@
 #include "Primitives/Quad.hpp"
 #include "Primitives/Cube.hpp"
 
-#include "Lights/Infinte.hpp"
+#include "Lights/InfiniteSphere.hpp"
 #include "Lights/Distant.hpp"
 #include "Lights/SkyDome.hpp"
 #include "Lights/InfiniteSphereCap.h"
@@ -30,12 +31,12 @@ static int occludedCount1 = 0;
 
 Scene::Scene(const Json sceneJson) : options(RenderOptions(sceneJson.at("renderer"))) {
     bsdfs = BSDFFactory::LoadBsdfsFromJson(sceneJson.at("bsdfs"));
+    mediums = MediumFactory::loadMediumsFromJson(sceneJson.at("media"));
     PrimitiveFactory::LoadPrimitivesFromJson(sceneJson.at("primitives"), * this);
 
     spdlog::info("{} Primitives", primitives.size());
     spdlog::info("{} lights", lights.size());
     spdlog::info("{} Bsdfs", bsdfs.size());
-
     _useBVH = getOptional(sceneJson["renderer"], "scene_bvh", false);
 
 }
@@ -70,7 +71,7 @@ void Scene::handleAddLight(const Json & p, int l, int r) {
 }
 
 
-std::optional < Intersection > Scene::intersect(const Ray & ray) const {
+std::optional < Intersection > Scene::intersect(Ray & ray) const {
     if ( _useBVH ) {
         RTCRayHit rayHit;
         EmbreeUtils::convertRay(& ray, & rayHit);
@@ -83,13 +84,13 @@ std::optional < Intersection > Scene::intersect(const Ray & ray) const {
         }
         Intersection * its = EmbreeUtils::RTCRayHit1_(& rayHit)->its;
         its->w = ray.d;
+        ray.farT = rayHit.ray.tfar;
         return {* its};
     }
 
     std::optional < Intersection > minIntersection;
     Ray _ray(ray);
     for ( auto primitive: primitives ) {
-
         auto its = primitive->intersect(_ray);
         if ( its.has_value() ) {
             minIntersection = its;

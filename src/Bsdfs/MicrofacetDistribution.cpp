@@ -28,14 +28,14 @@
 
 MicrofacetDistribution::~MicrofacetDistribution( ) noexcept {}
 
-Float MicrofacetDistribution::Pdf(const vec3 & wo, const vec3 & wh, const vec2 &alphaxy) const {
+Float MicrofacetDistribution::Pdf(const vec3 & wo, const vec3 & wh, const vec2 &alphaXY) const {
     if (sampleVisibleArea)
-        return D(wh, alphaxy) * G1(wo,alphaxy) * absDot(wo, wh) / AbsCosTheta(wo);
+        return D(wh, alphaXY) * G1(wo,alphaXY) * absDot(wo, wh) / AbsCosTheta(wo);
     else
-        return D(wh, alphaxy) * AbsCosTheta(wh);
+        return D(wh, alphaXY) * AbsCosTheta(wh);
 }
 
-Float Beckmann::roughnessToAlpha(float roughness) const {
+Float Beckmann::roughnessToAlpha(Float roughness) const {
     roughness = std::max(roughness, (Float)1e-3);
     return roughness;
     Float x = std::log(roughness);
@@ -43,9 +43,9 @@ Float Beckmann::roughnessToAlpha(float roughness) const {
            0.0171201f * x * x * x + 0.000640711f * x * x * x * x;
 }
 
-Float Beckmann::D(const vec3 & wh, const vec2 & alphaxy) const {
-    Float alphax =alphaxy.x;
-    Float alphay =alphaxy.y;
+Float Beckmann::D(const vec3 & wh, const vec2 & alphaXY) const {
+    Float alphax =alphaXY.x;
+    Float alphay =alphaXY.y;
     Float tan2Theta = Tan2Theta(wh);
     if (std::isinf(tan2Theta)) return 0.;
     Float cos4Theta = Cos2Theta(wh) * Cos2Theta(wh);
@@ -54,9 +54,9 @@ Float Beckmann::D(const vec3 & wh, const vec2 & alphaxy) const {
            (Constant::PI * alphax * alphay * cos4Theta);
 }
 
-Float Beckmann::Lambda(const vec3 & w, const vec2 & alphaxy) const {
-    Float alphax =alphaxy.x;
-    Float alphay =alphaxy.y;
+Float Beckmann::Lambda(const vec3 & w, const vec2 & alphaXY) const {
+    Float alphax =alphaXY.x;
+    Float alphay =alphaXY.y;
 
     Float absTanTheta = std::abs(TanTheta(w));
     if (std::isinf(absTanTheta)) return 0.;
@@ -68,9 +68,9 @@ Float Beckmann::Lambda(const vec3 & w, const vec2 & alphaxy) const {
     return (1 - 1.259f * a + 0.396f * a * a) / (3.535f * a + 2.181f * a * a);
 }
 
-vec3 Beckmann::Sample_wh(const vec3 & wo, const vec2 & u, const vec2 & alphaxy) const {
-    Float alphax =alphaxy.x;
-    Float alphay =alphaxy.y;
+vec3 Beckmann::Sample_wh(const vec3 & wo, const vec2 & u, const vec2 & alphaXY) const {
+    Float alphax =alphaXY.x;
+    Float alphay =alphaXY.y;
 
     //random sample  no importance sampling
     Float tan2Theta;
@@ -100,20 +100,83 @@ std::string Beckmann::ToString( ) const {
     return std::string();
 }
 
-Float GGX::roughnessToAlpha(float roughness) const {
-    return 0;
+Float GGX::roughnessToAlpha(Float roughness) const {
+    return roughness;
+
 }
 
-Float GGX::D(const vec3 & wh, const vec2 & alphaxy) const {
-    return 0;
+Float GGX::D(const vec3 & wh, const vec2 & alphaXY) const {
+    Float alphaX = alphaXY.x;
+    Float alphaY = alphaXY.y;
+    Float ax2 = alphaX * alphaX;
+    Float ay2 = alphaY * alphaY;
+    vec3  wh2 = wh * wh;
+    Float D = M_PI * alphaX *alphaY * pow(wh2.x/ax2+wh2.y/ay2+wh2.z,2);
+    return 1/D;
 }
 
-Float GGX::Lambda(const vec3 & w, const vec2 & alphaxy) const {
-    return 0;
+Float GGX::Lambda(const vec3 & w, const vec2 & alphaXY) const {
+    Float ax2 =  alphaXY.x * alphaXY.x;
+    Float ay2 = alphaXY.y * alphaXY.y;
+    vec3 v2 = w * w;
+    Float Lambda = (-1 + sqrt(1 + (v2.x * ax2 + v2.y * ay2) / v2.z)) / 2;
+    return Lambda;
 }
 
-vec3 GGX::Sample_wh(const vec3 & wo, const vec2 & u, const vec2 & alphaxy) const {
-    return vec3();
+vec3 GGX::Sample_wh(const vec3 & wo, const vec2 & u, const vec2 & alphaXY) const {
+    Float alphaX = alphaXY.x,alphaY =alphaXY.y;
+    if(sampleVisibleArea){
+        //see https://jcgt.org/published/0007/04/01/slides.pdf
+        if (wo.z < 0) {
+            // Ensure the input is on top of the surface.
+            return Sample_wh(-wo, u,alphaXY);
+        }
+        // Transform the incoming direction to the "hemisphere configuration".
+        vec3 hemisphereDirOut= normalize(vec3(alphaX * wo.x, alphaY * wo.y, wo.z));
+        // Parameterization of the projected area of a hemisphere.
+        Float r = sqrt(u.x);
+        Float phi = 2 * M_PI * u.y;
+        Float t1 = r * cos(phi);
+        Float t2 = r * sin(phi);
+        // Vertically scale the position of a sample to account for the projection.
+        Float s = (1 + hemisphereDirOut.z) / 2;
+        t2 = (1 - s) * sqrt(1 - t1 * t1) + s * t2;
+        // Point in the disk space
+        vec3 diskN{t1, t2, sqrt(std::max(0.0f, 1 - t1*t1 - t2*t2))};
+        // Reprojection onto hemisphere -- we get our sampled normal in hemisphere space.
+//        vec3 T1 = normalize(vec3(-hemisphereDirOut.y,hemisphereDirOut.x,0));
+//        vec3 T2 = cross(hemisphereDirOut,T1);
+//        vec3 hemisphereN =  t1 * T1 + t2 * T2 + diskN.z * hemisphereDirOut;
+        Frame frame(hemisphereDirOut);
+        vec3 hemisphereN = frame.toWorld(vec3(t1,t2,diskN.z));
+        // Transforming the normal back to the ellipsoid configuration
+        auto wh =  normalize(vec3(alphaX * hemisphereN.x, alphaY *  hemisphereN.y, std::max(0.0f, hemisphereN.z)));
+        if( hasNan(wh)){
+
+        }
+        return wh;
+    }
+    else {
+        Float cosTheta, phi = (2 * M_PI) * u[1];
+        if (alphaX == alphaY) {
+            Float tanTheta2 = alphaX * alphaY * u[0] / (1.0f - u[0]);
+            cosTheta = 1 / std::sqrt(1 + tanTheta2);
+        } else {
+            phi =
+                    std::atan(alphaY / alphaX * std::tan(2 * M_PI * u[1] + .5f * M_PI));
+            if (u[1] > .5f) phi += M_PI;
+            Float sinPhi = std::sin(phi), cosPhi = std::cos(phi);
+            const Float alphaX2 = alphaX * alphaX, alphaY2 = alphaY * alphaY;
+            const Float alpha2 =
+                    1 / (cosPhi * cosPhi / alphaX2 + sinPhi * sinPhi / alphaY2);
+            Float tanTheta2 = alpha2 * u[0] / (1 - u[0]);
+            cosTheta = 1 / std::sqrt(1 + tanTheta2);
+        }
+        Float sinTheta =
+                std::sqrt(std::max((Float )0., (Float )1. - cosTheta * cosTheta));
+        vec3 wh = vec3(sinTheta * cos(phi), sinTheta * sin(phi), cosTheta);
+        return  wh;
+    }
 }
 
 std::string GGX::ToString( ) const {

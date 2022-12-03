@@ -74,8 +74,8 @@ Spectrum
 SpecularR::sampleF(SurfaceEvent & event, const vec2 & u) const {
 
     event.wi = Frame::Reflect(event.wo);
-    event.pdf = 1;
+    event.pdf =  1;
     event.sampleType = BXDFType(BSDF_SPECULAR | BSDF_REFLECTION);
-    return Spectrum(1.0);
+    return  m_albedo->Evaluate(event.its);
 }
 

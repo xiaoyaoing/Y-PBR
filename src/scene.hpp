@@ -25,7 +25,7 @@ public:
     Scene(const Json sceneJson);
 
     // Scene and Light Intersection - Records the most recent intersection
-    std::optional<Intersection>  intersect(const Ray& ray) const;
+    std::optional<Intersection>  intersect(Ray & ray) const;
 
     //Determines whether the light and scene intersect - tests for occlusion
     bool intersectP(const Ray & ray) const ;

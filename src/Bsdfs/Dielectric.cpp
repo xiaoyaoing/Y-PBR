@@ -43,15 +43,6 @@ void Dielectric::LogInfo( ) const {
 }
 
 
-
-
-
-
-
-
-
-
-
 Spectrum RoughDielectric::f(const SurfaceEvent & event) const {
     const Spectrum albedo = m_albedo->Evaluate(event.its->uv);
     const vec3 & out = event.wo;
@@ -111,7 +102,7 @@ Float RoughDielectric::Pdf(const SurfaceEvent & event) const {
         Float sqrtDenom = dot(out, wh) * eta +  dot(in, wh);
         Float dWhDWi =
                 std::abs( dot(in, wh)) / (sqrtDenom * sqrtDenom);
-        pdf =   whPdf * (1-F) * dWhDWi;
+        pdf = (1-F) *  whPdf   * dWhDWi;
     }
     return pdf;
 }

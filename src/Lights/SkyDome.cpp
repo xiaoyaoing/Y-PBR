@@ -8,7 +8,7 @@
 
 
 Spectrum
-SkyDome::sampleLi(const Intersection & ref, const vec2 & u, vec3 * wi, Float * pdf, VisibilityTester * vis) const {
+SkyDome::sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf, Float * distance) const {
     Float mapPdf;
     vec2 uv = _sky->sample(MAP_SPHERICAL,u,&mapPdf);
     if(!mapPdf)
@@ -19,9 +19,7 @@ SkyDome::sampleLi(const Intersection & ref, const vec2 & u, vec3 * wi, Float * p
         *pdf = 0;
     else
         *pdf = mapPdf/( 2 * Constant::PI * Constant::PI * sinTheta );
-    Intersection pShape;
-    pShape.p = ref.p + 2 * _worldRadius * ( * wi );
-    * vis = VisibilityTester(ref, pShape);
+    * distance = 2*_worldRadius;
     return _sky->Evaluate(uv);
 }
 
@@ -127,9 +125,8 @@ vec3 SkyDome::uvToDirection(vec2 uv, float & sinTheta) const {
     );
 }
 
-SkyDome::SkyDome(const Json & json) : Light(int(LightFlags::Infinite)) {
+SkyDome::SkyDome(const Json & json)  {
     _transform = getOptional(json,"transform",getIndentifyTransform());
-    
     _temperature = getOptional(json,"temoerature",5777);
     _gammaScale = getOptional(json,"gamma_scale",1);
     _turbidity = getOptional(json,"turbidity",3);

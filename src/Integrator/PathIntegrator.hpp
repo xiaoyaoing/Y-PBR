@@ -9,7 +9,9 @@ struct PathTraceSettings {
 
 class PathIntegrator :  public SamplerIntegrator{
 public:
-    PathIntegrator(std::shared_ptr<Camera> camera,std::shared_ptr<Sampler> sampler,const std::string _lightSampleStrategy) : SamplerIntegrator(camera,sampler),lightSampleStrategy(_lightSampleStrategy){}
+    PathIntegrator(std::shared_ptr<Camera> camera,std::shared_ptr<Sampler> sampler,const Json & json) :
+    SamplerIntegrator(camera,sampler,json),
+    lightSampleStrategy(getOptional(json,"light_sample_strategy",std::string("uniform"))){}
     vec3 integrate(const Ray &ray, const Scene &scene, Sampler &sampler) const override;
 //    PathIntegrator(Json j);
     virtual void  process(const Scene &scene, Sampler & sampler ) override;

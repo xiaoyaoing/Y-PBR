@@ -16,7 +16,10 @@ class Medium;
 
 class Integrator{
 public:
-  // Integrator(Json j);
+   Integrator(const Json & json){
+       minBounces = getOptional(json,"min_bounces",0);
+       maxBounces = getOptional(json,"max_bounces",8);
+   }
    virtual void render(const Scene & scene) const = 0 ;
 
    virtual void  process(const Scene &scene, Sampler & sampler )  =0;
@@ -24,15 +27,15 @@ public:
     Spectrum uniformSampleOneLight(SurfaceEvent & event, const Scene &scene,
                                    Sampler &sampler,
                                    const Distribution1D *lightDistrib = nullptr,
-                                   bool handleMedia = false) const;
+                                   const Medium * medium = nullptr) const;
 
     Spectrum uniformSampleAllLights(SurfaceEvent & event, const Scene &scene,
-                                    Sampler &sampler, bool handleMedia = false) const ;
+                                    Sampler &sampler, const Medium * medium = nullptr) const ;
 
-    Spectrum estimateDirect(SurfaceEvent & event, const vec2 &uShading,
-                            const Light &light, const vec2 &uLight,
-                            const Scene &scene, Sampler &sampler,
+    Spectrum estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Light & light, const vec2 & uLight,
+                            const Scene & scene, Sampler & sampler, const Medium * medium = nullptr,
                             bool specular = false) const;
+
     Spectrum volumeUniformSampleOneLight(VolumeEvent & event, const Medium * medium,const Scene &scene,
                                    Sampler &sampler,
                                    const Distribution1D *lightDistrib = nullptr
@@ -47,18 +50,22 @@ public:
                             ) const;
 
 
-    Spectrum evalLightDirect(const Scene & scene,const Light & light,const Ray & ray,Float * lightPdf) const;
-    Spectrum evalShadowDirect(const Ray & ray,const Medium * medium,bool handleMedia) const ;
+    Spectrum evalLightDirect(const Scene & scene, const Light & light, Ray & ray,
+                             const Medium * medium, Float * lightPdf) const;
+    Spectrum evalShadowDirect(const Scene & scene,Ray ray,const Medium * medium) const ;
 
     SurfaceEvent makeLocalScatterEvent(const Intersection * its) const ;
     std::unique_ptr<Distribution1D> computeLightPowerDistrib(const Scene & scene) const;
+protected :
+    int minBounces,maxBounces;
 };
 
 //Integrator Based Sampler
 class SamplerIntegrator : public  Integrator{
 
 public:
-    SamplerIntegrator(std::shared_ptr<Camera> camera,std::shared_ptr<Sampler> sampler):_camera(camera),_sampler(sampler){}
+    SamplerIntegrator(std::shared_ptr<Camera> camera,std::shared_ptr<Sampler> sampler,const Json & json):
+    _camera(camera),_sampler(sampler), Integrator(json){}
     void render(const Scene & scene) const override;
     virtual vec3  integrate(const Ray& ray, const Scene& scene, Sampler& sampler) const = 0 ;
 

@@ -6,13 +6,11 @@
 
 #include <unordered_map>
 
-TriangleMesh::TriangleMesh( ) : Primitive(nullptr) {}
 
 
-void TriangleMesh::build(const Json & json, const Scene & scene) {
-
+void TriangleMesh::load(const Json & json, const Scene & scene) {
+    Primitive::load(json,scene);
     loadResources(json,scene);
-
     useSoomth = getOptional(json, "smooth", true);
     bool recomputeNormals = getOptional(json,"recompute_normals",false);
     if(useSoomth && recomputeNormals)
@@ -123,7 +121,7 @@ vec3 TriangleMesh::operator ()(Float u, Float v) const {
 }
 
 void TriangleMesh::transform(const mat4 & T) {
-    throw ( "not implmented" );
+    //throw ( "not implmented" );
 }
 
 Intersection TriangleMesh::sample(const vec2 & u, Float * pdf) const {

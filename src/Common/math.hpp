@@ -27,6 +27,7 @@ typedef glm::mat3 mat3;
 typedef glm::ivec2 ivec2;
 typedef glm::ivec3 ivec3;
 
+
 typedef std::uint8_t uint8;
 typedef std::uint16_t uint16;
 typedef std::uint32_t uint32;
@@ -47,15 +48,15 @@ namespace Constant {
     inline constexpr Float PiOver4 = 0.78539816339744830961;
     inline constexpr Float INV_PI = 0.31830988618379067154;
     inline constexpr Float INV_TWO_PI = INV_PI / 2;
+    inline constexpr Float INV_FOUR_PI = INV_PI / 4;
     inline constexpr Float HALF_PI = 1.57079632679489661923;
     inline constexpr Float TWO_PI = 6.283185307179586476925;
     inline constexpr Float EPSILON = 5e-4f;
 }
 
-class   BitManip {
+class BitManip {
 public :
-    static inline uint32 floatBitsToUint(float f)
-    {
+    static inline uint32 floatBitsToUint(float f) {
         union {
             float f;
             uint32 i;
@@ -78,19 +79,29 @@ namespace std {
             return result;
         }
     };
+    template < glm::length_t Size >
+    class hash < glm::vec < Size, int, glm::defaultp>> {
+    public:
+        std::size_t operator ()(const glm::vec < Size, int, glm::defaultp > & v) const {
+            // See http://www.boost.org/doc/libs/1_33_1/doc/html/hash_combine.html
+            int result = 0;
+            for (unsigned i = 0; i < Size; ++i)
+                result ^= static_cast<int>(v[i]) + 0x9E3779B9 + (result << 6) + (result >> 2);
+            return result;
+        }
+    };
 
 }
 
 
-
 template < glm::length_t size >
-inline Float dot(glm::vec < size, Float, glm::defaultp >  a,glm::vec < size, Float, glm::defaultp > b){
-    return glm::dot(a,b);
+inline Float dot(glm::vec < size, Float, glm::defaultp > a, glm::vec < size, Float, glm::defaultp > b) {
+    return glm::dot(a, b);
 }
 
 template < glm::length_t size >
-inline  Float absDot(glm::vec < size, Float, glm::defaultp >  a,glm::vec < size, Float, glm::defaultp > b){
-    return abs(dot(a,b));
+inline Float absDot(glm::vec < size, Float, glm::defaultp > a, glm::vec < size, Float, glm::defaultp > b) {
+    return abs(dot(a, b));
 }
 
 inline Float sqr(Float a) {
@@ -98,24 +109,32 @@ inline Float sqr(Float a) {
 }
 
 template < glm::length_t size >
-inline Float length2(glm::vec < size, Float, glm::defaultp >  a) {
+inline Float average(glm::vec < size, Float, glm::defaultp > a) {
+    Float sum = 0;
+    for ( int i = 0 ; i < size ; i ++ )
+        sum += a[i];
+    return sum / size;
+}
+
+template < glm::length_t size >
+inline Float length2(glm::vec < size, Float, glm::defaultp > a) {
     return dot(a, a);
 }
 
 
 template < glm::length_t size >
-inline Float length(glm::vec < size, Float, glm::defaultp >  a) {
+inline Float length(glm::vec < size, Float, glm::defaultp > a) {
     return glm::length(a);
 }
 
 template < glm::length_t size >
-inline Float distance2(glm::vec < size, Float, glm::defaultp >  a,glm::vec < size, Float, glm::defaultp > b){
-    return length2(a-b);
+inline Float distance2(glm::vec < size, Float, glm::defaultp > a, glm::vec < size, Float, glm::defaultp > b) {
+    return length2(a - b);
 }
 
 template < glm::length_t size >
-inline Float distance(glm::vec < size, Float, glm::defaultp >  a,glm::vec < size, Float, glm::defaultp > b){
-    return length(a-b);
+inline Float distance(glm::vec < size, Float, glm::defaultp > a, glm::vec < size, Float, glm::defaultp > b) {
+    return length(a - b);
 }
 
 inline vec3 normalize(vec3 a) {
@@ -126,8 +145,8 @@ inline auto radians(vec3 a) {
     return glm::radians(a);
 }
 
-inline vec3 faceForward(const vec3 & a,const vec3 & b){
-    return dot(a,b)>0?a:-a;
+inline vec3 faceForward(const vec3 & a, const vec3 & b) {
+    return dot(a, b) > 0 ? a : - a;
 }
 
 inline vec3 intToColor(uint32_t i) {
@@ -154,33 +173,33 @@ inline std::string toColorStr(const vec3 & v) {
 }
 
 inline std::string Mat4ToStr(const mat4 & mat) {
-   // return std::string();
+    // return std::string();
     std::string s;
     std::ostringstream buffer;
-    for(int i=0;i<4;i++)
-        for(int j=0;j<4;j++)
-            buffer<<mat[i][j]<<", ";
-    buffer<<std::endl;
+    for ( int i = 0 ; i < 4 ; i ++ )
+        for ( int j = 0 ; j < 4 ; j ++ )
+            buffer << mat[i][j] << ", ";
+    buffer << std::endl;
     return buffer.str();
 }
 
 
 template < int num >
 Float max(const glm::vec < num, Float, glm::defaultp > & v) {
-    Float maxVal = -1e5;
+    Float maxVal = - 1e5;
     for ( uint32 i = 0 ; i < num ; i ++ ) {
-       maxVal = std::max(v[i],maxVal);
+        maxVal = std::max(v[i], maxVal);
     }
     return maxVal;
 }
 
-template <typename Predicate>
-int FindInterval(int size, const Predicate &pred) {
+template < typename Predicate >
+int FindInterval(int size, const Predicate & pred) {
     int first = 0, len = size;
-    while (len > 0) {
+    while ( len > 0 ) {
         int half = len >> 1, middle = first + half;
         // Bisect range based on value of _pred_ at _middle_
-        if (pred(middle)) {
+        if ( pred(middle) ) {
             first = middle + 1;
             len -= half + 1;
         } else
@@ -214,7 +233,7 @@ glm::vec < size, Float, glm::defaultp > pow(const glm::vec < size, Float, glm::d
 
 template < glm::length_t size >
 Float maxElement(const glm::vec < size, Float, glm::defaultp > & v1) {
-    Float res = -1e5;
+    Float res = - 1e5;
     for ( uint32 i = 0 ; i < size ; i ++ ) {
         res = std::max(v1[i], res);
     }
@@ -264,7 +283,7 @@ template < glm::length_t size >
 glm::vec < size, Float, glm::defaultp > clamp(const glm::vec < size, Float, glm::defaultp > & v,
                                               const glm::vec < size, Float, glm::defaultp > & l,
                                               const glm::vec < size, Float, glm::defaultp > & r
-                                              ) {
+) {
     glm::vec < size, Float, glm::defaultp > res;
     for ( uint32 i = 0 ; i < size ; i ++ ) {
         res[i] = clamp(v[i], l[i], r[i]);
@@ -285,16 +304,16 @@ glm::vec < size, Float, glm::defaultp > lerp(const glm::vec < size, Float, glm::
 }
 
 template < class T >
-T  lerp(const T & x00, const T & x01, const T & x10, const T & x11, Float u, Float v) {
+T lerp(const T & x00, const T & x01, const T & x10, const T & x11, Float u, Float v) {
 
-    return (x00*(1.0f - u) + x01*u)*(1.0f - v) +
-           (x10*(1.0f - u) + x11*u)*v;
+    return ( x00 * ( 1.0f - u ) + x01 * u ) * ( 1.0f - v ) +
+           ( x10 * ( 1.0f - u ) + x11 * u ) * v;
 }
 
 template < class T >
-T  lerp(const T & x,const T & y, Float u) {
+T lerp(const T & x, const T & y, Float u) {
 
-    return x * (1-u) + y * u;
+    return x * ( 1 - u ) + y * u;
 }
 
 template < glm::length_t size >
@@ -318,20 +337,20 @@ bool hasNav(const glm::vec < size, Float, glm::defaultp > & v) {
 
 template < glm::length_t size >
 int maxDim(const glm::vec < size, Float, glm::defaultp > & v) {
-    Float maxVal = -1e5;
-    int dim=-1;
+    Float maxVal = - 1e5;
+    int dim = - 1;
     for ( uint32 i = 0 ; i < size ; i ++ ) {
-        if(v[i]>maxVal){
+        if ( v[i] > maxVal ) {
             maxVal = v[i];
-            dim=int(i);
+            dim = int(i);
         }
     }
     return dim;
 }
 
-template <class T>
-T interpolate3(const T & a,const T & b,const T & c,const vec2 & uv){
-    return uv.x * a + uv.y * b + (1-uv.x-uv.y)*c;
+template < class T >
+T interpolate3(const T & a, const T & b, const T & c, const vec2 & uv) {
+    return uv.x * a + uv.y * b + ( 1 - uv.x - uv.y ) * c;
 }
 
 namespace Angle {
@@ -345,9 +364,8 @@ namespace Angle {
 }
 
 
-
-inline Float PowerHeuristic(Float a,Float b){
-    return a*a/(a*a + b*b);
+inline Float PowerHeuristic(Float a, Float b) {
+    return a * a / ( a * a + b * b );
 }
 
 

@@ -1,17 +1,17 @@
 #include "Primitive.hpp"
+#include "scene.hpp"
 
-
-Intersection Primitive::sample(const Intersection & ref, const vec2 & u, Float * pdf) const {
+Intersection Primitive::sample(const vec3 & ref, const vec2 & u, Float * pdf) const {
     auto intr = sample(u, pdf);
 
-    vec3 wi = intr.p - ref.p;
+    vec3 wi = intr.p - ref;
     if (length2(wi) == 0)
         *pdf = 0;
     else {
         wi = normalize(wi);
         // Convert from area measure, as returned by the Sample() call
         // above, to solid angle measure.
-        *pdf *= length2(ref.p-intr.p) / abs(dot(intr.Ng, -wi));
+        *pdf *= length2(ref-intr.p) / abs(dot(intr.Ng, -wi));
         if (std::isinf(*pdf)) *pdf = 0.f;
     }
     return intr;
@@ -31,6 +31,12 @@ RTCGeometry Primitive::initRTC( ) {
     rtcSetGeometryOccludedFunction(_geom, &EmbreeUtils::instanceOccludedFunc);
     rtcCommitGeometry(_geom);
 
+}
+
+void Primitive::load(const Json & json, const Scene & scene) {
+   bsdf = scene.fetchBSDF(getOptional(json, "bsdf", std::string("null")));
+   if(json.contains("int_medium")) inMedium =  scene.fetchMedium(json["int_medium"]);
+   if(json.contains("ext_medium")) outMedium =  scene.fetchMedium(json["ext_medium"]);
 }
 
 

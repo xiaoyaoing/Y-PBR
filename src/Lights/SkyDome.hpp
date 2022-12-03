@@ -1,12 +1,12 @@
 #include "Light.hpp"
 #include "Common/Json.hpp"
 #include "Texture/BitMapTexture.hpp"
-class SkyDome : public  Light{
+class SkyDome : public  Infinite{
 public:
     SkyDome(const Json & json);
 
     Spectrum
-    sampleLi(const Intersection & ref, const vec2 & u, vec3 * wi, Float * pdf, VisibilityTester * vis) const override;
+    sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf, Float * distance) const override;
 
     LightSampleResult sampleDirect(const vec2 & positionSample, const vec2 & dirSample) override;
 
@@ -33,7 +33,4 @@ protected:
     float _intensity;
     bool _doSample;
     mat4  _transform;
-
-    vec3 _worldCenter;
-    Float _worldRadius;
 };

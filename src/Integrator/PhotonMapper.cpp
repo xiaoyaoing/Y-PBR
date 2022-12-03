@@ -573,9 +573,11 @@ void PhotonMapper::process(const Scene & scene, Sampler & sampler) {
 
 }
 
-PhotonMapper::PhotonMapper(const std::shared_ptr < Camera > & camera, int iterations, Float initRadius, int maxBounces,
-                           int photonsPerIteration, int writeFrequency) : _camera(camera), iterations(iterations),
-                                                                          initRadius(initRadius),
-                                                                          maxBounces(maxBounces),
-                                                                          photonsPerIteration(photonsPerIteration),
-                                                                          writeFrequency(writeFrequency) {}
+PhotonMapper::PhotonMapper(const std::shared_ptr < Camera > & camera, const Json & json) : Integrator(json) {
+    initRadius = getOptional(json, "radius", 0.01);
+    iterations = getOptional(json, "interation_num", 256);
+    photonsPerIteration = getOptional(json, "photons_per",
+                                          camera->image->width() * camera->image->height());
+    writeFrequency = getOptional(json, "write_frequency", 64);
+}
+

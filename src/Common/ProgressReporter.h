@@ -17,11 +17,11 @@ public:
         start =  std::chrono::high_resolution_clock::now();
     }
     void update(uint64_t num) {
-        return;
         std::lock_guard<std::mutex> lock(mutex);
         work_done += num;
         Float work_ratio = (Float)work_done / (Float)total_work;
-
+        spdlog::error("\r {0} ({1} / {2})",work_ratio * Float(100.0),(unsigned long long)work_done,
+                      (unsigned long long)total_work);
         fprintf(stdout,
                 "\r %.2f Percent Done (%llu / %llu)",
                 work_ratio * Float(100.0),

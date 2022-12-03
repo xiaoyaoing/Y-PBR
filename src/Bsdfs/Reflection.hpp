@@ -44,7 +44,7 @@ inline Float Sin2Phi(const vec3 & w) { return SinPhi(w) * SinPhi(w); }
 
 
 inline vec3 Reflect(const vec3 & wo, const vec3 & n) {
-    return - wo + 2 * dot(wo, n) * n;
+    return normalize(- wo + 2 * dot(wo, n) * n);
 }
 
 inline bool SameHemisphere(const vec3 & w, const vec3 & wp) {
@@ -95,6 +95,7 @@ public:
         if(! MatchesFlags(event.requestType))
             return Spectrum();
         Spectrum fResult = sampleF(event, u);
+        event.wi = normalize(event.wi);
         if ( adjoint ) return fResult;
         fResult *= sqr(eta(event));
         return fResult;
@@ -126,7 +127,7 @@ public:
     virtual Float eta(const SurfaceEvent & event) const { return 1; }
 
     void setAlbedo(const std::shared_ptr < Texture < Spectrum>> albedo) {
-        m_albedo = std::move(albedo);
+        m_albedo = albedo;
     }
 
 

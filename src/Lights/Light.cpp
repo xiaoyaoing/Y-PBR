@@ -6,16 +6,14 @@
 #include "Common/Texture.hpp"
 #include "Sampler/Warp.hpp"
 Spectrum
-AreaLight::sampleLi(const Intersection & ref, const vec2 & u, vec3 * wi, Float * pdf, VisibilityTester * vis) const {
-
+AreaLight::sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf, Float * distance) const {
     Intersection pShape = primitive->sample(ref, u, pdf);
-
     if(*pdf==0){
         return Spectrum();
     }
-    *wi = normalize(pShape.p-ref.p);
-    *vis = VisibilityTester(ref, pShape);
-    return directLighting(pShape, normalize(ref.p-pShape.p));
+    *distance = length(pShape.p - ref);
+    *wi = (pShape.p-ref) / *distance;
+    return directLighting(pShape, normalize(ref-pShape.p));
 
 }
 
@@ -71,6 +69,10 @@ LightSampleResult AreaLight::sampleDirect(const vec2 & positionSample, const vec
     return result;
 }
 
+std::optional < Intersection > AreaLight::intersect(Ray & ray) const {
+    return primitive->intersect(ray);
+}
+
 bool VisibilityTester::Unoccluded(const Scene & scene) const {
    // return true;
     vec3 dir =(p1.p-p0.p);
@@ -78,4 +80,15 @@ bool VisibilityTester::Unoccluded(const Scene & scene) const {
     dir= dir/distance;
     Ray ray(p0.p ,dir,p0.epsilon ,distance-p1.epsilon);
     return !scene.intersectP(ray);
+}
+
+std::optional < Intersection > Infinite::intersect(Ray & ray) const {
+    Intersection its;
+    its.p = ray.o + 2*_worldRadius;
+    its.w = ray.d;
+    return {its};
+}
+
+void Infinite::Preprocess(const Scene & scene) {
+    scene.getWorldBound().BoundingSphere(& _worldCenter, & _worldRadius);
 }

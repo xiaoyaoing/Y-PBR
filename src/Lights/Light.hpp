@@ -14,7 +14,7 @@ template<class T>
 class Texture;
 
 // LightFlags Declarations
-enum class LightFlags : int {
+enum LightFlags : int {
     DeltaPosition = 1,
     DeltaDirection = 2,
     Area = 4,
@@ -50,9 +50,9 @@ class Light {
 public:
     Light(int _flags) : flags(_flags){};
     ///given a intersection,sample light
-    virtual Spectrum sampleLi(const Intersection &ref, const vec2 &u,
+    virtual Spectrum sampleLi(const vec3 & ref, const vec2 &u,
                               vec3 *wi, Float *pdf,
-                              VisibilityTester *vis) const = 0;
+                              Float * distance) const = 0;
     ///sample from light
     virtual  LightSampleResult sampleDirect(const vec2 & positionSample, const vec2 & dirSample) = 0;
     ///compute environment radiance
@@ -65,13 +65,15 @@ public:
         _NOT_IMPLEMENT_ERROR
     }
     virtual  bool isDeltaLight() const {return false;}
+
+    virtual std::optional<Intersection> intersect(Ray & ray) const = 0;
     const int  flags;
 };
 
 
 class AreaLight : public  Light{
     Spectrum
-    sampleLi(const Intersection & ref, const vec2 & u, vec3 * wi, Float * pdf, VisibilityTester * vis) const override;
+    sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf, Float * distance) const override;
 
 public:
     LightSampleResult sampleDirect(const vec2 & positionSample, const vec2 & dirSample) override;
@@ -85,11 +87,22 @@ public:
                          bool twoSide=false);
     Float PdfLi(const Intersection & pShape, const vec3 & ref) const override;
 
-    std::optional<Intersection> intersect(const Ray & ray) const;
+    std::optional<Intersection> intersect(Ray & ray) const override;
 
 protected:
     std::shared_ptr<Primitive> primitive;
     std::shared_ptr<Texture<Spectrum>>  emssision;
     bool twoSide;
     Float area;
+};
+
+class Infinite : public  Light{
+public:
+    std::optional < Intersection > intersect(Ray & ray) const override;
+    void Preprocess(const Scene & scene) override;
+    Infinite(): Light(int(LightFlags::Infinite)){}
+    Infinite(LightFlags flag): Light(int(LightFlags::Infinite | flag)){}
+protected:
+    vec3 _worldCenter;
+    Float _worldRadius;
 };

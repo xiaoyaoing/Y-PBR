@@ -81,7 +81,10 @@ Spectrum RoughPlastic::sampleF(SurfaceEvent & event, const vec2 & u) const {
             return Spectrum(0);
         event.sampleType= BXDFType(BSDF_REFLECTION | BSDF_GLOSSY);
         event.pdf = specProb *  m_distrib->D(wh,alphaxy) /(4 * absDot(out,wh)) + (1-specProb) * event.wi.z / Constant::PI;
+        if(isnan(event.pdf))
+        {
 
+        }
     }
     else {
         Float remapU0= (u[0]-specProb)/(1-specProb);
@@ -92,6 +95,10 @@ Spectrum RoughPlastic::sampleF(SurfaceEvent & event, const vec2 & u) const {
         event.sampleType= BXDFType(BSDF_REFLECTION | BSDF_DIFFUSE);
         wh = normalize((event.wi+out));
         event.pdf = specProb *  m_distrib->D(wh,alphaxy) /(4 * absDot(out,wh)) + (1-specProb) * event.wi.z / Constant::PI;
+        if(isnan(event.pdf))
+        {
+
+        }
     }
 
     Float FOut = Fresnel::dielectricReflectance(1/m_ior,dot(out,wh));
