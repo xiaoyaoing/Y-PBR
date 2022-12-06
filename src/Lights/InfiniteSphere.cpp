@@ -37,6 +37,7 @@ Spectrum InfinteSphere::sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Fl
     else
         * pdf = mapPdf / ( 2 * Constant::PI * Constant::PI * sinTheta );
     * distance = 2 * _worldRadius;
+    //return Spectrum(2);
     return _emission->Evaluate(uv);
 }
 

@@ -24,8 +24,8 @@ void LambertainR::LogInfo( ) const {
 
 Spectrum LambertainR::sampleF(SurfaceEvent & event, const vec2 & u) const {
 
-    event.wi = Warp::squareToUniformHemisphere(u);
-    event.pdf = Warp::squareToUniformHemispherePdf(event.wi);
+    event.wi = Warp::squareToCosineHemisphere(u);
+    event.pdf = Warp::squareToCosineHemispherePdf(event.wi);
     event.sampleType = BXDFType(BSDF_REFLECTION | BSDF_DIFFUSE);
 
     return m_albedo->Evaluate(event.its) * Constant::INV_PI * AbsCosTheta(event.wi);
@@ -49,7 +49,7 @@ Spectrum LambertainT::sampleF(SurfaceEvent & event, const vec2 & u) const {
 Float LambertainR::Pdf(const SurfaceEvent & event) const {
     if ( event.wi.z <= 0.0f || event.wo.z <= 0.0f )
         return 0.0f;
-    return Warp::squareToUniformHemispherePdf(event.wo);
+    return Warp::squareToCosineHemispherePdf(event.wo);
 }
 
 Spectrum SpecularR::f(const SurfaceEvent & event) const {

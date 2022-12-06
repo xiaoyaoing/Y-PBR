@@ -87,6 +87,8 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
                 else
                     break;
             }
+            return throughput;
+           // return Spectrum(surfaceEvent.toWorld(surfaceEvent.wi));
             _ray = surfaceEvent.sctterRay(surfaceEvent.toWorld(surfaceEvent.wi));
         }
     }

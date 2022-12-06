@@ -64,7 +64,7 @@ public:
 
     vec2 sample(TextureMapJacobian jacobian, const vec2 & uv, Float * pdf) const override {
         vec2 newUv = _distribution[jacobian]->SampleContinuous(uv, pdf);
-      //  *pdf = *pdf * _w * _h;
+        *pdf = *pdf * _w * _h;
         return vec2(newUv.x, newUv.y);
     }
 

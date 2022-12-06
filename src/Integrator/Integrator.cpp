@@ -67,7 +67,7 @@ Integrator::estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Li
             if ( ! isBlack(f) && scatteringPdf != 0 ) {
                 auto l = length(event.wi);
                 vec3 worldShadowRayDir = event.toWorld(event.wi);
-                Ray shaowRay(event.its->p, worldShadowRayDir, Constant::EPSILON);
+                Ray shaowRay(event.its->p, worldShadowRayDir);
                 Spectrum Li = evalLightDirect(scene, light, shaowRay, medium, & lightPdf);
                 if ( lightPdf == 0 ) return Ld;
 
