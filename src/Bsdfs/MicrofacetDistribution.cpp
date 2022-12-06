@@ -82,17 +82,22 @@ vec3 Beckmann::Sample_wh(const vec3 & wo, const vec2 & u, const vec2 & alphaXY) 
             phi = u[1] * 2 * Constant::PI;
         }
         else {
-
+            phi = std::atan(alphay / alphax *
+                            std::tan(2 * Constant::PI * u[1] + 0.5 * Constant::PI));
+            if (u[1] > 0.5) phi += Constant::PI;
+            double sinPhi = std::sin(phi), cosPhi = std::cos(phi);
+            double alphaX2 = alphax * alphax, alphay2 = alphay * alphay;
+            tan2Theta = -std::log(1-u[0]) /
+                        (cosPhi * cosPhi / alphaX2 + sinPhi * sinPhi / alphay2);
         }
         Float cosTheta = std::sqrt(1 / (1+tan2Theta));
         Float sinTheta = std::sqrt(1 / (1+1/tan2Theta));
         vec3  wh = vec3(sinTheta*std::cos(phi),sinTheta*std::sin(phi),cosTheta);
-        if(dot(wo,wh)<0) wh = -wh;
         return wh;
     }
     // see https://hal.inria.fr/hal-00996995v1/document // todo
     else {
-
+        _NOT_IMPLEMENT_ERROR
     }
 }
 
@@ -111,7 +116,7 @@ Float GGX::D(const vec3 & wh, const vec2 & alphaXY) const {
     Float ax2 = alphaX * alphaX;
     Float ay2 = alphaY * alphaY;
     vec3  wh2 = wh * wh;
-    Float D = M_PI * alphaX *alphaY * pow(wh2.x/ax2+wh2.y/ay2+wh2.z,2);
+    Float D = Constant::PI * alphaX *alphaY * pow(wh2.x/ax2+wh2.y/ay2+wh2.z,2);
     return 1/D;
 }
 
@@ -135,7 +140,7 @@ vec3 GGX::Sample_wh(const vec3 & wo, const vec2 & u, const vec2 & alphaXY) const
         vec3 hemisphereDirOut= normalize(vec3(alphaX * wo.x, alphaY * wo.y, wo.z));
         // Parameterization of the projected area of a hemisphere.
         Float r = sqrt(u.x);
-        Float phi = 2 * M_PI * u.y;
+        Float phi = 2 * Constant::PI * u.y;
         Float t1 = r * cos(phi);
         Float t2 = r * sin(phi);
         // Vertically scale the position of a sample to account for the projection.
@@ -157,14 +162,14 @@ vec3 GGX::Sample_wh(const vec3 & wo, const vec2 & u, const vec2 & alphaXY) const
         return wh;
     }
     else {
-        Float cosTheta, phi = (2 * M_PI) * u[1];
+        Float cosTheta, phi = (2 * Constant::PI) * u[1];
         if (alphaX == alphaY) {
             Float tanTheta2 = alphaX * alphaY * u[0] / (1.0f - u[0]);
             cosTheta = 1 / std::sqrt(1 + tanTheta2);
         } else {
             phi =
-                    std::atan(alphaY / alphaX * std::tan(2 * M_PI * u[1] + .5f * M_PI));
-            if (u[1] > .5f) phi += M_PI;
+                    std::atan(alphaY / alphaX * std::tan(2 * Constant::PI * u[1] + .5f * Constant::PI));
+            if (u[1] > .5f) phi += Constant::PI;
             Float sinPhi = std::sin(phi), cosPhi = std::cos(phi);
             const Float alphaX2 = alphaX * alphaX, alphaY2 = alphaY * alphaY;
             const Float alpha2 =

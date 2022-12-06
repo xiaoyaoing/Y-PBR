@@ -23,7 +23,7 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
     for ( bounces = 0 ;; ++ bounces ) {
 
         its = scene.intersect(_ray);
-        if ( specularBounce) {
+        if ( specularBounce ) {
             if ( its.has_value() )
                 L += throughput * its->Le(- _ray.d);
             else
@@ -76,6 +76,7 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
             specularBounce = ( flags & BSDF_SPECULAR ) != 0;
 
             throughput *= f / surfaceEvent.pdf;
+         //   return f;
 //            if(bounces == 1)
 //            return (surfaceEvent.toWorld(surfaceEvent.wi)+vec3(1.f))/2.f;
 

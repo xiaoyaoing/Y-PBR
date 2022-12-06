@@ -21,12 +21,13 @@ public:
     void LogInfo( ) const override;
 
     Float eta(const SurfaceEvent & event) const override {
+        return 1;
         if(event.wi.z * event.wo.z >0)
             return 1;
         return event.wo.z<0?ior:invIor;
     }
 
-private:
+protected:
     Float  ior,invIor;
     bool  enableT;
 };
@@ -40,8 +41,10 @@ public:
                     std::shared_ptr < Texture<Float> > vroughness = nullptr);
 
     Spectrum f(const SurfaceEvent & event) const override;
-
     Float Pdf(const SurfaceEvent & event) const override;
+
+    Spectrum realF(const SurfaceEvent & event,bool reflect) const ;
+    Float realPdf(const SurfaceEvent & event,bool reflect) const;
 
     Spectrum sampleF(SurfaceEvent & event, const vec2 & u) const override;
 
@@ -54,4 +57,6 @@ public:
     Float m_ior;
     std::shared_ptr<MicrofacetDistribution> m_distrib;
     std::shared_ptr<Texture<Float>> m_roughness,m_vRoughness, m_uRoughness;
+
+    //Dielectric dielectric;
 };

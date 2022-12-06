@@ -14,18 +14,8 @@
             "albedo": 1,
             "type": "rough_dielectric",
             "ior" : 1.5,
-            "distribution": "ggx",
-            "roughness": 0.1
-        },
-        {
-            "name": "ChairWood",
-            "diffuse_reflection": "textures/wood2.png",
-            "type": "rough_plastic",
-            "ior": 1.5,
-            "thickness": 1.0,
-            "sigma_a": 0.0,
             "distribution": "beckmann",
-            "roughness": 0.05
+            "roughness": 0.1
         },
         {
             "name": "RoughPlastic",
@@ -52,7 +42,7 @@
         },
         {
             "name": "Stand",
-            "albedo": 0.2,
+            "albedo": 0.8,
             "type": "lambert",
             "material" : "Cu"
         },
@@ -81,49 +71,9 @@
             "bump_strength": 1,
             "emission": "textures/envmap.hdr",
             "type": "infinite_sphere",
-            "transform": {
-                "rotation" : [0,0,0]
-            },
             "sample": true,
             "bsdf": "null"
         },
-        {
-            "type" : "distant1",
-            "from" : [-0.865804 ,0.416766 ,-0.276929 ],
-            "to": [0,0,0] ,
-            "radiance" : [10,10,10]
-        },
-
-        {
-            "transform": {
-                "rotation": [
-                    -10.17397689819336,
-                    13.017423629760742,
-                    64.94903564453125
-                ]
-            },
-            "power": 10.0,
-            "type": "infinite_sphere_cap_1",
-            "sample": true,
-            "cap_angle": 5.0
-        },
-
-        {
-            "transform": {
-                "rotation": [
-                    -10.17397689819336,
-                    13.017423629760742,
-                    64.94903564453125
-                ]
-            },
-            "type": "skydome1",
-            "temperature": 5777.0,
-            "gamma_scale": 1.0,
-            "turbidity": 3.0,
-            "intensity": 6.0,
-            "sample": false
-        },
-
 
 
         {
@@ -176,6 +126,24 @@
             "backface_culling": false,
             "recompute_normals": false,
             "bsdf": "Stand"
+        },
+        {
+            "transform": {
+                "position": [
+                    -0.708772,
+                    0,
+                    -0.732108
+                ],
+                "scale": 0.001,
+                "rotation": [
+                    0,
+                    46.1511,
+                    180
+                ]
+            },
+            "bump_strength": 0,
+            "type": "quad",
+            "bsdf": "Floor"
         }
     ],
     "camera": {
@@ -217,12 +185,12 @@
     "renderer": {
         "output_file": "material-testball.png",
         "resume_render_file": "RenderState.dat",
-        "overwrite_output_files": true,
+        "overwrite_output_files": false,
         "adaptive_sampling": true,
         "enable_resume_render": false,
         "stratified_sampler": true,
         "scene_bvh": true,
-        "spp": 2,
+        "spp": 4,
         "spp_step": 16,
         "checkpoint_interval": "0",
         "hdr_output_file": "material-testball.exr"

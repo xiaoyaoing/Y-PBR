@@ -15,7 +15,7 @@ Spectrum Homogeneous::sampleDistance(const Ray & ray, Sampler & sampler, VolumeE
     event.rayDir = ray.d;
     Spectrum Tr = exp(-t * sigmaT);
     event.pdf = average(hitSurace?Tr:Tr/sigmaT);
-   // return Spectrum(1);
+    //return Spectrum(1);
     return  hitSurace?Tr/event.pdf:Tr * sigmaS / event.pdf;
 }
 

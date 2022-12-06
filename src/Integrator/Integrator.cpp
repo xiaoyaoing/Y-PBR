@@ -13,7 +13,7 @@
 #include "Mediums/Medium.hpp"
 
 static bool sampleBSDF = true;
-static bool sampleLgiht = false;
+static bool sampleLgiht = true;
 
 
 //Integrator::Integrator(Json j) {
@@ -48,25 +48,17 @@ Integrator::estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Li
             event.wi = event.toLocal(wi);
             scatteringPdf = bsdf->Pdf(event);
             Spectrum f = bsdf->f(event, false);
-//            return (event.wi+1.f)/2.f;
             if ( ! isBlack(f) ) {
-//                return  f * 100.f;
-//                return  f / lightPdf;
                 if ( light.isDeltaLight() ) Ld += f * Li;/// lightPdf;
                 else {
                     Float weight =
                             PowerHeuristic(lightPdf, scatteringPdf);
-                    Float t = lightPdf / scatteringPdf;
-                    // return Spectrum(scatteringPdf);
                     if ( ! sampleBSDF ) weight = 1;
-                    //  return Spectrum(lightPdf * 100000);
-                    //   weight = 1;
                     Ld += f * weight * Li / lightPdf;
                 }
             }
         }
     }
-    //return Ld;
     if ( sampleBSDF ) {
         if ( ! light.isDeltaLight() ) {
             // return event.its->Ns;

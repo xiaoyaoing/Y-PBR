@@ -43,6 +43,15 @@ void Dielectric::LogInfo( ) const {
 }
 
 
+
+
+
+
+
+
+
+
+
 Spectrum RoughDielectric::f(const SurfaceEvent & event) const {
     const Spectrum albedo = m_albedo->Evaluate(event.its->uv);
     const vec3 & out = event.wo;
@@ -102,7 +111,7 @@ Float RoughDielectric::Pdf(const SurfaceEvent & event) const {
         Float sqrtDenom = dot(out, wh) * eta +  dot(in, wh);
         Float dWhDWi =
                 std::abs( dot(in, wh)) / (sqrtDenom * sqrtDenom);
-        pdf = (1-F) *  whPdf   * dWhDWi;
+        pdf =   whPdf * (1-F) * dWhDWi;
     }
     return pdf;
 }
@@ -142,7 +151,7 @@ RoughDielectric::RoughDielectric(Float ior,  std::shared_ptr<MicrofacetDistribut
                                  std::shared_ptr < Texture < Float>> uroughness,
                                  std::shared_ptr < Texture < Float>> vroughness):
                                     m_distrib(distrib),
-                                    BSDF(BXDFType(BSDF_GLOSSY | BSDF_REFLECTION)),m_ior(ior),m_roughness(roughness),m_uRoughness(uroughness),m_vRoughness(vroughness)
+                                    BSDF(BXDFType(BSDF_GLOSSY | BSDF_REFLECTION | BSDF_TRANSMISSION)),m_ior(ior),m_roughness(roughness),m_uRoughness(uroughness),m_vRoughness(vroughness)
                                  {
 }
 

@@ -13,18 +13,39 @@ vec3 VolPathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler 
     int bounce;
     Spectrum throughPut(1);
     Ray _ray(ray);
+    std::optional < Intersection > temp;
+    bool gemoback;
+    bool tempHitSurface;
+    SurfaceEvent tempEvent;
     for ( bounce = 0 ; bounce < maxBounces ; bounce ++ ) {
         std::optional < Intersection > its = scene.intersect(_ray);
         bool foundIntersection = its.has_value();
         //if(foundIntersection) return (its->Ng +1.f)/2.f; else return L;
         if ( ! foundIntersection && ! medium ) break;
         bool hitSurface = true;
+        if(medium && (!foundIntersection || ( !its->bsdf->HasFlag(BSDF_GLOSSY)))){
+            medium = nullptr;
+        }
         if ( medium ) {
 //            return medium->sampleDistance(_ray, sampler, voulumeEvent);
             throughPut *= medium->sampleDistance(_ray, sampler, voulumeEvent);
             if ( isBlack(throughPut) ) break;
             hitSurface = voulumeEvent.exited;
         }
+       // hitSurface = true;
+
+        if(medium && (!foundIntersection || ( !its->bsdf->HasFlag(BSDF_GLOSSY)))){
+            medium = nullptr;
+            auto dir =  tempEvent.toWorld(tempEvent.wi);
+            Ray tempRay(_ray.o,-temp->w,0);
+           // its = scene.intersect(tempRay);
+            Ray tempRay1(_ray.o-1.1f * dir * Constant::EPSILON,dir,0);
+            auto its1 = scene.intersect(tempRay1);
+            int k =1;
+        }
+        temp = its;
+
+        tempHitSurface = hitSurface;
         if ( hitSurface ) {
 //            return Spectrum(0);
             if ( specularBounce ) {
@@ -53,17 +74,17 @@ vec3 VolPathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler 
                 BXDFType flags = surfaceEvent.sampleType;
                 specularBounce = ( flags & BSDF_SPECULAR ) != 0;
                 throughPut *= f / surfaceEvent.pdf;
-
                 _ray = surfaceEvent.sctterRay(surfaceEvent.toWorld(surfaceEvent.wi));
             }
-            medium = its->primitive->selectMedium(medium, dot(_ray.d, its->Ng) > 0);
+            tempEvent = surfaceEvent;
+            temp = *tempEvent.its;
+            gemoback = dot(_ray.d, its->Ng) < 0;
+            medium = its->primitive->selectMedium(medium, dot(_ray.d, its->Ng) < 0);
         } else {
-            //   return volumeUniformSampleOneLight(voulumeEvent,medium,scene,sampler,lightDistribution.get());
             L += throughPut *
                  volumeUniformSampleOneLight(voulumeEvent, medium, scene, sampler, lightDistribution.get());
             PhaseSample phaseSample;
             Spectrum p = voulumeEvent.phase->sampleP(_ray.d, sampler.getNext2D(), phaseSample);
-            //   throughPut *= p / voulumeEvent.pdf;
             _ray = Ray(voulumeEvent.p, phaseSample.w);
         }
         //russian prob

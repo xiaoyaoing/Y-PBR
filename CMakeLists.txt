@@ -50,7 +50,7 @@ target_include_directories(Y_PBR PUBLIC ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOUR
 
 
 
-#add_subdirectory(./test)
+add_subdirectory(./test)
 #
 #
 #

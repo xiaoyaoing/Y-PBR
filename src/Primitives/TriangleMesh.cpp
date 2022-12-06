@@ -11,7 +11,7 @@
 void TriangleMesh::load(const Json & json, const Scene & scene) {
     Primitive::load(json,scene);
     loadResources(json,scene);
-    useSoomth = getOptional(json, "smooth", true);
+    useSoomth = getOptional(json, "smooth", false);
     bool recomputeNormals = getOptional(json,"recompute_normals",false);
     if(useSoomth && recomputeNormals)
         recomputeSmoothNormals();

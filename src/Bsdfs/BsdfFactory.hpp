@@ -1,6 +1,6 @@
 #include "Reflection.hpp"
 #include "Conductor.hpp"
-
+#include "BSSRDF.hpp"
 namespace BSDFFactory{
 
 std::shared_ptr<BSDF> LoadBsdfFromJson(const Json & j);

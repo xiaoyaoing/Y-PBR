@@ -52,7 +52,7 @@ namespace PrimitiveFactory {
         auto prim = loadSimpleMap[type](json);
         prim->load(json, scene);
         prim->transform();
-        if(type!="cube")
+     //   if(type!="mesh")
         scene.AddPrimitive(prim);
         auto emission = getEmission(json, prim);
         if ( emission ) {

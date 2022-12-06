@@ -29,7 +29,6 @@ void Camera::preCompute( ) {
     _planeDist = 1.0f / std::tan(_fovRad * 0.5f);
     _ratio = Float(_res.y) / Float(_res.x);
     _pixelSize = vec2(1.0 / _res.x, 1.0 / _res.y);
-
 }
 
 Ray Camera::sampleRay(size_t x, size_t y, vec2 sample) const {
