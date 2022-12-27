@@ -3,6 +3,7 @@
 #include "Bsdfs/Reflection.hpp"
 #include "Common/Debug.hpp"
 #include "SampleRecords/SurfaceScatterEvent.hpp"
+#include "Bsdfs/BSSRDF.hpp"
 
 #include <optional>
 #include <spdlog/spdlog.h>
@@ -29,11 +30,11 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
             else
                 for ( auto light: scene.lights ) {
                     if ( light->flags == int(LightFlags::Infinite) ) {
-                         L += throughput * light->Le(_ray);
+                        L += throughput * light->Le(_ray);
                     }
                 }
         }
-      //  break;
+        //  break;
 
         if ( ! its.has_value() || bounces >= maxDepth )
             break;
@@ -41,7 +42,8 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
             return ( its->Ng + Spectrum(1.f) ) / 2.f;
         }
         surfaceEvent = makeLocalScatterEvent(& its.value());
-
+        if( hasNan(surfaceEvent.wi))
+            int k = 1;
         if ( its->bsdf->Pure(BSDF_FORWARD) ) {
             _ray = surfaceEvent.sctterRay(_ray.d);
         } else
@@ -67,18 +69,47 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
                 }
             }
 
+            if( hasNan(surfaceEvent.wi))
+                int k = 1;
+            auto temp = surfaceEvent.wo;
             surfaceEvent.requestType = BSDF_ALL;
             Spectrum f = its->bsdf->sampleF(surfaceEvent, sampler.getNext2D(), false);
             if ( isBlack(f) || surfaceEvent.pdf == 0 )
                 break;
-
             BXDFType flags = surfaceEvent.sampleType;
             specularBounce = ( flags & BSDF_SPECULAR ) != 0;
-
             throughput *= f / surfaceEvent.pdf;
-         //   return f;
-//            if(bounces == 1)
-//            return (surfaceEvent.toWorld(surfaceEvent.wi)+vec3(1.f))/2.f;
+            if( hasNan(throughput)){
+
+            }
+            _ray = surfaceEvent.sctterRay();
+
+            if(its->bssrdf && (flags & BSDF_TRANSMISSION)){
+                Intersection pi;
+                Float pdf = 0;
+                Spectrum s = its->bssrdf->sampleS(scene,sampler.getNext1D(),sampler.getNext2D(),surfaceEvent,&pi,&pdf);
+                if(isBlack(s) || pdf == 0)
+                    break;
+                surfaceEvent = makeLocalScatterEvent(&pi);
+                throughput *= s/pdf;
+//                return throughput;
+                if( hasNan(throughput)){
+
+                }
+                L += throughput * uniformSampleOneLight(surfaceEvent,scene,sampler,lightDistribution.get());
+                if( hasNan(L)){
+
+                }
+                surfaceEvent.requestType = BSDF_ALL;
+                f = pi.bsdf->sampleF(surfaceEvent, sampler.getNext2D(), false);
+                throughput *= f/surfaceEvent.pdf;
+                if( hasNan(throughput)){
+
+                }
+                specularBounce = isSpecualr(surfaceEvent.sampleType);
+                _ray = surfaceEvent.sctterRay();
+            }
+
 
             Float roulettePdf = std::max(throughput.x, std::max(throughput.y, throughput.z));
             if ( bounces > 2 && roulettePdf < 0.1 ) {
@@ -86,10 +117,7 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
                     throughput /= roulettePdf;
                 else
                     break;
-            }
-            return throughput;
-           // return Spectrum(surfaceEvent.toWorld(surfaceEvent.wi));
-            _ray = surfaceEvent.sctterRay(surfaceEvent.toWorld(surfaceEvent.wi));
+            }// return Spectrum(surfaceEvent.toWorld(surfaceEvent.wi));
         }
     }
     //return throughput;

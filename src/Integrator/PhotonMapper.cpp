@@ -26,16 +26,10 @@ struct SPPMPIxel {
 
     struct VisiblePoint {
         VisiblePoint( ) {}
-
-        VisiblePoint(SurfaceEvent * _event, Spectrum throughPut) : throughPut(throughPut) {
-            event = _event;
-        }
-
-
 //        VisiblePoint(const vec3 & p, const vec3 & wo, const BSDF * bsdf, const Spectrum & beta)
 //                : p(p), wo(wo), bsdf(bsdf), beta(beta) {}
-        SurfaceEvent * event;
-        Spectrum throughPut;
+        SurfaceEvent * event = nullptr ;
+        Spectrum throughPut = Spectrum(0);
 
         ~VisiblePoint( ) {
             //delete event;
@@ -197,7 +191,7 @@ void PhotonMapper::render(const Scene & scene) const {
                             pixel.isDielectric = isDielectric;
                             break;
                         }
-
+                        pixel.vp.event->its->p;
                         if ( bounce < maxBounces - 1 ) {
                             event.requestType = BSDF_ALL;
                             Spectrum f = bsdf->sampleF(event, tileSampler->getNext2D(),false);
@@ -216,11 +210,12 @@ void PhotonMapper::render(const Scene & scene) const {
                             ray = event.sctterRay(event.toWorld(event.wi));
                         }
                     }
+                  //  averageSPosition.add(pixel.vp.event->its->p);
                     if ( isDielectric ) {
                         dielectribVPNum ++;
                         if ( pixel.vp.event ) {
                             specularRealVpNum ++;
-                            averageSPosition.add(pixel.vp.event->its->p);
+                          //  averageSPosition.add(pixel.vp.event->its->p);
                         }
                     }
                 }
@@ -573,9 +568,9 @@ void PhotonMapper::process(const Scene & scene, Sampler & sampler) {
 
 }
 
-PhotonMapper::PhotonMapper(const std::shared_ptr < Camera > & camera, const Json & json) : Integrator(json) {
-    initRadius = getOptional(json, "radius", 0.01);
-    iterations = getOptional(json, "interation_num", 256);
+PhotonMapper::PhotonMapper(const std::shared_ptr < Camera > & camera, const Json & json) : Integrator(json),_camera(camera) {
+    initRadius = getOptional(json, "radius", 0.05);
+    iterations = getOptional(json, "interation_num", 32);
     photonsPerIteration = getOptional(json, "photons_per",
                                           camera->image->width() * camera->image->height());
     writeFrequency = getOptional(json, "write_frequency", 64);

@@ -55,6 +55,9 @@ public:
 
     virtual Frame setTangentFrame(const Intersection * its) const {
         //todo add bump map
+        if(its->tangent){
+           return Frame(*its->tangent,cross(its->Ns,*its->tangent),its->Ns);
+        }
         return Frame(its->Ns);
     }
 
@@ -81,10 +84,12 @@ public:
     }
 
     virtual  void load(const Json & json, const Scene & scene );
+    virtual  bool sameBSDF(BSDF * _bsdf) { return bsdf.get() == _bsdf;}
 
     RTCGeometry initRTC( );
 
     std::shared_ptr < BSDF > bsdf;
+    std::shared_ptr < BSSRDF > bssrdf;
     std::shared_ptr < AreaLight > areaLight;
 
     uint32 primId;

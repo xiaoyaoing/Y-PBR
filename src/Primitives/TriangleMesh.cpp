@@ -77,8 +77,8 @@ std::optional < Intersection > TriangleMesh::intersect(Ray & ray) const {
         its.p = ray.operator ()(ray.farT);
         const TriangleI tri = m_tris[rayHit.hit.primID];
         its.bsdf = Bsdf(tri.material).get();
+        its.bssrdf = bssrdf.get();
         its.uv = uvAt(rayHit.hit.primID, rayHit.hit.u, rayHit.hit.v);
-
 
         const vec3 & p0 = m_vertexs[tri.v0].pos();
         const vec3 & p1 = m_vertexs[tri.v1].pos();
@@ -90,9 +90,9 @@ std::optional < Intersection > TriangleMesh::intersect(Ray & ray) const {
             const vec3 & n2 = m_vertexs[tri.v1].normal();
             const vec3 & n3 = m_vertexs[tri.v2].normal();
             its.Ns = normalize(interpolate3(n2, n3, n1, vec2(rayHit.hit.u, rayHit.hit.v)));
-            //  its.Ns = vec3(rayHit.hit.u, rayHit.hit.v,0);
-            // its.Ns = normalize(n1);
-            // its.Ns = vec3(Float(tri.v0)/100000,(float)tri.v1 / 100000,(float)tri.v2 / 100000);
+        }
+        if( hasNan(its.Ns)){
+
         }
         its.primitive = this;
         return {its};
@@ -200,11 +200,11 @@ void TriangleMesh::loadResources(const Json & json, const Scene & scene) {
     mat4 transformMatrix = getOptional(json, "transform", getIndentifyTransform());
     Json bsdf_json = json["bsdf"];
     if ( bsdf_json.is_array() ) {
-        for ( const std::string & bsdf_str: bsdf_json ) {
-            m_bsdfs.push_back(scene.fetchBSDF(bsdf_str));
+        for ( const auto & subBsdf: bsdf_json ) {
+            m_bsdfs.push_back(scene.fetchBSDF(subBsdf));
         }
     } else {
-        m_bsdfs.push_back(scene.fetchBSDF(bsdf_json.get <std::string>()));
+        m_bsdfs.push_back(scene.fetchBSDF(bsdf_json));
     }
     if ( transformMatrix!=mat4() ) {
         mat4 transformNormalMat = getTransformNormalMat(transformMatrix);
@@ -242,6 +242,13 @@ void TriangleMesh::buildRTC( ) {
     rtcCommitGeometry(m_geometry);
     rtcAttachGeometry(m_scene, m_geometry);
     rtcCommitScene(m_scene);
+}
+
+bool TriangleMesh::sameBSDF(BSDF * _bsdf) {
+    for(auto bsdf : m_bsdfs)
+        if(bsdf.get() == _bsdf)
+            return true;
+    return false;
 }
 
 

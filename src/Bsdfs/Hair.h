@@ -3,6 +3,10 @@
 
 const int pMax = 3;
 
+/// Hair Bsdf
+
+
+
 
 class Hair : public  BSDF{
 public:

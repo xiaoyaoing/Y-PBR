@@ -17,7 +17,7 @@ static void coordinateSystem(const vec3 &a, vec3  &b, vec3  &c) {
 }
 
 struct Frame {
-    vec3 s, t;
+    vec3 tangent, bitTangent;
     vec3  n;
 
     /// Default constructor -- performs no initialization!
@@ -25,30 +25,30 @@ struct Frame {
 
     /// Given a normal and tangent vectors, construct a new coordinate frame
     Frame(const vec3  &s, const vec3 &t, const vec3  &n)
-            : s(s), t(t), n(n) { }
+            : tangent(s), bitTangent(t), n(n) { }
 
     /// Construct a new coordinate frame from a single vector
     Frame(const vec3 n) : n(n){
         float sign = copysignf(1.0f, n.z);
         const float a = -1.0f/(sign + n.z);
         const float b = n.x*n.y*a;
-        s = vec3(1.0f + sign*n.x*n.x*a, sign*b, -sign*n.x);
-        t = vec3(b, sign + n.y*n.y*a, -n.y);
+        tangent = vec3(1.0f + sign * n.x * n.x * a, sign * b, -sign * n.x);
+        bitTangent = vec3(b, sign + n.y * n.y * a, -n.y);
        // coordinateSystem(n, s, t);
     }
 
-    Frame(const Frame & frame):s(frame.s),t(frame.t),n(frame.n){}
+    Frame(const Frame & frame): tangent(frame.tangent), bitTangent(frame.bitTangent), n(frame.n){}
 
     /// Convert from world coordinates to local coordinates
     vec3 toLocal(const vec3 &v) const {
         return vec3(
-                dot(v,s), dot(v,t), dot(v,n)
+                dot(v, tangent), dot(v, bitTangent), dot(v, n)
         );
     }
 
     /// Convert from local coordinates to world coordinates
     vec3 toWorld(const vec3 &v) const {
-        return s * v.x + t * v.y   + n * v.z ;
+        return tangent * v.x + bitTangent * v.y + n * v.z ;
     }
 
     /** \brief Assuming that the given direction is in the local coordinate
@@ -119,7 +119,7 @@ struct Frame {
 
     /// Equality test
     bool operator==(const Frame &frame) const {
-        return frame.s == s && frame.t == t && frame.n == n;
+        return frame.tangent == tangent && frame.bitTangent == bitTangent && frame.n == n;
     }
 
     /// Inequality test

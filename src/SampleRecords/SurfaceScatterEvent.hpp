@@ -35,6 +35,9 @@ public:
         vec3 offsetPos = its->p + w * its->epsilon;
         return Ray(offsetPos, w, 0);
     }
+    Ray sctterRay() {
+        return sctterRay(toWorld(wi));
+    }
 };
 
 struct VolumeEvent {

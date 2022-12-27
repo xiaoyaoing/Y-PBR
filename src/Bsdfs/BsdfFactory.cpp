@@ -50,6 +50,14 @@ namespace BSDFFactory {
         vec3 k = getOptional(j, "k", vec3(3.9129485033f, 2.4528477015f, 2.1421879552f));
         return std::make_shared < Conductor >(eta, k);
     }
+    std::shared_ptr < Material > LoadPlasticMaterial(const Json & j) {
+        std::shared_ptr < Texture < Spectrum>> specularReflection = TextureFactory::LoadTexture < Spectrum >(
+                j, "specular_reflection", Spectrum(1));
+        std::shared_ptr < Texture < Spectrum>> diffuseReflection = TextureFactory::LoadTexture < Spectrum >(
+                j, "diffuse_reflection", Spectrum(0.5));
+        Float ior = getOptional(j, "ior", 1.5);
+        return std::make_shared <Plastic>(diffuseReflection,specularReflection,ior);
+    }
 
     std::shared_ptr < Material > LoadRoughConductorMaterial(const Json & j) {
         vec3 eta = getOptional(j, "eta", vec3(0.2004376970f, 0.9240334304f, 1.1022119527f));
@@ -87,7 +95,7 @@ namespace BSDFFactory {
         std::shared_ptr < Texture < Spectrum>> diffuseReflection = TextureFactory::LoadTexture < Spectrum >(
                 j, "diffuse_reflection", Spectrum(0.5));
         Float ior = getOptional(j, "ior", 1.5);
-        std::string distribStr = getOptional(j, "distribution", std::string("beckMann"));
+        std::string distribStr = getOptional(j, "distribution", std::string("beckmann"));
         auto roughnessTuple = loadRoughness(j);
         auto roughPlasticMaterial = std::make_shared < RoughPlastic >(diffuseReflection,specularReflection ,ior,
                                                                       LoadMicrofacetDistribution(distribStr),
@@ -120,6 +128,7 @@ namespace BSDFFactory {
             {"mirror",           LoadMirrorMaterial},
             {"dielectric",       LoadDielectricMaterial},
             {"conductor",        LoadConductorMaterial},
+            {"plastic",        LoadPlasticMaterial},
             {"rough_conductor",  LoadRoughConductorMaterial},
             {"rough_dielectric", LoadRoughDielectricMaterial},
             {"rough_plastic", LoadRoughPlasticMaterial},
@@ -150,20 +159,55 @@ namespace BSDFFactory {
         return material;
     }
 
+
+
     std::unordered_map < std::string, std::shared_ptr < BSDF>>
     LoadBsdfsFromJson(const Json & j) {
         //spdlog::info(to_string(j));
-        std::unordered_map < std::string, std::shared_ptr < BSDF>> bsdf_maps;
+        std::unordered_map < std::string, std::shared_ptr < BSDF>> bsdfMaps;
 
-        for ( auto & bsdf_json: j ) {
-            std::string bsdf_name = bsdf_json["name"];
+        for ( auto & bsdfJson: j ) {
+            std::string bsdf_name = bsdfJson["name"];
             spdlog::info(bsdf_name);
-            auto bsdf = LoadBsdfFromJson(bsdf_json);
+            auto bsdf = LoadBsdfFromJson(bsdfJson);
             bsdf->name = bsdf_name;
-            bsdf_maps[bsdf_name] = bsdf;
+            bsdfMaps[bsdf_name] = bsdf;
         }
-        bsdf_maps["default"] = LoadDefualtMaterial();
-        spdlog::info(bsdf_maps.size());
-        return bsdf_maps;
+        bsdfMaps["default"] = LoadDefualtMaterial();
+        spdlog::info(bsdfMaps.size());
+        return bsdfMaps;
+    }
+
+
+    std::unordered_map < std::string, std::shared_ptr < BSSRDF>> LoadBssrdfsFromJson(const Json & j) {
+        std::unordered_map < std::string, std::shared_ptr < BSSRDF>>  bssrdfMaps;
+        for ( auto & bssrdfJson: j ) {
+            {
+                std::string name = bssrdfJson["name"];
+                std::string type  = getOptional(bssrdfJson,"type",std::string("table"));
+                Float eta = getOptional(bssrdfJson,"eta",1.5);
+                if(type == "disney")
+                {
+                    auto scatterDistance = TextureFactory::LoadTexture(bssrdfJson,"scatter_distance",Spectrum(0.5));
+                    auto color = TextureFactory::LoadTexture(bssrdfJson,"color",Spectrum(0.5));
+                    bssrdfMaps[name] = std::make_shared<DisneyBSSRDF>(scatterDistance, color, eta);
+                }
+                else if(type == "table"){
+                    Spectrum sigmas(0.5),sigmaa(0.5);
+                    if(bssrdfJson.contains("material"))
+                    {
+                        GetMediumScatteringProperties(bssrdfJson["material"],&sigmaa,&sigmas);
+                    }
+                    auto sigmaS = TextureFactory::LoadTexture(bssrdfJson,"sigma_s",sigmas);
+                    auto sigmaA = TextureFactory::LoadTexture(bssrdfJson,"sigma_a",sigmaa);
+
+                    Float scale = getOptional(bssrdfJson,"scale",1.0);
+                    sigmaS->setScale(scale);sigmaA->setScale(scale);
+                    Float g = getOptional(bssrdfJson,"g",0);
+                    bssrdfMaps[name] = std::make_shared<TabelBSSRDF>(eta,sigmaA,sigmaS,g);
+                }
+            }
+        }
+        return bssrdfMaps;
     }
 }

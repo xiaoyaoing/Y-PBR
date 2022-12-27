@@ -1,7 +1,23 @@
 #include "Reflection.hpp"
 #include "MicrofacetDistribution.hpp"
 class Plastic : public  BSDF{
+public:
+    Float Pdf(const SurfaceEvent & event) const override;
 
+    void LogInfo( ) const override;
+    Plastic(const std::shared_ptr < Texture < Spectrum>> & diffuseReflectance,
+            const std::shared_ptr < Texture < Spectrum>> & specularReflectance, Float mIor):
+            BSDF(BXDFType(BSDF_SPECULAR | BSDF_REFLECTION | BSDF_DIFFUSE)),
+            diffuseReflectance(diffuseReflectance),specularReflectance(specularReflectance),m_ior(mIor)
+    {}
+protected:
+    Spectrum sampleF(SurfaceEvent & event, const vec2 & u) const override;
+
+    Spectrum f(const SurfaceEvent & event) const override;
+
+    std::shared_ptr<Texture<Spectrum>> diffuseReflectance;
+    std::shared_ptr<Texture<Spectrum>> specularReflectance;
+    Float m_ior;
 };
 
 

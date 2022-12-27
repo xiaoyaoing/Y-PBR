@@ -4,6 +4,7 @@
 #include "Sphere.hpp"
 #include "Cube.hpp"
 #include "Curve.hpp"
+#include "Disk.hpp"
 
 #include "Lights/InfiniteSphere.hpp"
 #include "Lights/InfiniteSphereCap.h"
@@ -79,7 +80,6 @@ namespace PrimitiveFactory {
 
     void LoadCurvesFromJson(const Json & json, Scene & scene) {
         std::shared_ptr < Curve > curve = std::make_shared < Curve >(json, scene);
-        std::shared_ptr < BSDF > bsdf = scene.fetchBSDF(getOptional(json, "bsdf", std::string("null")));
         curve->load(json, scene);
         scene.AddPrimitive(curve);
     }

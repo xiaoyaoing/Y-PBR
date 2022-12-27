@@ -3,7 +3,7 @@
 
 struct DebugConfig{
     const static  bool OnlyDirectLighting= false;
-    const static  bool OnlyIndirectLighting= true;
+    const static  bool OnlyIndirectLighting= false;
     const static  bool DebugMode ;
     const static  bool OnlyOneThread= false;
     const static  bool OnlyShowNormal  =false;

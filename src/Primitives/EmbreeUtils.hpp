@@ -2,6 +2,7 @@
 #pragma  once
 
 #include <embree3/rtcore.h>
+#include <optional>
 
 #define   _CHECK_RTC_DEVICE  assert(rtcGetDeviceError(EmbreeUtils::getDevice())==RTC_ERROR_NONE);
 #define   _LOG_RTC_DEVICE_STATES_IF_ERROR if(rtcGetDeviceError(EmbreeUtils::getDevice())!=RTC_ERROR_NONE) \
@@ -11,7 +12,7 @@ class Intersection;
 class Ray;
 namespace  EmbreeUtils {
     struct RTCRayHit1 : RTCRayHit{
-        Intersection * its = nullptr;
+        Intersection * its = nullptr ;
     };
 
     inline RTCRay *  RTCRay_(RTCRayN *  ray) {

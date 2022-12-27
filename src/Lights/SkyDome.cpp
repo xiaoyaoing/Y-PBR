@@ -20,7 +20,7 @@ SkyDome::sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf, Floa
     else
         *pdf = mapPdf/( 2 * Constant::PI * Constant::PI * sinTheta );
     * distance = 2*_worldRadius;
-    return _sky->Evaluate(uv);
+    return _sky->eval(uv);
 }
 
 LightSampleResult SkyDome::sampleDirect(const vec2 & positionSample, const vec2 & dirSample) {
@@ -28,11 +28,11 @@ LightSampleResult SkyDome::sampleDirect(const vec2 & positionSample, const vec2 
 }
 
 //Spectrum SkyDome::directLighting(const Intersection & intr) const {
-//    return _sky->Evaluate(directionToUV(intr.w));
+//    return _sky->eval(directionToUV(intr.w));
 //}
 
 Spectrum SkyDome::Le(const Ray & ray) const {
-    return _sky->Evaluate(directionToUV(ray.d));
+    return _sky->eval(directionToUV(ray.d));
 }
 
 Spectrum SkyDome::Power( ) {

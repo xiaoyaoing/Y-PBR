@@ -19,10 +19,20 @@
         },
         {
             "name": "RoughPlastic",
-            "specular_reflection" :1,
+            "specular_reflection" :0.1,
             "diffuse_reflection": [0.21 ,0.27, 0.39],
             "albedo": [0.21 ,0.27, 0.39],
             "type": "rough_plastic",
+            "ior" : 1.5,
+            "distribution": "beckmann",
+            "roughness": 0.1
+        },
+        {
+            "name": "plastic",
+            "specular_reflection" :0.1,
+            "diffuse_reflection": [0.21 ,0.27, 0.39],
+            "albedo": [0.21 ,0.27, 0.39],
+            "type": "plastic",
             "ior" : 1.5,
             "distribution": "beckmann",
             "roughness": 0.1
@@ -91,7 +101,7 @@
             "smooth": true,
             "backface_culling": false,
             "recompute_normals": false,
-            "bsdf": "RoughDielectric"
+            "bsdf": "plastic"
         },
         {
             "transform": {
@@ -108,7 +118,7 @@
             "smooth": true,
             "backface_culling": false,
             "recompute_normals": false,
-            "bsdf": "RoughDielectric"
+            "bsdf": "plastic"
         },
         {
             "transform": {
@@ -190,7 +200,7 @@
         "enable_resume_render": false,
         "stratified_sampler": true,
         "scene_bvh": true,
-        "spp": 4,
+        "spp": 64,
         "spp_step": 16,
         "checkpoint_interval": "0",
         "hdr_output_file": "material-testball.exr"

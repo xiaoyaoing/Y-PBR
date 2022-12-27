@@ -8,9 +8,9 @@ public:
     }
 
 
-    T Evaluate(const Intersection * si) const override;
+    T  eval(const Intersection * si) const override;
 
-    T Evaluate(vec2 uv) const override {
+    T eval(vec2 uv) const override {
 
         ivec2 uvI(uv*vec2(float(_resU), float(_resV)));
         bool on = (uvI.x ^ uvI.y) & 1;
@@ -33,7 +33,7 @@ protected:
 };
 
 template < class T >
-T CheckTexture < T >::Evaluate(const Intersection * si) const {
-    return Evaluate(si->uv);
+T CheckTexture < T >::eval(const Intersection * si) const {
+    return eval(si->uv);
 }
 

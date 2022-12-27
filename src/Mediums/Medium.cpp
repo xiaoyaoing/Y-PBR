@@ -1,5 +1,18 @@
 #include "Medium.hpp"
 #include "PhaseFunctionFactory.hpp"
+
+bool GetMediumScatteringProperties(const std::string &name, Spectrum *sigma_a,
+                                   Spectrum *sigma_prime_s) {
+    for (MeasuredSS &mss : SubsurfaceParameterTable) {
+        if (name == mss.name) {
+            *sigma_a = mss.sigma_a;
+            *sigma_prime_s = mss.sigma_prime_s;
+            return true;
+        }
+    }
+    return false;
+}
+
 Spectrum Homogeneous::TR(const Ray & ray) const {
     return  exp((ray.nearT - ray.farT) * sigmaT);
 }

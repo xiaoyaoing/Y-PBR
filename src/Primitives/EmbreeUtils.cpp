@@ -89,7 +89,7 @@ namespace EmbreeUtils {
         std::optional < Intersection > its = primitive->intersect(ray);
         if ( its.has_value() ) {
             hit->hit.geomID = args->geomID;
-            hit->its = & ( its.value() );
+            hit->its = &its.value();
             hit->ray.tfar = ray.farT;
         }
     }

@@ -22,8 +22,6 @@ static Float I0(Float x) {
 
 static Float getH(const SurfaceEvent & event){
     return std::fabs(event.its->uv.y);
-    return 0.5 +(event.its->uv.y)/2;
-
 }
 
 

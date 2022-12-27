@@ -36,7 +36,8 @@ public:
         return worldBound;
     }
 
-    std::shared_ptr<BSDF> fetchBSDF(const std::string & bsdfName) const;
+    std::shared_ptr<BSDF> fetchBSDF(const Json & json) const;
+    std::shared_ptr<BSSRDF> fetchBSSRDF(const std::string & bsdfName) const;
     std::shared_ptr<Medium> fetchMedium(const std::string & mediumName) const;
 
     void AddPrimitive(std::shared_ptr<Primitive> prim) {primitives.push_back(prim);}
@@ -53,6 +54,7 @@ protected:
 
     std::vector<std::shared_ptr<Primitive>> primitives;
     std::unordered_map<std::string,std::shared_ptr<BSDF>>  bsdfs;
+    std::unordered_map<std::string,std::shared_ptr<BSSRDF>>  bssrdfs;
     std::unordered_map<std::string,std::shared_ptr<Medium>>  mediums;
 
 

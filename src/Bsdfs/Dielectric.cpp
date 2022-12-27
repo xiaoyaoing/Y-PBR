@@ -11,7 +11,7 @@ Float Dielectric::Pdf(const SurfaceEvent & event) const {
 }
 
 Spectrum Dielectric::sampleF(SurfaceEvent & event, const vec2 & u) const {
-    Spectrum  albedo = m_albedo->Evaluate(event.its);
+    Spectrum  albedo = m_albedo->eval(event.its);
 
     bool sampleT = enableT;
     Float  eta = event.wo.z < 0.0f ? ior : invIor;
@@ -39,7 +39,7 @@ Spectrum Dielectric::sampleF(SurfaceEvent & event, const vec2 & u) const {
 }
 
 void Dielectric::LogInfo( ) const {
-    spdlog::info("{DielectricBXDF ior:{0} albedo:{1} enableT{2}:",ior, toColorStr(m_albedo->Evaluate()),enableT);
+    spdlog::info("{DielectricBXDF ior:{0} albedo:{1} enableT{2}:", ior, toColorStr(m_albedo->eval()), enableT);
 }
 
 
@@ -53,7 +53,7 @@ void Dielectric::LogInfo( ) const {
 
 
 Spectrum RoughDielectric::f(const SurfaceEvent & event) const {
-    const Spectrum albedo = m_albedo->Evaluate(event.its->uv);
+    const Spectrum albedo = m_albedo->eval(event.its->uv);
     const vec3 & out = event.wo;
     const vec3 & in = event.wi;
     bool reflect = out.z * in.z>0;
@@ -156,8 +156,8 @@ RoughDielectric::RoughDielectric(Float ior,  std::shared_ptr<MicrofacetDistribut
 }
 
 vec2 RoughDielectric::getAlphaXY(const SurfaceEvent & event) const {
-    Float roughnessx = m_uRoughness? m_uRoughness->Evaluate(event.its) : m_roughness->Evaluate(event.its);
-    Float roughnessy = m_vRoughness? m_vRoughness->Evaluate(event.its) : m_roughness->Evaluate(event.its);
+    Float roughnessx = m_uRoughness ? m_uRoughness->eval(event.its) : m_roughness->eval(event.its);
+    Float roughnessy = m_vRoughness ? m_vRoughness->eval(event.its) : m_roughness->eval(event.its);
     vec2 alphaXY = vec2(m_distrib->roughnessToAlpha(roughnessx),m_distrib->roughnessToAlpha(roughnessy));
     return alphaXY;
 }

@@ -17,14 +17,14 @@ Spectrum Conductor::f(const SurfaceEvent & event) const {
 Spectrum Conductor::sampleF(SurfaceEvent & event, const vec2 & u) const {
     event.wi = Frame::Reflect(event.wo);
     event.pdf = 1;
-    Spectrum  alebdo = m_albedo->Evaluate();
+    Spectrum  alebdo = m_albedo->eval();
     Spectrum  f = alebdo  *  Fresnel::conductorReflectance(m_eta, m_k, event.wo.z);
     event.sampleType = m_type;
     return f;
 }
 
 void Conductor::LogInfo( ) const {
-    spdlog::info("Specular Conductor albedo{0} eta{1} k{}", toColorStr(m_albedo->Evaluate()),
+    spdlog::info("Specular Conductor albedo{0} eta{1} k{}", toColorStr(m_albedo->eval()),
                  toColorStr(m_eta), toColorStr(m_k)
     );
 }
@@ -32,8 +32,8 @@ void Conductor::LogInfo( ) const {
 
 
 Spectrum RoughConductor::f(const SurfaceEvent & event) const {
-    Float roughnessx = m_uRoughness? m_uRoughness->Evaluate(event.its) : m_roughness->Evaluate(event.its);
-    Float roughnessy = m_vRoughness? m_vRoughness->Evaluate(event.its) : m_roughness->Evaluate(event.its);
+    Float roughnessx = m_uRoughness ? m_uRoughness->eval(event.its) : m_roughness->eval(event.its);
+    Float roughnessy = m_vRoughness ? m_vRoughness->eval(event.its) : m_roughness->eval(event.its);
     vec2 alphaxy = vec2(m_distrib->roughnessToAlpha(roughnessx),m_distrib->roughnessToAlpha(roughnessy));
 
     Float cosThetaO = AbsCosTheta(event.wo), cosThetaI = AbsCosTheta(event.wi);
@@ -46,13 +46,13 @@ Spectrum RoughConductor::f(const SurfaceEvent & event) const {
     // as the surface normal, so that TIR is handled correctly.
     Float cosI = dot(event.wi,faceForward(wh,vec3(0,0,1)));
     Spectrum F= Fresnel::conductorReflectance(m_eta,m_k,cosI);
-    return  m_albedo->Evaluate(event.its) * m_distrib->D(wh,alphaxy)  * F * m_distrib->G(event.wo, event.wi,alphaxy)/ (4 *  cosThetaO);
+    return m_albedo->eval(event.its) * m_distrib->D(wh, alphaxy) * F * m_distrib->G(event.wo, event.wi, alphaxy) / ( 4 * cosThetaO);
 }
 
 Float RoughConductor::Pdf(const SurfaceEvent & event) const {
     if (!SameHemisphere(event.wo,event.wi)) return 0;
-    Float roughnessx = m_uRoughness? m_uRoughness->Evaluate(event.its) : m_roughness->Evaluate(event.its);
-    Float roughnessy = m_vRoughness? m_vRoughness->Evaluate(event.its) : m_roughness->Evaluate(event.its);
+    Float roughnessx = m_uRoughness ? m_uRoughness->eval(event.its) : m_roughness->eval(event.its);
+    Float roughnessy = m_vRoughness ? m_vRoughness->eval(event.its) : m_roughness->eval(event.its);
     vec2 alphaxy = vec2(m_distrib->roughnessToAlpha(roughnessx),m_distrib->roughnessToAlpha(roughnessy));
 
     vec3 wh = normalize(event.wo + event.wi);
@@ -61,8 +61,8 @@ Float RoughConductor::Pdf(const SurfaceEvent & event) const {
 
 Spectrum
 RoughConductor::sampleF(SurfaceEvent & event, const vec2 & u) const {
-    Float roughnessx = m_uRoughness? m_uRoughness->Evaluate(event.its) : m_roughness->Evaluate(event.its);
-    Float roughnessy = m_vRoughness? m_vRoughness->Evaluate(event.its) : m_roughness->Evaluate(event.its);
+    Float roughnessx = m_uRoughness ? m_uRoughness->eval(event.its) : m_roughness->eval(event.its);
+    Float roughnessy = m_vRoughness ? m_vRoughness->eval(event.its) : m_roughness->eval(event.its);
 
     vec2 alphaxy = vec2(m_distrib->roughnessToAlpha(roughnessx),m_distrib->roughnessToAlpha(roughnessy));
     vec3 wh = m_distrib->Sample_wh(event.wo,u,alphaxy);
@@ -77,7 +77,7 @@ RoughConductor::sampleF(SurfaceEvent & event, const vec2 & u) const {
 
     Float cosI = dot(event.wi,faceForward(wh,vec3(0,0,1)));
     Spectrum F= Fresnel::conductorReflectance(m_eta,m_k,cosI);
-    return     m_albedo->Evaluate(event.its) * m_distrib->D(wh,alphaxy)  * F * m_distrib->G(event.wo, event.wi,alphaxy)/ (4 * event.wo.z);
+    return m_albedo->eval(event.its) * m_distrib->D(wh, alphaxy) * F * m_distrib->G(event.wo, event.wi, alphaxy) / ( 4 * event.wo.z);
 
 
 }

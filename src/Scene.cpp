@@ -3,6 +3,7 @@
 #include "IO/FileUtils.hpp"
 
 #include "Bsdfs/Reflection.hpp"
+#include "Bsdfs/BSSRDF.hpp"
 #include "Bsdfs/BsdfFactory.hpp"
 
 #include "Mediums/Medium.hpp"
@@ -31,6 +32,7 @@ static int occludedCount1 = 0;
 
 Scene::Scene(const Json sceneJson) : options(RenderOptions(sceneJson.at("renderer"))) {
     bsdfs = BSDFFactory::LoadBsdfsFromJson(sceneJson.at("bsdfs"));
+    bssrdfs = BSDFFactory::LoadBssrdfsFromJson(getOptional(sceneJson,"bssrdfs",Json()));
     mediums = MediumFactory::loadMediumsFromJson(sceneJson.at("media"));
     PrimitiveFactory::LoadPrimitivesFromJson(sceneJson.at("primitives"), * this);
 
@@ -73,6 +75,7 @@ void Scene::handleAddLight(const Json & p, int l, int r) {
 
 std::optional < Intersection > Scene::intersect(Ray & ray) const {
     if ( _useBVH ) {
+        auto tempray =ray;
         RTCRayHit rayHit;
         EmbreeUtils::convertRay(& ray, & rayHit);
         //return bvh->intersect(ray);
@@ -82,10 +85,10 @@ std::optional < Intersection > Scene::intersect(Ray & ray) const {
         if ( rayHit.hit.geomID == RTC_INVALID_GEOMETRY_ID ) {
             return std::nullopt;
         }
-        Intersection * its = EmbreeUtils::RTCRayHit1_(& rayHit)->its;
+        auto  its = EmbreeUtils::RTCRayHit1_(& rayHit)->its;
         its->w = ray.d;
         ray.farT = rayHit.ray.tfar;
-        return {* its};
+        return {*its};
     }
 
     std::optional < Intersection > minIntersection;
@@ -155,8 +158,13 @@ void Scene::build( ) {
 
 }
 
-std::shared_ptr < BSDF > Scene::fetchBSDF(const std::string & bsdfName) const {
-        return  bsdfs.contains(bsdfName)?bsdfs.at(bsdfName):bsdfs.at("default");
+std::shared_ptr < BSDF > Scene::fetchBSDF(const Json & json) const {
+        if(json.is_null())
+            return bsdfs.at("default");
+        else if(json.is_string())
+            return bsdfs.contains(json) ? bsdfs.at(json) : bsdfs.at("default");
+        else if(json.is_object())
+            return BSDFFactory::LoadBsdfFromJson(json);
 }
 
 std::shared_ptr < Medium > Scene::fetchMedium(const std::string & mediumName) const {
@@ -166,4 +174,10 @@ std::shared_ptr < Medium > Scene::fetchMedium(const std::string & mediumName) co
         return nullptr;
     }
     return mediums.at(mediumName);
+}
+
+std::shared_ptr < BSSRDF > Scene::fetchBSSRDF(const std::string & bssrdfName) const {
+    if(!bssrdfs.contains(bssrdfName))
+        return nullptr;
+    return bssrdfs.at(bssrdfName);
 }

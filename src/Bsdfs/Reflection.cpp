@@ -11,13 +11,13 @@ Spectrum LambertainR::f(const SurfaceEvent & event) const {
     if ( event.wo.z < 0 || event.wi.z < 0 ) {
         return Spectrum();
     }
-    Spectrum albedo = m_albedo->Evaluate(event.its);
+    Spectrum albedo = m_albedo->eval(event.its);
     return albedo * Constant::INV_PI * AbsCosTheta(event.wi);
 }
 
 
 void LambertainR::LogInfo( ) const {
-    Spectrum albedo = m_albedo->Evaluate();
+    Spectrum albedo = m_albedo->eval();
     spdlog::info("{0} albedo {1} {2} {3}", "LambertainReflection", albedo.x, albedo.y, albedo.z);
 }
 
@@ -28,12 +28,12 @@ Spectrum LambertainR::sampleF(SurfaceEvent & event, const vec2 & u) const {
     event.pdf = Warp::squareToCosineHemispherePdf(event.wi);
     event.sampleType = BXDFType(BSDF_REFLECTION | BSDF_DIFFUSE);
 
-    return m_albedo->Evaluate(event.its) * Constant::INV_PI * AbsCosTheta(event.wi);
+    return m_albedo->eval(event.its) * Constant::INV_PI * AbsCosTheta(event.wi);
 }
 
 
 Spectrum LambertainT::f(const SurfaceEvent & event) const {
-    return m_albedo->Evaluate(event.its) * Constant::INV_PI;
+    return m_albedo->eval(event.its) * Constant::INV_PI;
 }
 
 void LambertainT::LogInfo( ) const {
@@ -76,6 +76,6 @@ SpecularR::sampleF(SurfaceEvent & event, const vec2 & u) const {
     event.wi = Frame::Reflect(event.wo);
     event.pdf =  1;
     event.sampleType = BXDFType(BSDF_SPECULAR | BSDF_REFLECTION);
-    return  m_albedo->Evaluate(event.its);
+    return m_albedo->eval(event.its);
 }
 

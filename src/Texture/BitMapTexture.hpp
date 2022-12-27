@@ -41,8 +41,8 @@ public:
     }
 
 
-    T Evaluate(const Intersection * si) const override {
-        return Evaluate(si->uv);
+    T eval(const Intersection * si) const override {
+        return eval(si->uv);
     }
 
 
@@ -74,7 +74,7 @@ public:
         return res;
     }
 
-    T Evaluate(vec2 uv) const override {
+    T eval(vec2 uv) const override {
         float u = uv.x * _w;
         float v = uv.y * _h;
         if ( _linear ) {

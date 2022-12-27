@@ -13,10 +13,10 @@ Spectrum InfinteSphere::Le(const Ray & ray) const {
     vec2 uv = directionToUV(ray.d);
     //return Spectrum(0,uv.y,0);
     //return (ray.d + 1.0f)/2.f;
-    Spectrum L = _emission->Evaluate(uv);
+    Spectrum L = _emission->eval(uv);
     if ( hasNan(L) ) {
         uv = directionToUV(ray.d);
-        L = _emission->Evaluate(uv);
+        L = _emission->eval(uv);
     }
     return L;
 }
@@ -38,11 +38,11 @@ Spectrum InfinteSphere::sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Fl
         * pdf = mapPdf / ( 2 * Constant::PI * Constant::PI * sinTheta );
     * distance = 2 * _worldRadius;
     //return Spectrum(2);
-    return _emission->Evaluate(uv);
+    return _emission->eval(uv);
 }
 
 //Spectrum InfinteSphere::directLighting(const Intersection & intr) const {
-//    return _emission->Evaluate(directionToUV(intr.w));
+//    return _emission->eval(directionToUV(intr.w));
 //}
 
 Spectrum InfinteSphere::Power( ) {
@@ -107,7 +107,7 @@ LightSampleResult InfinteSphere::sampleDirect(const vec2 & positionSample, const
 //    *pdf = mapPdf / ( 2 * Constant::PI * Constant::PI * sinTheta );
     result.lightDirPdf = _emission->pdf(MAP_SPHERICAL, uv) / ( 2 * Constant::PI * Constant::PI * sinTheta );
     result.lightPosPdf = 1 / ( _worldRadius * _worldRadius * Constant::PI );
-    result.radiance = _emission->Evaluate(uv);
+    result.radiance = _emission->eval(uv);
     vec3 v1, v2;
     coordinateSystem(- dir, v1, v2);
     vec2 cd = Warp::ConcentricSampleDisk(positionSample);

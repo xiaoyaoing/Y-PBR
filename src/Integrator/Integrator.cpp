@@ -30,6 +30,7 @@ Integrator::estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Li
     if ( ! bsdf->MatchesFlags(BSDF_NO_SPECULAR) )
         return Spectrum();
 
+
     event.requestType =
             specular ? BSDF_ALL : BSDF_NO_SPECULAR;
     vec3 wi;
@@ -55,6 +56,10 @@ Integrator::estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Li
                             PowerHeuristic(lightPdf, scatteringPdf);
                     if ( ! sampleBSDF ) weight = 1;
                     Ld += f * weight * Li / lightPdf;
+                    if ( hasNan(Ld) ) {
+                        bsdf->f(event, false);
+                        int k = 1;
+                    }
                 }
             }
         }
@@ -79,6 +84,7 @@ Integrator::estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Li
 
                 if ( ! isBlack(Li) ) Ld += f * weight * Li / scatteringPdf;
                 if ( hasNan(Ld) ) {
+                    bsdf->f(event, false);
                     int k = 1;
                 }
             }
@@ -132,6 +138,9 @@ Spectrum Integrator::uniformSampleAllLights(SurfaceEvent & event, const Scene & 
 SurfaceEvent Integrator::makeLocalScatterEvent(const Intersection * its) const {
     SurfaceEvent event;
     Frame frame = its->primitive->setTangentFrame(its);
+    if( hasNan(frame.n)){
+        its->primitive->setTangentFrame(its);
+    }
 
     bool enableTwoSideShading = true;
 
@@ -141,7 +150,7 @@ SurfaceEvent Integrator::makeLocalScatterEvent(const Intersection * its) const {
     //todo add this to config class
     if ( enableTwoSideShading && hitBackSide && ! isTransmissive ) {
         frame.n = - frame.n;
-        frame.s = - frame.s;
+        frame.tangent = - frame.tangent;
         flippedFrame = true;
     }
     event.frame = frame;
@@ -170,7 +179,11 @@ Integrator::evalLightDirect(const Scene & scene, const Light & light, Ray & ray,
     Spectrum L;
     if ( light.flags & int(LightFlags::Area) ) L = lightIts->Le(- ray.d);
     if ( light.flags & int(LightFlags::Infinite) ) L = light.Le(ray);
+    //avoid self shadow
+    ray.farT -= lightIts->epsilon;
+    if( isBlack(L)) return Spectrum(0);
     auto t = L * evalShadowDirect(scene, ray, medium);
+    auto it = scene.intersect(ray);
     if ( hasNan(t) )
         int k = 1;
     if ( lightPdf ) * lightPdf = light.PdfLi(lightIts.value(), ray.o);

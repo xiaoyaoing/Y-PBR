@@ -92,20 +92,23 @@ public:
 
 
     inline Spectrum sampleF(SurfaceEvent & event, const vec2 & u, bool adjoint) const {
-        if(! MatchesFlags(event.requestType))
+        if(!MatchesFlags(event.requestType))
             return Spectrum();
         Spectrum fResult = sampleF(event, u);
-        event.wi = normalize(event.wi);
+       // event.wo = normalize(event.wi);
         if ( adjoint ) return fResult;
         fResult *= sqr(eta(event));
+        if( hasNan(fResult)){
+
+        }
         return fResult;
     }
 
     inline Spectrum f(const SurfaceEvent & event, bool adjoint) const {
-        if(! MatchesFlags(event.requestType))
+        if(!MatchesFlags(event.requestType))
             return Spectrum();
-
         Spectrum fResult = f(event);
+        if(adjoint) return fResult;
         fResult *= sqr(eta(event));
         return fResult;
     }

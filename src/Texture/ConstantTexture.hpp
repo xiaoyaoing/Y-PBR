@@ -6,8 +6,8 @@ public:
     ConstantTexture(const T  value):value(value){
     }
 
-    T Evaluate(const Intersection * si = nullptr) const override { return value; }
-    T Evaluate(vec2 uv) const override {return value; }
+    T eval(const Intersection * si = nullptr) const override { return value; }
+    T eval(vec2 uv) const override {return value; }
     vec2 sample(TextureMapJacobian jacobian, const vec2 & uv,Float * pdf) const override {
         return vec2();
     }

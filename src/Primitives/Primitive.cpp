@@ -34,7 +34,8 @@ RTCGeometry Primitive::initRTC( ) {
 }
 
 void Primitive::load(const Json & json, const Scene & scene) {
-   bsdf = scene.fetchBSDF(getOptional(json, "bsdf", std::string("null")));
+   bsdf = scene.fetchBSDF(getOptional(json, "bsdf", Json()));
+   bssrdf = scene.fetchBSSRDF(getOptional(json, "bssrdf", std::string()));
    if(json.contains("int_medium")) inMedium =  scene.fetchMedium(json["int_medium"]);
    if(json.contains("ext_medium")) outMedium =  scene.fetchMedium(json["ext_medium"]);
 }

@@ -251,7 +251,7 @@ std::optional < Intersection > Curve::intersect(Ray & ray) const {
 
             vec3 point = BSpline::quadratic(_nodeData[p0], _nodeData[p0 + 1], _nodeData[p0 + 2],_nodeData[p0 + 3], t);
             its.Ng = its.Ns =  normalize((its.w - tangent*dot(tangent,its.w)));
-            its.tangent = tangent;
+            its.tangent = new vec3(tangent);
             its.uv = {rayHit.hit.u,rayHit.hit.v};
 
             return {its};
@@ -386,7 +386,7 @@ Curve::Curve(const Json & json,Scene & scene ) : Primitive(json) {
                 if (_subSample > 0.0f && rand.getNext1D() < _subSample)
                     continue;
                 auto prim = std::make_shared <CurveI>(&_nodeData,t);
-                std::shared_ptr < BSDF > bsdf = scene.fetchBSDF(getOptional(json, "bsdf", std::string("null")));
+                std::shared_ptr < BSDF > bsdf = scene.fetchBSDF(getOptional(json, "bsdf",Json()));
              //   prim->setBSDF(bsdf);
               //  scene.AddPrimitive(prim);
                 prims.emplace_back(
@@ -444,7 +444,7 @@ Curve::Curve(const Json & json,Scene & scene ) : Primitive(json) {
 Frame Curve::setTangentFrame(const Intersection * its) const {
    vec3 T,B,N;
    N = its->Ns;
-   B = its->tangent;
+   B = *its->tangent;
    T = cross(B,N);
    T = normalize(T - dot(T,N) * N);
    B = cross(N,T);

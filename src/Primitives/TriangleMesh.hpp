@@ -17,6 +17,8 @@ public:
     void computeBoundingBox() override;
     void computeArea() override;
 
+    bool sameBSDF(BSDF * _bsdf) override;
+
 
     void load(const Json & json, const Scene & scene) override;
     Bounds3 getTriBounds(int idx);

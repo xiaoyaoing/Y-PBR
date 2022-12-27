@@ -20,7 +20,7 @@ AreaLight::sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf, Fl
 
 
 Spectrum AreaLight::directLighting(const Intersection & intr,const vec3 & wo) const {
-    return (twoSide || dot(intr.Ng, wo) > 0) ? emssision->Evaluate(&intr): Spectrum(0.f);
+    return (twoSide || dot(intr.Ng, wo) > 0) ? emssision->eval(& intr) : Spectrum(0.f);
 }
 
 
