@@ -10,6 +10,7 @@ protected:
     void computeBoundingBox( ) override;
 
 public:
+    ~Curve(){}
     Curve(const Json & json,Scene & scene);
     void transform(const mat4 & T) override;
     std::optional < Intersection > intersect(Ray & ray) const override;

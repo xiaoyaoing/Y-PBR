@@ -12,8 +12,8 @@ class BSSRDF;
 struct Intersection {
     vec3 p;
     vec3 w;  //dir of the indicent ray
-    BSDF * bsdf;
-    BSSRDF * bssrdf;
+    BSDF * bsdf = nullptr;
+    BSSRDF * bssrdf = nullptr;
     const Primitive * primitive;
     vec3 Ns,Ng ;
     vec3 * tangent = nullptr;

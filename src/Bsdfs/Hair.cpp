@@ -146,10 +146,8 @@ Spectrum Hair::f(const SurfaceEvent & event) const {
     vec3 Ntrt = NP(_betaTRT, cosThetaD, phi, 2, h);
     vec3 fsum = MR * Nr + MTT * Ntt + MTRT * Ntrt;
     vec3 res =  fsum ;
-    if( AbsCosTheta(event.wi)>0) res/= AbsCosTheta(event.wi);
-    if( hasNan(res)){
+  //  if( AbsCosTheta(event.wi)>0) res/= AbsCosTheta(event.wi);
 
-    }
     return res;
 }
 

@@ -16,10 +16,6 @@
       "phase_function": {
         "type": "isotropic"
       },
-      "transmittance": {
-        "type": "linear",
-        "max_t": 0.75
-      },
       "max_bounces": 1024,
       "type": "homogeneous",
       "sigma_a": [0.4,0.3, 0.01],
@@ -31,7 +27,7 @@
     {
       "name": "teapot",
       "albedo": 1.0,
-      "type": "rough_dielectric",
+      "type": "dielectric",
       "roughness" : 0.1,
       "ior": 1.31,
       "enable_refraction": true
@@ -125,7 +121,28 @@
     }
   ],
   "primitives": [
-
+    {
+      "name": "frontWall",
+      "transform": {
+        "position": [
+          0,
+          1,
+          1
+        ],
+        "scale": [
+          2,
+          4,
+          2
+        ],
+        "rotation": [
+          0,
+          90,
+          90
+        ]
+      },
+      "type": "quad",
+      "bsdf": "frontWall"
+    },
     {
       "name": "leftWall",
       "transform": {
@@ -259,17 +276,48 @@
       "bsdf": "light"
     },
     {
-      "file": "teapot.obj",
-      "type": "mesh",
-      "bsdf": "teapot",
+      "name": "shortBox",
       "transform": {
+        "position": [
+          0.328631,
+          0.3,
+          0.374592
+        ],
         "scale": [
-          0.01,
-          0.01,
-          0.01
+          0.594811,
+          0.604394,
+          0.6
+        ],
+        "rotation": [
+          90,
+          90,
+          -163.36
         ]
       },
-      "int_medium" : "teapot"
+      "type": "cube",
+      "bsdf": "shortBox"
+    },
+    {
+      "name": "tallBox",
+      "transform": {
+        "position": [
+          -0.335439,
+          0.6,
+          -0.291415
+        ],
+        "scale": [
+          0.607289,
+          0.597739,
+          1.2
+        ],
+        "rotation": [
+          90,
+          180,
+          160.812
+        ]
+      },
+      "type": "cube",
+      "bsdf": "tallBox"
     }
   ],
   "camera": {
@@ -300,7 +348,7 @@
     "fov": 35
   },
   "integrator": {
-    "type": "vol_path_tracer",
+    "type": "path_tracer",
     "min_bounces": 0,
     "max_bounces": 64,
     "enable_consistency_checks": true,
@@ -316,7 +364,7 @@
     "enable_resume_render": false,
     "stratified_sampler": false,
     "scene_bvh": true,
-    "spp": ,
+    "spp": 4,
     "spp_step": 16,
     "checkpoint_interval": "0",
     "timeout": "0"
