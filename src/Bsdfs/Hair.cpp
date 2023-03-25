@@ -46,7 +46,7 @@ inline Float LogisticCDF(Float x, Float s) {
 
 
 inline Float TrimmedLogistic(Float x, Float s, Float a, Float b) {
-    while ( x > Constant::PI ) x -= 2 * Constant::PI;
+    while ( x > Constant::PI) x -= 2 * Constant::PI;
     while ( x < - Constant::PI ) x += 2 * Constant::PI;
     return Logistic(x, s) / ( LogisticCDF(b, s) - LogisticCDF(a, s) );
 }
@@ -188,6 +188,12 @@ Float Hair::Pdf(const SurfaceEvent & event) const {
 
 Spectrum Hair::sampleF(SurfaceEvent & event, const vec2 & u) const {
     //Hair-samplineg requires 4 randoms.
+//    if(float(rand()%100000)/100000 <0.01 ){
+//        event.wo = Frame::Reflect(event.wi);
+//        event.pdf = 0.1;
+//        event.sampleType = BXDFType(BSDF_SPECULAR | BSDF_REFLECTION);
+//        return Spectrum(1);
+//    }
     vec2 u0 = DemuxFloat(u[0]), u1 = DemuxFloat(u[1]);
     Float sinThetaO = event.wo.y;
     Float costhetaO = trigInverse(sinThetaO);
@@ -229,7 +235,7 @@ Spectrum Hair::sampleF(SurfaceEvent & event, const vec2 & u) const {
 
     event.wi = vec3(sinPhi * cosThetaI, sinThetaI, cosPhi * cosThetaI);
     event.sampleType = this->m_type;
-    event.pdf = Pdf(event);
+    event.pdf =  Pdf(event);
     return f(event);
 }
 
@@ -252,6 +258,7 @@ Float Hair::D(Float beta, Float phi) const {
 
 Hair::Hair(const Json & json) : BSDF(BXDFType(BSDF_GLOSSY | BSDF_TRANSMISSION | BSDF_REFLECTION)) {
     _scaleAngle = getOptional(json, "scale_angle", 2.5);
+    _scaleAngle = 0;
     _roughness = getOptional(json, "roughness", 0.3);
     Float melaninRatio = getOptional(json, "melanin_ratio", 1);
     Float melaninConcentration = getOptional(json, "melanin_concentration", 1.3);

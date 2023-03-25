@@ -31,7 +31,3 @@ struct Intersection {
         return Ray(p,dir,epsilon,d-epsilon);
     }
 };
-
-struct SurfaceIntersection : Intersection{
-
-};

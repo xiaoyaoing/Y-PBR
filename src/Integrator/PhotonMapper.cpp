@@ -29,7 +29,7 @@ struct SPPMPIxel {
 //        VisiblePoint(const vec3 & p, const vec3 & wo, const BSDF * bsdf, const Spectrum & beta)
 //                : p(p), wo(wo), bsdf(bsdf), beta(beta) {}
         SurfaceEvent * event = nullptr ;
-        Spectrum throughPut = Spectrum(0);
+        Spectrum beta = Spectrum(0);
 
         ~VisiblePoint( ) {
             //delete event;
@@ -96,7 +96,7 @@ int specularRealVpNum = 0;
 AtmoicVec3 averageSPosition;
 AtmoicVec3 averageSpecularPixelPosition;
 
-AtmoicVec3 averageSpecularPixelthroughput;
+AtmoicVec3 averageSpecularPixelbeta;
 AtmoicVec3 averageSpecularPixelPhi;
 std::atomic < Float > averageSpecularPixelPhotons;
 
@@ -164,14 +164,14 @@ void PhotonMapper::render(const Scene & scene) const {
                     }
                     Ray ray = _camera->sampleRay(x, y, tileSampler->getNext2D());
                     bool specularBounce = true;
-                    Spectrum throughput = Spectrum(1);
+                    Spectrum beta = Spectrum(1);
                     if ( pixelIndex == 0 )
                         int k = 1;
                     bool isDielectric = false;
                     for ( int bounce = 0 ; bounce < maxBounces ; bounce ++ ) {
                         std::optional < Intersection > its = scene.intersect(ray);
                         if ( ! its ) {
-                            for ( auto light: scene.lights );// pixel.Ld += throughput * light->environmentLighting(ray);
+                            for ( auto light: scene.lights );// pixel.Ld += beta * light->environmentLighting(ray);
                             break;
                         }
                         if ( bounce == 0 && its->bsdf->HasFlag(BSDF_SPECULAR) ) {
@@ -180,14 +180,14 @@ void PhotonMapper::render(const Scene & scene) const {
                         SurfaceEvent event = makeLocalScatterEvent(& its.value());
                         const BSDF * bsdf = its->bsdf;
                         if ( specularBounce )
-                            pixel.Ld += throughput * its->Le(- ray.d);
-                        pixel.Ld += throughput * uniformSampleOneLight(event, scene, * tileSampler);
+                            pixel.Ld += beta * its->Le(- ray.d);
+                        pixel.Ld += beta * uniformSampleOneLight(event, scene, * tileSampler);
                         bool isDiffuse = bsdf->HasFlag(BSDF_DIFFUSE);
                         bool isGlossy = bsdf->HasFlag(BSDF_GLOSSY);
                         //find visible point
                         if ( isDiffuse || ( isGlossy && bounce == maxBounces - 1 ) ) {
                             pixel.vp.event = new SurfaceEvent(event);
-                            pixel.vp.throughPut = throughput;
+                            pixel.vp.beta = beta;
                             pixel.isDielectric = isDielectric;
                             break;
                         }
@@ -198,11 +198,11 @@ void PhotonMapper::render(const Scene & scene) const {
                             //if(!specularBounce) f*=AbsCosTheta(event.wi);
                             if ( event.pdf == 0 || isBlack(f) ) break;
                             specularBounce = ( event.sampleType & BSDF_SPECULAR ) != 0;
-                            throughput *=   f / event.pdf;
-                            if ( luminace(throughput) < 0.25 ) {
-                                Float russinanProb = luminace(throughput);
+                            beta *=   f / event.pdf;
+                            if ( luminace(beta) < 0.25 ) {
+                                Float russinanProb = luminace(beta);
                                 if ( tileSampler->getNext1D() < russinanProb ) {
-                                    throughput /= luminace(throughput);
+                                    beta /= luminace(beta);
                                 } else {
                                     break;
                                 }
@@ -229,7 +229,7 @@ void PhotonMapper::render(const Scene & scene) const {
         for ( int i = 0 ; i < pixelNum ; i ++ ) {
              SPPMPIxel & pixel = pixels[i];
             pixel.rate = 0;
-            if ( isBlack(pixel.vp.throughPut) )
+            if ( isBlack(pixel.vp.beta) )
                 continue;
             Bounds3 vpBpunds(pixel.vp.event->its->p);
             vpBpunds = Expand(vpBpunds, pixel.radius);
@@ -247,7 +247,7 @@ void PhotonMapper::render(const Scene & scene) const {
         std::vector < std::atomic < SPPMListNode *>> grids(pixelNum);
         parallel_for([&](int pixelIndex) {
             SPPMPIxel & pixel = pixels[pixelIndex];
-            if ( isBlack(pixel.vp.throughPut) )
+            if ( isBlack(pixel.vp.beta) )
                 return;
             vec3 pMin = pixel.vp.event->its->p - vec3(pixel.radius);
             vec3 pMax = pixel.vp.event->its->p + vec3(pixel.radius);
@@ -310,7 +310,7 @@ void PhotonMapper::render(const Scene & scene) const {
             photonColor += lightSample.radiance / Float(photonsPerIteration);
             photonRayPos += photonRay.o / Float(photonsPerIteration);
 
-            Spectrum throughput = absDot(photonRay.d, lightSample.lightN) * lightSample.radiance
+            Spectrum beta = absDot(photonRay.d, lightSample.lightN) * lightSample.radiance
                                   / ( lightSample.lightDirPdf * lightSample.lightPosPdf );
             bool firstDielectric = false;
             for ( int bounce = 0 ; bounce < 8 ; bounce ++ ) {
@@ -375,7 +375,7 @@ void PhotonMapper::render(const Scene & scene) const {
                             if ( length2(p - photonP) > pixel->radius * pixel->radius )
                                 continue;
                             event->wi = event->toLocal(- photonRay.d);
-                            Spectrum contrib = event->its->bsdf->f(* event, false) * throughput;
+                            Spectrum contrib = event->its->bsdf->f(* event, false) * beta;
                             //f(event->its->bsdf->hasFlag(BSDF_SPECULAR)) contrib /= AbsCosTheta(event->wi);
                             if ( hasNan(contrib) ) {
 
@@ -396,9 +396,9 @@ void PhotonMapper::render(const Scene & scene) const {
                                                              RadicalInverse(haltonDim + 1, haltonIndex)), true);
                 //if(!isSpecualr(event.sampleType)) f *=abs(event.wi.z);
                 haltonDim += 2;
-                Spectrum throughputNew = throughput * f/ event.pdf;
+                Spectrum betaNew = beta * f/ event.pdf;
 
-                Float russProb = std::max((Float) 0, 1 - luminace(throughputNew) / luminace(throughput));
+                Float russProb = std::max((Float) 0, 1 - luminace(betaNew) / luminace(beta));
                 russProb = 0;
                 if ( RadicalInverse(haltonDim ++, haltonIndex) < russProb ) {
                     if ( bounce == 0 ) count3 ++;
@@ -406,7 +406,7 @@ void PhotonMapper::render(const Scene & scene) const {
                         photonSRuss ++;
                     break;
                 }
-                throughput = throughputNew / ( 1 - russProb );
+                beta = betaNew / ( 1 - russProb );
                 vec3 wi = event.toWorld(event.wi);
                 photonRay = event.sctterRay(wi);
                 if ( firstDielectric && bounce == 0 ) {
@@ -442,7 +442,7 @@ void PhotonMapper::render(const Scene & scene) const {
                 Spectrum phi;
                 for ( int i = 0 ; i < 3 ; i ++ )
                     phi[i] = pixel.phi[i];
-                pixel.flux = ( pixel.flux + phi * pixel.vp.throughPut ) * ( newRadius * newRadius ) /
+                pixel.flux = ( pixel.flux + phi * pixel.vp.beta ) * ( newRadius * newRadius ) /
                              ( pixel.radius * pixel.radius );
                 int a = pixel.curPhotonCount;
                 Float b = pixel.lastPhotonCount;
@@ -467,7 +467,7 @@ void PhotonMapper::render(const Scene & scene) const {
                     averageSpecularPixelPosition.add(pixel.vp.event->its->p);
                     averageSpecularPixelRadius = atomic_load(& averageSpecularPixelRadius) + pixel.radius;
 
-                    averageSpecularPixelthroughput.add(pixel.vp.throughPut);
+                    averageSpecularPixelbeta.add(pixel.vp.beta);
                     averageSpecularPixelPhi.add(vec3(atomic_load(& pixel.phi[0]), atomic_load(& pixel.phi[1]),
                                                      atomic_load(& pixel.phi[2])));
                     averageSpecularPixelPhotons = atomic_load(& averageSpecularPixelPhotons) + pixel.lastPhotonCount;
@@ -476,7 +476,7 @@ void PhotonMapper::render(const Scene & scene) const {
                     pixel.phi[i] = 0;
 
             }
-            pixel.vp.throughPut = Spectrum(0);
+            pixel.vp.beta = Spectrum(0);
             delete pixel.vp.event;
             pixel.vp.event = nullptr;
         }, pixelNum, 4096);
@@ -500,7 +500,7 @@ void PhotonMapper::render(const Scene & scene) const {
         visiblePhotonCount = 0;
 
         averageSpecularPixelPosition.divide(dielectricNum);
-        averageSpecularPixelthroughput.divide(dielectricNum);
+        averageSpecularPixelbeta.divide(dielectricNum);
         averageSpecularPixelPhi.divide(dielectricNum);
         averageSpecularPixelPhotons = atomic_load(& averageSpecularPixelPhotons) / dielectricNum;
 

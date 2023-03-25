@@ -4,7 +4,7 @@
 const int pMax = 3;
 
 /// Hair Bsdf
-
+class Deielectric;
 class Hair : public  BSDF{
 public:
     Spectrum f(const SurfaceEvent & event) const override;

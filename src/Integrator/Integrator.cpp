@@ -135,7 +135,7 @@ Spectrum Integrator::uniformSampleAllLights(SurfaceEvent & event, const Scene & 
 }
 
 
-SurfaceEvent Integrator::makeLocalScatterEvent(const Intersection * its) const {
+SurfaceEvent makeLocalScatterEvent(const Intersection * its) {
     SurfaceEvent event;
     Frame frame = its->primitive->setTangentFrame(its);
     if( hasNan(frame.n)){
@@ -188,33 +188,6 @@ Integrator::evalLightDirect(const Scene & scene, const Light & light, Ray & ray,
         int k = 1;
     if ( lightPdf ) * lightPdf = light.PdfLi(lightIts.value(), ray.o);
     return t;
-//    = light.Le(ray);
-//
-//    if ( light.flags & int(LightFlags::Area) ) {
-//        const AreaLight & areaLight = reinterpret_cast<const AreaLight &>(light);
-//        areaLight.intersect(ray);
-//    }
-//
-//
-//    bool occluded = scene.intersectP(ray);
-//    if ( light.flags & int(LightFlags::Area) ) {
-//        if ( ! occluded )
-//            return Spectrum(0);
-//        auto its = scene.intersect(ray);
-//        bool hitDestLight = its->primitive->areaLight.get() == & light;
-//        if ( ! hitDestLight )
-//            return Spectrum();
-//        * lightPdf = light.PdfLi(its.value(), ray.o);
-//        return its->Le(- ray.d);
-//    }
-//    if ( light.flags & int(LightFlags::Infinite) ) {
-//        if ( occluded )
-//            return Spectrum(0);
-//        Intersection infiniteIts;
-//        infiniteIts.w = - ray.d;
-//        * lightPdf = light.PdfLi(infiniteIts, ray.o);
-//        return light.Le(ray);
-//    }
 }
 
 Spectrum Integrator::evalShadowDirect(const Scene & scene, Ray ray, const Medium * medium) const {
@@ -345,4 +318,20 @@ void SamplerIntegrator::render(const Scene & scene) const {
     _camera->image->savePNG();
 
     parallel_cleanup();
+}
+
+bool russian(int depth, Float pdf,Sampler & sampler, vec3 &throguhPut) {
+
+}
+
+bool russian(int depth, Sampler &sampler, vec3 &beta) {
+    float pdf = max(beta);
+    if(depth<2 || pdf > 0.2)
+        return false;
+    if(sampler.getNext1D() < pdf )
+    {
+        beta/= pdf;
+        return false;
+    }
+    return true;
 }

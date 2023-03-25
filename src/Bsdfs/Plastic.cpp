@@ -51,7 +51,7 @@ Float RoughPlastic::Pdf(const SurfaceEvent & event) const {
     Float specProb = lS / ( lS + lD );
     Float diffProb = 1 - specProb;
     vec2 alphaXY = getAlphaXY(event);
-    Float D = m_distrib->D(wh, alphaXY);
+    Float D = m_distrib->Pdf(event.wo,wh, alphaXY);
     specProb *= D / ( 4 * absDot(out, wh) );
     diffProb *= in.z / Constant::PI;
     return specProb + diffProb;

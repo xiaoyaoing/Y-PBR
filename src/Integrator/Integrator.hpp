@@ -54,7 +54,6 @@ public:
                              const Medium * medium, Float * lightPdf) const;
     Spectrum evalShadowDirect(const Scene & scene,Ray ray,const Medium * medium) const ;
 
-    SurfaceEvent makeLocalScatterEvent(const Intersection * its) const ;
     std::unique_ptr<Distribution1D> computeLightPowerDistrib(const Scene & scene) const;
 protected :
     int minBounces,maxBounces;
@@ -73,3 +72,6 @@ public:
     std::shared_ptr<Camera> _camera;
     std::shared_ptr<Sampler> _sampler;
 };
+
+SurfaceEvent makeLocalScatterEvent(const Intersection * its);
+bool russian(int depth, Sampler &sampler, vec3 &beta);

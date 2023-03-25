@@ -11,7 +11,7 @@ vec3 VolPathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler 
     SurfaceEvent surfaceEvent;
     bool specularBounce = true;
     int bounce;
-    Spectrum throughPut(1);
+    Spectrum beta(1);
     Ray _ray(ray);
     std::optional < Intersection > temp;
     bool gemoback;
@@ -28,8 +28,8 @@ vec3 VolPathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler 
         }
         if ( medium ) {
 //            return medium->sampleDistance(_ray, sampler, voulumeEvent);
-            throughPut *= medium->sampleDistance(_ray, sampler, voulumeEvent);
-            if ( isBlack(throughPut) ) break;
+            beta *= medium->sampleDistance(_ray, sampler, voulumeEvent);
+            if ( isBlack(beta) ) break;
             hitSurface = voulumeEvent.exited;
         }
        // hitSurface = true;
@@ -50,11 +50,11 @@ vec3 VolPathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler 
 //            return Spectrum(0);
             if ( specularBounce ) {
                 if ( foundIntersection )
-                    L += throughPut * its->Le(- _ray.d);
+                    L += beta * its->Le(- _ray.d);
                 else
                     for ( auto light: scene.lights ) {
                         if ( light->flags == int(LightFlags::Infinite) ) {
-                            L += throughPut * light->Le(_ray);
+                            L += beta * light->Le(_ray);
                         }
                     }
             }
@@ -64,7 +64,7 @@ vec3 VolPathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler 
             } else {
                 if ( its->bsdf->MatchesFlags(BXDFType(BSDF_NO_SPECULAR)) && bounce < maxBounces - 1 ) {
 
-                    L += throughPut * uniformSampleAllLights
+                    L += beta * uniformSampleAllLights
                             (surfaceEvent, scene, sampler, medium);  //direct lighting
                 }
                 surfaceEvent.requestType = BSDF_ALL;
@@ -73,7 +73,7 @@ vec3 VolPathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler 
                     break;
                 BXDFType flags = surfaceEvent.sampleType;
                 specularBounce = ( flags & BSDF_SPECULAR ) != 0;
-                throughPut *= f / surfaceEvent.pdf;
+                beta *= f / surfaceEvent.pdf;
                 _ray = surfaceEvent.sctterRay(surfaceEvent.toWorld(surfaceEvent.wi));
             }
             tempEvent = surfaceEvent;
@@ -81,17 +81,17 @@ vec3 VolPathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler 
             gemoback = dot(_ray.d, its->Ng) < 0;
             medium = its->primitive->selectMedium(medium, dot(_ray.d, its->Ng) < 0);
         } else {
-            L += throughPut *
+            L += beta *
                  volumeUniformSampleOneLight(voulumeEvent, medium, scene, sampler, lightDistribution.get());
             PhaseSample phaseSample;
             Spectrum p = voulumeEvent.phase->sampleP(_ray.d, sampler.getNext2D(), phaseSample);
             _ray = Ray(voulumeEvent.p, phaseSample.w);
         }
         //russian prob
-        Float roulettePdf = std::max(throughPut.x, std::max(throughPut.y, throughPut.z));
+        Float roulettePdf = std::max(beta.x, std::max(beta.y, beta.z));
         if ( bounce > 2 && roulettePdf < 0.1 ) {
             if ( sampler.getNext1D() < roulettePdf )
-                throughPut /= roulettePdf;
+                beta /= roulettePdf;
             else
                 break;
         }

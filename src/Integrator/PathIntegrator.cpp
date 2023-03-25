@@ -9,10 +9,10 @@
 #include <spdlog/spdlog.h>
 
 //2022/7/15
-Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler & sampler) const {
-    std::optional < Intersection > its;
+Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &sampler) const {
+    std::optional<Intersection> its;
     SurfaceEvent surfaceEvent;
-    Spectrum throughput(1.0);
+    Spectrum beta(1.0);
     Spectrum L(0);
 
     int bounces = 0, maxDepth = maxBounces;
@@ -21,110 +21,75 @@ Spectrum PathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler
 
     std::string firstHitName;
     std::string Path;
-    for ( bounces = 0 ;; ++ bounces ) {
+    for (bounces = 0;; ++bounces) {
 
         its = scene.intersect(_ray);
-        if ( specularBounce ) {
-            if ( its.has_value() )
-                L += throughput * its->Le(- _ray.d);
+        if (specularBounce) {
+            if (its.has_value())
+                L += beta * its->Le(-_ray.d);
             else
-                for ( auto light: scene.lights ) {
-                    if ( light->flags == int(LightFlags::Infinite) ) {
-                        L += throughput * light->Le(_ray);
+                for (auto light: scene.lights) {
+                    if (light->flags == int(LightFlags::Infinite)) {
+                        L += beta * light->Le(_ray);
                     }
                 }
         }
         //  break;
 
-        if ( ! its.has_value() || bounces >= maxDepth )
+        if (!its.has_value() || bounces >= maxDepth)
             break;
-        if ( DebugConfig::OnlyShowNormal ) {
-            return ( its->Ng + Spectrum(1.f) ) / 2.f;
+        //  return Spectrum(its->uv.x,its->uv.y,0);
+        if (DebugConfig::OnlyShowNormal) {
+            return (its->Ng + Spectrum(1.f)) / 2.f;
         }
-        surfaceEvent = makeLocalScatterEvent(& its.value());
-        if( hasNan(surfaceEvent.wi))
-            int k = 1;
-        if ( its->bsdf->Pure(BSDF_FORWARD) ) {
+        surfaceEvent = makeLocalScatterEvent(&its.value());
+        if (its->bsdf->Pure(BSDF_FORWARD)) {
             _ray = surfaceEvent.sctterRay(_ray.d);
-        } else
-            ///sample direct lighting for no specular bxdf
-        {
-            if ( its->bsdf->MatchesFlags(BXDFType(BSDF_NO_SPECULAR)) && bounces < maxDepth - 1 ) {
+        } else {
+            if (its->bsdf->MatchesFlags(BXDFType(BSDF_NO_SPECULAR)) && bounces < maxDepth - 1) {
 
                 Spectrum Ld = uniformSampleAllLights
                         (surfaceEvent, scene, sampler, nullptr);  //direct lighting
-                if ( DebugConfig::OnlyDirectLighting )
+                if (DebugConfig::OnlyDirectLighting)
                     return Ld;
-                L += throughput * Ld;
-                if ( hasNan(L) ) {
-                    int k = 1;
-                }
-            }
+                L += beta * Ld;
 
-            {
-                if ( DebugConfig::OnlyDirectLighting )
-                    return L;
-                if ( DebugConfig::OnlyIndirectLighting && bounces == 0 ) {
-                    L = Spectrum(0.f);
-                }
             }
-
-            if( hasNan(surfaceEvent.wi))
-                int k = 1;
-            auto temp = surfaceEvent.wo;
             surfaceEvent.requestType = BSDF_ALL;
             Spectrum f = its->bsdf->sampleF(surfaceEvent, sampler.getNext2D(), false);
-            if ( isBlack(f) || surfaceEvent.pdf == 0 )
+            if (isBlack(f) || surfaceEvent.pdf == 0)
                 break;
             BXDFType flags = surfaceEvent.sampleType;
-            specularBounce = ( flags & BSDF_SPECULAR ) != 0;
-            throughput *= f / surfaceEvent.pdf;
-            if( hasNan(throughput)){
-
-            }
+            specularBounce = (flags & BSDF_SPECULAR) != 0;
+            beta *= f / surfaceEvent.pdf;
             _ray = surfaceEvent.sctterRay();
 
-            if(its->bssrdf && (flags & BSDF_TRANSMISSION)){
+            if (its->bssrdf && (flags & BSDF_TRANSMISSION)) {
                 Intersection pi;
                 Float pdf = 0;
-                Spectrum s = its->bssrdf->sampleS(scene,sampler.getNext1D(),sampler.getNext2D(),surfaceEvent,&pi,&pdf);
-                if(isBlack(s) || pdf == 0)
+                Spectrum s = its->bssrdf->sampleS(scene, sampler.getNext1D(), sampler.getNext2D(), surfaceEvent, &pi,
+                                                  &pdf);
+                if (isBlack(s) || pdf == 0)
                     break;
                 surfaceEvent = makeLocalScatterEvent(&pi);
-                throughput *= s/pdf;
-//                return throughput;
-                if( hasNan(throughput)){
+                beta *= s / pdf;
+                L += beta * uniformSampleOneLight(surfaceEvent, scene, sampler, lightDistribution.get());
 
-                }
-                L += throughput * uniformSampleOneLight(surfaceEvent,scene,sampler,lightDistribution.get());
-                if( hasNan(L)){
-
-                }
                 surfaceEvent.requestType = BSDF_ALL;
                 f = pi.bsdf->sampleF(surfaceEvent, sampler.getNext2D(), false);
-                throughput *= f/surfaceEvent.pdf;
-                if( hasNan(throughput)){
-
-                }
+                beta *= f / surfaceEvent.pdf;
                 specularBounce = isSpecualr(surfaceEvent.sampleType);
                 _ray = surfaceEvent.sctterRay();
             }
-
-
-            Float roulettePdf = std::max(throughput.x, std::max(throughput.y, throughput.z));
-            if ( bounces > 2 && roulettePdf < 0.1 ) {
-                if ( sampler.getNext1D() < roulettePdf )
-                    throughput /= roulettePdf;
-                else
-                    break;
-            }// return Spectrum(surfaceEvent.toWorld(surfaceEvent.wi));
+            if(russian(bounces,sampler,beta))
+                break;
         }
     }
-    //return throughput;
+    //return beta;
     return L;
 }
 
 
-void PathIntegrator::process(const Scene & scene, Sampler & sampler) {
+void PathIntegrator::process(const Scene &scene, Sampler &sampler) {
     lightDistribution = CreateLightSampleDistribution(lightSampleStrategy, scene);
 }

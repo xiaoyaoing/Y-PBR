@@ -22,7 +22,7 @@ public:
     vec3 toWorld(const vec3 & w) const {
         return frame.toWorld(w);
     }
-    SurfaceEvent(const SurfaceEvent & event) : its(new Intersection(* event.its)),
+    SurfaceEvent(const SurfaceEvent & event) : its(event.its),
                                                frame(event.frame), wo(event.wo), wi(event.wi),
                                                sampleType(event.sampleType),
                                                value(event.value), pdf(event.pdf),
@@ -38,6 +38,13 @@ public:
     Ray sctterRay() {
         return sctterRay(toWorld(wi));
     }
+
+    SurfaceEvent makeFlipQuery() {
+        SurfaceEvent event(*this);
+        event.wi = wo;
+        event.wo = wi;
+        return event;
+    }
 };
 
 struct VolumeEvent {
@@ -46,4 +53,5 @@ struct VolumeEvent {
     const PhaseFunction * phase;
     Float pdf;
 };
+
 
