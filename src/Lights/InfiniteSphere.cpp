@@ -5,6 +5,7 @@
 #include <spdlog/spdlog.h>
 
 #include "Common/Transform.hpp"
+#include "SampleRecords/PositionAndDirectionSample.h"
 
 static vec3 rgb(0);
 static int count = 0;
@@ -95,19 +96,19 @@ void InfinteSphere::logDebugInfo( ) const {
     spdlog::info("infinite" + toColorStr(rgb / (float) count));
 }
 
-LightSampleResult InfinteSphere::sampleDirect(const vec2 & positionSample, const vec2 & dirSample) {
-    LightSampleResult result;
+PositionAndDirectionSample InfinteSphere::sampleDirect(const vec2 & positionSample, const vec2 & dirSample) const{
+    PositionAndDirectionSample result;
     Float mapPdf;
     vec2 uv = _emission->sample(MAP_SPHERICAL, dirSample, & mapPdf);
     if ( ! mapPdf )
         return result;
     float sinTheta;
     vec3 dir = - uvToDirection(uv, sinTheta);
-    result.lightN = dir;
+    result.n = dir;
 //    *pdf = mapPdf / ( 2 * Constant::PI * Constant::PI * sinTheta );
-    result.lightDirPdf = _emission->pdf(MAP_SPHERICAL, uv) / ( 2 * Constant::PI * Constant::PI * sinTheta );
-    result.lightPosPdf = 1 / ( _worldRadius * _worldRadius * Constant::PI );
-    result.radiance = _emission->eval(uv);
+    result.dirPdf = _emission->pdf(MAP_SPHERICAL, uv) / (2 * Constant::PI * Constant::PI * sinTheta );
+    result.posPdf = 1 / (_worldRadius * _worldRadius * Constant::PI );
+    result.weight = _emission->eval(uv) / (result.dirPdf * result.posPdf );
     vec3 v1, v2;
     coordinateSystem(- dir, v1, v2);
     vec2 cd = Warp::ConcentricSampleDisk(positionSample);

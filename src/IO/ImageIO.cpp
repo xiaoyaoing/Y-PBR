@@ -255,4 +255,47 @@ uint8 * loadJpg(const std::string & path,int & w,int & h,int & channels){
         return std::move(texels);
     }
 
+    bool isHdr(const std::string &path) {
+        return stbi_is_hdr(path.c_str());
+    }
+
+    bool saveLdr(std::string path, const uint8 *img, int w, int h, int channels) {
+        path = FileUtils::getFileFullPath(path);
+        auto suffix = FileUtils::getFileSuffix(path);
+        if(suffix.empty())
+        {
+            return false;
+        }
+        if(suffix == "png")
+        {
+            return savePng(FileUtils::getFilePath(path),std::vector<uint8_t>(img,img+w*h*channels),w,h,channels);
+        }
+        return false;
+    }
+
+    bool saveHdr(std::string path ,const float * img,int w,int h,int channels){
+        path = FileUtils::getFileFullPath(path);
+        auto suffix = FileUtils::getFileSuffix(path);
+        if(suffix.empty()){
+            return false;
+        }
+//        if(suffix == "hdr"){
+//            std::ofstream out(path, std::ios::binary);
+//            if (!out)
+//            {
+//                spdlog::error("Failed to open output file!\n");
+//                return false;
+//            }
+//            stbi_wr
+//            if (!stbi_write_hdr_to_func([](void* context, void* data, int size) -> int {
+//                std::ostream& os = *static_cast<std::ostream*>(context);
+//                os.write(static_cast<const char*>(data), size);
+//                return os.good() ? 1 : 0;
+//            }, &out, w, h, 3, img))
+//            {
+//                std::cerr << "Failed to write HDR data to file!\n";
+//                return;
+//            }
+//        }
+    }
 }

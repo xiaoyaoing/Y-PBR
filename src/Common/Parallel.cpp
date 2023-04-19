@@ -273,3 +273,4 @@ void parallel_cleanup() {
     threads.erase(threads.begin(), threads.end());
     shutdownThreads = false;
 }
+

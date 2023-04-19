@@ -17,13 +17,13 @@ enum class TexelConversion
 namespace ImageIO {
 
     bool saveLdr(const std::string & path, const uint8 * img, int w, int h, int channels);
-
-    bool
+    bool saveHdr(const std::string & path,const float  * img,int w,int h,int channels);
+    static  bool
     savePng(const std::string & path, const std::vector < unsigned char > & image, int width, int height, int channels);
 
     std::unique_ptr < float[] > loadHdr(const std::string & path, TexelConversion request, int & w, int & h);
 
     std::unique_ptr < uint8[] > loadLdr(const std::string & path, TexelConversion request, int & w, int & h,
                                         bool gammaCorrect = true);
-
+    bool isHdr(const std::string & path);
 }

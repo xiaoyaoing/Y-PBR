@@ -113,10 +113,9 @@ public:
         return fResult;
     }
 
-    virtual void LogInfo( ) const = 0;
-
+    ///If there is a match in one lobe, it can be considered a match.
     bool MatchesFlags(BXDFType t) const {
-        return ( m_type & t ) != 0;
+        return ( m_type & t ) !=0;
     }
 
     bool HasFlag(BXDFType t) const {
@@ -161,8 +160,6 @@ public:
 
     Float Pdf(const SurfaceEvent & event) const override;
 
-    virtual void LogInfo( ) const;
-
 
     virtual Spectrum sampleF(SurfaceEvent & event, const vec2 & u) const override;
 
@@ -174,8 +171,6 @@ class LambertainT : public BSDF {
 public:
 
     virtual Spectrum f(const SurfaceEvent & event) const override;
-
-    virtual void LogInfo( ) const override;
 
     LambertainT( ) : BSDF(BXDFType(BSDF_DIFFUSE | BSDF_TRANSMISSION)) {}
 
@@ -190,8 +185,6 @@ public:
 
 
     virtual Spectrum f(const SurfaceEvent & event) const override;
-
-    virtual void LogInfo( ) const override;
 
     SpecularR( ) : BSDF(BXDFType(BSDF_REFLECTION | BSDF_SPECULAR)) {}
 

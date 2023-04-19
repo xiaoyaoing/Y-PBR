@@ -6,6 +6,7 @@
 #include "Sampler/LowDiscrepancy.hpp"
 #include "IO/ImageIO.hpp"
 #include "IO/FileUtils.hpp"
+#include "SampleRecords/PositionAndDirectionSample.h"
 #include <thread>
 //sppm mainly learned from pbrt
 
@@ -131,7 +132,7 @@ static inline int hash(const ivec3 & p, int hashSize) {
            hashSize;
 }
 
-void PhotonMapper::render(const Scene & scene) const {
+void PhotonMapper::render(const Scene & scene)  {
     ivec2 pixelBounds = _camera->image->resoulation();
     int pixelNum = pixelBounds.x * pixelBounds.y;
     std::unique_ptr < SPPMPIxel[] > pixels(new SPPMPIxel[pixelNum]);
@@ -301,17 +302,15 @@ void PhotonMapper::render(const Scene & scene) const {
             vec2 posSample(RadicalInverse(haltonDim, haltonIndex), RadicalInverse(haltonDim + 1, haltonIndex));
             vec2 dirSample(RadicalInverse(haltonDim + 2, haltonIndex), RadicalInverse(haltonDim + 3, haltonIndex));
             haltonDim += 5;
-            LightSampleResult lightSample = light->sampleDirect(posSample, dirSample);
+            PositionAndDirectionSample lightSample = light->sampleDirect(posSample, dirSample);
 
-            if ( lightSample.lightDirPdf == 0 || lightSample.lightPosPdf == 0 || isBlack(lightSample.radiance) )
+            if (lightSample.dirPdf == 0 || lightSample.posPdf == 0 || isBlack(lightSample.weight) )
                 return;
             Ray & photonRay = lightSample.ray;
             dir += photonRay.d / Float(photonsPerIteration);
-            photonColor += lightSample.radiance / Float(photonsPerIteration);
             photonRayPos += photonRay.o / Float(photonsPerIteration);
 
-            Spectrum beta = absDot(photonRay.d, lightSample.lightN) * lightSample.radiance
-                                  / ( lightSample.lightDirPdf * lightSample.lightPosPdf );
+            Spectrum beta = lightSample.weight;
             bool firstDielectric = false;
             for ( int bounce = 0 ; bounce < 8 ; bounce ++ ) {
                 std::optional < Intersection > its = scene.intersect(photonRay);

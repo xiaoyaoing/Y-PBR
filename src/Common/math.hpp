@@ -137,6 +137,10 @@ inline Float distance(glm::vec < size, Float, glm::defaultp > a, glm::vec < size
     return length(a - b);
 }
 
+inline vec3 direction(vec3 a,vec3 b){
+    return normalize(b-a);
+}
+
 inline vec3 normalize(vec3 a) {
     return glm::normalize(a);
 }

@@ -23,13 +23,6 @@ Spectrum Conductor::sampleF(SurfaceEvent & event, const vec2 & u) const {
     return f;
 }
 
-void Conductor::LogInfo( ) const {
-    spdlog::info("Specular Conductor albedo{0} eta{1} k{}", toColorStr(m_albedo->eval()),
-                 toColorStr(m_eta), toColorStr(m_k)
-    );
-}
-
-
 
 Spectrum RoughConductor::f(const SurfaceEvent & event) const {
     Float roughnessx = m_uRoughness ? m_uRoughness->eval(event.its) : m_roughness->eval(event.its);
@@ -77,12 +70,12 @@ RoughConductor::sampleF(SurfaceEvent & event, const vec2 & u) const {
 
     Float cosI = dot(event.wi,faceForward(wh,vec3(0,0,1)));
     Spectrum F= Fresnel::conductorReflectance(m_eta,m_k,cosI);
-    return m_albedo->eval(event.its) * m_distrib->D(wh, alphaxy) * F * m_distrib->G(event.wo, event.wi, alphaxy) / ( 4 * event.wo.z);
 
-
-}
-
-void RoughConductor::LogInfo( ) const {
+    auto res =  m_albedo->eval(event.its) * m_distrib->D(wh, alphaxy) * F * m_distrib->G(event.wo, event.wi, alphaxy) / ( 4 * event.wo.z);
+    if(AbsCosTheta(event.wo)<0.01){
+        int k =1;
+    }
+    return res;
 
 }
 

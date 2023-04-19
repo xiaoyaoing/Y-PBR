@@ -282,8 +282,13 @@ SeparableBSSRDF::sampleSp(const Scene & scene, Float u1, const vec2 & u2, const 
 
         }
         ptr->si = scene.intersect(ray);
-        if ( ! ptr->si || tHit <= 0 )
+        if ( ! ptr->si  )
             break;
+        tHit -=ray.farT;
+        if(tHit<0)
+        {
+           break;
+        }
         base = ptr->si.value();
         if ( ptr->si->primitive == po.its->primitive ) {
             IntersectionChain * next = new IntersectionChain();
@@ -294,7 +299,7 @@ SeparableBSSRDF::sampleSp(const Scene & scene, Float u1, const vec2 & u2, const 
         }
         tempRay = ray;
 //        ray.o = ptr->si->p;
-        tHit -= ray.farT;
+      //  tHit -= ray.farT;
         ray = base.spawnRay(pTarget);
 
 //        ray.farT = tHit;
@@ -612,10 +617,6 @@ Float BSSRDFAdapater::Pdf(const SurfaceEvent & event) const {
     if ( event.wi.z <= 0.0f || event.wo.z <= 0.0f )
         return 0.0f;
     return Warp::squareToCosineHemispherePdf(event.wo);}
-
-void BSSRDFAdapater::LogInfo( ) const {
-
-}
 
 Spectrum BSSRDFAdapater::sampleF(SurfaceEvent & event, const vec2 & u) const {
     event.wi = Warp::squareToCosineHemisphere(u);

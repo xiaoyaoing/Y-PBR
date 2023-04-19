@@ -1,29 +1,19 @@
-#include "Integrator.hpp"
+
+#include "TraceHelper.h"
 #include "Bsdfs/Reflection.hpp"
 #include "Common/ProgressReporter.h"
 #include "Sampler/Sampler.hpp"
 #include "Common/Parallel.h"
 #include "Camera/Camera.hpp"
-#include "PathIntegrator.hpp"
+
 #include <thread>
 #include <iostream>
-
 #include "Texture/BitMapTexture.hpp"
-
 #include "Mediums/Medium.hpp"
-
-static bool sampleBSDF = true;
-static bool sampleLgiht = true;
-
-
-//Integrator::Integrator(Json j) {
-//
-//}
-
-
-Spectrum
-Integrator::estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Light & light, const vec2 & uLight,
-                           const Scene & scene, Sampler & sampler, const Medium * medium, bool specular) const {
+bool TraceHelper::sampleLight = true;
+bool TraceHelper::sampleBSDF = true;
+Spectrum TraceHelper::estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Light & light, const vec2 & uLight,
+                           const Scene & scene, Sampler & sampler, const Medium * medium, bool specular) {
     const BSDF * bsdf = event.its->bsdf;
 
     //pure specular case
@@ -38,7 +28,7 @@ Integrator::estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Li
     VisibilityTester visibility;
 
     Spectrum Ld(0);
-    if ( sampleLgiht ) {
+    if ( sampleLight ) {
         Float distance;
         Spectrum Li = light.sampleLi(event.its->p, uLight, & wi, & lightPdf, & distance);
         // return Spectrum(lightPdf);
@@ -79,7 +69,7 @@ Integrator::estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Li
                 Float weight = 1;
                 if ( ! isSpecualr(event.sampleType) ) {
                     weight = PowerHeuristic(scatteringPdf, lightPdf);
-                    if ( ! sampleLgiht ) weight = 1;
+                    if ( ! sampleLight ) weight = 1;
                 }
 
                 Ld += f * weight * Li / scatteringPdf;
@@ -98,11 +88,11 @@ Integrator::estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Li
 }
 
 Spectrum
-Integrator::uniformSampleOneLight(SurfaceEvent & event,
+TraceHelper::uniformSampleOneLight(SurfaceEvent & event,
                                   const Scene & scene,
                                   Sampler & sampler,
                                   const Distribution1D * lightDistrib,
-                                  const Medium * medium) const {
+                                  const Medium * medium) {
 
     //todo multiple lightPdf
     Float lightPdf;
@@ -124,8 +114,8 @@ Integrator::uniformSampleOneLight(SurfaceEvent & event,
                           scene, sampler, medium, false) / lightPdf;
 }
 
-Spectrum Integrator::uniformSampleAllLights(SurfaceEvent & event, const Scene & scene,
-                                            Sampler & sampler, const Medium * medium) const {
+Spectrum TraceHelper::uniformSampleAllLights(SurfaceEvent & event, const Scene & scene,
+                                            Sampler & sampler, const Medium * medium) {
     Spectrum L(0);
     for ( auto & light: scene.lights ) {
         L += estimateDirect(event, sampler.getNext2D(), * light, sampler.getNext2D(),
@@ -160,7 +150,7 @@ SurfaceEvent makeLocalScatterEvent(const Intersection * its) {
     return event;
 }
 
-std::unique_ptr < Distribution1D > Integrator::computeLightPowerDistrib(const Scene & scene) const {
+std::unique_ptr < Distribution1D > TraceHelper::computeLightPowerDistrib(const Scene & scene) {
     int nLights = scene.lights.size();
     Float * power = new Float[nLights];
     for ( int i = 0 ; i < nLights ; i ++ ) {
@@ -170,8 +160,8 @@ std::unique_ptr < Distribution1D > Integrator::computeLightPowerDistrib(const Sc
 }
 
 Spectrum
-Integrator::evalLightDirect(const Scene & scene, const Light & light, Ray & ray,
-                            const Medium * medium, Float * lightPdf) const {
+TraceHelper::evalLightDirect(const Scene & scene, const Light & light, Ray & ray,
+                            const Medium * medium, Float * lightPdf) {
     if ( light.isDeltaLight() )
         return Spectrum(0);
     std::optional < Intersection > lightIts = light.intersect(ray);
@@ -190,7 +180,7 @@ Integrator::evalLightDirect(const Scene & scene, const Light & light, Ray & ray,
     return t;
 }
 
-Spectrum Integrator::evalShadowDirect(const Scene & scene, Ray ray, const Medium * medium) const {
+Spectrum TraceHelper::evalShadowDirect(const Scene & scene, Ray ray, const Medium * medium) {
     if ( ! medium ) {
         return scene.intersectP(ray) ? Spectrum(0) : Spectrum(1);
     }
@@ -210,8 +200,8 @@ Spectrum Integrator::evalShadowDirect(const Scene & scene, Ray ray, const Medium
     return Tr;
 }
 
-Spectrum Integrator::volumeUniformSampleOneLight(VolumeEvent & event, const Medium * medium, const Scene & scene,
-                                                 Sampler & sampler, const Distribution1D * lightDistrib) const {
+Spectrum TraceHelper::volumeUniformSampleOneLight(VolumeEvent & event, const Medium * medium, const Scene & scene,
+                                                 Sampler & sampler, const Distribution1D * lightDistrib) {
     Float lightPdf;
     std::shared_ptr < Light > light;
     int lightNum;
@@ -231,14 +221,14 @@ Spectrum Integrator::volumeUniformSampleOneLight(VolumeEvent & event, const Medi
                                 scene, sampler) / lightPdf;
 }
 
-Spectrum Integrator::volumeUniformSampleAllLights(VolumeEvent & event, const Medium * medium, const Scene & scene,
-                                                  Sampler & sampler) const {
+Spectrum TraceHelper::volumeUniformSampleAllLights(VolumeEvent & event, const Medium * medium, const Scene & scene,
+                                                  Sampler & sampler) {
     return Spectrum();
 }
 
 Spectrum
-Integrator::volumeEstimateDirect(VolumeEvent & event, const Medium * medium, const vec2 & uShading, const Light & light,
-                                 const vec2 & uLight, const Scene & scene, Sampler & sampler) const {
+TraceHelper::volumeEstimateDirect(VolumeEvent & event, const Medium * medium, const vec2 & uShading, const Light & light,
+                                 const vec2 & uLight, const Scene & scene, Sampler & sampler) {
     Spectrum Ld(0), Li;
     vec3 wi;
     Float lightPdf, distance, scatteringPdf;
@@ -270,62 +260,32 @@ Integrator::volumeEstimateDirect(VolumeEvent & event, const Medium * medium, con
     return Ld;
 }
 
-void SamplerIntegrator::render(const Scene & scene)  {
-    auto tileSize = scene.options.tileSize;
-    ivec2 renderBounds = _camera->image->resoulation();
-    int width = _camera->image->width();
-    int height = _camera->image->height();
-    ivec2 numTiles{( renderBounds.x + tileSize - 1 ) / tileSize, ( renderBounds.y + tileSize - 1 ) / tileSize};
+SurfaceEvent TraceHelper::makeLocalScatterEvent(const Intersection *its) {
+    SurfaceEvent event;
+    Frame frame = its->primitive->setTangentFrame(its);
+    if( hasNan(frame.n)){
+        its->primitive->setTangentFrame(its);
+    }
 
-    int num_threads = std::thread::hardware_concurrency();
-    parallel_init(num_threads);
+    bool enableTwoSideShading = true;
 
-    int spp = scene.options.spp;
-    int sppStep = scene.options.sppStep;
-
-    ProgressReporter reporter(numTiles.x * numTiles.y);
-    parallel_for([&](const vec2 & tile) {
-
-        int x0 = tile[0] * tileSize;
-        int x1 = std::min(x0 + tileSize, width);
-        int y0 = tile[1] * tileSize;
-        int y1 = std::min(y0 + tileSize, height);
-
-        std::unique_ptr < Sampler > tileSampler = _sampler->clone();
-        tileSampler->setSeed(tile.y * renderBounds.x + tile.x);
-        for ( int y = y0 ; y < y1 ; y ++ ) {
-            for ( int x = x0 ; x < x1 ; x ++ ) {
-                for ( int s = 0 ; s < spp ; s ++ ) {
-                    {
-                        Ray ray = _camera->sampleRay(x, y, tileSampler->getNext2D());
-                        Spectrum radiance = integrate(ray, scene, * tileSampler);
-                        if(luminace(radiance)>2){
-                            std::cout<<luminace(radiance)<<std::endl;
-                        }
-                        _camera->image->addPixel(x, y, radiance);
-                    }
-                }
-                _camera->image->dividePixel(x, y, spp);
-            }
-        }
-        reporter.update(1);
-    }, numTiles);
-    _camera->image->postProgress();
-    _camera->image->savePNG();
-
-    parallel_cleanup();
+    bool hitBackSide = dot(its->w, its->Ng) > 0;
+    bool isTransmissive = its->bsdf->HasFlag(BSDF_TRANSMISSION);
+    bool flippedFrame = false;
+    //todo add this to config class
+    if ( enableTwoSideShading && hitBackSide && ! isTransmissive ) {
+        frame.n = - frame.n;
+        frame.tangent = - frame.tangent;
+        flippedFrame = true;
+    }
+    event.frame = frame;
+    event.its = its;
+    event.wo = event.toLocal(- its->w);
+    event.flippedFrame = flippedFrame;
+    return event;
 }
 
-void SamplerIntegrator::renderPixel(int x, int y) const {
-
-}
-
-bool russian(int depth, Float pdf,Sampler & sampler, vec3 &throguhPut) {
-
-}
-
-
-bool russian(int depth, Sampler &sampler, vec3 &beta) {
+bool russian(int depth, Sampler &sampler, Spectrum &beta) {
     float pdf = max(beta);
     if(depth<2 || pdf > 0.2)
         return false;
@@ -336,3 +296,4 @@ bool russian(int depth, Sampler &sampler, vec3 &beta) {
     }
     return true;
 }
+

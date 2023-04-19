@@ -21,7 +21,7 @@ gMock:
 -   handles functions of arbitrary types and overloaded functions,
 -   comes with a rich set of matchers for validating function arguments,
 -   uses an intuitive syntax for controlling the behavior of a mock,
--   does automatic verification of expectations (no record-and-replay needed),
+-   does automatic verification of expectations (no _record-and-replay needed),
 -   allows arbitrary (partial) ordering constraints on function calls to be
     expressed,
 -   lets a user extend it by defining new matchers and actions.

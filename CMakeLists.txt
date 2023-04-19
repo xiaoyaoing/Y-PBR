@@ -37,7 +37,6 @@ if(NOT TARGET spdlog)
 endif()
 
 find_package(Embree 3.0 REQUIRED)
-message(${EMBREE_LIBRARIES})
 
 ## complie for Zero
 file(GLOB_RECURSE YPBR_SOURCES ${YPBR_SOURCES_DIR}/*.cpp src/Common/Parallel.cpp lib/lodepng/lodepng.cpp lib/stbi/stb_image.c
@@ -45,7 +44,7 @@ file(GLOB_RECURSE YPBR_SOURCES ${YPBR_SOURCES_DIR}/*.cpp src/Common/Parallel.cpp
 link_libraries(spdlog::spdlog )
 link_libraries(${EMBREE_LIBRARIES})
 
-add_executable(Y_PBR src/main.cpp ${YPBR_SOURCES} src/Integrator/BDPT/PathVertex.cpp src/Integrator/BDPT/PathVertex.h src/Integrator/BDPT/Records.h)
+add_executable(Y_PBR src/main.cpp ${YPBR_SOURCES} src/Integrator/BDPT/PathVertex.cpp src/Integrator/BDPT/PathVertex.h src/Integrator/BDPT/Records.h src/Integrator/BDPT/LightPath.cpp src/Integrator/BDPT/LightPath.h src/Integrator/BDPT/CameraPath.cpp src/Integrator/BDPT/CameraPath.h src/Integrator/BDPT/BdptTracer.cpp src/Integrator/BDPT/BdptTracer.h src/Bsdfs/RoughHair.h src/Bsdfs/RoughHair.cpp src/Integrator/TraceHelper.cpp src/Integrator/TraceHelper.h src/SampleRecords/records.h src/SampleRecords/PositionAndDirectionSample.h src/Camera/ImagePramid.cpp src/Camera/ImagePramid.h)
 target_include_directories(Y_PBR PUBLIC ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/lib)
 
 

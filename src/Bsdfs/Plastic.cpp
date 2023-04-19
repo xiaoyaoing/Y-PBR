@@ -113,10 +113,6 @@ Spectrum RoughPlastic::sampleF(SurfaceEvent & event, const vec2 & u) const {
     return specularContrib + diffuseContrib;
 }
 
-void RoughPlastic::LogInfo( ) const {
-
-}
-
 vec2 RoughPlastic::getAlphaXY(const SurfaceEvent & event) const {
     Float roughnessx = m_uRoughness ? m_uRoughness->eval(event.its) : m_roughness->eval(event.its);
     Float roughnessy = m_vRoughness ? m_vRoughness->eval(event.its) : m_roughness->eval(event.its);
@@ -148,10 +144,6 @@ Float Plastic::Pdf(const SurfaceEvent & event) const {
     else if ( sampleDiffuseR )
         return Warp::squareToCosineHemispherePdf(in);
     return 0;
-}
-
-void Plastic::LogInfo( ) const {
-
 }
 
 Spectrum Plastic::sampleF(SurfaceEvent & event, const vec2 & u) const {

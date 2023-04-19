@@ -1,6 +1,7 @@
 #include "Light.hpp"
 #include "Texture/BitMapTexture.hpp"
 #include "Common/Frame.hpp"
+#include "PositionAndDirectionSample.h"
 
 
 class InfinteSphereCap : public Infinite {
@@ -12,7 +13,7 @@ public:
     Spectrum
     sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf, Float * distance) const override;
 
-    LightSampleResult sampleDirect(const vec2 & positionSample, const vec2 & u2) override;
+    PositionAndDirectionSample sampleDirect(const vec2 & positionSample, const vec2 & u2) const override;
 
     Spectrum Le(const Ray & ray) const override;
 

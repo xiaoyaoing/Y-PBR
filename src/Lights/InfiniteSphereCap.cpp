@@ -1,5 +1,6 @@
 #include "InfiniteSphereCap.h"
 #include "scene.hpp"
+#include "PositionAndDirectionSample.h"
 
 static inline vec3 uniformSphericalCap(const vec2 & xi, float cosThetaMax) {
     float phi = xi.x * Constant::TWO_PI;
@@ -24,7 +25,7 @@ Spectrum InfinteSphereCap::sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi,
     return _emission;
 }
 
-LightSampleResult InfinteSphereCap::sampleDirect(const vec2 & positionSample, const vec2 & u2) {
+PositionAndDirectionSample InfinteSphereCap::sampleDirect(const vec2 & positionSample, const vec2 & u2) const{
     _NOT_IMPLEMENT_ERROR;
 }
 
@@ -36,7 +37,7 @@ Spectrum InfinteSphereCap::Le(const Ray & ray) const {
 }
 
 Float InfinteSphereCap::PdfLi(const Intersection & pShape, const vec3 & ref) const {
-    vec3 rayDir = - pShape.w;
+    vec3 rayDir =  pShape.w;
     if ( dot(rayDir, _capDir) < _cosCapAngle )
         return 0;
     return uniformSphericalCapPdf(_cosCapAngle);
@@ -54,8 +55,8 @@ Spectrum InfinteSphereCap::Power( ) {
 InfinteSphereCap::InfinteSphereCap(const Json & json)  {
 
     _capAngle = Angle::degToRad(getOptional(json, "cap_angle", 5));
-    _cosCapAngle = cos(_capAngle);
-
+    _cosCapAngle = abs(cos(_capAngle));
+    _cosCapAngle = std::min(_cosCapAngle,0.99f);
     mat4 transform = getOptional(json, "transform", getIndentifyTransform());
     _capDir = transformVector(transform, vec3(0, 1, 0));
     _capFrame = Frame(_capDir);

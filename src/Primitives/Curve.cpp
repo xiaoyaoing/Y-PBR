@@ -173,7 +173,7 @@ void Curve::computeBoundingBox( ) {
     BB_ =  Bounds3();
     for (size_t i = 2; i < _nodeData.size(); ++i)
         BB_ = Union(BB_,curveBox(_nodeData[i - 2], _nodeData[i - 1], _nodeData[i]));
-    BB_  = Bounds3(vec3(-1000),vec3(1000));
+   // BB_  = Bounds3(vec3(-1000),vec3(1000));
 }
 
 void Curve::transform(const mat4 & T) {

@@ -3,6 +3,8 @@
 #include "../Colors/Spectrum.hpp"
 #include "../Ray/Intersection.hpp"
 #include "Ray/Ray.hpp"
+#include "PositionAndDirectionSample.h"
+#include "SampleRecords/PositionAndDirectionSample.h"
 
 #include <optional>
 
@@ -38,14 +40,6 @@ private:
 };
 
 
-struct LightSampleResult{
-    vec3 lightN;
-    Float lightPosPdf;
-    Float lightDirPdf;
-    Spectrum radiance;
-    Ray ray;
-};
-
 class Light {
 public:
     Light(int _flags) : flags(_flags){};
@@ -53,8 +47,19 @@ public:
     virtual Spectrum sampleLi(const vec3 & ref, const vec2 &u,
                               vec3 *wi, Float *pdf,
                               Float * distance) const = 0;
+    PositionAndDirectionSample sampleLi(const vec3 & ref, const vec2 &u){
+        PositionAndDirectionSample result;
+        vec3 wi;Float pdf,distance;
+        Spectrum  Li = sampleLi(ref,u,&wi,&pdf,&distance);
+        if(isBlack(Li))
+            return result;
+        result.ray.o = ref + wi * distance;
+        result.ray.d = -wi;
+        result.weight = Li/pdf;
+        return result;
+    }
     ///sample from light
-    virtual  LightSampleResult sampleDirect(const vec2 & positionSample, const vec2 & dirSample) = 0;
+    virtual  PositionAndDirectionSample sampleDirect(const vec2 & positionSample, const vec2 & dirSample) const = 0;
     ///compute environment radiance
     virtual Spectrum Le(const Ray & ray) const  {return Spectrum(0);};
     /// returns total power of the light
@@ -76,7 +81,7 @@ class AreaLight : public  Light{
     sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf, Float * distance) const override;
 
 public:
-    LightSampleResult sampleDirect(const vec2 & positionSample, const vec2 & dirSample) override;
+    PositionAndDirectionSample sampleDirect(const vec2 & positionSample, const vec2 & dirSample) const override;
 
 public:
     virtual  Spectrum directLighting(const Intersection & intr,const vec3 & wo) const ;

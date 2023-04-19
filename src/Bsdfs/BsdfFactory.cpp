@@ -4,7 +4,7 @@
 #include "Dielectric.hpp"
 #include "Plastic.hpp"
 #include "Hair.h"
-
+#include "RoughHair.h"
 #include "Common/Json.hpp"
 #include "Texture/TextureFactory.hpp"
 
@@ -113,6 +113,11 @@ namespace BSDFFactory {
         return std::make_shared <ForwardBSDF>();
     }
 
+    std::shared_ptr < Material > LoadRoughHairMaterial(const Json & j ) {
+      //  RoughHair roughHair();
+        return std::make_shared <RoughHair>();
+    }
+
 
         std::shared_ptr < Material > LoadDefualtMaterial( ) {
         std::shared_ptr < Material > material = std::make_shared < LambertainR >();
@@ -133,7 +138,8 @@ namespace BSDFFactory {
             {"rough_dielectric", LoadRoughDielectricMaterial},
             {"rough_plastic", LoadRoughPlasticMaterial},
             {"hair", LoadHairMaterial},
-            {"forward", LoadForwardMaterial}
+            {"forward", LoadForwardMaterial},
+            {"rough_hair", LoadRoughHairMaterial}
     };
 
 

@@ -1,6 +1,7 @@
 #include "Light.hpp"
 #include "Texture/BitMapTexture.hpp"
 #include "Common/Json.hpp"
+#include "PositionAndDirectionSample.h"
 
 class InfinteSphere : public  Infinite {
 public:
@@ -10,7 +11,7 @@ public:
     InfinteSphere(const Json & json);
     Spectrum
     sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf, Float * distance) const override;
-    LightSampleResult sampleDirect(const vec2 & positionSample, const vec2 & u2) override;
+    PositionAndDirectionSample sampleDirect(const vec2 & positionSample, const vec2 & u2) const override;
     Spectrum Le(const Ray & ray) const override;
 
 

@@ -14,8 +14,6 @@ public:
 
     Spectrum sampleF(SurfaceEvent & event, const vec2 & u) const override;
 
-    void LogInfo( ) const override;
-
 protected:
     vec3 m_eta;
     vec3 m_k;
@@ -33,7 +31,7 @@ public:
     Spectrum f(const SurfaceEvent & event) const override;
     Float Pdf(const SurfaceEvent & event) const override;
     Spectrum sampleF(SurfaceEvent & event, const vec2 & u) const override;
-    void LogInfo( ) const override;
+
 protected:
     vec3 m_eta;
     vec3 m_k;

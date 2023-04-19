@@ -27,7 +27,7 @@ public:
     };
 
 
-    BitMapTexture(const std::string & path) : _path(FileUtils::WorkingDir+path) {
+    BitMapTexture(const std::string & path) : _path(path) {
     }
 
     BitMapTexture(void * texels, int w, int h, TexelType texelType, bool linear, bool clamp) :

@@ -20,7 +20,7 @@ public:
        minBounces = getOptional(json,"min_bounces",0);
        maxBounces = getOptional(json,"max_bounces",8);
    }
-   virtual void render(const Scene & scene) const = 0 ;
+   virtual void render(const Scene & scene)  = 0 ;
 
    virtual void  process(const Scene &scene, Sampler & sampler )  =0;
 
@@ -65,12 +65,13 @@ class SamplerIntegrator : public  Integrator{
 public:
     SamplerIntegrator(std::shared_ptr<Camera> camera,std::shared_ptr<Sampler> sampler,const Json & json):
     _camera(camera),_sampler(sampler), Integrator(json){}
-    void render(const Scene & scene) const override;
+    void render(const Scene & scene)  override;
     virtual vec3  integrate(const Ray& ray, const Scene& scene, Sampler& sampler) const = 0 ;
-
+    virtual void renderPixel(int x,int y) const ;
 public:
     std::shared_ptr<Camera> _camera;
     std::shared_ptr<Sampler> _sampler;
+    int tileISze = 16;
 };
 
 SurfaceEvent makeLocalScatterEvent(const Intersection * its);

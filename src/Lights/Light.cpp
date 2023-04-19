@@ -5,6 +5,8 @@
 
 #include "Common/Texture.hpp"
 #include "Sampler/Warp.hpp"
+#include "SampleRecords/PositionAndDirectionSample.h"
+
 Spectrum
 AreaLight::sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf, Float * distance) const {
     Intersection pShape = primitive->sample(ref, u, pdf);
@@ -38,34 +40,35 @@ Float AreaLight::PdfLi(const Intersection & pShape, const vec3 & ref) const {
     return primitive->directPdf(pShape,ref);
 }
 
-LightSampleResult AreaLight::sampleDirect(const vec2 & positionSample, const vec2 & dirSample) {
-    LightSampleResult result;
-    Intersection pshape = primitive->sample(positionSample, & result.lightPosPdf);
+PositionAndDirectionSample AreaLight::sampleDirect(const vec2 & positionSample, const vec2 & dirSample) const {
+    PositionAndDirectionSample result;
+    Intersection pshape = primitive->sample(positionSample, & result.posPdf);
     vec3 w;
     if(twoSide){
         vec2 u = dirSample;
         if(u[0]<0.5){
             u[0] *=2;
             w = Warp::squareToUniformHemisphere(u);
-            result.lightDirPdf = Warp::squareToCosineHemispherePdf(w);
+            result.dirPdf = Warp::squareToCosineHemispherePdf(w);
         }
         else {
             u[0] = u[0] *2-1;
             w = Warp::squareToUniformHemisphere(u);
-            result.lightDirPdf = Warp::squareToCosineHemispherePdf(w);
+            result.dirPdf = Warp::squareToCosineHemispherePdf(w);
             w=-w;
         }
     }
     else {
         w = Warp::squareToUniformHemisphere(dirSample);
-        result.lightDirPdf = Warp::squareToCosineHemispherePdf(w);
+        result.dirPdf = Warp::squareToCosineHemispherePdf(w);
     }
-    result.lightN = pshape.Ng;
-    result.radiance = directLighting(pshape,result.lightN);
+    result.n = pshape.Ng;
 
     vec3 s,t;
-    coordinateSystem(result.lightN,s,t);
-    result.ray = Ray(pshape.p,w.x * s+w.y * t+w.z*result.lightN);
+    coordinateSystem(result.n, s, t);
+    result.ray = Ray(pshape.p,w.x * s+w.y * t+w.z*result.n);
+    result.weight = directLighting(pshape, result.n) * absDot(result.ray.d,result.n) /(result.dirPdf * result.posPdf);
+
     return result;
 }
 

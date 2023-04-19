@@ -38,19 +38,6 @@ Spectrum Dielectric::sampleF(SurfaceEvent & event, const vec2 & u) const {
     return f;
 }
 
-void Dielectric::LogInfo( ) const {
-    spdlog::info("{DielectricBXDF ior:{0} albedo:{1} enableT{2}:", ior, toColorStr(m_albedo->eval()), enableT);
-}
-
-
-
-
-
-
-
-
-
-
 
 Spectrum RoughDielectric::f(const SurfaceEvent & event) const {
     const Spectrum albedo = m_albedo->eval(event.its->uv);
@@ -140,10 +127,6 @@ Spectrum RoughDielectric::sampleF(SurfaceEvent & event, const vec2 & u) const {
     }
     event.pdf= Pdf(event);
     return  f(event);
-}
-
-void RoughDielectric::LogInfo( ) const {
-
 }
 
 RoughDielectric::RoughDielectric(Float ior,  std::shared_ptr<MicrofacetDistribution> distrib,

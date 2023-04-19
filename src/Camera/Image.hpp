@@ -5,10 +5,10 @@
 #include "ToneMap.hpp"
 #include "spdlog/spdlog.h"
 
-inline vec3 gammaCompress(const vec3 & in) {
+inline vec3 gammaCompress(const vec3 &in) {
 
     vec3 out;
-    for ( uint8_t c = 0 ; c < 3 ; c ++ ) {
+    for (uint8_t c = 0; c < 3; c++) {
         out[c] = in[c] <= 0.0031308 ? 12.92 * in[c] : 1.055 * std::pow(in[c], 1.0 / 2.4) - 0.055;
     }
 
@@ -17,64 +17,87 @@ inline vec3 gammaCompress(const vec3 & in) {
 }
 
 class Image {
+    typedef std::atomic<Float> vec3a[3];
 
     struct Pixel {
-        vec3 rgb = vec3(0);
-    };
+        Pixel() {
+            Pixel(Spectrum());
+        }
 
-    /**************************************************************************
-    Hard coded (except for dimensions) uncompressed 24bpp true-color TGA header.
-    After writing this to file, the RGB bytes can be dumped in sequence
-    (left to right, top to bottom) to create a TGA image.
-    ***************************************************************************/
-    struct HeaderTGA {
-        HeaderTGA(uint16_t width, uint16_t height)
-                : width(width), height(height) {}
 
-    private:
-        uint8_t begin[12] = {0, 0, 2};
-        uint16_t width;
-        uint16_t height;
-        uint8_t end[2] = {24, 32};
+        Pixel(vec3 s) {
+            rgb[0] = s.x;
+            rgb[1] = s.y;
+            rgb[2] = s.z;
+        }
+
+        vec3 add(vec3 value) {
+            atomicAdd(rgb[0], value.x);
+            atomicAdd(rgb[1], value.y);
+            atomicAdd(rgb[2], value.z);
+
+        }
+
+        vec3 value() const {
+            return vec3(rgb[0].load(), rgb[1].load(), rgb[2].load());
+        }
+        void operator=(vec3 s) {
+            rgb[0] = s.x;
+            rgb[1] = s.y;
+            rgb[2] = s.z;
+        }
+
+    protected:
+        vec3a rgb;
+
     };
 
     vec3 getPixel(int x, int y) const;
-
     uint32 getIndex(uint32 x, uint32 y) const;
 
-    std::vector < Pixel > pixels;
+    std::vector<Pixel> buffers;
+    std::vector<uint32_t> sampleCounts;
     ToneMap::ToneMapType _tonemapType;
-    Float exposure_scale;
-    Float gain_scale;
-    
-    std::string  fileName;
+
     uint32 _width;
     uint32 _height;
 public:
-    Image(const ivec2 & res,const std::string & fileName,ToneMap::ToneMapType toneMapType = ToneMap::Filmic )
-          : _width(res.x), _height(res.y), fileName(fileName), _tonemapType(toneMapType){
-        pixels.resize(_width * _height, Pixel());
+    Image(const ivec2 &res, ToneMap::ToneMapType toneMapType = ToneMap::Filmic)
+            : _width(res.x), _height(res.y), _tonemapType(toneMapType), buffers(res.x * res.y) {
+    }
+
+    Image(const Image &another) {
+        _width = another._width;
+        _height = another._height;
+        _tonemapType = another._tonemapType;
+        buffers = std::vector<Pixel>(_width * _height);
+    }
+
+    static void atomicAdd(std::atomic<float> &dst, float add) {
+        float current = dst.load();
+        float desired = current + add;
+        while (!dst.compare_exchange_weak(current, desired))
+            desired = current + add;
     }
 
     void addPixel(uint32 x, uint32 y, vec3 rgb);
-    void dividePixel(uint32 x, uint32 y, uint32);
 
+    void saveTXT(const std::string &fileName) const;
 
-    void savePPM() const;
-    void saveTGA() const;
-    void savePNG() const;
-    void saveBMP() const;
-    void saveTXT() const;
+    void save(const std::string &fileName) const;
 
+    void postProgress();
 
-    void postProgress( );
-    void fill(const Spectrum & spectrum){
-        std::fill(pixels.begin(),pixels.end(),Pixel{spectrum});
+    inline void fill(const Spectrum &spectrum) {
+        for(auto & pixel:buffers)
+            pixel  = vec3();
     }
-//    Float getExposure( ) const;
-//    Float getGain(Float exposure_factor) const;
 
-    ivec2 resoulation(){ return ivec2(_width, _height);}
-    int width(){return _width;}
-    int height(){return _height;}
+    ivec2 resoulation() const { return ivec2(_width, _height); }
+
+    int width() const{ return _width; }
+    int height() const { return _height;}
+    inline int product() const {return width() * height();}
+
+    vec3 getPixel(int idx) const;
 };

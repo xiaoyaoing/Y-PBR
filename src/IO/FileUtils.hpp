@@ -34,10 +34,12 @@ public:
         in.read(reinterpret_cast<char *>(dst), n*sizeof(T));
     }
 
+    static std::string getFileFullPath(const std::string & path);
+    static std::string getFilePath(const std::string & path,const std::string & suffix,bool overwrite = false);
+    static std::string getFilePath(const std::string & path,bool overwrite = false);
 
-    static std::string getFilePath(const std::string & path,const std::string & suffix,bool overwrite);
-    static std::string getFileExtension(const std::string & path);
-
+    static std::string getFileSuffix(const std::string & path);
+    static std::string getFilePrefix(const std::string & path);
     static size_t getFileSize(const std::string & path);
 };
 

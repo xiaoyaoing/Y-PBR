@@ -101,8 +101,6 @@ public:
 
     Float Pdf(const SurfaceEvent & event) const override;
 
-    void LogInfo( ) const override;
-
     Float eta(const SurfaceEvent & event) const override;
 
 protected:

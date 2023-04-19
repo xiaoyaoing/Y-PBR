@@ -1,6 +1,8 @@
 #include "Light.hpp"
 #include "Common/Json.hpp"
 #include "Texture/BitMapTexture.hpp"
+#include "PositionAndDirectionSample.h"
+
 class SkyDome : public  Infinite{
 public:
     SkyDome(const Json & json);
@@ -8,7 +10,7 @@ public:
     Spectrum
     sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf, Float * distance) const override;
 
-    LightSampleResult sampleDirect(const vec2 & positionSample, const vec2 & dirSample) override;
+    PositionAndDirectionSample sampleDirect(const vec2 & positionSample, const vec2 & dirSample) override;
 
 
     Spectrum Le(const Ray & ray) const override;

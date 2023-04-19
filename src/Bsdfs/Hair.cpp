@@ -239,10 +239,6 @@ Spectrum Hair::sampleF(SurfaceEvent & event, const vec2 & u) const {
     return f(event);
 }
 
-void Hair::LogInfo( ) const {
-
-}
-
 
 Float Hair::D(Float beta, Float phi) const {
     Float result = 0.0f;

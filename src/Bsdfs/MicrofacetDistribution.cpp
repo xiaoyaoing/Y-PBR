@@ -130,12 +130,13 @@ Float GGX::Lambda(const vec3 & w, const vec2 & alphaXY) const {
 
 vec3 GGX::Sample_wh(const vec3 & wo, const vec2 & u, const vec2 & alphaXY) const {
     Float alphaX = alphaXY.x,alphaY =alphaXY.y;
+    if (wo.z < 0) {
+        // Ensure the input is on top of the surface.
+        return Sample_wh(-wo, u,alphaXY);
+    }
     if(sampleVisibleArea){
         //see https://jcgt.org/published/0007/04/01/slides.pdf
-        if (wo.z < 0) {
-            // Ensure the input is on top of the surface.
-            return Sample_wh(-wo, u,alphaXY);
-        }
+
         // Transform the incoming direction to the "hemisphere configuration".
         vec3 hemisphereDirOut= normalize(vec3(alphaX * wo.x, alphaY * wo.y, wo.z));
         // Parameterization of the projected area of a hemisphere.

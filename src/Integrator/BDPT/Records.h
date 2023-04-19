@@ -11,18 +11,23 @@
 #pragma  once
 
 #include "Common/math.hpp"
+#include "Camera/Camera.hpp"
+#include "Ray/Intersection.hpp"
+#include "Lights/Light.hpp"
+#include "SampleRecords/PositionAndDirectionSample.h"
 
 struct LightRecord{
-    Float pdf;
-    vec3 normal;
+    PositionAndDirectionSample sample;
+    float lightPdf;
 };
 
 struct CameraRecord{
-    vec2 pos;
+    ivec2 pixel;
+    PositionAndDirectionSample sample;
 };
 
 struct SurfaceRecord{
-
+    SurfaceEvent event;
 };
 
 struct MediumRecord{

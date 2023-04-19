@@ -1,5 +1,7 @@
 #include "Distant.hpp"
 #include "scene.hpp"
+#include "PositionAndDirectionSample.h"
+
 Float DistantLight::PdfLi(const Intersection & pShape, const vec3 & ref) const {
     return 0;
 }
@@ -12,7 +14,7 @@ DistantLight::sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf,
     return L;
 }
 
-LightSampleResult DistantLight::sampleDirect(const vec2 & positionSample, const vec2 & dirSample) {
+PositionAndDirectionSample DistantLight::sampleDirect(const vec2 & positionSample, const vec2 & dirSample) {
     _NOT_IMPLEMENT_ERROR;
 }
 

@@ -7,7 +7,7 @@
 
 #include <optional>
 #include <spdlog/spdlog.h>
-
+#include "iostream"
 //2022/7/15
 Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &sampler) const {
     std::optional<Intersection> its;
@@ -62,9 +62,15 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
             BXDFType flags = surfaceEvent.sampleType;
             specularBounce = (flags & BSDF_SPECULAR) != 0;
             beta *= f / surfaceEvent.pdf;
+            if(luminace(beta)>10){
+                int k = 1;
+            }
+           // return (surfaceEvent.wo+1.f)/2.f;
             _ray = surfaceEvent.sctterRay();
 
-            if (its->bssrdf && (flags & BSDF_TRANSMISSION)) {
+          //  return beta;
+
+            if (its->bssrdf && (flags & BSDF_TRANSMISSION) ) {
                 Intersection pi;
                 Float pdf = 0;
                 Spectrum s = its->bssrdf->sampleS(scene, sampler.getNext1D(), sampler.getNext2D(), surfaceEvent, &pi,
@@ -85,7 +91,6 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
                 break;
         }
     }
-    //return beta;
     return L;
 }
 

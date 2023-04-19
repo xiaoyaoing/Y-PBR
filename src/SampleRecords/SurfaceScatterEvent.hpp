@@ -45,6 +45,12 @@ public:
         event.wo = wi;
         return event;
     }
+    SurfaceEvent makeWarpQuery(const vec3 &newWi, const vec3 &newWo){
+        SurfaceEvent event(*this);
+        event.wo = newWo;
+        event.wi = newWi;
+        return event;
+    }
 };
 
 struct VolumeEvent {

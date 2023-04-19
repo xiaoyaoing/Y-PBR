@@ -13,7 +13,6 @@ public:
 
     Spectrum sampleF(SurfaceEvent & event, const vec2 & u) const override;
 
-    void LogInfo( ) const override;
     Hair(const Json & json);
 protected:
     Float M(Float v,Float sinThetaO,Float sinThetaI,Float cosThetaO,Float cosThetaI) const ;

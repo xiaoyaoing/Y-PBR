@@ -4,7 +4,6 @@ class Plastic : public  BSDF{
 public:
     Float Pdf(const SurfaceEvent & event) const override;
 
-    void LogInfo( ) const override;
     Plastic(const std::shared_ptr < Texture < Spectrum>> & diffuseReflectance,
             const std::shared_ptr < Texture < Spectrum>> & specularReflectance, Float mIor):
             BSDF(BXDFType(BSDF_SPECULAR | BSDF_REFLECTION | BSDF_DIFFUSE)),
@@ -40,8 +39,6 @@ public:
     Float Pdf(const SurfaceEvent & event) const override;
 
     Spectrum sampleF(SurfaceEvent & event, const vec2 & u) const override;
-
-    void LogInfo( ) const override;
 
     vec2 getAlphaXY(const SurfaceEvent & event) const;
 

@@ -16,12 +16,6 @@ Spectrum LambertainR::f(const SurfaceEvent & event) const {
 }
 
 
-void LambertainR::LogInfo( ) const {
-    Spectrum albedo = m_albedo->eval();
-    spdlog::info("{0} albedo {1} {2} {3}", "LambertainReflection", albedo.x, albedo.y, albedo.z);
-}
-
-
 Spectrum LambertainR::sampleF(SurfaceEvent & event, const vec2 & u) const {
 
     event.wi = Warp::squareToCosineHemisphere(u);
@@ -34,10 +28,6 @@ Spectrum LambertainR::sampleF(SurfaceEvent & event, const vec2 & u) const {
 
 Spectrum LambertainT::f(const SurfaceEvent & event) const {
     return m_albedo->eval(event.its) * Constant::INV_PI;
-}
-
-void LambertainT::LogInfo( ) const {
-
 }
 
 
@@ -62,11 +52,6 @@ Spectrum SpecularR::f(const SurfaceEvent & event) const {
 
 Float SpecularR::Pdf(const SurfaceEvent & event) const {
     return 0;
-}
-
-
-void SpecularR::LogInfo( ) const {
-    spdlog::info("Specular Reflection");
 }
 
 

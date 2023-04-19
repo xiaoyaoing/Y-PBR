@@ -135,7 +135,7 @@ namespace CurveIO {
 
 
     bool CurveIO::load(const std::string & path, CurveData & data) {
-        auto ext = FileUtils::getFileExtension(path);
+        auto ext = FileUtils::getFileSuffix(path);
         if(ext == "fiber")
             return loadFiber(path,data);
     }
