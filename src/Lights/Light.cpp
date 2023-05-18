@@ -67,7 +67,8 @@ PositionAndDirectionSample AreaLight::sampleDirect(const vec2 & positionSample, 
     vec3 s,t;
     coordinateSystem(result.n, s, t);
     result.ray = Ray(pshape.p,w.x * s+w.y * t+w.z*result.n);
-    result.weight = directLighting(pshape, result.n) * absDot(result.ray.d,result.n) /(result.dirPdf * result.posPdf);
+    result.weight = directLighting(pshape, result.n);
+   // result.weight = directLighting(pshape, result.n) * absDot(result.ray.d,result.n) /(result.dirPdf * result.posPdf);
 
     return result;
 }

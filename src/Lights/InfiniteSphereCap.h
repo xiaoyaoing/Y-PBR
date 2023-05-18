@@ -1,7 +1,7 @@
 #include "Light.hpp"
 #include "Texture/BitMapTexture.hpp"
 #include "Common/Frame.hpp"
-#include "PositionAndDirectionSample.h"
+#include "SampleRecords/PositionAndDirectionSample.h"
 
 
 class InfinteSphereCap : public Infinite {

@@ -3,12 +3,12 @@
 #include "Colors/Spectrum.hpp"
 struct PositionAndDirectionSample{
     vec3 n;
-    Float posPdf;
-    Float dirPdf;
-    Spectrum weight;
+    Float posPdf = 0;
+    Float dirPdf = 0;
+    Spectrum weight = Spectrum(0);
     Ray ray;
     Spectrum computeWeight(){
-        return radiance * absDot(ray.d,n) / (posPdf * dirPdf);
+        return weight * absDot(n,ray.d) /(dirPdf * posPdf);
     }
 };
 

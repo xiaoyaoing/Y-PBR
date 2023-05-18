@@ -4,7 +4,7 @@
 #include "Common/Debug.hpp"
 #include "SampleRecords/SurfaceScatterEvent.hpp"
 #include "Bsdfs/BSSRDF.hpp"
-
+#include "TraceHelper.h"
 #include <optional>
 #include <spdlog/spdlog.h>
 #include "iostream"
@@ -24,6 +24,8 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
     for (bounces = 0;; ++bounces) {
 
         its = scene.intersect(_ray);
+//        if(its)
+//            return (its->Ng+1.f)/2.f;
         if (specularBounce) {
             if (its.has_value())
                 L += beta * its->Le(-_ray.d);
@@ -33,6 +35,9 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
                         L += beta * light->Le(_ray);
                     }
                 }
+            if(hasNan(L)){
+                int k = 1;
+            }
         }
         //  break;
 
@@ -53,6 +58,9 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
                 if (DebugConfig::OnlyDirectLighting)
                     return Ld;
                 L += beta * Ld;
+                if(hasNan(L)){
+                    int k = 1;
+                }
 
             }
             surfaceEvent.requestType = BSDF_ALL;
@@ -62,7 +70,7 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
             BXDFType flags = surfaceEvent.sampleType;
             specularBounce = (flags & BSDF_SPECULAR) != 0;
             beta *= f / surfaceEvent.pdf;
-            if(luminace(beta)>10){
+            if(hasNan(beta)){
                 int k = 1;
             }
            // return (surfaceEvent.wo+1.f)/2.f;
@@ -90,6 +98,9 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
             if(russian(bounces,sampler,beta))
                 break;
         }
+    }
+    if(hasNan(L)){
+        int k = 1;
     }
     return L;
 }

@@ -13,9 +13,7 @@ bool PathVertex::canConnect() const {
         case VertexType::Camera:
             return true;
         case VertexType::Surface:
-            return _sampler.bsdf->MatchesFlags(BXDFType(BSDF_DIFFUSE | BSDF_GLOSSY |
-                                                        BSDF_REFLECTION |
-                                                        BSDF_TRANSMISSION)) > 0;
+            return !_sampler.bsdf->Pure(BSDF_PURE_SPECULR);
     }
     //   LOG(FATAL) << "Unhandled vertex type in IsConnectable()";
     return false;  // NOTREACHED
@@ -40,10 +38,10 @@ vec3 PathVertex::pos() const {
 Spectrum PathVertex::eval(const PathVertex &vertex, bool adjoint) const {
     vec3 d = normalize(vertex.pos() - pos());
     switch (type) {
-        case VertexType::Surface:
-            const auto & event = _record.surfaceRecord.event;
-            return _sampler.bsdf->f(event.makeWarpQuery(event.toLocal(d),event.wi),adjoint);
-        case VertexType::Medium:
+        case VertexType::Surface: {
+            const auto &event = _record.surfaceRecord.event;
+            return _sampler.bsdf->f(event.makeWarpQuery( event.wi,event.toLocal(d)), false);
+        }
         default:
             return Spectrum();
     }
@@ -57,16 +55,17 @@ bool PathVertex::sampleNext(const Scene &scene, bool adjoint, PathState &state, 
     switch (type) {
         case VertexType::Light: {
             auto &record = _record.lightRecord;
-            pdf = record.sample.dirPdf;
-//            weight = record.sample.radiance;
-//            pdf = record.sample.dirPdf * record.sample.posPdf;
+          //  pdf = record.sample.dirPdf;
+//           weight = record.sample.radiance;
             ray = record.sample.ray;
+            pdf = record.sample.dirPdf ;
+            weight = Spectrum (dot(record.sample.n,ray.d) /(record.sample.dirPdf)) ;
             break;
         }
         case VertexType::Camera: {
             auto &record = _record.cameraRecord;
 //            weight = record.sample.radiance;
-            pdf =  record.sample.dirPdf;
+            pdf = record.sample.dirPdf;
             ray = record.sample.ray;
             break;
         }
@@ -78,7 +77,14 @@ bool PathVertex::sampleNext(const Scene &scene, bool adjoint, PathState &state, 
             SurfaceEvent &event = record.event;
             auto &bsdf = event.its->bsdf;
             weight = bsdf->sampleF(event, state.sampler.getNext2D(), adjoint);
-            if (russian(state.bounce, state.sampler, weight))
+            if(isBlack(weight) || event.pdf == 0){
+                return false;
+            }
+            weight/=event.pdf;
+            if(isinf(weight[0])){
+                int k = 1;
+            }
+            if (russian(state.bounce, state.sampler,  weight * beta))
                 return false;
             pdf = event.pdf;
             ray = event.sctterRay();
@@ -90,8 +96,14 @@ bool PathVertex::sampleNext(const Scene &scene, bool adjoint, PathState &state, 
     if (!its) {
         return false;
     }
-    auto event = TraceHelper::makeLocalScatterEvent(&its.value());
-    next = PathVertex(event, beta * weight);
+    SurfaceRecord record;
+    record.its = its.value();
+    auto event = makeLocalScatterEvent(&record.its);
+    record.event = event;
+    if(hasNan(weight) || isinf(weight[0])){
+        int k = 1;
+    }
+    next = PathVertex(record, beta * weight);
     next.pdfFwd = pdf;
     state.bounce++;
     return true;
@@ -115,10 +127,13 @@ bool PathVertex::sampleRootVertex(PathState &state) {
             auto &record = _record.lightRecord;
             record.sample = light->sampleDirect(state.sampler.getNext2D(), state.sampler.getNext2D());
             if (isInfiniteLight()) {
-                    //todo
+                //todo
             } else {
-                beta = record.sample.computeWeight() / record.lightPdf;
-                pdfFwd = record.sample.posPdf * record.sample.lightPdf;
+                beta = record.sample.weight/ record.lightPdf / record.sample.posPdf;
+                if(beta[0]==0){
+                    int k = 1;
+                }
+                pdfFwd = record.sample.posPdf * record.lightPdf;
             }
             return true;
         }

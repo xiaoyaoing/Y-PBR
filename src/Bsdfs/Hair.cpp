@@ -74,11 +74,33 @@ static std::array < Spectrum, pMax + 1 > Ap(Float cosThetaO, Float eta, Float h,
     return ap;
 }
 
+static float logI0(float x)
+{
+    if (x > 12.0f)
+        // More stable evaluation of log(I0(x))
+        // See also https://publons.com/discussion/12/
+        return x + 0.5f*(std::log(1.0f/(Constant::TWO_PI*x)) + 1.0f/(8.0f*x));
+    else
+        return std::log(I0(x));
+}
+
 Float Hair::M(Float v, Float sinThetaO, Float sinThetaI, Float cosThetaO, Float cosThetaI) const {
-    Float a = sinThetaO * sinThetaI / v;
-    Float b = cosThetaI * cosThetaO / v;
+//    Float a = sinThetaO * sinThetaI / v;
+//    Float b = cosThetaI * cosThetaO / v;
+    float a = cosThetaI*cosThetaO/v;
+    float b = sinThetaI*sinThetaO/v;
     Float csch = 2 / ( exp(1 / v) - exp(- 1 / v) );
-    return csch * exp(b) * I0(- a);
+    auto val =  csch * exp(b) * I0(- a);
+
+    if (v < 0.1f)
+        // More numerically stable evaluation for small roughnesses
+        // See https://publons.com/discussion/12/
+        val =  std::exp(-b + logI0(a) - 1.0f/v + 0.6931f + std::log(1.0f/(2.0f*v)));
+    else
+       val =  std::exp(-b)*I0(a)/(2.0f*v*std::sinh(1.0f/v));
+    if(isnan(val) || isinf(val))
+        int k =1;
+    return val;
 }
 
 
@@ -147,7 +169,9 @@ Spectrum Hair::f(const SurfaceEvent & event) const {
     vec3 fsum = MR * Nr + MTT * Ntt + MTRT * Ntrt;
     vec3 res =  fsum ;
   //  if( AbsCosTheta(event.wi)>0) res/= AbsCosTheta(event.wi);
-
+    if(hasNan(res)){
+        int k = 1;
+    }
     return res;
 }
 
@@ -180,8 +204,8 @@ Float Hair::Pdf(const SurfaceEvent & event) const {
     pdf += M(_vR, sin(thetaOR), sinThetaI, cos(thetaOR), cosThetaI) * apPdf[0] * TrimmedLogistic(phi- Phi(gammaI,gammaT,0),_betaR,-Constant::PI,Constant::PI);
     pdf += M(_vTT, sin(thetaOTT), sinThetaI, cos(thetaOTT), cosThetaI) * apPdf[1] * TrimmedLogistic(phi- Phi(gammaI,gammaT,1),_betaTT,-Constant::PI,Constant::PI);
     pdf += M(_vTRT, sin(thetaOTRT), sinThetaI, cos(thetaOTRT), cosThetaI) * apPdf[2] *TrimmedLogistic(phi- Phi(gammaI,gammaT,2),_betaTRT,-Constant::PI,Constant::PI);
-    if( isnan(pdf)){
-
+    if( isnan(pdf) || isinf(pdf)){
+        int k =1;
     }
     return pdf;
 }

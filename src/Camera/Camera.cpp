@@ -3,11 +3,12 @@
 #include "Camera.hpp"
 #include "../Common/Json.hpp"
 
+
 Camera::Camera(const Json &c) {
 
     _fovDeg = getOptional(c, "fov", 45);
     _res = getOptional(c, "resolution", ivec2(512, 512));
-    image = std::make_unique<Image>(_res, getOptional(c, "output", std::string("image")));
+    image = std::make_unique<Image>(_res);
     if (c.contains("transform")) {
         const auto &transformJson = c["transform"];
         _cameraToWorld = c["transform"];
@@ -31,17 +32,18 @@ void Camera::preCompute() {
     _ratio = Float(_res.y) / Float(_res.x);
     _pixelSize = vec2(1.0 / _res.x, 1.0 / _res.y);
 
-    _rasterToCamera = getTransFormMatrix(vec3(-1, _ratio, _planeDist), vec3(2.f / _res.x, -2.f / _res.x, 0), vec3());
+    _rasterToCamera = getTransFormMatrix(vec3(-1, _ratio, _planeDist), vec3(2.f / _res.x, -2.f / _res.x, 1), vec3());
     _cameraToRaster = glm::inverse(_rasterToCamera);
+
+    vec3 pMin = transformPoint(_rasterToCamera,vec3(0,0,0));
+    vec3 pMax = transformPoint(_rasterToCamera,vec3(_res.x,_res.y,0));
+    pMin /= pMin.z;
+    pMax /= pMax.z;
+    A = std::abs((pMax.x - pMin.x) * (pMax.y - pMin.y));
 }
 
 Ray Camera::sampleRay(size_t x, size_t y, vec2 sample) const {
     auto localD = normalize(transformPoint(_rasterToCamera, vec3(x + sample.x, y + sample.y, 0)));
-//    vec3 localD = normalize(vec3(
-//            - 1.0 + ( x + 0.5f + sample.x ) * 2.0f * _pixelSize.x,
-//            _ratio - ( y + 0.5f + sample.y ) * 2.0f * _pixelSize.x,
-//            _planeDist
-//    ));
     vec3 d = transformVector(_cameraToWorld, localD);
     d = normalize(d);
     return Ray(_pos, d);
@@ -223,8 +225,8 @@ Spectrum Camera::rayWeight(const Ray &ray, ivec2 *pRaster) const {
         return Spectrum(0);
     }
     auto p = ray(_planeDist / cosTheta);
-    auto pRaster3d = transformVector(_cameraToRaster, transformPoint(_toLocal, p));
-    if (pRaster3d.x < _res.x && pRaster3d.y < _res.y) {
+    auto pRaster3d = transformPoint(_cameraToRaster, transformPoint(_toLocal, p));
+    if (pRaster3d.x < _res.x && pRaster3d.y < _res.y && pRaster3d.x >=0 && pRaster3d.y>=0) {
         if (pRaster)
             *pRaster = ivec2(pRaster3d.x, pRaster3d.y);
         return Spectrum(1.f / (A * cos2Theta * cos2Theta));
@@ -246,7 +248,7 @@ PositionAndDirectionSample Camera::sampleRay(ivec2 point, vec2 /*posSample*/, ve
     PositionAndDirectionSample result;
     auto localD = normalize(transformPoint(_rasterToCamera, vec3(point.x + dirSample.x, point.y + dirSample.y, 0)));
     result.posPdf = 1;
-    result.dirPdf = _invPlaneArea / (localD.z * localD.z * localD.z);
+    result.dirPdf =1.f / A * (localD.z * localD.z * localD.z);
     result.weight = Spectrum(1);
     result.n = transformVector(_cameraToWorld, vec3(0, 0, 1));
     auto worldD = transformVector(_cameraToWorld,localD);
@@ -254,17 +256,16 @@ PositionAndDirectionSample Camera::sampleRay(ivec2 point, vec2 /*posSample*/, ve
     return result;
 }
 
-PositionAndDirectionSample Camera::sampleLi(vec3 p, ivec2 *pRaster, vec2 sample) const {
-    PositionAndDirectionSample result;
+bool Camera::sampleLi(vec3 p, ivec2 *pRaster, vec2 sample, PositionAndDirectionSample &result) const {
     auto cameraP = transformPoint(_cameraToWorld, vec3(0, 0, 0));
     result.ray = Ray(cameraP, direction(cameraP, p));
     result.weight = rayWeight(result.ray, pRaster);
-    if (!isBlack(result.weight))
-        result.dirPdf = distance2(p, cameraP) / dot(result.ray.d, transformVector(_cameraToWorld, vec3(0, 0, 1)));
+    if (isBlack(result.weight))
+        return false;
+    result.dirPdf = distance2(p, cameraP) / absDot(result.ray.d, transformVector(_cameraToWorld, vec3(0, 0, 1)));
     result.n= transformVector(_cameraToWorld, vec3(0, 0, 1));
     result.posPdf = 1;
-    result.weight/=(result.dirPdf * result.posPdf);
-    return result;
+    return true;
     }
 
 

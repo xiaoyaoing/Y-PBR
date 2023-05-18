@@ -24,6 +24,7 @@ class Primitive {
 public:
     Primitive(const Json & json) {
         toWorld = getOptional(json, "transform", getIndentifyTransform());
+        _name = getOptional(json,"name",std::string(""));
     }
 
     Primitive( ) {}
@@ -61,26 +62,30 @@ public:
         return Frame(its->Ns);
     }
 
-    const Medium * selectMedium(const Medium * currentMedium, bool geomBack) const  {
+    inline const Medium * selectMedium(const Medium * currentMedium, bool geomBack) const  {
         if(inMedium || outMedium)
             return geomBack?inMedium.get():outMedium.get();
         return currentMedium;
     }
 
-    const mat4 & getTransform( ) {
+    inline  const mat4 & getTransform( ) {
         return toWorld;
     }
 
-    Bounds3 BB( ) const {
+    inline Bounds3 BB( ) const {
         return BB_;
     }
 
-    Float Area( ) const {
+    inline Float Area( ) const {
         return area;
     }
 
-    Float InvArea( ) const {
+    inline Float InvArea( ) const {
         return inv_area;
+    }
+
+    inline std::string  name() const{
+        return _name;
     }
 
     virtual  void load(const Json & json, const Scene & scene );
@@ -103,7 +108,7 @@ protected:
     Bounds3 BB_;
     RTCGeometry _geom;
     mat4 toWorld;
-
+    std::string _name;
     std::shared_ptr <Medium > outMedium;
     std::shared_ptr <Medium > inMedium;
     //mat4  toWorld;

@@ -10,9 +10,12 @@
 #include <iostream>
 #include "Texture/BitMapTexture.hpp"
 #include "Mediums/Medium.hpp"
+bool TraceHelper::sampleBSDF  = true;
 bool TraceHelper::sampleLight = true;
-bool TraceHelper::sampleBSDF = true;
-Spectrum TraceHelper::estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Light & light, const vec2 & uLight,
+
+bool sampleLight = TraceHelper::sampleLight;
+bool sampleBSDF = TraceHelper::sampleBSDF;
+Spectrum estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Light & light, const vec2 & uLight,
                            const Scene & scene, Sampler & sampler, const Medium * medium, bool specular) {
     const BSDF * bsdf = event.its->bsdf;
 
@@ -36,6 +39,7 @@ Spectrum TraceHelper::estimateDirect(SurfaceEvent & event, const vec2 & uShading
         Ray ray(event.its->p, wi, Constant::EPSILON, distance - Constant::EPSILON);
         Li *= evalShadowDirect(scene, ray, medium);
         if ( ! isBlack(Li) && lightPdf != 0 ) {
+            auto its = scene.intersect(ray);
             event.wi = event.toLocal(wi);
             scatteringPdf = bsdf->Pdf(event);
             Spectrum f = bsdf->f(event, false);
@@ -46,10 +50,6 @@ Spectrum TraceHelper::estimateDirect(SurfaceEvent & event, const vec2 & uShading
                             PowerHeuristic(lightPdf, scatteringPdf);
                     if ( ! sampleBSDF ) weight = 1;
                     Ld += f * weight * Li / lightPdf;
-                    if ( hasNan(Ld) ) {
-                        bsdf->f(event, false);
-                        int k = 1;
-                    }
                 }
             }
         }
@@ -88,7 +88,7 @@ Spectrum TraceHelper::estimateDirect(SurfaceEvent & event, const vec2 & uShading
 }
 
 Spectrum
-TraceHelper::uniformSampleOneLight(SurfaceEvent & event,
+uniformSampleOneLight(SurfaceEvent & event,
                                   const Scene & scene,
                                   Sampler & sampler,
                                   const Distribution1D * lightDistrib,
@@ -114,7 +114,7 @@ TraceHelper::uniformSampleOneLight(SurfaceEvent & event,
                           scene, sampler, medium, false) / lightPdf;
 }
 
-Spectrum TraceHelper::uniformSampleAllLights(SurfaceEvent & event, const Scene & scene,
+Spectrum uniformSampleAllLights(SurfaceEvent & event, const Scene & scene,
                                             Sampler & sampler, const Medium * medium) {
     Spectrum L(0);
     for ( auto & light: scene.lights ) {
@@ -147,10 +147,11 @@ SurfaceEvent makeLocalScatterEvent(const Intersection * its) {
     event.its = its;
     event.wo = event.toLocal(- its->w);
     event.flippedFrame = flippedFrame;
+    event.requestType = BSDF_ALL;
     return event;
 }
 
-std::unique_ptr < Distribution1D > TraceHelper::computeLightPowerDistrib(const Scene & scene) {
+std::unique_ptr < Distribution1D > computeLightPowerDistrib(const Scene & scene) {
     int nLights = scene.lights.size();
     Float * power = new Float[nLights];
     for ( int i = 0 ; i < nLights ; i ++ ) {
@@ -160,7 +161,7 @@ std::unique_ptr < Distribution1D > TraceHelper::computeLightPowerDistrib(const S
 }
 
 Spectrum
-TraceHelper::evalLightDirect(const Scene & scene, const Light & light, Ray & ray,
+evalLightDirect(const Scene & scene, const Light & light, Ray & ray,
                             const Medium * medium, Float * lightPdf) {
     if ( light.isDeltaLight() )
         return Spectrum(0);
@@ -180,9 +181,9 @@ TraceHelper::evalLightDirect(const Scene & scene, const Light & light, Ray & ray
     return t;
 }
 
-Spectrum TraceHelper::evalShadowDirect(const Scene & scene, Ray ray, const Medium * medium) {
+Spectrum evalShadowDirect(const Scene & scene, Ray ray, const Medium * medium) {
     if ( ! medium ) {
-        return scene.intersectP(ray) ? Spectrum(0) : Spectrum(1);
+        return scene.intersect(ray) ? Spectrum(0) : Spectrum(1);
     }
     Spectrum Tr(1);
     std::optional < Intersection > its;
@@ -200,7 +201,7 @@ Spectrum TraceHelper::evalShadowDirect(const Scene & scene, Ray ray, const Mediu
     return Tr;
 }
 
-Spectrum TraceHelper::volumeUniformSampleOneLight(VolumeEvent & event, const Medium * medium, const Scene & scene,
+Spectrum volumeUniformSampleOneLight(VolumeEvent & event, const Medium * medium, const Scene & scene,
                                                  Sampler & sampler, const Distribution1D * lightDistrib) {
     Float lightPdf;
     std::shared_ptr < Light > light;
@@ -221,13 +222,13 @@ Spectrum TraceHelper::volumeUniformSampleOneLight(VolumeEvent & event, const Med
                                 scene, sampler) / lightPdf;
 }
 
-Spectrum TraceHelper::volumeUniformSampleAllLights(VolumeEvent & event, const Medium * medium, const Scene & scene,
+Spectrum volumeUniformSampleAllLights(VolumeEvent & event, const Medium * medium, const Scene & scene,
                                                   Sampler & sampler) {
     return Spectrum();
 }
 
 Spectrum
-TraceHelper::volumeEstimateDirect(VolumeEvent & event, const Medium * medium, const vec2 & uShading, const Light & light,
+volumeEstimateDirect(VolumeEvent & event, const Medium * medium, const vec2 & uShading, const Light & light,
                                  const vec2 & uLight, const Scene & scene, Sampler & sampler) {
     Spectrum Ld(0), Li;
     vec3 wi;
@@ -260,32 +261,7 @@ TraceHelper::volumeEstimateDirect(VolumeEvent & event, const Medium * medium, co
     return Ld;
 }
 
-SurfaceEvent TraceHelper::makeLocalScatterEvent(const Intersection *its) {
-    SurfaceEvent event;
-    Frame frame = its->primitive->setTangentFrame(its);
-    if( hasNan(frame.n)){
-        its->primitive->setTangentFrame(its);
-    }
-
-    bool enableTwoSideShading = true;
-
-    bool hitBackSide = dot(its->w, its->Ng) > 0;
-    bool isTransmissive = its->bsdf->HasFlag(BSDF_TRANSMISSION);
-    bool flippedFrame = false;
-    //todo add this to config class
-    if ( enableTwoSideShading && hitBackSide && ! isTransmissive ) {
-        frame.n = - frame.n;
-        frame.tangent = - frame.tangent;
-        flippedFrame = true;
-    }
-    event.frame = frame;
-    event.its = its;
-    event.wo = event.toLocal(- its->w);
-    event.flippedFrame = flippedFrame;
-    return event;
-}
-
-bool russian(int depth, Sampler &sampler, Spectrum &beta) {
+bool russian(int depth, Sampler &sampler, Spectrum beta) {
     float pdf = max(beta);
     if(depth<2 || pdf > 0.2)
         return false;

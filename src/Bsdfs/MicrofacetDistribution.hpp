@@ -24,6 +24,7 @@ public:
         return 1 / (1 + Lambda(w, alphaXY) );
     }
     virtual Float G(const vec3 & wo, const vec3 & wi, const vec2 & alphaXY) const {
+        return G1(wo,alphaXY) * G1(wi,alphaXY);
         return 1 / ( 1 + Lambda(wo, alphaXY) + Lambda(wi, alphaXY) );
     }
     virtual vec3 Sample_wh(const vec3 & wo, const vec2 & u, const vec2 & alphaXY) const = 0;

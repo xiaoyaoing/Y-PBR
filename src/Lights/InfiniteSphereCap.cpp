@@ -1,6 +1,6 @@
 #include "InfiniteSphereCap.h"
 #include "scene.hpp"
-#include "PositionAndDirectionSample.h"
+#include "SampleRecords/PositionAndDirectionSample.h"
 
 static inline vec3 uniformSphericalCap(const vec2 & xi, float cosThetaMax) {
     float phi = xi.x * Constant::TWO_PI;

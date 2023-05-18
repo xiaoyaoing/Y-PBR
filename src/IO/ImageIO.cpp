@@ -3,6 +3,9 @@
 #include <lodepng/lodepng.h>
 #include <stbi/stb_image.h>
 
+#define TINYEXR_IMPLEMENTATION
+
+#include "tinyexr/tinyexr.h"
 #include <iostream>
 #include <sstream>
 #include <spdlog/spdlog.h>
@@ -86,18 +89,19 @@ namespace ImageIO {
     }
 
     void
-    encodeOneStep(const char * filename, const std::vector < unsigned char > & image, unsigned width, unsigned height) {
+    encodeOneStep(const char * filename, const std::vector < unsigned char > & image, unsigned width, unsigned height,int channels) {
         //Encode the image
-        unsigned error = lodepng::encode(filename, image, width, height);
+        LodePNGColorType types[] = {LCT_GREY, LCT_GREY_ALPHA, LCT_RGB, LCT_RGBA};
+        unsigned error = lodepng::encode(filename, image, width, height,types[channels - 1]);
 
         //if there's an error, display it
         if ( error ) std::cout << "encoder error " << error << ": " << lodepng_error_text(error) << std::endl;
     }
 
-    bool savePng(const std::string & path, const std::vector < unsigned char > & image, int width, int height,
+    static bool savePng(const std::string & path, const std::vector < unsigned char > & image, int width, int height,
                  int channels) {
 
-        encodeOneStep(path.c_str(), image, width, height);
+        encodeOneStep(path.c_str(), image, width, height,channels);
     }
 
     bool saveBMP(const std::string & path, const std::vector < unsigned char > & image, int width, int height,
@@ -108,7 +112,7 @@ namespace ImageIO {
     static void nop(void *){}
 
     std::unique_ptr < float[] > loadHdr(const std::string & path, TexelConversion request, int & w, int & h) {
-        std::shared_ptr < std::ifstream > in = std::make_shared < std::ifstream >(path);
+        std::shared_ptr < std::ifstream > in = std::make_shared < std::ifstream >(FileUtils::getFileFullPath(path));
         if ( ! in )
             return nullptr;
 
@@ -218,6 +222,7 @@ uint8 * loadJpg(const std::string & path,int & w,int & h,int & channels){
 
     std::unique_ptr < uint8[] >
     loadLdr(const std::string & path, TexelConversion request, int & w, int & h, bool gammaCorrect) {
+        auto fullPath = FileUtils::getFileFullPath(path);
         int channels;
         std::unique_ptr<uint8[], void(*)(void *)> img((uint8 *)0,&nop);
 #if JPEG_AVAILABLE
@@ -226,7 +231,7 @@ uint8 * loadJpg(const std::string & path,int & w,int & h,int & channels){
         }
 #endif
         if(path.ends_with("png")){
-            img = std::unique_ptr<uint8[], void(*)(void *)>(loadPng(path,w,h,channels),free);
+            img = std::unique_ptr<uint8[], void(*)(void *)>(loadPng(fullPath,w,h,channels),free);
         }
         else {
             spdlog::error("{} image not supported yet",path);
@@ -256,11 +261,12 @@ uint8 * loadJpg(const std::string & path,int & w,int & h,int & channels){
     }
 
     bool isHdr(const std::string &path) {
-        return stbi_is_hdr(path.c_str());
+        auto  suffix = FileUtils::getFileSuffix(path);
+        return suffix == "hdr" || suffix == "exr";
     }
 
-    bool saveLdr(std::string path, const uint8 *img, int w, int h, int channels) {
-        path = FileUtils::getFileFullPath(path);
+    bool saveLdr(const std::string &path, const uint8 *img, int w, int h, int channels, bool overwrite) {
+        auto fullPath  = FileUtils::getFileFullPath(path);
         auto suffix = FileUtils::getFileSuffix(path);
         if(suffix.empty())
         {
@@ -268,16 +274,85 @@ uint8 * loadJpg(const std::string & path,int & w,int & h,int & channels){
         }
         if(suffix == "png")
         {
-            return savePng(FileUtils::getFilePath(path),std::vector<uint8_t>(img,img+w*h*channels),w,h,channels);
+            return savePng(FileUtils::getFilePath(fullPath,overwrite),std::vector<uint8_t>(img,img+w*h*channels),w,h,channels);
         }
         return false;
     }
 
-    bool saveHdr(std::string path ,const float * img,int w,int h,int channels){
-        path = FileUtils::getFileFullPath(path);
+    // See `examples/rgbe2exr/` for more details.
+    bool SaveEXR(const float* rgb, int width, int height, const char* outfilename) {
+
+        EXRHeader header;
+        InitEXRHeader(&header);
+
+        EXRImage image;
+        InitEXRImage(&image);
+
+        image.num_channels = 3;
+
+        std::vector<float> images[3];
+        images[0].resize(width * height);
+        images[1].resize(width * height);
+        images[2].resize(width * height);
+
+        // Split RGBRGBRGB... into R, G and B layer
+        for (int i = 0; i < width * height; i++) {
+            images[0][i] = rgb[3*i+0];
+            images[1][i] = rgb[3*i+1];
+            images[2][i] = rgb[3*i+2];
+        }
+
+        float* image_ptr[3];
+        image_ptr[0] = &(images[2].at(0)); // B
+        image_ptr[1] = &(images[1].at(0)); // G
+        image_ptr[2] = &(images[0].at(0)); // R
+
+        image.images = (unsigned char**)image_ptr;
+        image.width = width;
+        image.height = height;
+
+        header.num_channels = 3;
+        header.channels = (EXRChannelInfo *)malloc(sizeof(EXRChannelInfo) * header.num_channels);
+        // Must be (A)BGR order, since most of EXR viewers expect this channel order.
+        strncpy(header.channels[0].name, "B", 255); header.channels[0].name[strlen("B")] = '\0';
+        strncpy(header.channels[1].name, "G", 255); header.channels[1].name[strlen("G")] = '\0';
+        strncpy(header.channels[2].name, "R", 255); header.channels[2].name[strlen("R")] = '\0';
+
+        header.pixel_types = (int *)malloc(sizeof(int) * header.num_channels);
+        header.requested_pixel_types = (int *)malloc(sizeof(int) * header.num_channels);
+        for (int i = 0; i < header.num_channels; i++) {
+            header.pixel_types[i] = TINYEXR_PIXELTYPE_FLOAT; // pixel type of input image
+            header.requested_pixel_types[i] = TINYEXR_PIXELTYPE_HALF; // pixel type of output image to be stored in .EXR
+        }
+
+        const char* err = NULL; // or nullptr in C++11 or later.
+        int ret = SaveEXRImageToFile(&image, &header, outfilename, &err);
+        if (ret != TINYEXR_SUCCESS) {
+            fprintf(stderr, "Save EXR err: %s\n", err);
+            FreeEXRErrorMessage(err); // free's buffer for an error message
+            return ret;
+        }
+        printf("Saved exr file. [ %s ] \n", outfilename);
+
+        //free(rgb);
+
+        free(header.channels);
+        free(header.pixel_types);
+        free(header.requested_pixel_types);
+
+    }
+
+
+    bool saveHdr(const std::string &path, const float *img, int w, int h, int channels, bool overwrite ) {
+        auto fullPath = FileUtils::getFileFullPath(path);
         auto suffix = FileUtils::getFileSuffix(path);
         if(suffix.empty()){
             return false;
+        }
+        if(suffix=="exr"){
+            fullPath = FileUtils::getFilePath(fullPath,overwrite);
+            return SaveEXR(img,w,h,fullPath.c_str());
+
         }
 //        if(suffix == "hdr"){
 //            std::ofstream out(path, std::ios::binary);

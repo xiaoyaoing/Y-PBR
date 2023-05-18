@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Ray/Intersection.hpp"
 #include "Records.h"
 #include "SampleRecords/SurfaceScatterEvent.hpp"
@@ -32,6 +34,11 @@ public:
         CameraRecord cameraRecord;
         SurfaceRecord surfaceRecord;
         MediumRecord mediumRecord;
+        VertexRecord(){}
+        VertexRecord(const SurfaceRecord & surfaceRecord): surfaceRecord((surfaceRecord)){
+
+        }
+        ~VertexRecord(){}
     };
     union VertexSampler{
         const Light * light;
@@ -64,19 +71,25 @@ public:
         type = VertexType::Camera;
         _sampler.camera = camera;
         _record.cameraRecord.sample = sample;
-        beta = sample.weight;
+        beta = sample.weight / (sample.dirPdf * sample.posPdf);
     }
 
-    PathVertex(const Light * light,PositionAndDirectionSample sample){
+    PathVertex(const Light * light,PositionAndDirectionSample sample,Float lightPdf){
         type = VertexType::Light;
         _sampler.light = light; ;
-        _record.cameraRecord.sample = sample;
-        beta = sample.weight;
+        _record.lightRecord.sample = sample;
+        _record.lightRecord.lightPdf = lightPdf;
+        beta = sample.weight/lightPdf;
+        pdfFwd =  0;
     }
 
-    PathVertex(const SurfaceEvent & event,const Spectrum  &beta):type(VertexType::Surface){
-        _sampler.bsdf = event.its->bsdf;
-        _record.surfaceRecord.event = event;
+    PathVertex(const SurfaceRecord & record,const Spectrum  &beta):type(VertexType::Surface),
+    _record(record)
+    {
+        _sampler.bsdf = record.its.bsdf;
+        //avoid pointer error
+        //_record.surfaceRecord.event.its = &_record.surfaceRecord.its;
+        this->beta = beta;
     }
 
     bool sampleNext(const Scene & scene, bool adjoint, PathState &state, PathVertex *prev, PathVertex & next);

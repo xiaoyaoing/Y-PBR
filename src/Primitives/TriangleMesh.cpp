@@ -85,6 +85,7 @@ std::optional < Intersection > TriangleMesh::intersect(Ray & ray) const {
         const vec3 & p2 = m_vertexs[tri.v2].pos();
 
         its.Ns = its.Ng = normalize(cross(p1 - p0, p2 - p0));
+        // 定义随机数分布，范围为 [0, 99]
         if ( useSoomth ) {
             const vec3 & n1 = m_vertexs[tri.v0].normal();
             const vec3 & n2 = m_vertexs[tri.v1].normal();

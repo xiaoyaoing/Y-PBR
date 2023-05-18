@@ -21,7 +21,7 @@ class Image {
 
     struct Pixel {
         Pixel() {
-            Pixel(Spectrum());
+            Pixel(Spectrum(0));
         }
 
 
@@ -35,12 +35,12 @@ class Image {
             atomicAdd(rgb[0], value.x);
             atomicAdd(rgb[1], value.y);
             atomicAdd(rgb[2], value.z);
-
         }
 
         vec3 value() const {
             return vec3(rgb[0].load(), rgb[1].load(), rgb[2].load());
         }
+
         void operator=(vec3 s) {
             rgb[0] = s.x;
             rgb[1] = s.y;
@@ -53,6 +53,7 @@ class Image {
     };
 
     vec3 getPixel(int x, int y) const;
+
     uint32 getIndex(uint32 x, uint32 y) const;
 
     std::vector<Pixel> buffers;
@@ -63,7 +64,8 @@ class Image {
     uint32 _height;
 public:
     Image(const ivec2 &res, ToneMap::ToneMapType toneMapType = ToneMap::Filmic)
-            : _width(res.x), _height(res.y), _tonemapType(toneMapType), buffers(res.x * res.y) {
+            : _width(res.x), _height(res.y), _tonemapType(toneMapType), buffers(res.x * res.y),
+              sampleCounts(res.x * res.y) {
     }
 
     Image(const Image &another) {
@@ -71,6 +73,7 @@ public:
         _height = another._height;
         _tonemapType = another._tonemapType;
         buffers = std::vector<Pixel>(_width * _height);
+        sampleCounts.assign(buffers.size(), 0);
     }
 
     static void atomicAdd(std::atomic<float> &dst, float add) {
@@ -84,20 +87,24 @@ public:
 
     void saveTXT(const std::string &fileName) const;
 
-    void save(const std::string &fileName) const;
+    void save(const std::string &fileName,Float scale,bool overwrite = false) const;
 
-    void postProgress();
 
-    inline void fill(const Spectrum &spectrum) {
-        for(auto & pixel:buffers)
-            pixel  = vec3();
-    }
 
     ivec2 resoulation() const { return ivec2(_width, _height); }
 
-    int width() const{ return _width; }
-    int height() const { return _height;}
-    inline int product() const {return width() * height();}
+    int width() const { return _width; }
+
+    int height() const { return _height; }
+
+    inline int product() const { return width() * height(); }
+
+    inline void fill(const Spectrum &spectrum) {
+        for (auto &pixel: buffers)
+            pixel = vec3();
+    }
 
     vec3 getPixel(int idx) const;
+
+
 };

@@ -1,6 +1,6 @@
 #include "Light.hpp"
 #include "Common/Json.hpp"
-#include "PositionAndDirectionSample.h"
+#include "SampleRecords/PositionAndDirectionSample.h"
 
 class DistantLight : public Infinite {
 public:
@@ -15,7 +15,7 @@ public:
     Spectrum Power( ) override;
 
 
-    PositionAndDirectionSample sampleDirect(const vec2 & positionSample, const vec2 & dirSample) override;
+    PositionAndDirectionSample sampleDirect(const vec2 & positionSample, const vec2 & dirSample) const override;
 
     bool isDeltaLight( ) const override;
 

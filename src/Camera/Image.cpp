@@ -27,7 +27,13 @@ vec3 Image::getPixel(int x, int y) const {
 }
 
 vec3 Image::getPixel(int idx) const {
-    return buffers[idx].value() / Float(sampleCounts[idx]);
+    if(sampleCounts[idx]!=0){
+        int k = 1;
+    }
+     else {
+         int k = 1;
+     }
+    return sampleCounts[idx]!=0?buffers[idx].value():vec3(0);
 }
 
 uint32 Image::getIndex(uint32 x, uint32 y) const {
@@ -37,51 +43,51 @@ uint32 Image::getIndex(uint32 x, uint32 y) const {
 
 
 void Image::addPixel(uint32 x, uint32 y, vec3 rgb) {
+    if(x<0 || x>=width() || y<0 || y>=height())
+        return;
+//    if(hasNan(rgb)){
+//        throw("Rdiance NAN");
+//    }
+    if(rgb.r <0 || rgb.g<0 || rgb.z<0){
+        throw("Radiance Neg");
+    }
     uint32 idx = getIndex(x, y);
     buffers[idx].add(rgb);
     sampleCounts[idx]++;
 }
 
-void Image::dividePixel(uint32 x, uint32 y, uint32 count) {
-    //  buffers[getIndex(x,y)].rgb/=Float(count);
-}
 
-void Image::postProgress() {
 
-    for (int i = 0; i < buffers.size(); i++) {
-        Spectrum rgb = clamp(255.f * ToneMap::toneMap(_tonemapType, buffers[i].value() / Float(sampleCounts[i])),
-                             vec3(0), 255.f * vec3(1));
-        buffers[i] = rgb;
-    }
-}
 
-void Image::save(const std::string &fileName) const {
+void Image::save(const std::string &fileName,Float scale,bool overwrite) const {
     auto extension = FileUtils::getFileSuffix(fileName);
     if (extension.empty()) {
         spdlog::info("Invalid Path {0}", fileName);
         return;
     } else {
-        int byteNum = product() * 3;
         auto isHdr = ImageIO::isHdr(fileName);
         if (isHdr) {
+            int byteNum = product() * 3;
             std::unique_ptr<float[]> hdr(new float[byteNum]);
             for (int i = 0; i < buffers.size(); i++) {
-                auto rgb = getPixel(i);
+                auto rgb = getPixel(i) * scale;
                 hdr[3 * i] = rgb.r;
                 hdr[3 * i + 1] = rgb.g;
                 hdr[3 * i + 2] = rgb.b;
             }
-            ImageIO::saveHdr(fileName, hdr.get(), width(), height(), 3);
+            ImageIO::saveHdr(fileName, hdr.get(), width(), height(), 3, overwrite);
         } else {
+            int byteNum = product() * 3;
             std::unique_ptr<uint8_t[]> ldr(new uint8_t[byteNum]);
             for (int i = 0; i < buffers.size(); i++) {
-                auto rgb = getPixel(i);
+                auto rgb = getPixel(i) * scale;
+                //rgb = vec3(sampleCounts[i]/100.f);
                 rgb = clamp(255.f * ToneMap::toneMap(_tonemapType, rgb), vec3(0), 255.f * vec3(1));
                 ldr[3 * i] = uint8_t(rgb.r);
                 ldr[3 * i + 1] = uint8_t(rgb.g);
                 ldr[3 * i + 2] = uint8_t(rgb.b);
             }
-            ImageIO::saveLdr(fileName, ldr.get(), width(), height(), 3);
+            ImageIO::saveLdr(fileName, ldr.get(), width(), height(), 3, overwrite);
         }
     }
 }

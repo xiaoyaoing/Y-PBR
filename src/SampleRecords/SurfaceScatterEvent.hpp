@@ -15,6 +15,7 @@ struct SurfaceEvent {
     Float value;
     Float pdf;
     bool flippedFrame;
+    bool itsCopyied = false;
 public:
     vec3 toLocal(const vec3 & w) const {
         return frame.toLocal(w);
@@ -22,14 +23,19 @@ public:
     vec3 toWorld(const vec3 & w) const {
         return frame.toWorld(w);
     }
-    SurfaceEvent(const SurfaceEvent & event) : its(event.its),
+    SurfaceEvent(const SurfaceEvent & event) : its(new Intersection(*event.its)),
                                                frame(event.frame), wo(event.wo), wi(event.wi),
                                                sampleType(event.sampleType),
                                                value(event.value), pdf(event.pdf),
-                                               flippedFrame(event.flippedFrame) {}
+                                               requestType(event.requestType),
+                                               flippedFrame(event.flippedFrame),
+                                               itsCopyied(true){
+
+    }
     SurfaceEvent() {}
     ~SurfaceEvent( ) {
-        //delete its;
+        if(itsCopyied)
+            delete its;
     }
     Ray sctterRay(const vec3 & w) {
         vec3 offsetPos = its->p + w * its->epsilon;
@@ -39,13 +45,13 @@ public:
         return sctterRay(toWorld(wi));
     }
 
-    SurfaceEvent makeFlipQuery() {
+    SurfaceEvent makeFlipQuery() const{
         SurfaceEvent event(*this);
         event.wi = wo;
         event.wo = wi;
         return event;
     }
-    SurfaceEvent makeWarpQuery(const vec3 &newWi, const vec3 &newWo){
+    SurfaceEvent makeWarpQuery(const vec3 &newWi, const vec3 &newWo) const{
         SurfaceEvent event(*this);
         event.wo = newWo;
         event.wi = newWi;

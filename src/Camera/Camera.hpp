@@ -60,7 +60,7 @@ public:
     void drawLine(int x0,int x1,int y0,int y1, const Spectrum & color);
     //给定相交，采样光线，返回这条光线在胶片上的权重,光线在光栅上的位置，以及pdf
     Spectrum evalDirection(vec3 p, ivec2 * pRaster, Float * pdf) const;
-    PositionAndDirectionSample sampleLi(vec3 p, ivec2 *pRaster, vec2 sample) const;
+    bool sampleLi(vec3 p, ivec2 *pRaster, vec2 sample, PositionAndDirectionSample &result) const;
     //给定光线 返回权重 如果和光栅相交就返回光栅位置
     Spectrum rayWeight(const Ray & ray,ivec2 * pRaster) const ;
     std::shared_ptr<Medium> _medium = nullptr;

@@ -118,7 +118,7 @@ public:
     void LoadResources( ) {
         _linear = true;
         _clamp = false;
-        _isHdr = stbi_is_hdr(_path.c_str());
+        _isHdr = ImageIO::isHdr(_path);
         _isRGB = sizeof(T) == sizeof(Spectrum);
         int w, h;
         void * pixels = nullptr;

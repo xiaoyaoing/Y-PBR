@@ -3,7 +3,7 @@
 #include "Common/Transform.hpp"
 #include "scene.hpp"
 #include "Texture/BitMapTexture.hpp"
-#include "PositionAndDirectionSample.h"
+#include "SampleRecords/PositionAndDirectionSample.h"
 #include <skylight/ArHosekSkyModel.h>
 
 
@@ -24,8 +24,8 @@ SkyDome::sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf, Floa
     return _sky->eval(uv);
 }
 
-PositionAndDirectionSample SkyDome::sampleDirect(const vec2 & positionSample, const vec2 & dirSample) {
-    throw("not impl");
+PositionAndDirectionSample SkyDome::sampleDirect(const vec2 & positionSample, const vec2 & dirSample) const{
+   _NOT_IMPLEMENT_ERROR;
 }
 
 //Spectrum SkyDome::directLighting(const Intersection & intr) const {

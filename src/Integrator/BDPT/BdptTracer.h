@@ -7,7 +7,7 @@ class BdptTracer{
   //  std::unique_ptr<PathVertex[]> lightPath;
  //   std::unique_ptr<PathVertex[]> cameraPath;
 public:
-    BdptTracer(const Scene & scene,const Camera * camera,ImagePramId * imagePramId = nullptr,int maxBounces=8);
+    BdptTracer(const Scene & scene,const Distribution1D * distrib, const Camera * camera,ImagePramId * imagePramId = nullptr,int maxBounces=8);
     Spectrum traceSample(ivec2 pixel,Sampler & sampler);
 private:
     const Scene & scene;
@@ -17,4 +17,5 @@ private:
     const Distribution1D * lightDistrib;
     Image * image;
     ImagePramId * imagePramid;
+    int maxBounces;
 };

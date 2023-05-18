@@ -6,6 +6,7 @@
 #include <thread>
 void BDPTIntegrator::process(const Scene &scene, Sampler &sampler) {
     lightDistrib = CreateLightSampleDistribution(std::string("uniform"), scene);
+    imagePramid = new ImagePramId(maxBounces,*_camera);
 }
 
 vec3 BDPTIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &sampler) const {
@@ -21,7 +22,7 @@ void BDPTIntegrator::render(const Scene &scene)  {
     ivec2 numTiles{(renderBounds.x + tileSize - 1) / tileSize, (renderBounds.y + tileSize - 1) / tileSize};
     for(int i=0 ;i<numTiles.x * numTiles.y;i++)
     {
-        _tracers.emplace_back(BdptTracer(scene,_camera.get(),imagePramid,scene.options.maxBounces));
+        _tracers.emplace_back(BdptTracer(scene,lightDistrib.get(),_camera.get(),imagePramid,maxBounces));
     }
     int num_threads = std::thread::hardware_concurrency();
     parallel_init(num_threads);
@@ -36,28 +37,31 @@ void BDPTIntegrator::render(const Scene &scene)  {
         int x1 = std::min(x0 + tileSize, width);
         int y0 = tile[1] * tileSize;
         int y1 = std::min(y0 + tileSize, height);
-
+        auto & tracer = _tracers[tile.x * numTiles.y + tile.y];
         std::unique_ptr<Sampler> tileSampler = _sampler->clone();
         tileSampler->setSeed(tile.y * renderBounds.x + tile.x);
         for (int y = y0; y < y1; y++) {
             for (int x = x0; x < x1; x++) {
                 for (int s = 0; s < spp; s++) {
                     {
+                        ivec2 pixel(x,y);
+                        Spectrum  L  = tracer.traceSample(pixel,*tileSampler);
+                        _camera->image->addPixel(x,y,L);
                     }
                 }
             }
         }
         reporter.update(1);
     }, numTiles);
-    saveOutPuts(scene.options.outputFileName);
+    saveOutPuts(scene.options.outputFileName,spp);
     parallel_cleanup();
 }
 
-void BDPTIntegrator::saveOutPuts(const std::string & fileName) {
-    _camera->image->postProgress();
-    _camera->image->savePNG(fileName);
+void BDPTIntegrator::saveOutPuts(const std::string & fileName,int spp) {
+    Float sppScale = 1.f/spp;
+    _camera->image->save(fileName,sppScale);
     if(imagePramid){
-       imagePramid->saveOutPut(fileName);
+       imagePramid->saveOutPut(fileName,sppScale);
     }
 }
 

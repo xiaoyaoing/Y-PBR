@@ -13,12 +13,16 @@
 #include "Common/math.hpp"
 #include "Camera/Camera.hpp"
 #include "Ray/Intersection.hpp"
+#include "SampleRecords/SurfaceScatterEvent.hpp"
 #include "Lights/Light.hpp"
 #include "SampleRecords/PositionAndDirectionSample.h"
 
 struct LightRecord{
     PositionAndDirectionSample sample;
     float lightPdf;
+    LightRecord(){
+
+    }
 };
 
 struct CameraRecord{
@@ -27,7 +31,12 @@ struct CameraRecord{
 };
 
 struct SurfaceRecord{
+    Intersection its;
     SurfaceEvent event;
+public:
+    ~SurfaceRecord(){
+
+    }
 };
 
 struct MediumRecord{

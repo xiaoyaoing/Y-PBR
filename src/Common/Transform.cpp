@@ -52,6 +52,10 @@ static void gramSchmidt(vec3 &a, vec3 &b, vec3 &c)
         c= normalize(c);
 }
 
+mat4 getTransform(const vec3 & position, const vec3 & scale, const vec3 & rotation){
+
+}
+
 void glm::from_json(const Json & j,mat4 & transform) {
     if ( j.is_array() ) {   // given by explict matrix
         if ( j.size() != 16 ) {
@@ -147,3 +151,8 @@ void glm::from_json(const Json & j,mat4 & transform) {
 
     }  // end
 }
+
+
+//mat4 getTransFormMatrix(const vec3 &position, const vec3 &scale, const vec3 &rotation) {
+//    return mat4();
+//}

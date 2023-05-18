@@ -3,7 +3,7 @@
 using Spectrum = vec3;
 
 inline bool isBlack(const Spectrum & color ){
-    return color.x==0 && color.y==0 && color.z==0;
+    return color.x<=1e-8f && color.y<=1e-8f && color.z<=1e-8f;
 }
 
 inline Float luminace(const Spectrum & color){
@@ -13,6 +13,11 @@ inline Float luminace(const Spectrum & color){
 
 inline bool hasNan(const Spectrum & color){
     return isnan(color[0]) || isnan(color[1]) || isnan(color[2]);
+}
+
+inline bool hasNeg(const Spectrum & color ){
+    return color[0]<0 || color[1]<0 || color[2]<0;
+
 }
 
 //void from_json(const Json &j, Spectrum & spectrum);

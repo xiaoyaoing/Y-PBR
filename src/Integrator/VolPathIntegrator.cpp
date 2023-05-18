@@ -1,7 +1,7 @@
 #include "VolPathIntegrator.h"
 #include "Bsdfs/Reflection.hpp"
 #include "Mediums/Medium.hpp"
-
+#include "TraceHelper.h"
 
 vec3 VolPathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler & sampler) const {
     Spectrum L(0);

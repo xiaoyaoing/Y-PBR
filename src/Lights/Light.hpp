@@ -3,7 +3,6 @@
 #include "../Colors/Spectrum.hpp"
 #include "../Ray/Intersection.hpp"
 #include "Ray/Ray.hpp"
-#include "PositionAndDirectionSample.h"
 #include "SampleRecords/PositionAndDirectionSample.h"
 
 #include <optional>
@@ -47,14 +46,15 @@ public:
     virtual Spectrum sampleLi(const vec3 & ref, const vec2 &u,
                               vec3 *wi, Float *pdf,
                               Float * distance) const = 0;
-    PositionAndDirectionSample sampleLi(const vec3 & ref, const vec2 &u){
-        PositionAndDirectionSample result;
+    PositionAndDirectionSample sampleLi(const vec3 & ref, const vec2 &u) const{
+        PositionAndDirectionSample result{};
         vec3 wi;Float pdf,distance;
         Spectrum  Li = sampleLi(ref,u,&wi,&pdf,&distance);
         if(isBlack(Li))
             return result;
         result.ray.o = ref + wi * distance;
         result.ray.d = -wi;
+        result.posPdf = pdf;
         result.weight = Li/pdf;
         return result;
     }

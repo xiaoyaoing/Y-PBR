@@ -34,19 +34,32 @@ Render::Render(const Json & json) {
             integrator = std::make_unique < PhotonMapper >(camera, integratorJson);
         }
         else if(type == "bidirectional_path_tracer"){
-            integrator =
+            integrator = std::make_unique < BDPTIntegrator >(camera, sampler,integratorJson);
         }
     }
 }
 
+class TimeCounter{
+public:
+    void printTimeCount(){
+        std::chrono::time_point < std::chrono::steady_clock > end = std::chrono::steady_clock::now();
+        auto s = std::chrono::duration_cast < std::chrono::seconds >(end - start).count();
+        std::cout <<std::endl<< event<<"done. Take " << s << "s";
+    }
+    TimeCounter(std::string event):event(std::move(event))
+    {
+        start = std::chrono::steady_clock::now();
+    }
+private:
+    std::chrono::time_point < std::chrono::steady_clock >  start;
+    std::string event;
+
+};
 
 void Render::Go( ) {
-    std::chrono::time_point < std::chrono::steady_clock > start = std::chrono::steady_clock::now();
+    TimeCounter counter("Rendering");
     scene->build();
     integrator->process(* scene, * sampler);
     integrator->render(* scene);
-
-    std::chrono::time_point < std::chrono::steady_clock > end = std::chrono::steady_clock::now();
-    auto s = std::chrono::duration_cast < std::chrono::seconds >(end - start).count();
-    std::cout << "\nrendering done take " << s << "s";
+    counter.printTimeCount();
 }

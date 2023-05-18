@@ -81,12 +81,30 @@ inline mat4 mult(const mat4 & a, const mat4 & b) {
     return result;
 }
 
+inline mat4  getTranslateMatrix(const vec3 & position){
+    mat4 m = mat4(1);
+    m[0][3]=position.x;
+    m[1][3]=position.y;
+    m[2][3]=position.z;
+    return m;
+}
+
+inline mat4 getScaleMatrix(const vec3 & scale){
+    mat4 m = mat4(1);
+    m[0][0]=scale.x;
+    m[1][1]=scale.y;
+    m[2][2]=scale.z;
+    return m;
+}
+
 inline mat4 getTransFormMatrix(const vec3 & position, const vec3 & scale, const vec3 & rotation) {
     mat4 rotationMatrix = rotate(rotation.z, glm::dvec3(0.0, 0.0, 1.0)) *
                           rotate(rotation.y, glm::dvec3(0.0, 1.0, 0.0)) *
                           rotate(rotation.x, glm::dvec3(1.0, 0.0, 0.0));
-
-    return glm::translate(mat4(1.0), position) * rotationMatrix * glm::scale(mat4(1.0), scale);
+    auto translateMatrix = getTranslateMatrix(position);
+    auto scalem = getScaleMatrix(scale);
+    auto  res = translateMatrix * scalem;
+    return    getScaleMatrix(scale)  * rotationMatrix * translateMatrix;
 }
 
 inline mat4 getTransformNormalMat(const mat4 & matrix) {
