@@ -2,11 +2,28 @@
 #include "IO/FileUtils.hpp"
 #include "Common/Render.hpp"
 #include "iostream"
+#include "Texture/BitMapTexture.hpp"
 
-
+void convert(std::string file){
+    BitMapTexture<Spectrum> t(file);
+    t.LoadResources();
+    ivec2 res(t.width(),t.height());
+    Image image(res,ToneMap::LinearOnly);
+    for(int i =0;i<t.width();i++)
+        for(int j=0;j<t.height();j++){
+            auto value = t.getValue(i,j);
+            if(luminace(value)>0.2)
+                value = Spectrum(1);
+            else
+                value = Spectrum(0);
+            image.addPixel(i,j,value);
+        }
+    image.save(file,1);
+}
 
 int main() {
-
+//    convert("/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/img.png");
+//    exit(0);
     spdlog::set_level(spdlog::level::off);
     std::cout << "Rendering Begin";
 
@@ -16,7 +33,7 @@ int main() {
     //FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/veach-mis/";
     // FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/caustic/";
       FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/classroom/";
-    FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/veach-mis/";
+   // FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/veach-mis/";
     //  FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/hair/";
      FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/curly-hair/";
     // FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/water-caustic/";
@@ -27,7 +44,7 @@ int main() {
      // FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/head/";
     //    FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/veach-bidir/";
     //FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/cornell-box/";
-   // FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/teapot/";
+    FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/teapot/";
 
 
     std::ifstream scene_file(FileUtils::WorkingDir + "scene.json");
