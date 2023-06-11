@@ -36,53 +36,23 @@ if(NOT TARGET spdlog)
     find_package(spdlog REQUIRED)
 endif()
 
+find_package(miniz REQUIRED)
 find_package(Embree 3.0 REQUIRED)
 
+
+
 ## complie for Zero
-file(GLOB_RECURSE YPBR_SOURCES ${YPBR_SOURCES_DIR}/*.cpp src/Common/Parallel.cpp lib/lodepng/lodepng.cpp lib/stbi/stb_image.c
+file(GLOB_RECURSE YPBR_SOURCES ${YPBR_SOURCES_DIR}/*.cpp  lib/lodepng/lodepng.cpp lib/stbi/stb_image.c
         lib/skylight/ArHosekSkyModel.cpp)
 link_libraries(spdlog::spdlog )
 link_libraries(${EMBREE_LIBRARIES})
 
-add_executable(Y_PBR src/main.cpp ${YPBR_SOURCES} src/Integrator/BDPT/PathVertex.cpp src/Integrator/BDPT/PathVertex.h src/Integrator/BDPT/Records.h src/Integrator/BDPT/LightPath.cpp src/Integrator/BDPT/LightPath.h src/Integrator/BDPT/CameraPath.cpp src/Integrator/BDPT/CameraPath.h src/Integrator/BDPT/BdptTracer.cpp src/Integrator/BDPT/BdptTracer.h src/Bsdfs/RoughHair.h src/Bsdfs/RoughHair.cpp src/Integrator/TraceHelper.cpp src/Integrator/TraceHelper.h src/SampleRecords/records.h src/SampleRecords/PositionAndDirectionSample.h src/Camera/ImagePramid.cpp src/Camera/ImagePramid.h)
-target_include_directories(Y_PBR PUBLIC ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/lib)
+
+add_executable(Y_PBR test/main.cpp ${YPBR_SOURCES})
+target_include_directories(Y_PBR PUBLIC ${PROJECT_SOURCE_DIR}/src )
+target_link_libraries(Y_PBR PRIVATE tinyexr)
 
 
-
-add_subdirectory(./test)
-#
-#
-#
-#
-#
-#if(NOT TARGET spdlog)
-#    find_package(spdlog REQUIRED)
-#endif()
-#
-#
-#include_directories(${PROJECT_SOURCE_DIR}/lib/glm/)
-#include_directories(${PROJECT_SOURCE_DIR}/lib/nlohmann/)
-#
-#
-#enable_testing()
-#add_subdirectory(lib/gtest)
-#include_directories(lib/gtest)
-#add_tests(tests)
-#
-#
-#file(GLOB_RECURSE _source_list ${PROJECT_SOURCE_DIR}/src/*.cpp ${PROJECT_SOURCE_DIR}/src/*.hpp )
-#
-#
-#foreach(_source IN ITEMS ${_source_list})
-#    get_filename_component(_source_path "${_source}" PATH)
-#    string(REPLACE "${CMAKE_SOURCE_DIR}" "" _group_path "${_source_path}")
-#    string(REPLACE "/" "\\" _group_path "${_group_path}")
-#    source_group("${_group_path}" FILES "${_source}")
-#endforeach()
-##
-#message(${_source_list})
-#
-#
-#add_executable(${PROJECT_NAME} ${_source_list} src/Primitives/Cube.hpp  src/Primitives/TriangleMesh.hpp src/Primitives/TriangleMesh.cpp )
-#target_link_libraries(${PROJECT_NAME}  spdlog::spdlog)
-
+add_executable(sampleTest test/samplerTest.cpp  ${YPBR_SOURCES})
+target_include_directories(sampleTest PUBLIC ${PROJECT_SOURCE_DIR}/src )
+target_link_libraries(sampleTest PRIVATE tinyexr)

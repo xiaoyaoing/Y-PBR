@@ -54,8 +54,9 @@ namespace BSDFFactory {
         std::shared_ptr < Texture < Spectrum>> specularReflection = TextureFactory::LoadTexture < Spectrum >(
                 j, "specular_reflection", Spectrum(1));
         std::shared_ptr < Texture < Spectrum>> diffuseReflection = TextureFactory::LoadTexture < Spectrum >(
-                j, "diffuse_reflection", Spectrum(0.5));
+                j, "diffuse_reflection", Spectrum(0.9));
         Float ior = getOptional(j, "ior", 1.5);
+        return std::make_shared<Plastic1>(j);
         return std::make_shared <Plastic>(diffuseReflection,specularReflection,ior);
     }
 

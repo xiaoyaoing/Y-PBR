@@ -18,6 +18,8 @@ Spectrum LambertainR::f(const SurfaceEvent & event) const {
 
 Spectrum LambertainR::sampleF(SurfaceEvent & event, const vec2 & u) const {
 
+    if(event.wo.z<0)
+        return Spectrum(0);
     event.wi = Warp::squareToCosineHemisphere(u);
     event.pdf = Warp::squareToCosineHemispherePdf(event.wi);
     event.sampleType = BXDFType(BSDF_REFLECTION | BSDF_DIFFUSE);

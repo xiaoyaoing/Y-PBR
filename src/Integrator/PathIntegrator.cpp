@@ -10,12 +10,13 @@
 #include "iostream"
 //2022/7/15
 Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &sampler) const {
+
     std::optional<Intersection> its;
     SurfaceEvent surfaceEvent;
     Spectrum beta(1.0);
     Spectrum L(0);
 
-    int bounces = 0, maxDepth = maxBounces;
+    int bounces = minBounces, maxDepth = maxBounces;
     bool specularBounce = true;
     Ray _ray(ray);
 
@@ -35,7 +36,7 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
                         L += beta * light->Le(_ray);
                     }
                 }
-            if(hasNan(L)){
+            if(hasNeg(L)){
                 int k = 1;
             }
         }
@@ -43,6 +44,7 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
 
         if (!its.has_value() || bounces >= maxDepth)
             break;
+
         //  return Spectrum(its->uv.x,its->uv.y,0);
         if (DebugConfig::OnlyShowNormal) {
             return (its->Ng + Spectrum(1.f)) / 2.f;
@@ -51,13 +53,12 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
         if (its->bsdf->Pure(BSDF_FORWARD)) {
             _ray = surfaceEvent.sctterRay(_ray.d);
         } else {
-            if (its->bsdf->MatchesFlags(BXDFType(BSDF_NO_SPECULAR)) && bounces < maxDepth - 1) {
-
+            if (!its->bsdf->Pure(BSDF_PURE_SPECULR) && bounces < maxDepth - 1) {
                 Spectrum Ld = uniformSampleAllLights
                         (surfaceEvent, scene, sampler, nullptr);  //direct lighting
                 if (DebugConfig::OnlyDirectLighting)
                     return Ld;
-                L += beta * Ld;
+                    L += beta * Ld;
                 if(hasNan(L)){
                     int k = 1;
                 }
@@ -70,13 +71,12 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
             BXDFType flags = surfaceEvent.sampleType;
             specularBounce = (flags & BSDF_SPECULAR) != 0;
             beta *= f / surfaceEvent.pdf;
+
             if(hasNan(beta)){
                 int k = 1;
             }
-           // return (surfaceEvent.wo+1.f)/2.f;
             _ray = surfaceEvent.sctterRay();
 
-          //  return beta;
 
             if (its->bssrdf && (flags & BSDF_TRANSMISSION) ) {
                 Intersection pi;
@@ -88,7 +88,9 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
                 surfaceEvent = makeLocalScatterEvent(&pi);
                 beta *= s / pdf;
                 L += beta * uniformSampleOneLight(surfaceEvent, scene, sampler, lightDistribution.get());
-
+                if(hasNeg(L)){
+                    int k =1;
+                }
                 surfaceEvent.requestType = BSDF_ALL;
                 f = pi.bsdf->sampleF(surfaceEvent, sampler.getNext2D(), false);
                 beta *= f / surfaceEvent.pdf;
@@ -99,7 +101,7 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
                 break;
         }
     }
-    if(hasNan(L)){
+    if(hasNeg(L)){
         int k = 1;
     }
     return L;

@@ -4,6 +4,7 @@
 #include "Bsdfs/Reflection.hpp"
 #include "SampleRecords/SurfaceScatterEvent.hpp"
 #include "Sampler/LowDiscrepancy.hpp"
+#include "Sampler/UniformSampler.h"
 #include "SampleRecords/PositionAndDirectionSample.h"
 #include "IO/ImageIO.hpp"
 #include "TraceHelper.h"
@@ -152,8 +153,8 @@ void PhotonMapper::render(const Scene &scene) {
     ProgressReporter reporter(iterations);
     for (int iteration = 0; iteration < iterations; iteration++) {
         parallel_for([&](ivec2 tileIndex) {
-            std::unique_ptr<Sampler> tileSampler = sampler.clone();
-            tileSampler->setSeed((tileIndex.y * nTiles.x + tileIndex.x) * (iteration + 1));
+            std::unique_ptr<Sampler> tileSampler = sampler.clone(0);
+          //  tileSampler->setSeed((tileIndex.y * nTiles.x + tileIndex.x) * (iteration + 1));
             int x0 = tileIndex.x * tileSize;
             int x1 = std::min(x0 + tileSize - 1, pixelBounds.x - 1);
             int y0 = tileIndex.y * tileSize;

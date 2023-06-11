@@ -12,23 +12,17 @@ static int count = 0;
 
 Spectrum InfinteSphere::Le(const Ray & ray) const {
     vec2 uv = directionToUV(ray.d);
-    //return Spectrum(0,uv.y,0);
-    //return (ray.d + 1.0f)/2.f;
+//   return Spectrum(uv.x,uv.y,0);
+    //uv = vec2(0.1,0.2);
     Spectrum L = _emission->eval(uv);
-    if ( hasNan(L) ) {
-        uv = directionToUV(ray.d);
-        L = _emission->eval(uv);
-    }
     return L;
 }
 
 Spectrum InfinteSphere::sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf,
                                  Float * distance) const {
 
-//    auto t = getTransFormMfdiratrix(vec3(0),vec3(1),vec3(270,270,270)) * this->_toWorld;
-//    auto s = Mat4ToStr(t);
     Float mapPdf;
-    vec2 uv = _emission->sample(MAP_SPHERICAL, u, & mapPdf);
+    vec2 uv = _emission->sample(MAP_SPHERICAL,u , & mapPdf);
     if ( ! mapPdf )
         return Spectrum(0);
     float sinTheta;
@@ -38,13 +32,9 @@ Spectrum InfinteSphere::sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Fl
     else
         * pdf = mapPdf / ( 2 * Constant::PI * Constant::PI * sinTheta );
     * distance = 2 * _worldRadius;
-    //return Spectrum(2);
     return _emission->eval(uv);
 }
 
-//Spectrum InfinteSphere::directLighting(const Intersection & intr) const {
-//    return _emission->eval(directionToUV(intr.w));
-//}
 
 Spectrum InfinteSphere::Power( ) {
     return 4 * Constant::PI * _worldRadius * _worldRadius * _emission->average();
@@ -57,11 +47,6 @@ void InfinteSphere::Preprocess(const Scene & scene) {
 
 vec2 InfinteSphere::directionToUV(const vec3 & wi) const {
     vec3 wLocal = transformVector(_toLocal, wi);
-    auto t = length(wi);
-    auto t1 = length(wLocal);
-    if ( abs(wLocal.y) > 1 ) {
-
-    }
     auto uv = vec2(std::atan2(wLocal.z, wLocal.x) * Constant::INV_TWO_PI + 0.5f,
                    std::acos(- clamp(wLocal.y, -1, 1)) * Constant::INV_PI);
     return uv;

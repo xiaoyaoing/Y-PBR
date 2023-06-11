@@ -51,36 +51,13 @@ inline bool SameHemisphere(const vec3 &w, const vec3 &wp) {
     return w.z * wp.z > 0;
 }
 
+inline bool isMirrorRelfect(const vec3 & wo,const vec3 & wi){
 
-//class BSDF;
-////
-//class Bsdf{
-//
-//public:
-//    Spectrum f(const vec3 &wo , const vec3 &wi,
-//               BXDFType flags = BSDF_ALL) const ;
-//
-//    ///sample a new dir
-//    ///wi wo in local space
-//    virtual Spectrum sampleF(const vec3 &wo, vec3 *wi, const vec2 &u,
-//                             Float *pdf, BXDFType type,BXDFType *sampledType) const ;
-//
-//    int NumComponents(BXDFType flags = BSDF_ALL) const;
-//
-//    void Add(BXDF *b) {
-//        BXDFs[nBXDFs++] = b;
-//    }
-//    void LogInfo();
-//    std::string name;
-//
-////    Float eta(){
-////        return BXDF[]
-////    }
-//private:
-//    BXDF *BXDFs[8];
-//    int nBXDFs = 0;
-//    //for debug
-//};
+        return std::abs(wi.z*wo.z - wi.x*wo.x - wi.y*wo.y - 1.0f) < 1e-3f;
+
+}
+
+
 
 class BSDF {
 public:
@@ -92,8 +69,8 @@ public:
 
 
     inline Spectrum sampleF(SurfaceEvent &event, const vec2 &u, bool adjoint) const {
-        if (!MatchesFlags(event.requestType))
-            return Spectrum();
+//        if (!MatchesFlags(event.requestType))
+//            return Spectrum();
         Spectrum fResult = sampleF(event, u);
         if (adjoint)
             fResult *= std::abs(
@@ -101,12 +78,14 @@ public:
                     dot((event.toWorld(event.wi)), event.its->Ng) * event.wo.z);
         else
             fResult *= sqr(eta(event));
+
+        if(hasNeg(fResult) || hasNan(fResult)){
+            int  k =1;
+        }
         return fResult;
     }
 
     inline Spectrum f(const SurfaceEvent &event, bool adjoint) const {
-        if (!MatchesFlags(event.requestType))
-            return Spectrum();
         Spectrum fResult = f(event);
         if (adjoint) {
             auto dot1= dot((event.toWorld(event.wo)), event.its->Ng);
@@ -120,8 +99,8 @@ public:
     }
 
     ///If there is a match in one lobe, it can be considered a match.
-    bool MatchesFlags(BXDFType t) const {
-        return (m_type & t) == m_type;
+    bool MatchesFlags(BXDFType typeToMatch) const {
+        return (m_type & typeToMatch) == m_type;
     }
 
     bool HasFlag(BXDFType t) const {

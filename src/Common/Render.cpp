@@ -9,14 +9,16 @@
 #include <Integrator/BDPT/BDPTIntegrator.hpp>
 #include <thread>
 #include <spdlog/spdlog.h>
+#include <Sampler/UniformSampler.h>
 
 #include <iostream>
-
-
+#include "Sampler/SamplerFactory.h"
 Render::Render(const Json & json) {
     camera = std::make_unique < Camera >(json.at("camera"));
     scene = std::make_unique < Scene >(json);
-    sampler = std::make_shared < UniformSampler >();
+
+    sampler = SamplerFactory::loadSampler(getOptional(json,"sampler",Json()),scene->options.spp,camera->image->resoulation());
+   // sampler = std::make_shared < UniformSampler >();
 
     //load integrator
     {

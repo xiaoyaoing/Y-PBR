@@ -125,6 +125,9 @@ Spectrum RoughDielectric::sampleF(SurfaceEvent & event, const vec2 & u) const {
         event.wi = in; 
         event.sampleType= BXDFType(BSDF_TRANSMISSION | BSDF_GLOSSY);
     }
+    if(whDotOut<0){
+        int k =1;
+    }
     event.pdf= Pdf(event);
     return  f(event);
 }

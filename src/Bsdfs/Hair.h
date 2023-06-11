@@ -26,6 +26,7 @@ protected:
 
 
 private:
+    Float betaM,betaN;
     Float _scaleAngle;
     Float _roughness;
     Float _betaR,_betaTT,_betaTRT;

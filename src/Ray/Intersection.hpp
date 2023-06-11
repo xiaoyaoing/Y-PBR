@@ -1,7 +1,7 @@
 #pragma  once
 #include "../Common/math.hpp"
 //#include "../Bsdfs/Reflection.hpp"
-
+#include <optional>
 #include "../Colors/Spectrum.hpp"
 #include "Ray.hpp"
 
@@ -16,7 +16,7 @@ struct Intersection {
     BSSRDF * bssrdf = nullptr;
     const Primitive * primitive;
     vec3 Ns,Ng ;
-    vec3 * tangent = nullptr;
+    std::optional<vec3> tangent= std::nullopt;
     vec2 uv;
     Float epsilon = Constant::EPSILON;
     Spectrum Le(const vec3 & wo) const;
@@ -24,6 +24,8 @@ struct Intersection {
     Intersection(const Intersection & its):p(its.p),w(its.w),bsdf(its.bsdf),bssrdf(its.bssrdf)
                                         ,Ns(its.Ns),Ng(its.Ng),uv(its.uv),primitive(its.primitive),tangent(its.tangent){
 
+    }
+    ~Intersection(){
     }
     Ray spawnRay(const vec3 & target){
         Float d = distance(p,target);

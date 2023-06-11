@@ -20,8 +20,8 @@ Spectrum estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Light
     const BSDF * bsdf = event.its->bsdf;
 
     //pure specular case
-    if ( ! bsdf->MatchesFlags(BSDF_NO_SPECULAR) )
-        return Spectrum();
+//    if ( ! bsdf->MatchesFlags(BSDF_NO_SPECULAR) )
+//        return Spectrum();
 
 
     event.requestType =
@@ -34,15 +34,14 @@ Spectrum estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Light
     if ( sampleLight ) {
         Float distance;
         Spectrum Li = light.sampleLi(event.its->p, uLight, & wi, & lightPdf, & distance);
-        // return Spectrum(lightPdf);
-
         Ray ray(event.its->p, wi, Constant::EPSILON, distance - Constant::EPSILON);
-        Li *= evalShadowDirect(scene, ray, medium);
+       Li *= evalShadowDirect(scene, ray, medium);
         if ( ! isBlack(Li) && lightPdf != 0 ) {
             auto its = scene.intersect(ray);
             event.wi = event.toLocal(wi);
             scatteringPdf = bsdf->Pdf(event);
             Spectrum f = bsdf->f(event, false);
+
             if ( ! isBlack(f) ) {
                 if ( light.isDeltaLight() ) Ld += f * Li;/// lightPdf;
                 else {
@@ -50,6 +49,9 @@ Spectrum estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Light
                             PowerHeuristic(lightPdf, scatteringPdf);
                     if ( ! sampleBSDF ) weight = 1;
                     Ld += f * weight * Li / lightPdf;
+                    if(hasNeg(Ld)){
+                        int k =1;
+                    }
                 }
             }
         }
@@ -65,7 +67,6 @@ Spectrum estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Light
                 Ray shaowRay(event.its->p, worldShadowRayDir);
                 Spectrum Li = evalLightDirect(scene, light, shaowRay, medium, & lightPdf);
                 if ( lightPdf == 0 && isBlack(Li) ) return Ld;
-                //return Ld;
                 Float weight = 1;
                 if ( ! isSpecualr(event.sampleType) ) {
                     weight = PowerHeuristic(scatteringPdf, lightPdf);
@@ -73,7 +74,7 @@ Spectrum estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Light
                 }
 
                 Ld += f * weight * Li / scatteringPdf;
-                if ( hasNan(Ld) ) {
+                if ( hasNeg(Ld) ) {
                     bsdf->f(event, false);
                     int k = 1;
                 }
@@ -128,9 +129,6 @@ Spectrum uniformSampleAllLights(SurfaceEvent & event, const Scene & scene,
 SurfaceEvent makeLocalScatterEvent(const Intersection * its) {
     SurfaceEvent event;
     Frame frame = its->primitive->setTangentFrame(its);
-    if( hasNan(frame.n)){
-        its->primitive->setTangentFrame(its);
-    }
 
     bool enableTwoSideShading = true;
 
@@ -174,7 +172,6 @@ evalLightDirect(const Scene & scene, const Light & light, Ray & ray,
     ray.farT -= lightIts->epsilon;
     if( isBlack(L)) return Spectrum(0);
     auto t = L * evalShadowDirect(scene, ray, medium);
-    auto it = scene.intersect(ray);
     if ( hasNan(t) )
         int k = 1;
     if ( lightPdf ) * lightPdf = light.PdfLi(lightIts.value(), ray.o);
@@ -183,7 +180,7 @@ evalLightDirect(const Scene & scene, const Light & light, Ray & ray,
 
 Spectrum evalShadowDirect(const Scene & scene, Ray ray, const Medium * medium) {
     if ( ! medium ) {
-        return scene.intersect(ray) ? Spectrum(0) : Spectrum(1);
+        return scene.intersectP(ray) ? Spectrum(0) : Spectrum(1);
     }
     Spectrum Tr(1);
     std::optional < Intersection > its;
@@ -243,6 +240,9 @@ volumeEstimateDirect(VolumeEvent & event, const Medium * medium, const vec2 & uS
         Float weight = 1;
         if ( ! light.isDeltaLight() ) weight = PowerHeuristic(lightPdf, scatteringPdf);
         Ld += Li * p * weight;
+        if(hasNeg(Ld)){
+            int k =1;
+        }
     }
     ///phase sample
 
@@ -256,6 +256,9 @@ volumeEstimateDirect(VolumeEvent & event, const Medium * medium, const vec2 & uS
             if ( lightPdf == 0 ) return Ld;
             Float weight = PowerHeuristic(scatteringPdf, lightPdf);
             if ( ! isBlack(Li) ) Ld += f * weight * Li / scatteringPdf;
+            if(hasNeg(Ld)){
+                int k =1;
+            }
         }
     }
     return Ld;

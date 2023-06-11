@@ -19,6 +19,26 @@ protected:
     Float m_ior;
 };
 
+class Plastic1 : public BSDF{
+public:
+    Float Pdf(const SurfaceEvent & event) const override;
+
+    Plastic1 (const Json & json);
+protected:
+    Spectrum sampleF(SurfaceEvent & event, const vec2 & u) const override;
+
+    Spectrum f(const SurfaceEvent & event) const override;
+
+     std::pair<Float,Float> specAndDiffuseProb(const SurfaceEvent & event) const;
+
+    Float m_ior;
+    //float _thickness;
+    vec3 _sigmaA;
+    Float _diffuseFresnel;
+    Float _avgTransmittance;
+    vec3 _scaledSigmaA;
+};
+
 
 class RoughPlastic : public  BSDF{
     std::shared_ptr<Texture<Spectrum>> diffuseReflectance;

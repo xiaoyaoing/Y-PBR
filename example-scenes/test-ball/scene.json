@@ -28,9 +28,8 @@
         },
         {
             "name": "RoughPlastic",
-            "specular_reflection" :0.1,
-            "diffuse_reflection": [0.21 ,0.27, 0.39],
-            "albedo": [0.21 ,0.27, 0.39],
+            "specular_reflection" :0.25,
+            "diffuse_reflection": 0.25,
             "type": "rough_plastic",
             "ior" : 1.5,
             "distribution": "beckmann",
@@ -110,7 +109,7 @@
             "smooth": true,
             "backface_culling": false,
             "recompute_normals": false,
-            "bsdf": "hair"
+            "bsdf": "RoughPlastic"
         },
         {
             "transform": {
@@ -127,7 +126,7 @@
             "smooth": true,
             "backface_culling": false,
             "recompute_normals": false,
-            "bsdf": "hair"
+            "bsdf": "RoughPlastic"
         },
         {
             "transform": {
@@ -202,14 +201,14 @@
         "enable_two_sided_shading": true
     },
     "renderer": {
-        "output_file": "material-testball.png",
+        "output_file": "material-testball.exr",
         "resume_render_file": "RenderState.dat",
         "overwrite_output_files": false,
         "adaptive_sampling": true,
         "enable_resume_render": false,
         "stratified_sampler": true,
         "scene_bvh": true,
-        "spp": 1,
+        "spp": 16,
         "spp_step": 16,
         "checkpoint_interval": "0",
         "hdr_output_file": "material-testball.exr"

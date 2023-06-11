@@ -2,6 +2,9 @@
 #pragma  once
 
 enum BXDFType {
+
+
+
     BSDF_REFLECTION = 1U << 0,
     BSDF_TRANSMISSION = 1U << 1,
     BSDF_DIFFUSE = 1U << 2,

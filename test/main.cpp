@@ -1,5 +1,4 @@
 
-#include "IO/FileUtils.hpp"
 #include "Common/Render.hpp"
 #include "iostream"
 #include "Texture/BitMapTexture.hpp"
@@ -21,7 +20,8 @@ void convert(std::string file){
     image.save(file,1);
 }
 
-int main() {
+
+int main(int argc, const char *argv[]) {
 //    convert("/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/img.png");
 //    exit(0);
     spdlog::set_level(spdlog::level::off);
@@ -32,7 +32,7 @@ int main() {
     //FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/bathroom2/";
     //FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/veach-mis/";
     // FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/caustic/";
-      FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/classroom/";
+  //    FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/classroom/";
    // FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/veach-mis/";
     //  FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/hair/";
      FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/curly-hair/";
@@ -46,14 +46,14 @@ int main() {
     //FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/cornell-box/";
     FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/teapot/";
 
+    if(argc>0){
+        for(int i =1; i<argc;i++)
+            Render::renderScene(std::string(argv[i]));
+    }
+    else {
+        Render::renderScene();
+    }
 
-    std::ifstream scene_file(FileUtils::WorkingDir + "scene.json");
-    nlohmann::json j;
-    scene_file >> j;
-    scene_file.close();
-
-    Render render(j);
-    render.Go();
 }
 
 

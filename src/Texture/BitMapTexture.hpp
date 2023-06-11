@@ -65,18 +65,24 @@ public:
     vec2 sample(TextureMapJacobian jacobian, const vec2 & uv, Float * pdf) const override {
         vec2 newUv = _distribution[jacobian]->SampleContinuous(uv, pdf);
         *pdf = *pdf * _w * _h;
-        return vec2(newUv.x, newUv.y);
+        return vec2(newUv.x,1- newUv.y);
     }
 
     Float pdf(TextureMapJacobian jacobian, const vec2 & uv) const override {
         vec2 newuv(uv);
-        Float res = _distribution[jacobian]->Pdf(vec2(newuv.x, newuv.y));
+        Float res = _distribution[jacobian]->Pdf(vec2(newuv.x, 1-newuv.y));
         return res;
+    }
+
+    void convert(){
+
+    //    ImageIO::saveLdr("a.png", ldr.get(), width(), height(), 3, overwrite);
+
     }
 
     T eval(vec2 uv) const override {
         float u = uv.x * _w;
-        float v = uv.y * _h;
+        float v = (1-uv.y) * _h;
         if ( _linear ) {
             u -= 0.5f;
             v -= 0.5f;
@@ -136,21 +142,30 @@ public:
             }
     }
 
-protected:
-
-    inline Float weight(int x, int y) const {
-        if ( _texelType == TexelType::RGB_HDR ) {
-            const vec3 v = as < vec3 >()[x + y * _w];
-            return luminace(v);
-        }
-        return 1;
-    }
-
     inline T getValue(int x, int y) const {
         T value;
         convertOut(_texels, value, y * _w + x, _isHdr);
         return value;
     }
+
+    inline int width(){
+        return _w;
+    }
+    inline int height(){
+        return _h;
+    }
+
+protected:
+
+    inline Float weight(int x, int y) const {
+        if ( _texelType == TexelType::RGB_HDR ) {
+            const vec3 v = as < vec3 >()[x + y * _w];
+            return max(v);
+        }
+        return 1;
+    }
+
+
 
     static void convertOut(const void * data, Spectrum & value, int index, bool isHdr) {
         if ( isHdr )

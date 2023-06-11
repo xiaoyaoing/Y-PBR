@@ -11,7 +11,6 @@ void Quad::preCompute( ) {
     computeBoundingBox();
     _invSq = vec2(1 / length2(_edge0), 1 / length2(_edge1));
     _normal = normalize(cross(_edge1, _edge0));
-
 }
 
 

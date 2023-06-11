@@ -12,6 +12,7 @@
 #include "Common/Frame.hpp"
 #include "Fresnel.hpp"
 #include "Sampler/Sampler.hpp"
+#include "Sampler/UniformSampler.h"
 /* sample microfacets from a tilted mesonormal */
 std::pair<vec3, Float> sample_wh(const vec3 &wi, const vec3 &wm,
                                      const MicrofacetDistribution * distr,

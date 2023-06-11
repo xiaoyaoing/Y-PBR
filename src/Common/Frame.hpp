@@ -117,6 +117,8 @@ struct Frame {
         return {-v.x,-v.y,v.z};
     }
 
+
+
     /// Equality test
     bool operator==(const Frame &frame) const {
         return frame.tangent == tangent && frame.bitTangent == bitTangent && frame.n == n;

@@ -57,7 +57,7 @@ public:
     virtual Frame setTangentFrame(const Intersection * its) const {
         //todo add bump map
         if(its->tangent){
-           return Frame(*its->tangent,cross(its->Ns,*its->tangent),its->Ns);
+           return Frame(*its->tangent,cross(its->Ns,its->tangent.value()),its->Ns);
         }
         return Frame(its->Ns);
     }

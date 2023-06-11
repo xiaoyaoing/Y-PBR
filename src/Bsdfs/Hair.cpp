@@ -46,7 +46,7 @@ inline Float LogisticCDF(Float x, Float s) {
 
 
 inline Float TrimmedLogistic(Float x, Float s, Float a, Float b) {
-    while ( x > Constant::PI) x -= 2 * Constant::PI;
+    while ( x > Constant::PI ) x -= 2 * Constant::PI;
     while ( x < - Constant::PI ) x += 2 * Constant::PI;
     return Logistic(x, s) / ( LogisticCDF(b, s) - LogisticCDF(a, s) );
 }
@@ -70,7 +70,7 @@ static std::array < Spectrum, pMax + 1 > Ap(Float cosThetaO, Float eta, Float h,
     // Compute attenuation terms up to $p=_pMax_$
     for ( int p = 2 ; p < pMax ; ++ p ) ap[p] = ap[p - 1] * T * f;
     // Compute attenuation term accounting for remaining orders of scattering
-   // ap[pMax] = ap[pMax - 1] * f * T / ( Spectrum(1.f) - T * f );
+    // ap[pMax] = ap[pMax - 1] * f * T / ( Spectrum(1.f) - T * f );
     return ap;
 }
 
@@ -85,24 +85,14 @@ static float logI0(float x)
 }
 
 Float Hair::M(Float v, Float sinThetaO, Float sinThetaI, Float cosThetaO, Float cosThetaI) const {
-//    Float a = sinThetaO * sinThetaI / v;
-//    Float b = cosThetaI * cosThetaO / v;
-    float a = cosThetaI*cosThetaO/v;
-    float b = sinThetaI*sinThetaO/v;
+    Float b = sinThetaO * sinThetaI / v;
+    Float a = cosThetaI * cosThetaO / v;
     Float csch = 2 / ( exp(1 / v) - exp(- 1 / v) );
-    auto val =  csch * exp(b) * I0(- a);
+    if(v<0.1)
+        return std::exp(-b + logI0(a) - 1.0f/v + 0.6931f + std::log(1.0f/(2.0f*v)));
 
-    if (v < 0.1f)
-        // More numerically stable evaluation for small roughnesses
-        // See https://publons.com/discussion/12/
-        val =  std::exp(-b + logI0(a) - 1.0f/v + 0.6931f + std::log(1.0f/(2.0f*v)));
-    else
-       val =  std::exp(-b)*I0(a)/(2.0f*v*std::sinh(1.0f/v));
-    if(isnan(val) || isinf(val))
-        int k =1;
-    return val;
+    return csch * exp(b) * I0(- a);
 }
-
 
 Float Hair::NR(Float beta, Float cosO, Float phi, Float h) const {
     Float gammaI = std::asin(clamp(h, - 1.0f, 1.0f));
@@ -110,7 +100,7 @@ Float Hair::NR(Float beta, Float cosO, Float phi, Float h) const {
     deltaPhi = std::fmod(deltaPhi, Constant::TWO_PI);
     if ( deltaPhi < 0.0f )
         deltaPhi += Constant::TWO_PI;
-   // return D(beta, deltaPhi) * Fresnel::dielectricReflectance(1.0f / _eta, cosO * cos(gammaI));
+    // return D(beta, deltaPhi) * Fresnel::dielectricReflectance(1.0f / _eta, cosO * cos(gammaI));
     return TrimmedLogistic(deltaPhi, beta, - Constant::PI, Constant::PI) *
            Fresnel::dielectricReflectance(1.0f / _eta, cosO * cos(gammaI));
 }
@@ -133,7 +123,7 @@ vec3 Hair::NP(Float beta, Float cosThetaD, Float phi, int p, Float h) const {
     deltaPhi = std::fmod(deltaPhi, Constant::TWO_PI);
     if ( deltaPhi < 0.0f )
         deltaPhi += Constant::TWO_PI;
-   // return Aph * D(beta, deltaPhi);
+    // return Aph * D(beta, deltaPhi);
     return Aph * TrimmedLogistic(deltaPhi, beta, - Constant::PI, Constant::PI);
 }
 
@@ -161,17 +151,15 @@ Spectrum Hair::f(const SurfaceEvent & event) const {
         phi += Constant::TWO_PI;
 
     Float h = getH(event);
- //   h = event.its->uv.y;
+    //   h = event.its->uv.y;
 
     vec3 Nr = vec3(NR(_betaR, trigInverse(event.wo.y), phi, h));
-    vec3 Ntt = NP(_betaTT, cosThetaD, phi, 1, h);
-    vec3 Ntrt = NP(_betaTRT, cosThetaD, phi, 2, h);
+    vec3 Ntt = NP(_betaR, cosThetaD, phi, 1, h);
+    vec3 Ntrt = NP(_betaR, cosThetaD, phi, 2, h);
     vec3 fsum = MR * Nr + MTT * Ntt + MTRT * Ntrt;
     vec3 res =  fsum ;
-  //  if( AbsCosTheta(event.wi)>0) res/= AbsCosTheta(event.wi);
-    if(hasNan(res)){
-        int k = 1;
-    }
+    //  if( AbsCosTheta(event.wi)>0) res/= AbsCosTheta(event.wi);
+
     return res;
 }
 
@@ -202,22 +190,16 @@ Float Hair::Pdf(const SurfaceEvent & event) const {
 
     Float pdf = 0;
     pdf += M(_vR, sin(thetaOR), sinThetaI, cos(thetaOR), cosThetaI) * apPdf[0] * TrimmedLogistic(phi- Phi(gammaI,gammaT,0),_betaR,-Constant::PI,Constant::PI);
-    pdf += M(_vTT, sin(thetaOTT), sinThetaI, cos(thetaOTT), cosThetaI) * apPdf[1] * TrimmedLogistic(phi- Phi(gammaI,gammaT,1),_betaTT,-Constant::PI,Constant::PI);
-    pdf += M(_vTRT, sin(thetaOTRT), sinThetaI, cos(thetaOTRT), cosThetaI) * apPdf[2] *TrimmedLogistic(phi- Phi(gammaI,gammaT,2),_betaTRT,-Constant::PI,Constant::PI);
-    if( isnan(pdf) || isinf(pdf)){
-        int k =1;
+    pdf += M(_vTT, sin(thetaOTT), sinThetaI, cos(thetaOTT), cosThetaI) * apPdf[1] * TrimmedLogistic(phi- Phi(gammaI,gammaT,1),_betaR,-Constant::PI,Constant::PI);
+    pdf += M(_vTRT, sin(thetaOTRT), sinThetaI, cos(thetaOTRT), cosThetaI) * apPdf[2] *TrimmedLogistic(phi- Phi(gammaI,gammaT,2),_betaR,-Constant::PI,Constant::PI);
+    if( isnan(pdf)){
+
     }
     return pdf;
 }
 
 Spectrum Hair::sampleF(SurfaceEvent & event, const vec2 & u) const {
     //Hair-samplineg requires 4 randoms.
-//    if(float(rand()%100000)/100000 <0.01 ){
-//        event.wo = Frame::Reflect(event.wi);
-//        event.pdf = 0.1;
-//        event.sampleType = BXDFType(BSDF_SPECULAR | BSDF_REFLECTION);
-//        return Spectrum(1);
-//    }
     vec2 u0 = DemuxFloat(u[0]), u1 = DemuxFloat(u[1]);
     Float sinThetaO = event.wo.y;
     Float costhetaO = trigInverse(sinThetaO);
@@ -234,13 +216,13 @@ Spectrum Hair::sampleF(SurfaceEvent & event, const vec2 & u) const {
     Float theta, v;
     if ( p == 0 ) {
         theta = thetaO - 2 * _scaleAngle;
-        v = _betaR;
+        v =  _vR;
     } else if ( p == 1 ) {
         theta = thetaO + _scaleAngle;
-        v = _betaTT;
+        v = _vTT;
     } else if ( p == 2 ) {
         theta = thetaO + 4 * _scaleAngle;
-        v = _betaTRT;
+        v = _vTRT;
     } else { throw ( "Invalid P" ); }
 
     Float sinThetaI = sampleM(v, sin(theta), cos(theta), u1[0], u1[1]);
@@ -253,15 +235,17 @@ Spectrum Hair::sampleF(SurfaceEvent & event, const vec2 & u) const {
     Float gammaI = std::asin(clamp(h, - 1.0f, 1.0f));
     Float gammaT = std::asin(clamp(h / iorPrime, - 1.0f, 1.0f));
 
-    deltaphi = Phi(gammaI, gammaT, p) + SampleTrimmedLogistic(u0[1], v, - Constant::PI, Constant::PI);
+    deltaphi = Phi(gammaI, gammaT, p) + SampleTrimmedLogistic(u0[1], _betaR, - Constant::PI, Constant::PI);
     Float phi = phiO + deltaphi;
     Float sinPhi = sin(phi), cosPhi = cos(phi);
 
     event.wi = vec3(sinPhi * cosThetaI, sinThetaI, cosPhi * cosThetaI);
     event.sampleType = this->m_type;
-    event.pdf =  Pdf(event);
+    event.pdf = Pdf(event);
     return f(event);
 }
+
+
 
 
 Float Hair::D(Float beta, Float phi) const {
@@ -278,9 +262,8 @@ Float Hair::D(Float beta, Float phi) const {
 
 Hair::Hair(const Json & json) : BSDF(BXDFType(BSDF_GLOSSY | BSDF_TRANSMISSION | BSDF_REFLECTION)) {
     _scaleAngle = getOptional(json, "scale_angle", 2.5);
-    _scaleAngle = 0;
     _roughness = getOptional(json, "roughness", 0.3);
-    Float melaninRatio = getOptional(json, "melanin_ratio", 1);
+    Float melaninRatio = getOptional(json, "melanin_ratio", 1.f);
     Float melaninConcentration = getOptional(json, "melanin_concentration", 1.3);
     bool overrideSigmaA = containsAndGet(json, "sigma_a", _sigmaA);
     if ( ! overrideSigmaA ) {
@@ -290,13 +273,19 @@ Hair::Hair(const Json & json) : BSDF(BXDFType(BSDF_GLOSSY | BSDF_TRANSMISSION | 
         _sigmaA = melaninConcentration * lerp(eumelaninSigmaA, pheomelaninSigmaA, melaninRatio);
     }
 
-    _betaR = std::max(Constant::PI * 0.5f * _roughness, 0.04f);
+    betaM = getOptional(json,"beta_m",0.3);
+    betaN = getOptional(json,"beta_n",0.3);
+
+    _betaR = std::max(Constant::PI * 0.5f * betaM, 0.04f);
     _betaTT = _betaR * 0.5f;
     _betaTRT = _betaR * 2.0f;
 
     _vR = _betaR * _betaR;
     _vTT = _betaTT * _betaTT;
     _vTRT = _betaTRT * _betaTRT;
+
+    _betaR = std::max(Constant::PI * 0.5f * betaN, 0.04f);
+
 
     _scaleAngle = Angle::degToRad(_scaleAngle);
 
@@ -321,7 +310,7 @@ std::array < Float, pMax + 1 > Hair::ComputeApPdf(Float cosThetaO, Float h) cons
     Float sinGammaT = h / etap;
     Float cosGammaT = trigInverse(sinGammaT);
 
-    Spectrum T = exp(_sigmaA) * ( 2 * cosGammaT / cosThetaT );
+    Spectrum T = exp(- _sigmaA * 2.f * cosGammaT / cosThetaT);
     std::array < Spectrum, pMax + 1 > ap = Ap(cosThetaO, _eta, h, T);
 
     // Compute $A_p$ PDF from individual $A_p$ terms
