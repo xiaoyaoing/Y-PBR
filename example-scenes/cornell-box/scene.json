@@ -9,7 +9,7 @@
       "type": "homogeneous",
       "sigma_a": 1.0,
       "sigma_s": 0.5,
-      "density": 0.5
+      "density": 1
     }
     ,{
       "name" : "teapot",
@@ -136,12 +136,13 @@
         ],
         "rotation": [
           0,
-          90,
+          270,
           90
         ]
       },
       "type": "quad",
-      "bsdf": "frontWall"
+      "bsdf": "frontWall",
+      "int_medium": "gas"
     },
     {
       "name": "leftWall",
@@ -348,9 +349,9 @@
     "fov": 35
   },
   "integrator": {
-    "type": "path_tracer",
+    "type": "vol_path_tracer",
     "min_bounces": 0,
-    "max_bounces": 64,
+    "max_bounces": 128,
     "enable_consistency_checks": true,
     "enable_two_sided_shading": true,
     "enable_light_sampling": true,
@@ -362,9 +363,9 @@
     "overwrite_output_files": false,
     "adaptive_sampling": false,
     "enable_resume_render": false,
-    "stratified_sampler": false,
+    "stratified_sampler": true,
     "scene_bvh": true,
-    "spp": 4,
+    "spp": 64,
     "spp_step": 16,
     "checkpoint_interval": "0",
     "timeout": "0"

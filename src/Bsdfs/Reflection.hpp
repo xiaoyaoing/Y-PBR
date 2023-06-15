@@ -51,12 +51,15 @@ inline bool SameHemisphere(const vec3 &w, const vec3 &wp) {
     return w.z * wp.z > 0;
 }
 
-inline bool isMirrorRelfect(const vec3 & wo,const vec3 & wi){
+inline bool isMirrorReflect(const vec3 & wo, const vec3 & wi){
 
         return std::abs(wi.z*wo.z - wi.x*wo.x - wi.y*wo.y - 1.0f) < 1e-3f;
 
 }
 
+
+std::tuple < std::shared_ptr < Texture < Float>>, std::shared_ptr < Texture < Float>>, std::shared_ptr < Texture < Float>> >
+loadRoughness(const Json & json);
 
 
 class BSDF {
@@ -88,8 +91,6 @@ public:
     inline Spectrum f(const SurfaceEvent &event, bool adjoint) const {
         Spectrum fResult = f(event);
         if (adjoint) {
-            auto dot1= dot((event.toWorld(event.wo)), event.its->Ng);
-            auto woz = event.wo.z;
             auto corrnectShading = std::abs(
                     dot((event.toWorld(event.wo)), event.its->Ng) * event.wi.z /
                     (dot((event.toWorld(event.wi)), event.its->Ng) * event.wo.z));

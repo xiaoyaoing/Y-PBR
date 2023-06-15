@@ -19,10 +19,6 @@ Spectrum estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Light
                            const Scene & scene, Sampler & sampler, const Medium * medium, bool specular) {
     const BSDF * bsdf = event.its->bsdf;
 
-    //pure specular case
-//    if ( ! bsdf->MatchesFlags(BSDF_NO_SPECULAR) )
-//        return Spectrum();
-
 
     event.requestType =
             specular ? BSDF_ALL : BSDF_NO_SPECULAR;
@@ -35,8 +31,10 @@ Spectrum estimateDirect(SurfaceEvent & event, const vec2 & uShading, const Light
         Float distance;
         Spectrum Li = light.sampleLi(event.its->p, uLight, & wi, & lightPdf, & distance);
         Ray ray(event.its->p, wi, Constant::EPSILON, distance - Constant::EPSILON);
-       Li *= evalShadowDirect(scene, ray, medium);
+        Li *= evalShadowDirect(scene, ray, medium);
+
         if ( ! isBlack(Li) && lightPdf != 0 ) {
+
             auto its = scene.intersect(ray);
             event.wi = event.toLocal(wi);
             scatteringPdf = bsdf->Pdf(event);
@@ -171,10 +169,9 @@ evalLightDirect(const Scene & scene, const Light & light, Ray & ray,
     //avoid self shadow
     ray.farT -= lightIts->epsilon;
     if( isBlack(L)) return Spectrum(0);
-    auto t = L * evalShadowDirect(scene, ray, medium);
-    if ( hasNan(t) )
-        int k = 1;
     if ( lightPdf ) * lightPdf = light.PdfLi(lightIts.value(), ray.o);
+
+    auto t = L * evalShadowDirect(scene, ray, medium);
     return t;
 }
 
@@ -183,14 +180,17 @@ Spectrum evalShadowDirect(const Scene & scene, Ray ray, const Medium * medium) {
         return scene.intersectP(ray) ? Spectrum(0) : Spectrum(1);
     }
     Spectrum Tr(1);
+   // return Tr;
     std::optional < Intersection > its;
     Float tHit = ray.farT;
-    while ( tHit > 0 ) {
+    while ( tHit > 0  && medium) {
         its = scene.intersect(ray);
         bool didHit = its.has_value();
         if ( didHit && ! its->bsdf->Pure(BSDF_FORWARD) )
             return Spectrum();
         Tr *= medium->TR(ray);
+        if(!its)
+            return Tr;
         medium = its->primitive->selectMedium(medium, dot(ray.d, its->Ng) > 0);
         tHit -= ray.farT;
         ray = Ray(its->p, ray.d, Constant::EPSILON, tHit);
@@ -211,6 +211,7 @@ Spectrum volumeUniformSampleOneLight(VolumeEvent & event, const Medium * medium,
         lightNum = std::min((int) ( sampler.getNext1D() * nLights ), nLights - 1);
         lightPdf = Float(1) / nLights;
     }
+    lightNum = 0;lightPdf = 1;
     light = scene.lights.at(lightNum);
 
     vec2 uScattering = sampler.getNext2D();
@@ -231,18 +232,18 @@ volumeEstimateDirect(VolumeEvent & event, const Medium * medium, const vec2 & uS
     vec3 wi;
     Float lightPdf, distance, scatteringPdf;
     ///light sample
-    // return event.p;
     Li = light.sampleLi(event.p, uLight, & wi, & lightPdf, & distance);
     Ray ray(event.p, wi, Constant::EPSILON, distance - Constant::EPSILON);
     // return Spectrum(distance);
     Spectrum p = event.phase->p(event.rayDir, wi);
-    if ( ! isBlack(p) && ! isBlack(( Li = Li * evalShadowDirect(scene, ray, medium) )) ) {
+    if ( ! isBlack(p) && !isBlack(( Li = Li * evalShadowDirect(scene, ray, medium) ))) {
         Float weight = 1;
+        scatteringPdf = event.phase->pdf(-event.rayDir,wi);
         if ( ! light.isDeltaLight() ) weight = PowerHeuristic(lightPdf, scatteringPdf);
-        Ld += Li * p * weight;
-        if(hasNeg(Ld)){
-            int k =1;
-        }
+        Ld +=weight * p * Li / lightPdf;
+     //   return Ld;
+       // return vec3(lightPdf/100.f);
+  //      return Li/lightPdf;
     }
     ///phase sample
 
@@ -256,7 +257,7 @@ volumeEstimateDirect(VolumeEvent & event, const Medium * medium, const vec2 & uS
             if ( lightPdf == 0 ) return Ld;
             Float weight = PowerHeuristic(scatteringPdf, lightPdf);
             if ( ! isBlack(Li) ) Ld += f * weight * Li / scatteringPdf;
-            if(hasNeg(Ld)){
+            if(luminace(Ld)>10){
                 int k =1;
             }
         }
@@ -266,7 +267,7 @@ volumeEstimateDirect(VolumeEvent & event, const Medium * medium, const vec2 & uS
 
 bool russian(int depth, Sampler &sampler, Spectrum beta) {
     float pdf = max(beta);
-    if(depth<2 || pdf > 0.2)
+    if(depth<2 || pdf > 0.1)
         return false;
     if(sampler.getNext1D() < pdf )
     {

@@ -93,7 +93,7 @@ Float Sphere::directPdf(const Intersection & pShape, vec3 ref) const {
     return 1/(2 * Constant::PI *(1-cosThetaMax));
 }
 
-Intersection Sphere::sample(const vec3 & ref, const vec2 & u, Float * pdf) const {
+Intersection Sphere::sample(const vec3 &ref, const vec2 &u, Float *pdf, vec3 *wi) const {
     //All points are visible
     Intersection it;
     if( distance2(ref, center) <= radius * radius){
@@ -128,12 +128,10 @@ Intersection Sphere::sample(const vec3 & ref, const vec2 & u, Float * pdf) const
 
     vec3 nWorld = -(sinAlpha * cos(phi) * wx + sinAlpha * sin(phi) * wy +cosAlpha * w );
     vec3 pWorld = center + radius * nWorld;
-    if(pWorld == ref){
-
-    }
     it.p = pWorld;
     it.Ng = nWorld;
     *pdf = 1/(2 * Constant::PI *(1-cosThetaMax));
+    *wi = normalize((pWorld - ref.p));
     return it;
 }
 

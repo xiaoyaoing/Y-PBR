@@ -36,9 +36,7 @@
                 "type": "isotropic"
             },
             "transmittance": {
-                "type": "double_exponential",
-                "sigma_a": 1,
-                "sigma_b": 10
+                "type": "exponential"
             },
             "max_bounces": 1024,
             "type": "homogeneous",
@@ -987,19 +985,19 @@
         "max_bounces": 3,
         "enable_consistency_checks": false,
         "enable_two_sided_shading": true,
-        "type": "path_tracer",
+        "type": "vol_path_tracer",
         "enable_light_sampling": true,
         "enable_volume_light_sampling": true,
         "low_order_scattering": true,
         "include_surfaces": true
     },
     "renderer": {
-        "overwrite_output_files": true,
+        "overwrite_output_files": false,
         "adaptive_sampling": true,
         "enable_resume_render": false,
         "stratified_sampler": false,
         "scene_bvh": true,
-        "spp": 256,
+        "spp": 64,
         "spp_step": 16,
         "checkpoint_interval": "0",
         "timeout": "0",

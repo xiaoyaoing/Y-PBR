@@ -3,9 +3,9 @@
 #include "Mediums/Medium.hpp"
 #include "TraceHelper.h"
 
-vec3 VolPathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler & sampler) const {
+vec3 VolPathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &sampler) const {
     Spectrum L(0);
-    const Medium * medium;
+    const Medium *medium;
     medium = _camera->_medium.get();
     VolumeEvent voulumeEvent;
     SurfaceEvent surfaceEvent;
@@ -13,88 +13,89 @@ vec3 VolPathIntegrator::integrate(const Ray & ray, const Scene & scene, Sampler 
     int bounce;
     Spectrum beta(1);
     Ray _ray(ray);
-    std::optional < Intersection > temp;
+    std::optional<Intersection> temp;
     bool gemoback;
     bool tempHitSurface;
     SurfaceEvent tempEvent;
-    for ( bounce = 0 ; bounce < maxBounces ; bounce ++ ) {
-        std::optional < Intersection > its = scene.intersect(_ray);
+    for (bounce = 0; bounce < maxBounces; bounce++) {
+        std::optional<Intersection> its = scene.intersect(_ray);
         bool foundIntersection = its.has_value();
-        //if(foundIntersection) return (its->Ng +1.f)/2.f; else return L;
-        if ( ! foundIntersection && ! medium ) break;
         bool hitSurface = true;
-        if(medium && (!foundIntersection || ( !its->bsdf->HasFlag(BSDF_GLOSSY)))){
-            medium = nullptr;
-        }
-        if ( medium ) {
-//            return medium->sampleDistance(_ray, sampler, voulumeEvent);
+        if (!medium && !foundIntersection)
+            break;
+        if (medium) {
+            medium->sampleDistance(_ray, sampler, voulumeEvent);
             beta *= medium->sampleDistance(_ray, sampler, voulumeEvent);
-            if ( isBlack(beta) ) break;
+            if (isBlack(beta)) break;
             hitSurface = voulumeEvent.exited;
+            if (!foundIntersection && hitSurface)
+                break;
         }
-       // hitSurface = true;
+        if (hitSurface) {
+            if (specularBounce) {
+                if (its.has_value())
+                    L += beta * its->Le(-_ray.d);
 
-        if(medium && (!foundIntersection || ( !its->bsdf->HasFlag(BSDF_GLOSSY)))){
-            medium = nullptr;
-            auto dir =  tempEvent.toWorld(tempEvent.wi);
-            Ray tempRay(_ray.o,-temp->w,0);
-           // its = scene.intersect(tempRay);
-            Ray tempRay1(_ray.o-1.1f * dir * Constant::EPSILON,dir,0);
-            auto its1 = scene.intersect(tempRay1);
-            int k =1;
-        }
-        temp = its;
-
-        tempHitSurface = hitSurface;
-        if ( hitSurface ) {
-//            return Spectrum(0);
-            if ( specularBounce ) {
-                if ( foundIntersection )
-                    L += beta * its->Le(- _ray.d);
-                else
-                    for ( auto light: scene.lights ) {
-                        if ( light->flags == int(LightFlags::Infinite) ) {
-                            L += beta * light->Le(_ray);
-                        }
-                    }
             }
-            surfaceEvent = makeLocalScatterEvent(& its.value());
-            if ( its->bsdf->Pure(BSDF_FORWARD) ) {
+
+            surfaceEvent = makeLocalScatterEvent(&its.value());
+            if (its->bsdf->Pure(BSDF_FORWARD)) {
                 _ray = surfaceEvent.sctterRay(_ray.d);
             } else {
-                if ( its->bsdf->MatchesFlags(BXDFType(BSDF_NO_SPECULAR)) && bounce < maxBounces - 1 ) {
-
-                    L += beta * uniformSampleAllLights
-                            (surfaceEvent, scene, sampler, medium);  //direct lighting
+                if (its->bsdf->MatchesFlags(BXDFType(BSDF_NO_SPECULAR)) && bounce < maxBounces - 1) {
+                    auto l = uniformSampleAllLights
+                            (surfaceEvent, scene, sampler, medium);
+                    L += beta * l;
                 }
                 surfaceEvent.requestType = BSDF_ALL;
                 Spectrum f = its->bsdf->sampleF(surfaceEvent, sampler.getNext2D(), false);
-                if ( isBlack(f) || surfaceEvent.pdf == 0 )
+                if (isBlack(f) || surfaceEvent.pdf == 0)
                     break;
                 BXDFType flags = surfaceEvent.sampleType;
-                specularBounce = ( flags & BSDF_SPECULAR ) != 0;
+                specularBounce = (flags & BSDF_SPECULAR) != 0;
+                if (specularBounce) {
+                    int k = 1;
+                }
                 beta *= f / surfaceEvent.pdf;
                 _ray = surfaceEvent.sctterRay(surfaceEvent.toWorld(surfaceEvent.wi));
             }
-            tempEvent = surfaceEvent;
-            temp = *tempEvent.its;
-            gemoback = dot(_ray.d, its->Ng) < 0;
             medium = its->primitive->selectMedium(medium, dot(_ray.d, its->Ng) < 0);
         } else {
+            specularBounce = false;
+            auto l = volumeUniformSampleOneLight(voulumeEvent, medium, scene, sampler, lightDistribution.get());
             L += beta *
-                 volumeUniformSampleOneLight(voulumeEvent, medium, scene, sampler, lightDistribution.get());
+                 l;
+            // return beta * l;
+            if ((luminace(L) > 2)) {
+                int k = 1;
+            }
+
             PhaseSample phaseSample;
             Spectrum p = voulumeEvent.phase->sampleP(_ray.d, sampler.getNext2D(), phaseSample);
+            beta *= p / phaseSample.pdf;
             _ray = Ray(voulumeEvent.p, phaseSample.w);
         }
         //russian prob
         Float roulettePdf = std::max(beta.x, std::max(beta.y, beta.z));
-        if ( bounce > 2 && roulettePdf < 0.1 ) {
-            if ( sampler.getNext1D() < roulettePdf )
+        if (bounce > 2 && roulettePdf < 0.1) {
+            if (sampler.getNext1D() < roulettePdf)
                 beta /= roulettePdf;
             else
                 break;
         }
+        if (bounce == 2 && luminace(L) > 2) {
+            int k = 1;
+        }
+    }
+
+    if (specularBounce)
+        for (auto light: scene.lights) {
+            if (light->flags == int(LightFlags::Infinite)) {
+                L += beta * light->Le(_ray);
+            }
+        }
+    if (luminace(L) == 0 ) {
+        int k = 1;
     }
     return L;
 }

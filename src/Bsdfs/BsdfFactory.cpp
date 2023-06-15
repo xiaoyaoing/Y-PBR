@@ -91,6 +91,7 @@ namespace BSDFFactory {
     }
 
     std::shared_ptr < Material > LoadRoughPlasticMaterial(const Json & j) {
+        return std::make_shared<RoughPlastic>(j);
         std::shared_ptr < Texture < Spectrum>> specularReflection = TextureFactory::LoadTexture < Spectrum >(
                 j, "specular_reflection", Spectrum(1));
         std::shared_ptr < Texture < Spectrum>> diffuseReflection = TextureFactory::LoadTexture < Spectrum >(

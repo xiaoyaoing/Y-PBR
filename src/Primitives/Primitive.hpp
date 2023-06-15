@@ -45,8 +45,7 @@ public:
 
     void transform( ) { transform(toWorld); }
 
-    virtual Intersection sample(const vec3 & ref, const vec2 & u,
-                                Float * pdf) const;
+    virtual Intersection sample(const vec3 &ref, const vec2 &u, Float *pdf, vec3 *wi) const;
 
     virtual Intersection sample(const vec2 & u, Float * pdf) const {};
 

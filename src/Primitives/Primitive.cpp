@@ -1,17 +1,18 @@
 #include "Primitive.hpp"
 #include "scene.hpp"
 
-Intersection Primitive::sample(const vec3 & ref, const vec2 & u, Float * pdf) const {
+Intersection Primitive::sample(const vec3 &ref, const vec2 &u, Float *pdf, vec3 *wi ) const {
     auto intr = sample(u, pdf);
 
-    vec3 wi = intr.p - ref;
-    if (length2(wi) == 0)
+    *wi = intr.p - ref;
+    if (length2(*wi) == 0)
         *pdf = 0;
     else {
-        wi = normalize(wi);
+        auto l = length(*wi);
+        *wi /=l;
         // Convert from area measure, as returned by the Sample() call
         // above, to solid angle measure.
-        *pdf *= length2(ref-intr.p) / abs(dot(intr.Ng, -wi));
+        *pdf *= l * l / abs(dot(*wi,intr.Ng)) ;
         if (std::isinf(*pdf)) *pdf = 0.f;
     }
     return intr;

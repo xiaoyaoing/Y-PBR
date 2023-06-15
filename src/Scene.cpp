@@ -33,7 +33,7 @@ static int occludedCount1 = 0;
 Scene::Scene(const Json sceneJson) : options(RenderOptions(sceneJson.at("renderer"))) {
     bsdfs = BSDFFactory::LoadBsdfsFromJson(sceneJson.at("bsdfs"));
     bssrdfs = BSDFFactory::LoadBssrdfsFromJson(getOptional(sceneJson,"bssrdfs",Json()));
-   // mediums = MediumFactory::loadMediumsFromJson(sceneJson.at("media"));
+    mediums = MediumFactory::loadMediumsFromJson(sceneJson.at("media"));
     PrimitiveFactory::LoadPrimitivesFromJson(sceneJson.at("primitives"), * this);
 
     spdlog::info("{} Primitives", primitives.size());

@@ -4,8 +4,19 @@
 
 #include "Common/Frame.hpp"
 #include "Sampler/Warp.hpp"
+#include "Texture/TextureFactory.hpp"
 
 #include <spdlog/spdlog.h>
+
+std::tuple < std::shared_ptr < Texture < Float>>, std::shared_ptr < Texture < Float>>, std::shared_ptr < Texture < Float>> >
+loadRoughness(const Json & json) {
+    std::shared_ptr < Texture < Float>> roughness = nullptr, uroughness = nullptr, vroughness = nullptr;
+    roughness = TextureFactory::LoadTexture < Float >(json, "roughness", 0.01f);
+    uroughness = TextureFactory::LoadTexture < Float >(json, "urounghness");
+    vroughness = TextureFactory::LoadTexture < Float >(json, "vrounghness");
+    return std::make_tuple(roughness, uroughness, vroughness);
+}
+
 
 Spectrum LambertainR::f(const SurfaceEvent & event) const {
     if ( event.wo.z < 0 || event.wi.z < 0 ) {

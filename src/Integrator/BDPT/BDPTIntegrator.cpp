@@ -25,6 +25,7 @@ void BDPTIntegrator::render(const Scene &scene)  {
         _tracers.emplace_back(BdptTracer(scene,lightDistrib.get(),_camera.get(),imagePramid,maxBounces));
     }
     int num_threads = std::thread::hardware_concurrency();
+    num_threads=1;
     parallel_init(num_threads);
 
     int spp = scene.options.spp;

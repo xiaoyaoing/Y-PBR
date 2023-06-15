@@ -18,6 +18,17 @@ Spectrum Homogeneous::TR(const Ray & ray) const {
 }
 
 Spectrum Homogeneous::sampleDistance(const Ray & ray, Sampler & sampler, VolumeEvent & event) const {
+    if(isBlack(sigmaS)){
+        auto maxT = ray.farT;
+        if (maxT == std::numeric_limits<Float>::max())
+            return Spectrum (0);
+        event.p = ray.operator()(maxT);
+        event.phase = phaseFunction.get();
+        event.exited = true;
+        event.rayDir = ray.d;
+        event.pdf = 1.0f;
+        return exp(-maxT * sigmaT);
+    }
     int channel = std::min(int(sampler.getNext1D() * 3),2);
     Float t = -std::log(1-sampler.getNext1D()) /sigmaT[channel];
     bool hitSurace = t >= ray.farT;
@@ -27,9 +38,9 @@ Spectrum Homogeneous::sampleDistance(const Ray & ray, Sampler & sampler, VolumeE
     event.p = ray(t);
     event.rayDir = ray.d;
     Spectrum Tr = exp(-t * sigmaT);
-    event.pdf = average(hitSurace?Tr:Tr/sigmaT);
-    //return Spectrum(1);
-    return  hitSurace?Tr/event.pdf:Tr * sigmaS / event.pdf;
+    event.pdf = average(hitSurace?Tr:Tr * sigmaT);
+   // return Tr;
+    return  (hitSurace?Tr/event.pdf:Tr * sigmaS / event.pdf);
 }
 
 Homogeneous::Homogeneous(const Json & json) {

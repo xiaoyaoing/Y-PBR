@@ -9,19 +9,21 @@
 
 Spectrum
 AreaLight::sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf, Float * distance) const {
-    Intersection pShape = primitive->sample(ref, u, pdf);
+    Intersection pShape = primitive->sample(ref, u, pdf, wi);
     if(*pdf==0){
         return Spectrum();
     }
     *distance = length(pShape.p - ref);
-    *wi = (pShape.p-ref) / *distance;
-    return directLighting(pShape, normalize(ref-pShape.p));
+    return directLighting(pShape, -(*wi));
 
 }
 
 
 
 Spectrum AreaLight::directLighting(const Intersection & intr,const vec3 & wo) const {
+    if( dot(intr.Ng, wo) <0){
+        int k = 1;
+    }
     return (twoSide || dot(intr.Ng, wo) > 0) ? emssision->eval(& intr) : Spectrum(0.f);
 }
 

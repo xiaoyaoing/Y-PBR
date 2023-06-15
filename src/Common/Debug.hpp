@@ -2,11 +2,12 @@
 #pragma once
 
 struct DebugConfig{
-    const static  bool OnlyDirectLighting= false;
-    const static  bool OnlyIndirectLighting= false;
+    const static  bool OnlyDirectLighting;
+    const static  bool OnlyIndirectLighting;
+    const static  bool OnlyOneThread;
+    const static  bool OnlyShowNormal;
     const static  bool DebugMode ;
-    const static  bool OnlyOneThread= false;
-    const static  bool OnlyShowNormal  =false;
+
 
     const static  bool sampleInRange = false;
     const static  int  sampleMinx;

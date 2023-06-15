@@ -7,7 +7,7 @@ public:
     Sphere(const Json & json):Primitive(json){}
     Intersection sample(const vec2 & u, Float * pdf) const override;
 
-    Intersection sample(const vec3 & ref, const vec2 & u, Float * pdf) const override;
+    Intersection sample(const vec3 &ref, const vec2 &u, Float *pdf, vec3 *wi) const override;
 
     std::optional<Intersection> intersect(Ray& ray) const override;
     vec3 operator()(Float u, Float v) const override;

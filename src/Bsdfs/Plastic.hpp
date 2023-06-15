@@ -32,8 +32,6 @@ protected:
      std::pair<Float,Float> specAndDiffuseProb(const SurfaceEvent & event) const;
 
     Float m_ior;
-    //float _thickness;
-    vec3 _sigmaA;
     Float _diffuseFresnel;
     Float _avgTransmittance;
     vec3 _scaledSigmaA;
@@ -43,10 +41,15 @@ protected:
 class RoughPlastic : public  BSDF{
     std::shared_ptr<Texture<Spectrum>> diffuseReflectance;
     std::shared_ptr<Texture<Spectrum>> specularReflectance;
-    Float m_ior;
     std::shared_ptr<Texture<Float>> m_roughness,m_vRoughness, m_uRoughness;
     std::shared_ptr<MicrofacetDistribution> m_distrib;
+
+    Float m_ior;
+    Float _diffuseFresnel;
+    Float _avgTransmittance;
+    vec3 _scaledSigmaA;
 public:
+    RoughPlastic(const Json & json);
     RoughPlastic(const std::shared_ptr < Texture < Spectrum>> & diffuseReflectance,
                  const std::shared_ptr < Texture < Spectrum>> & specularReflectance, Float mIor,
                  const std::shared_ptr < MicrofacetDistribution > & mDistrib,

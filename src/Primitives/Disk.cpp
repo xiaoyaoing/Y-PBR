@@ -20,8 +20,8 @@ void Disk::computeBoundingBox( ) {
     Primitive::computeBoundingBox();
 }
 
-Intersection Disk::sample(const vec3 & ref, const vec2 & u, Float * pdf) const {
-    return Primitive::sample(ref, u, pdf);
+Intersection Disk::sample(const vec3 &ref, const vec2 &u, Float *pdf, vec3 *wi) const {
+    return Primitive::sample(ref, u, pdf, wi);
 }
 
 Intersection Disk::sample(const vec2 & u, Float * pdf) const {

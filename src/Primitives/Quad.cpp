@@ -38,7 +38,7 @@ std::optional < Intersection > Quad::intersect(Ray & ray) const {
     ray.farT = t;
     its.uv = vec2(l0, l1);
     its.p = q;
-    its.Ng = its.Ns = normal(its.p);
+   its.Ng = its.Ns =  _normal;
     its.primitive = this;
     its.bsdf = bsdf.get();
     return {its};

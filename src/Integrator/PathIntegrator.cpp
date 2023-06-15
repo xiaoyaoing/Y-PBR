@@ -58,7 +58,7 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
                         (surfaceEvent, scene, sampler, nullptr);  //direct lighting
                 if (DebugConfig::OnlyDirectLighting)
                     return Ld;
-                    L += beta * Ld;
+                 L += beta * Ld;
                 if(hasNan(L)){
                     int k = 1;
                 }
