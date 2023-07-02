@@ -36,7 +36,7 @@ LightPath::connectCameraBDPT(const Scene &scene, const Camera *camera, Sampler &
         return Spectrum(0);
     PositionAndDirectionSample sample;
     if(!camera->sampleLi(lightVertex.pos(), &pixel, sampler.getNext2D(),sample))
-        return Spectrum(0,0,0);
+        return Spectrum(1,0,0);
 
     auto cameraVertex = PathVertex(camera,sample);
     auto ray = generateRay(cameraVertex, lightVertex);
@@ -45,7 +45,10 @@ LightPath::connectCameraBDPT(const Scene &scene, const Camera *camera, Sampler &
        // return Spectrum(0);
    // return lightVertex.eval(cameraVertex, true);
    // return lightVertex.beta;
+   return lightVertex.eval(cameraVertex, true);
     auto res = tr *   lightVertex.beta  *  lightVertex.eval(cameraVertex, true) * cameraVertex.beta;
+    return res;
+    return lightVertex.eval(cameraVertex, true);
   //  return abs(lightVertex.pos())/10.f;
     return res;
     return cameraVertex.beta ;//* 10.f;

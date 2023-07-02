@@ -25,9 +25,8 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
     for (bounces = 0;; ++bounces) {
 
         its = scene.intersect(_ray);
-//        if(its)
-//            return (its->Ng+1.f)/2.f;
-        if (specularBounce) {
+
+        if (specularBounce && bounces>minBounces) {
             if (its.has_value())
                 L += beta * its->Le(-_ray.d);
             else
@@ -50,6 +49,8 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
             return (its->Ng + Spectrum(1.f)) / 2.f;
         }
         surfaceEvent = makeLocalScatterEvent(&its.value());
+//        if(its)
+//            return (surfaceEvent.frame.n+1.f)/2.f;
         if (its->bsdf->Pure(BSDF_FORWARD)) {
             _ray = surfaceEvent.sctterRay(_ray.d);
         } else {

@@ -2,6 +2,7 @@
 #include "Fresnel.hpp"
 #include <iostream>
 
+
 static Float trigInverse(Float x) {
     return std::min(std::sqrt(std::max(1.0f - x*x, 0.0f)), 1.0f);
 
@@ -21,7 +22,7 @@ static Float I0(Float x) {
 }
 
 static Float getH(const SurfaceEvent & event){
-    return std::fabs(event.its->uv.y);
+    return 2*std::fabs(event.its->uv.y)-1;
 }
 
 
@@ -124,7 +125,7 @@ vec3 Hair::NP(Float beta, Float cosThetaD, Float phi, int p, Float h) const {
     if ( deltaPhi < 0.0f )
         deltaPhi += Constant::TWO_PI;
     // return Aph * D(beta, deltaPhi);
-    return Aph * TrimmedLogistic(deltaPhi, beta, - Constant::PI, Constant::PI);
+    return Aph * vec3( TrimmedLogistic(deltaPhi, beta, - Constant::PI, Constant::PI));
 }
 
 Spectrum Hair::f(const SurfaceEvent & event) const {
@@ -146,7 +147,7 @@ Spectrum Hair::f(const SurfaceEvent & event) const {
     Float MTT = M(_vTT, sin(thetaOTT), sinThetaI, cos(thetaOTT), cosThetaI);
     Float MTRT = M(_vTRT, sin(thetaOTRT), sinThetaI, cos(thetaOTRT), cosThetaI);
 
-    Float phi = std::atan2(event.wi.x, event.wi.z);
+    Float phi = std::atan2(event.wi.x, event.wi.z) - std::atan2(event.wo.x,event.wo.z);
     if ( phi < 0.0f )
         phi += Constant::TWO_PI;
 
@@ -156,14 +157,20 @@ Spectrum Hair::f(const SurfaceEvent & event) const {
     vec3 Nr = vec3(NR(_betaR, trigInverse(event.wo.y), phi, h));
     vec3 Ntt = NP(_betaR, cosThetaD, phi, 1, h);
     vec3 Ntrt = NP(_betaR, cosThetaD, phi, 2, h);
+  //  return Ntrt * MTRT;
     vec3 fsum = MR * Nr + MTT * Ntt + MTRT * Ntrt;
+  //  return MR * Nr;
+    return fsum;
     vec3 res =  fsum ;
     //  if( AbsCosTheta(event.wi)>0) res/= AbsCosTheta(event.wi);
-
+    res = MTRT * Ntrt;
     return res;
 }
 
+
 Float Hair::Pdf(const SurfaceEvent & event) const {
+
+
     Float sinThetaO = event.wo.y;
     Float costhetaO = trigInverse(sinThetaO);
     Float thetaO = std::asin(clamp(sinThetaO, - 1, 1));
@@ -301,6 +308,7 @@ Float Hair::sampleM(Float v, Float sinThetaO, Float cosThetaO, Float xi1, Float 
 }
 
 std::array < Float, pMax + 1 > Hair::ComputeApPdf(Float cosThetaO, Float h) const {
+
     Float sinThetaO = trigInverse(cosThetaO);
 
     Float sinThetaT = sinThetaO / _eta;
@@ -324,5 +332,7 @@ std::array < Float, pMax + 1 > Hair::ComputeApPdf(Float cosThetaO, Float h) cons
     }
     return apPdf;
 }
+
+
 
 

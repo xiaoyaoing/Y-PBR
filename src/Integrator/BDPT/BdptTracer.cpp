@@ -21,7 +21,7 @@ Spectrum BdptTracer::traceSample(ivec2 pixel, Sampler &sampler) {
         for (int c = 1; c <= upperBound; ++c) {
             if(l!=2 || c!=1)
                 continue;
-                if (!cameraPath->operator[](c-1).canConnect() || !lightPath->operator[](l-1).canConnect())
+            if (!cameraPath->operator[](c-1).canConnect() || !lightPath->operator[](l-1).canConnect())
                     continue;
             if (c == 1) {
                 ivec2 pRaster;

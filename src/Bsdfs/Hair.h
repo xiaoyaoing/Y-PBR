@@ -1,5 +1,5 @@
 #include "Reflection.hpp"
-
+#include "MicrofacetDistribution.hpp"
 
 const int pMax = 3;
 
@@ -24,8 +24,11 @@ protected:
 
     std::array<Float, pMax + 1> ComputeApPdf(Float cosThetaO,Float h) const;
 
-
+    vec3 getSmoothDir(vec3 wo,Float gammaI,Float  gammaT, int p ) const;
 private:
+    GGX ggx;
+
+    vec2 alpha_r,alpha_tt,alpha_trt;
     Float betaM,betaN;
     Float _scaleAngle;
     Float _roughness;

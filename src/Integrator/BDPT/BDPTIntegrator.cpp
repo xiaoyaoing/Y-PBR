@@ -39,8 +39,7 @@ void BDPTIntegrator::render(const Scene &scene)  {
         int y0 = tile[1] * tileSize;
         int y1 = std::min(y0 + tileSize, height);
         auto & tracer = _tracers[tile.x * numTiles.y + tile.y];
-        std::unique_ptr<Sampler> tileSampler = _sampler->clone(0);
-     //   tileSampler->setSeed(tile.y * renderBounds.x + tile.x);
+        std::unique_ptr<Sampler> tileSampler = _sampler->clone(tile.y * renderBounds.x + tile.x);
         for (int y = y0; y < y1; y++) {
             for (int x = x0; x < x1; x++) {
                 for (int s = 0; s < spp; s++) {

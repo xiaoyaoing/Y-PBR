@@ -482,16 +482,14 @@ std::optional<Intersection> CurveI::intersect(Ray &ray) const {
     its.p = ray.o + ray.d * ray.farT;
     uint32 p0 = curveIts.curveP0;
     float t = curveIts.uv.x;
-
+    t = 0.5;
     vec3 tangent = normalize(BSpline::quadraticDeriv((*_nodeData)[p0], (*_nodeData)[p0 + 1], (*_nodeData)[p0 + 2], t));
-
     {
         vec3 point = BSpline::quadratic((*_nodeData)[p0], (*_nodeData)[p0 + 1], (*_nodeData)[p0 + 2], t);
         vec3 localP = its.p - point;
         localP -= tangent * (dot(localP, tangent));
         its.Ng = its.Ns = normalize(localP);
     }
-    its.Ng =its.Ns = tangent;
     its.uv = curveIts.uv;
     its.primitive = this;
     its.bsdf = bsdf.get();

@@ -32,6 +32,7 @@ public:
     std::optional<Intersection> intersect(const Ray & ray) const ;
     bool intersectP(const Ray & ray) const ;
 
+
     template < typename  LAMBDA>
     void trace(Ray & ray,LAMBDA intersector) const {
         if ( ! nodes ) {

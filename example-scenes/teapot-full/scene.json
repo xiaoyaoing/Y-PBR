@@ -99,6 +99,20 @@
             }
         },
         {
+            "transform": {
+                "scale": [
+                    133,133,133
+                ],
+                "rotation": [
+                    0,
+                    45,
+                    -180
+                ]
+            },
+            "type": "quad",
+            "bsdf": "Floor"
+        },
+        {
             "transform": {},
             "ext_medium": "Tea",
             "type": "mesh",
@@ -151,14 +165,14 @@
         "enable_volume_light_sampling": true
     },
     "renderer": {
-        "output_file": "teapot-full.png",
+        "output_file": "teapot-full.exr",
         "resume_render_file": "RenderState.dat",
         "overwrite_output_files": false,
         "adaptive_sampling": true,
         "enable_resume_render": false,
         "stratified_sampler": true,
         "scene_bvh": true,
-        "spp": 1,
+        "spp": 512,
         "spp_step": 16,
         "checkpoint_interval": "0",
         "timeout": "0",

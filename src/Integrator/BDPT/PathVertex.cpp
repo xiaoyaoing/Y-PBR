@@ -40,6 +40,7 @@ Spectrum PathVertex::eval(const PathVertex &vertex, bool adjoint) const {
     switch (type) {
         case VertexType::Surface: {
             const auto &event = _record.surfaceRecord.event;
+            return (1.f+event.toLocal(d))/2.f;
             return _sampler.bsdf->f(event.makeWarpQuery( event.wi,event.toLocal(d)), false);
         }
         default:

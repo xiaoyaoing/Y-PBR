@@ -31,8 +31,6 @@ Spectrum RoughConductor::f(const SurfaceEvent & event) const {
     Float roughnessx = m_uRoughness ? m_uRoughness->eval(event.its) : m_roughness->eval(event.its);
     Float roughnessy = m_vRoughness ? m_vRoughness->eval(event.its) : m_roughness->eval(event.its);
     vec2 alphaxy = vec2(m_distrib->roughnessToAlpha(roughnessx),m_distrib->roughnessToAlpha(roughnessy));
-    if(event.wi.z<0 || event.wo.z<0)
-        return Spectrum(0);
     Float cosThetaO = AbsCosTheta(event.wo), cosThetaI = AbsCosTheta(event.wi);
     vec3 wh = event.wi + event.wo;
     // Handle degenerate cases for microfacet reflection
@@ -41,7 +39,7 @@ Spectrum RoughConductor::f(const SurfaceEvent & event) const {
     wh = normalize(wh);
     // For the Fresnel call, make sure that wh is in the same hemisphere
     // as the surface normal, so that TIR is handled correctly.
-    Float cosI = dot(event.wi,faceForward(wh,vec3(0,0,1)));
+    Float cosI = dot(event.wo,faceForward(wh,vec3(0,0,1)));
     Spectrum F= Fresnel::conductorReflectance(m_eta,m_k,cosI);
     //return Spectrum(1);
     return m_albedo->eval(event.its) * m_distrib->D(wh, alphaxy) * F * m_distrib->G(event.wo, event.wi, alphaxy) / ( 4 * cosThetaO);

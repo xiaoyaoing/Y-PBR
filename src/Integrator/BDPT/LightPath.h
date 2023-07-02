@@ -42,7 +42,6 @@ public :
         vec3 dir = b.pos() - a.pos();
         auto l = length(dir);
         dir /= l;
-        dir = normalize(dir);
         return Ray(a.pos(), dir, 1e-4f, l - 1e-4f);
     }
 
