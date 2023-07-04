@@ -1,6 +1,7 @@
 #pragma once
 #include "../Common/math.hpp"
 #include "vector"
+#include <memory>
 struct Distribution1D{
 
     Distribution1D(const Float *f, int n) : func(f, f + n), cdf(n + 1) {

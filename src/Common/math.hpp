@@ -1,12 +1,10 @@
 //2022/7/13
 #pragma  once
 
-
-#include "glm/glm.hpp"
-#include <glm/gtx/transform.hpp>
-#include "sstream"
-#include "string"
-
+#include <glm.hpp>
+#include <gtx/transform.hpp>
+#include <sstream>
+#include <string>
 #ifdef  _USE_DOUBLE
 
 typedef  double Float;
@@ -383,6 +381,24 @@ namespace Angle {
 
 inline Float PowerHeuristic(Float a, Float b) {
     return a * a / (a * a + b * b);
+}
+
+template<class T>
+inline bool isnan(T a){
+    return std::isnan(a);
+}
+
+template<class T>
+inline bool isinf(T a){
+    return std::isinf(a);
+}
+
+inline  Float sin(Float a ){
+    return std::sin(a);
+}
+
+inline  Float cos(Float a ){
+    return std::cos(a);
 }
 
 

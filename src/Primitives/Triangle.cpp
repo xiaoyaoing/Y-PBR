@@ -1,7 +1,7 @@
 ////2022/7/17
 //
 //#include "Triangle.hpp"
-//#include <spdlog/spdlog.h>
+//
 //#include "scene.hpp"
 //
 //

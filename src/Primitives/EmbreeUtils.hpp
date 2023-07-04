@@ -1,6 +1,7 @@
 //2022/9/4
 #pragma  once
 
+#include "spdlog/spdlog-inl.h"
 #include <embree3/rtcore.h>
 #include <optional>
 

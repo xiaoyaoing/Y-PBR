@@ -2,7 +2,7 @@
 #include "IO/FileUtils.hpp"
 #include <fstream>
 #include <array>
-
+#include <memory>
 //Mainly Copyied From Tunsgten
 //https://benedikt-bitterli.me/tungsten.html
 namespace CurveIO {
@@ -134,13 +134,13 @@ namespace CurveIO {
     }
 
 
-    bool CurveIO::load(const std::string & path, CurveData & data) {
+    bool load(const std::string & path, CurveData & data) {
         auto ext = FileUtils::getFileSuffix(path);
         if(ext == "fiber")
             return loadFiber(path,data);
     }
 
-    bool CurveIO::save(const std::string & path, const CurveIO::CurveData & data) {
+    bool save(const std::string & path, const CurveIO::CurveData & data) {
         return false;
     }
 

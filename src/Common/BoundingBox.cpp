@@ -9,8 +9,8 @@ bool Bounds3::IntersectP(const Ray & ray, const vec3 & invDir, const int * dirIs
     Float tyMax = (bounds[1 - dirIsNeg[1]].y - ray.o.y) * invDir.y;
 
     // Update _tMax_ and _tyMax_ to ensure robust bounds intersection
-    tMax *= 1 + 2 * gamma(3);
-    tyMax *= 1 + 2 * gamma(3);
+    tMax *= 1 + 2 * 1e-3f;
+    tyMax *= 1 + 2 * 1e-3f;
     if (tMin > tyMax || tyMin > tMax) return false;
     if (tyMin > tMin) tMin = tyMin;
     if (tyMax < tMax) tMax = tyMax;
@@ -20,7 +20,7 @@ bool Bounds3::IntersectP(const Ray & ray, const vec3 & invDir, const int * dirIs
     Float tzMax = (bounds[1 - dirIsNeg[2]].z - ray.o.z) * invDir.z;
 
     // Update _tzMax_ to ensure robust bounds intersection
-    tzMax *= 1 + 2 * gamma(3);
+    tzMax *= 1 + 2 * 1e-3f;
     if (tMin > tzMax || tzMin > tMax) return false;
     if (tzMin > tMin) tMin = tzMin;
     if (tzMax < tMax) tMax = tzMax;

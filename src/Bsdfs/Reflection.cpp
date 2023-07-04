@@ -6,7 +6,7 @@
 #include "Sampler/Warp.hpp"
 #include "Texture/TextureFactory.hpp"
 
-#include <spdlog/spdlog.h>
+
 
 std::tuple < std::shared_ptr < Texture < Float>>, std::shared_ptr < Texture < Float>>, std::shared_ptr < Texture < Float>> >
 loadRoughness(const Json & json) {

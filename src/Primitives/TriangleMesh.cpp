@@ -117,9 +117,6 @@ vec3 TriangleMesh::normal(const vec3 & pos) const {
     throw ( "not implmented" );
 }
 
-vec3 TriangleMesh::operator ()(Float u, Float v) const {
-    throw ( "not implmented" );
-}
 
 void TriangleMesh::transform(const mat4 & T) {
     //throw ( "not implmented" );

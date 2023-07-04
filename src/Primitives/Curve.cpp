@@ -374,21 +374,17 @@ Curve::Curve(const Json &json, Scene &scene) : Primitive(json) {
 
             if (_subSample > 0.0f && rand.getNext1D() < _subSample)
                 continue;
-            auto prim = std::make_shared<CurveI>(&_nodeData, t);
-            std::shared_ptr<BSDF> bsdf = scene.fetchBSDF(getOptional(json, "bsdf", Json()));
-            //   prim->setBSDF(bsdf);
-            //  scene.AddPrimitive(prim);
-            prims.emplace_back(
-                    std::make_shared<Primitive>(curveBox(p0, p1, p2),
-                                                t)
-            );
+//            std::shared_ptr<BSDF> bsdf = scene.fetchBSDF(getOptional(json, "bsdf", Json()));
+//            //   prim->setBSDF(bsdf);
+//            //  scene.AddPrimitive(prim);
+//            );
         }
 
     }
 
 
     std::cout << "Building Hair BVh Start" << std::endl;
-    if (!useEmbree) _bvh.reset(new BVHAccel(prims, BVHAccel::SplitMethod::PBRTSAH, 2));
+   // if (!useEmbree) _bvh.reset(new BVHAccel(prims, BVHAccel::SplitMethod::PBRTSAH, 2));
     std::cout << "Building Hair BVh End" << std::endl;
     computeBoundingBox();
 
@@ -446,62 +442,62 @@ Frame Curve::setTangentFrame(const Intersection *its) const {
     return Frame(T, B, N);
 }
 
-std::optional<Intersection> CurveI::intersect(Ray &ray) const {
-    CurveIntersection curveIts;
-    bool didIntersect = false;
-    vec3 o(ray.o), lz(ray.d);
-    float d = std::sqrt(lz.x * lz.x + lz.z * lz.z);
-    vec3 lx, ly;
-    if (d == 0.0f) {
-        lx = vec3(1.0f, 0.0f, 0.0f);
-        ly = vec3(0.0f, 0.0f, -lz.y);
-    } else {
-        lx = vec3(lz.z / d, 0.0f, -lz.x / d);
-        ly = vec3(lx.z * lz.y, d, -lz.y * lx.x);
-    }
-
-    vec4 q0(project(o, lx, ly, lz, (*_nodeData)[id - 2]));
-    vec4 q1(project(o, lx, ly, lz, (*_nodeData)[id - 1]));
-    vec4 q2(project(o, lx, ly, lz, (*_nodeData)[id - 0]));
-    vec3 invDir(1 / ray.d.x, 1 / ray.d.y, 1 / ray.d.z);
-    int dirIsNeg[3] = {invDir.x < 0, invDir.y < 0, invDir.z < 0};
-    vec3 n0, n1, n2;
-
-    if (pointOnSpline(q0, q1, q2, ray.nearT, ray.farT, curveIts, n0, n1, n2)) {
-        ray.farT = curveIts.t;
-        curveIts.curveP0 = id - 2;
-        didIntersect = true;
-    }
-
-    if (!didIntersect) {
-        return std::nullopt;
-    }
-
-    Intersection its;
-    its.w = -ray.d;
-    its.p = ray.o + ray.d * ray.farT;
-    uint32 p0 = curveIts.curveP0;
-    float t = curveIts.uv.x;
-    t = 0.5;
-    vec3 tangent = normalize(BSpline::quadraticDeriv((*_nodeData)[p0], (*_nodeData)[p0 + 1], (*_nodeData)[p0 + 2], t));
-    {
-        vec3 point = BSpline::quadratic((*_nodeData)[p0], (*_nodeData)[p0 + 1], (*_nodeData)[p0 + 2], t);
-        vec3 localP = its.p - point;
-        localP -= tangent * (dot(localP, tangent));
-        its.Ng = its.Ns = normalize(localP);
-    }
-    its.uv = curveIts.uv;
-    its.primitive = this;
-    its.bsdf = bsdf.get();
-
-    return {its};
-}
-
-bool CurveI::occluded(const Ray &ray) const {
-    Ray _ray(ray);
-    return intersect(_ray).has_value();
-}
-
-void CurveI::computeBoundingBox() {
-    BB_ = curveBox((*_nodeData)[id - 2], (*_nodeData)[id - 1], (*_nodeData)[id - 0]);
-}
+//std::optional<Intersection> CurveI::intersect(Ray &ray) const {
+//    CurveIntersection curveIts;
+//    bool didIntersect = false;
+//    vec3 o(ray.o), lz(ray.d);
+//    float d = std::sqrt(lz.x * lz.x + lz.z * lz.z);
+//    vec3 lx, ly;
+//    if (d == 0.0f) {
+//        lx = vec3(1.0f, 0.0f, 0.0f);
+//        ly = vec3(0.0f, 0.0f, -lz.y);
+//    } else {
+//        lx = vec3(lz.z / d, 0.0f, -lz.x / d);
+//        ly = vec3(lx.z * lz.y, d, -lz.y * lx.x);
+//    }
+//
+//    vec4 q0(project(o, lx, ly, lz, (*_nodeData)[id - 2]));
+//    vec4 q1(project(o, lx, ly, lz, (*_nodeData)[id - 1]));
+//    vec4 q2(project(o, lx, ly, lz, (*_nodeData)[id - 0]));
+//    vec3 invDir(1 / ray.d.x, 1 / ray.d.y, 1 / ray.d.z);
+//    int dirIsNeg[3] = {invDir.x < 0, invDir.y < 0, invDir.z < 0};
+//    vec3 n0, n1, n2;
+//
+//    if (pointOnSpline(q0, q1, q2, ray.nearT, ray.farT, curveIts, n0, n1, n2)) {
+//        ray.farT = curveIts.t;
+//        curveIts.curveP0 = id - 2;
+//        didIntersect = true;
+//    }
+//
+//    if (!didIntersect) {
+//        return std::nullopt;
+//    }
+//
+//    Intersection its;
+//    its.w = -ray.d;
+//    its.p = ray.o + ray.d * ray.farT;
+//    uint32 p0 = curveIts.curveP0;
+//    float t = curveIts.uv.x;
+//    t = 0.5;
+//    vec3 tangent = normalize(BSpline::quadraticDeriv((*_nodeData)[p0], (*_nodeData)[p0 + 1], (*_nodeData)[p0 + 2], t));
+//    {
+//        vec3 point = BSpline::quadratic((*_nodeData)[p0], (*_nodeData)[p0 + 1], (*_nodeData)[p0 + 2], t);
+//        vec3 localP = its.p - point;
+//        localP -= tangent * (dot(localP, tangent));
+//        its.Ng = its.Ns = normalize(localP);
+//    }
+//    its.uv = curveIts.uv;
+//    its.primitive = this;
+//    its.bsdf = bsdf.get();
+//
+//    return {its};
+//}
+//
+//bool CurveI::occluded(const Ray &ray) const {
+//    Ray _ray(ray);
+//    return intersect(_ray).has_value();
+//}
+//
+//void CurveI::computeBoundingBox() {
+//    BB_ = curveBox((*_nodeData)[id - 2], (*_nodeData)[id - 1], (*_nodeData)[id - 0]);
+//}

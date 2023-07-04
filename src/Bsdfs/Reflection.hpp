@@ -6,7 +6,7 @@
 #include "Common/Texture.hpp"
 
 #include "Common/Json.hpp"
-#include <spdlog/spdlog.h>
+
 
 
 // BSDF Inline Functions

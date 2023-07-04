@@ -1,10 +1,11 @@
 #pragma  once
 
-#include "../Colors/Spectrum.hpp"
-#include "../Ray/Intersection.hpp"
+#include "Colors/Spectrum.hpp"
+#include "Ray/Intersection.hpp"
 #include "Ray/Ray.hpp"
 #include "SampleRecords/PositionAndDirectionSample.h"
 
+#include <memory>
 #include <optional>
 
 class Scene;
@@ -13,6 +14,7 @@ class Ray;
 
 template<class T>
 class Texture;
+
 
 // LightFlags Declarations
 enum LightFlags : int {

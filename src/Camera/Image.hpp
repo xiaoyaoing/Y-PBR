@@ -35,6 +35,7 @@ class Image {
             atomicAdd(rgb[0], value.x);
             atomicAdd(rgb[1], value.y);
             atomicAdd(rgb[2], value.z);
+            return vec3();
         }
 
         vec3 value() const {

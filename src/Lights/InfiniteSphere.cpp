@@ -2,7 +2,7 @@
 #include "scene.hpp"
 #include "iostream"
 #include "Sampler/Warp.hpp"
-#include <spdlog/spdlog.h>
+
 
 #include "Common/Transform.hpp"
 #include "SampleRecords/PositionAndDirectionSample.h"

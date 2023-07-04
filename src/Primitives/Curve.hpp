@@ -48,16 +48,16 @@ private:
     std::unique_ptr<BVHAccel> _bvh;
 };
 
-class CurveI : public  Primitive {
-    std::vector<vec4> * _nodeData;
-    uint32 id;
-    Curve::CurveModeEnum _mode;
-    std::optional < Intersection > intersect(Ray & ray) const override;
-    bool occluded(const Ray & ray) const override;
-    void computeBoundingBox( ) override;
-
-public:
-    CurveI(std::vector<vec4> * _nodeData,uint32 id) : _nodeData(_nodeData),id(id){
-        computeBoundingBox();
-    }
-};
+//class CurveI : public  Primitive {
+//    std::vector<vec4> * _nodeData;
+//    uint32 id;
+//    Curve::CurveModeEnum _mode;
+//    std::optional < Intersection > intersect(Ray & ray) const override;
+//    bool occluded(const Ray & ray) const override;
+//    void computeBoundingBox( ) override;
+//
+//public:
+//    CurveI(std::vector<vec4> * _nodeData,uint32 id) : _nodeData(_nodeData),id(id){
+//        computeBoundingBox();
+//    }
+//};

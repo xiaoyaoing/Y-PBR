@@ -4,7 +4,7 @@
 #include "IO/ImageIO.hpp"
 #include "IO/FileUtils.hpp"
 
-#include <spdlog/spdlog.h>
+
 #include <iostream>
 #include <fstream>
 

@@ -499,8 +499,8 @@ void PhotonMapper::render(const Scene &scene) {
         }
 
 
-        spdlog::error("{0} {1} {2} {3} {4} {5}", rate / updateCount, visiblePhotonCount, averageRadius, curPhoton,
-                      lastPhoton, updateCount);
+//        spdlog::error("{0} {1} {2} {3} {4} {5}", rate / updateCount, visiblePhotonCount, averageRadius, curPhoton,
+//                      lastPhoton, updateCount);
         visiblePhotonCount = 0;
 
         averageSpecularPixelPosition.divide(dielectricNum);

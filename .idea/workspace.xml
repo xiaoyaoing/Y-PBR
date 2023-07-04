@@ -1,0 +1,991 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakePresetLoader">{
+  &quot;useNewFormat&quot;: true
+}</component>
+  <component name="CMakeReloadState">
+    <option name="reloaded" value="true" />
+  </component>
+  <component name="CMakeRunConfigurationManager">
+    <generated>
+      <config projectName="Y-PBR" targetName="tinyexr" />
+      <config projectName="Y-PBR" targetName="sampleTest" />
+      <config projectName="Y-PBR" targetName="miniz" />
+      <config projectName="Y-PBR" targetName="test_tinyexr" />
+      <config projectName="Y-PBR" targetName="lib" />
+      <config projectName="Y-PBR" targetName="Y_PBR" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+      <configuration PROFILE_NAME="Release" ENABLED="true" CONFIG_NAME="Release" />
+      <configuration PROFILE_NAME="Debug-Visual Studio" ENABLED="true" CONFIG_NAME="Debug" TOOLCHAIN_NAME="Visual Studio" />
+      <configuration PROFILE_NAME="Release-Visual Studio" ENABLED="true" CONFIG_NAME="Release" TOOLCHAIN_NAME="Visual Studio" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3bc67e00-be72-4fc3-9449-a7a4f1302963" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/.cmake/api/v1/query/cache-v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/.cmake/api/v1/query/cmakeFiles-v1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/.cmake/api/v1/query/codemodel-v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/.cmake/api/v1/query/toolchains-v1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeCache.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeFiles/3.25.2/CMakeCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeFiles/3.25.2/CMakeCXXCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeFiles/3.25.2/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeFiles/3.25.2/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeFiles/3.25.2/CMakeRCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeFiles/3.25.2/CMakeSystem.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeFiles/3.25.2/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeFiles/3.25.2/CompilerIdC/CMakeCCompilerId.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeFiles/3.25.2/CompilerIdC/CMakeCCompilerId.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeFiles/3.25.2/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeFiles/3.25.2/CompilerIdCXX/CMakeCXXCompilerId.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeFiles/3.25.2/CompilerIdCXX/CMakeCXXCompilerId.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeFiles/CMakeOutput.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeFiles/ShowIncludes/foo.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeFiles/ShowIncludes/main.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeFiles/ShowIncludes/main.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeFiles/clion-Debug-Visual Studio-log.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeFiles/clion-environment.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/CMakeFiles/cmake.check_cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/buildbench.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/bvh_access.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/bvh_builder.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/closest_point.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/closest_point_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/collide.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/convert.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/curve_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/curve_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/displacement_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/displacement_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/dynamic_scene.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/dynamic_scene_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/embree3.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/embree_tests.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/embree_verify.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/glfw3.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/grid_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/grid_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/hair_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/hair_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/instanced_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/instanced_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/interpolation.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/interpolation_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/intersection_filter.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/intersection_filter_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/lazy_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/lazy_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/minimal.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/build.bench" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/cornell_box.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/cornell_box.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/cornell_box.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/cornell_box.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/cornell_box.xml.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/cornell_box_instanced.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/cornell_box_instanced.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/cornell_box_mblur.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/cornell_box_mblur.xml.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/curve0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/curve1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/curve_flat.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/curve_flat.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/curve_geometry.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/curve_oriented.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/curve_oriented.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/curve_round.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/curve_round.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/cylinder.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/cylinder.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/furBall_A.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/furBall_A.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/furBall_A.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/hair0.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/hair0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/hair1.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/hair1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/linesegments.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/linesegments.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/mblur_time_range_curve.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/mblur_time_range_grid.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/mblur_time_range_line.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/mblur_time_range_quad.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/mblur_time_range_triangle.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/oriented_bspline_curve_twisted.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/oriented_curve0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/oriented_curve1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/oriented_curve_large_curvature.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/oriented_curve_large_curvature.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/oriented_curves.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/oriented_hermite_curve_twisted.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/points.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/points.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/round_line_segments_0.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/round_line_segments_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/round_line_segments_1.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/round_line_segments_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/round_line_segments_2.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/round_line_segments_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/round_line_segments_3.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/round_line_segments_3.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/round_line_segments_4.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/round_line_segments_4.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/round_line_segments_5.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/round_line_segments_5.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/round_line_segments_6.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/round_line_segments_6.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv0.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv1.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv3.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv3.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv4.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv4.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv5.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv5.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv6.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv6.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv7.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv7.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv8.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv8.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv9.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv9.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv_no_boundary.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv_no_boundary.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv_pin_all.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv_pin_all.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv_pin_boundary.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv_pin_boundary.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv_pin_corners.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv_pin_corners.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv_smooth_boundary.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/subdiv_smooth_boundary.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/models/trace.bench" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/motion_blur_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/motion_blur_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/msvcp140.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/multiscene_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/next_hit.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/pathtracer.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/pathtracer_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/point_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/point_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/quaternion_motion_blur.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/quaternion_motion_blur_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/subdivision_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/subdivision_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/tbb12.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/triangle_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/triangle_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/user_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/user_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/vcruntime140.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/viewer.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/viewer_anim.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/viewer_anim_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/viewer_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/viewer_stream.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/viewer_stream_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/voronoi.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/bin/voronoi_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/doc/CHANGELOG.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/doc/LICENSE.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/doc/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/doc/readme.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/doc/third-party-programs-TBB.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/doc/third-party-programs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/include/embree3/rtcore.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/include/embree3/rtcore.isph" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/include/embree3/rtcore_buffer.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/include/embree3/rtcore_buffer.isph" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/include/embree3/rtcore_builder.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/include/embree3/rtcore_common.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/include/embree3/rtcore_common.isph" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/include/embree3/rtcore_config.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/include/embree3/rtcore_device.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/include/embree3/rtcore_device.isph" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/include/embree3/rtcore_geometry.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/include/embree3/rtcore_geometry.isph" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/include/embree3/rtcore_quaternion.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/include/embree3/rtcore_quaternion.isph" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/include/embree3/rtcore_ray.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/include/embree3/rtcore_ray.isph" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/include/embree3/rtcore_scene.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/include/embree3/rtcore_scene.isph" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/lib/cmake/embree-3.13.5/embree-config-version.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/lib/cmake/embree-3.13.5/embree-config.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/lib/cmake/embree-3.13.5/embree-targets-release.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/lib/cmake/embree-3.13.5/embree-targets.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/lib/embree3.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-src/lib/tbb.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeCache.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeFiles/3.25.2/CMakeSystem.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeFiles/CMakeOutput.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeFiles/CMakeRuleHashes.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeFiles/Makefile.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeFiles/Makefile2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeFiles/Progress/4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeFiles/Progress/count.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeFiles/TargetDirectories.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeFiles/cmake.check_cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeFiles/embree_binary-populate.dir/DependInfo.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeFiles/embree_binary-populate.dir/Labels.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeFiles/embree_binary-populate.dir/Labels.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeFiles/embree_binary-populate.dir/build.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeFiles/embree_binary-populate.dir/cmake_clean.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeFiles/embree_binary-populate.dir/compiler_depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeFiles/embree_binary-populate.dir/compiler_depend.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeFiles/embree_binary-populate.dir/progress.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeFiles/progress.marks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/cmake_install.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree-3.13.5.x64.vc14.windows.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/download-embree_binary-populate.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/embree_binary-populate-mkdir" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/embree_binary-populate-urlinfo.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/extract-embree_binary-populate.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/verify-embree_binary-populate.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/embree_binary-populate-prefix/tmp/embree_binary-populate-cfgcmd.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug-visual-studio/_deps/embree_binary-subbuild/embree_binary-populate-prefix/tmp/embree_binary-populate-mkdirs.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/cmakeFiles-v1-54065c1a95885edb7d40.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/codemodel-v2-ae18c97bdb039036123b.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/index-2023-07-04T12-48-00-0730.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/target-Y_PBR-Debug-bfd5ae46292a9723c4f5.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Y_PBR.dir/compiler_depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Y_PBR.dir/compiler_depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Y_PBR.dir/includes_C.rsp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Y_PBR.dir/includes_C.rsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Y_PBR.dir/includes_CXX.rsp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Y_PBR.dir/includes_CXX.rsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Y-PBR.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Y-PBR.cbp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/lib/CMakeFiles/lib.dir/compiler_depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/lib/CMakeFiles/lib.dir/compiler_depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/lib/tinyexr/CMakeFiles/miniz.dir/compiler_depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/lib/tinyexr/CMakeFiles/miniz.dir/compiler_depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/lib/tinyexr/CMakeFiles/tinyexr.dir/compiler_depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/lib/tinyexr/CMakeFiles/tinyexr.dir/compiler_depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/query/cache-v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/query/cmakeFiles-v1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/query/codemodel-v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/query/toolchains-v1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/reply/cache-v2-f40a83cd98dfb19445bb.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/reply/cmakeFiles-v1-372e38f132ae36359c6b.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/reply/codemodel-v2-8b8829132c2ff9115db5.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/reply/directory-.-Release-d0094a50bb2071803777.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/reply/directory-lib-Release-e9069484d90298468a11.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/reply/directory-lib.glm-Release-ce07c1f5db497389ae15.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/reply/directory-lib.tinyexr-Release-9f9471477442de4cd1aa.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/reply/index-2023-07-04T12-50-42-0653.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/reply/target-Y_PBR-Release-da89d7c3ac9314bfa7f9.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/reply/target-lib-Release-c5ad2c9d6349e5dd222d.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/reply/target-miniz-Release-698880054a091dc4b9a1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/reply/target-sampleTest-Release-8bac219781f91a41cdec.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/reply/target-test_tinyexr-Release-ca94802c0ff969f5dfa8.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/reply/target-tinyexr-Release-5130ce6721efea30d38c.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/.cmake/api/v1/reply/toolchains-v1-74b2bfd571a3958e95dc.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeCache.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/3.25.2/CMakeCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/3.25.2/CMakeCXXCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/3.25.2/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/3.25.2/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/3.25.2/CMakeRCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/3.25.2/CMakeSystem.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/3.25.2/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/3.25.2/CompilerIdC/a.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/3.25.2/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/3.25.2/CompilerIdCXX/a.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/CMakeOutput.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Makefile.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Makefile2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/TargetDirectories.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/DependInfo.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/build.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/cmake_clean.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/compiler_depend.internal" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/compiler_depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/compiler_depend.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/flags.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/includes_C.rsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/includes_CXX.rsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/lib/lodepng/lodepng.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/lib/lodepng/lodepng.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/lib/skylight/ArHosekSkyModel.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/lib/skylight/ArHosekSkyModel.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/lib/stbi/stb_image.c.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/lib/stbi/stb_image.c.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/link.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/linkLibs.rsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/objects.a" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/objects1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/progress.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/BSSRDF.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/BSSRDF.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/BsdfFactory.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/BsdfFactory.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/ComplexIor.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/ComplexIor.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/Conductor.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/Conductor.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/Dielectric.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/Dielectric.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/Disney.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/Disney.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/Forward.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/Forward.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/Hair.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/Hair.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/Hair_GGX.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/Hair_GGX.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/Material.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/Material.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/MicrofacetDistribution.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/MicrofacetDistribution.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/Plastic.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/Plastic.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/Reflection.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/Reflection.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/RoughHair.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Bsdfs/RoughHair.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Camera/Camera.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Camera/Camera.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Camera/Image.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Camera/Image.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Camera/ImagePramid.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Camera/ImagePramid.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Camera/ToneMap.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Camera/ToneMap.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Colors/Spectral.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Colors/Spectral.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Colors/Spectrum.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Colors/Spectrum.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/API.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/API.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/BoundingBox.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/BoundingBox.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/Debug.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/Debug.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/Frame.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/Frame.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/Json.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/Json.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/Parallel.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/Parallel.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/ProgressReporter.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/ProgressReporter.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/Render.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/Render.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/Texture.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/Texture.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/Transform.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/Transform.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/histogram.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Common/histogram.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Hierancy/BVH.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Hierancy/BVH.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Hierancy/KdTree.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Hierancy/KdTree.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/IO/CurveIO.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/IO/CurveIO.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/IO/FileUtils.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/IO/FileUtils.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/IO/ImageIO.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/IO/ImageIO.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/IO/MeshIO.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/IO/MeshIO.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/IO/ObjLoader.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/IO/ObjLoader.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/BDPT/BDPTIntegrator.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/BDPT/BDPTIntegrator.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/BDPT/BdptTracer.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/BDPT/BdptTracer.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/BDPT/CameraPath.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/BDPT/CameraPath.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/BDPT/LightPath.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/BDPT/LightPath.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/BDPT/PathVertex.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/BDPT/PathVertex.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/BDPTIntegrator.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/BDPTIntegrator.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/Integrator.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/Integrator.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/PathIntegrator.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/PathIntegrator.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/PhotonMapper.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/PhotonMapper.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/TraceHelper.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/TraceHelper.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/VolPathIntegrator.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Integrator/VolPathIntegrator.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Lights/Distant.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Lights/Distant.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Lights/InfiniteSphere.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Lights/InfiniteSphere.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Lights/InfiniteSphereCap.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Lights/InfiniteSphereCap.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Lights/Light.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Lights/Light.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Lights/LightFactory.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Lights/LightFactory.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Lights/SkyDome.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Lights/SkyDome.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Materials/Material.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Materials/Material.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Mediums/Medium.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Mediums/Medium.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Mediums/MediumFactory.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Mediums/MediumFactory.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Mediums/PhaseFunction.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Mediums/PhaseFunction.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Mediums/PhaseFunctionFactory.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Mediums/PhaseFunctionFactory.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/Cube.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/Cube.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/Curve.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/Curve.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/Disk.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/Disk.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/EmbreeUtils.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/EmbreeUtils.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/Primitive.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/Primitive.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/PrimitiveFactory.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/PrimitiveFactory.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/Quad.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/Quad.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/Sphere.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/Sphere.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/Triangle.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/Triangle.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/TriangleHelper.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/TriangleHelper.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/TriangleMesh.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Primitives/TriangleMesh.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Ray/Intersection.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Ray/Intersection.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Ray/Ray.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Ray/Ray.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Sampler/Distrib.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Sampler/Distrib.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Sampler/HaltonSampler.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Sampler/HaltonSampler.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Sampler/LightDistrib.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Sampler/LightDistrib.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Sampler/LowDiscrepancy.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Sampler/LowDiscrepancy.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Sampler/SamplerFactory.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Sampler/SamplerFactory.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Sampler/UniformSampler.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Sampler/UniformSampler.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Sampler/Warp.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Sampler/Warp.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Scene.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Scene.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Texture/BitMapTexture.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Texture/BitMapTexture.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Texture/CheckTexture.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Texture/CheckTexture.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Texture/ConstantTexture.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Texture/ConstantTexture.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Texture/TextureFactory.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/src/Texture/TextureFactory.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/test/main.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/Y_PBR.dir/test/main.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/clion-Release-log.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/clion-environment.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/cmake.check_cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/progress.marks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/sampleTest.dir/DependInfo.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/sampleTest.dir/build.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/sampleTest.dir/cmake_clean.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/sampleTest.dir/compiler_depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/sampleTest.dir/compiler_depend.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/sampleTest.dir/depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/sampleTest.dir/flags.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/sampleTest.dir/includes_C.rsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/sampleTest.dir/includes_CXX.rsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/sampleTest.dir/link.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/sampleTest.dir/linkLibs.rsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/sampleTest.dir/objects1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/CMakeFiles/sampleTest.dir/progress.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/Testing/Temporary/LastTest.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/Y-PBR.cbp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/Y_PBR.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/buildbench.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/bvh_access.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/bvh_builder.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/closest_point.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/closest_point_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/collide.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/convert.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/curve_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/curve_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/displacement_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/displacement_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/dynamic_scene.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/dynamic_scene_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/embree3.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/embree_tests.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/embree_verify.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/glfw3.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/grid_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/grid_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/hair_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/hair_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/instanced_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/instanced_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/interpolation.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/interpolation_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/intersection_filter.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/intersection_filter_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/lazy_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/lazy_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/minimal.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/build.bench" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/cornell_box.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/cornell_box.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/cornell_box.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/cornell_box.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/cornell_box.xml.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/cornell_box_instanced.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/cornell_box_instanced.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/cornell_box_mblur.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/cornell_box_mblur.xml.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/curve0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/curve1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/curve_flat.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/curve_flat.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/curve_geometry.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/curve_oriented.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/curve_oriented.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/curve_round.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/curve_round.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/cylinder.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/cylinder.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/furBall_A.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/furBall_A.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/furBall_A.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/hair0.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/hair0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/hair1.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/hair1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/linesegments.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/linesegments.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/mblur_time_range_curve.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/mblur_time_range_grid.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/mblur_time_range_line.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/mblur_time_range_quad.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/mblur_time_range_triangle.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/oriented_bspline_curve_twisted.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/oriented_curve0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/oriented_curve1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/oriented_curve_large_curvature.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/oriented_curve_large_curvature.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/oriented_curves.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/oriented_hermite_curve_twisted.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/points.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/points.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/round_line_segments_0.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/round_line_segments_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/round_line_segments_1.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/round_line_segments_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/round_line_segments_2.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/round_line_segments_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/round_line_segments_3.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/round_line_segments_3.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/round_line_segments_4.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/round_line_segments_4.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/round_line_segments_5.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/round_line_segments_5.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/round_line_segments_6.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/round_line_segments_6.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv0.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv1.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv3.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv3.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv4.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv4.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv5.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv5.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv6.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv6.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv7.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv7.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv8.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv8.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv9.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv9.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv_no_boundary.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv_no_boundary.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv_pin_all.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv_pin_all.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv_pin_boundary.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv_pin_boundary.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv_pin_corners.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv_pin_corners.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv_smooth_boundary.ecs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/subdiv_smooth_boundary.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/models/trace.bench" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/motion_blur_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/motion_blur_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/msvcp140.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/multiscene_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/next_hit.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/pathtracer.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/pathtracer_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/point_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/point_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/quaternion_motion_blur.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/quaternion_motion_blur_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/subdivision_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/subdivision_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/tbb12.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/triangle_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/triangle_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/user_geometry.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/user_geometry_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/vcruntime140.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/viewer.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/viewer_anim.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/viewer_anim_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/viewer_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/viewer_stream.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/viewer_stream_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/voronoi.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/bin/voronoi_ispc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/doc/CHANGELOG.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/doc/LICENSE.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/doc/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/doc/readme.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/doc/third-party-programs-TBB.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/doc/third-party-programs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/include/embree3/rtcore.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/include/embree3/rtcore.isph" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/include/embree3/rtcore_buffer.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/include/embree3/rtcore_buffer.isph" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/include/embree3/rtcore_builder.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/include/embree3/rtcore_common.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/include/embree3/rtcore_common.isph" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/include/embree3/rtcore_config.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/include/embree3/rtcore_device.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/include/embree3/rtcore_device.isph" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/include/embree3/rtcore_geometry.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/include/embree3/rtcore_geometry.isph" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/include/embree3/rtcore_quaternion.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/include/embree3/rtcore_quaternion.isph" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/include/embree3/rtcore_ray.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/include/embree3/rtcore_ray.isph" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/include/embree3/rtcore_scene.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/include/embree3/rtcore_scene.isph" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/lib/cmake/embree-3.13.5/embree-config-version.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/lib/cmake/embree-3.13.5/embree-config.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/lib/cmake/embree-3.13.5/embree-targets-release.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/lib/cmake/embree-3.13.5/embree-targets.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/lib/embree3.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-src/lib/tbb.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeCache.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeFiles/3.25.2/CMakeSystem.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeFiles/CMakeOutput.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeFiles/CMakeRuleHashes.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeFiles/Makefile.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeFiles/Makefile2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeFiles/TargetDirectories.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeFiles/cmake.check_cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeFiles/embree_binary-populate-complete" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeFiles/embree_binary-populate.dir/DependInfo.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeFiles/embree_binary-populate.dir/Labels.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeFiles/embree_binary-populate.dir/Labels.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeFiles/embree_binary-populate.dir/build.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeFiles/embree_binary-populate.dir/cmake_clean.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeFiles/embree_binary-populate.dir/compiler_depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeFiles/embree_binary-populate.dir/compiler_depend.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeFiles/embree_binary-populate.dir/progress.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeFiles/progress.marks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/cmake_install.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree-3.13.5.x64.vc14.windows.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/download-embree_binary-populate.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/embree_binary-populate-build" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/embree_binary-populate-configure" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/embree_binary-populate-done" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/embree_binary-populate-download" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/embree_binary-populate-install" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/embree_binary-populate-mkdir" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/embree_binary-populate-patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/embree_binary-populate-test" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/embree_binary-populate-update" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/embree_binary-populate-urlinfo.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/extract-embree_binary-populate.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/verify-embree_binary-populate.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/embree_binary-populate-prefix/tmp/embree_binary-populate-cfgcmd.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/_deps/embree_binary-subbuild/embree_binary-populate-prefix/tmp/embree_binary-populate-mkdirs.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/cmake_install.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/CMakeFiles/lib.dir/DependInfo.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/CMakeFiles/lib.dir/build.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/CMakeFiles/lib.dir/cmake_clean.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/CMakeFiles/lib.dir/compiler_depend.internal" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/CMakeFiles/lib.dir/compiler_depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/CMakeFiles/lib.dir/compiler_depend.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/CMakeFiles/lib.dir/depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/CMakeFiles/lib.dir/flags.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/CMakeFiles/lib.dir/includes_CXX.rsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/CMakeFiles/lib.dir/lib.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/CMakeFiles/lib.dir/lib.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/CMakeFiles/lib.dir/link.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/CMakeFiles/lib.dir/linkLibs.rsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/CMakeFiles/lib.dir/objects.a" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/CMakeFiles/lib.dir/objects1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/CMakeFiles/lib.dir/progress.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/CMakeFiles/progress.marks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/catch2/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/catch2/CMakeFiles/progress.marks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/catch2/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/catch2/catch2.cbp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/catch2/cmake_install.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/cmake_install.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/glm/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/glm/CMakeFiles/progress.marks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/glm/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/glm/cmake_install.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/liblib.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/liblib.dll.a" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/progress.marks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/DependInfo.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/build.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/cmake_clean.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/cmake_clean_target.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/compiler_depend.internal" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/compiler_depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/compiler_depend.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/flags.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/includes_CXX.rsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/link.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/progress.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/src/async.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/src/async.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/src/bundled_fmtlib_format.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/src/bundled_fmtlib_format.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/src/cfg.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/src/cfg.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/src/color_sinks.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/src/color_sinks.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/src/file_sinks.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/src/file_sinks.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/src/spdlog.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/src/spdlog.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/src/stdout_sinks.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/CMakeFiles/spdlog.dir/src/stdout_sinks.cpp.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/cmake_install.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/libspdlog.a" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/spdlog/spdlog.cbp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/miniz.dir/DependInfo.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/miniz.dir/build.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/miniz.dir/cmake_clean.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/miniz.dir/cmake_clean_target.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/miniz.dir/compiler_depend.internal" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/miniz.dir/compiler_depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/miniz.dir/compiler_depend.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/miniz.dir/depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/miniz.dir/deps/miniz/miniz.c.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/miniz.dir/deps/miniz/miniz.c.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/miniz.dir/flags.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/miniz.dir/includes_C.rsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/miniz.dir/link.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/miniz.dir/progress.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/progress.marks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/test_tinyexr.dir/DependInfo.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/test_tinyexr.dir/build.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/test_tinyexr.dir/cmake_clean.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/test_tinyexr.dir/compiler_depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/test_tinyexr.dir/compiler_depend.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/test_tinyexr.dir/depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/test_tinyexr.dir/flags.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/test_tinyexr.dir/includes_CXX.rsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/test_tinyexr.dir/link.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/test_tinyexr.dir/linkLibs.rsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/test_tinyexr.dir/objects1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/test_tinyexr.dir/progress.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/tinyexr.dir/DependInfo.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/tinyexr.dir/build.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/tinyexr.dir/cmake_clean.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/tinyexr.dir/cmake_clean_target.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/tinyexr.dir/compiler_depend.internal" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/tinyexr.dir/compiler_depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/tinyexr.dir/compiler_depend.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/tinyexr.dir/depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/tinyexr.dir/flags.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/tinyexr.dir/includes_CXX.rsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/tinyexr.dir/link.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/tinyexr.dir/progress.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/tinyexr.dir/tinyexr.cc.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/CMakeFiles/tinyexr.dir/tinyexr.cc.obj.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/cmake_install.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/libminiz.a" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/libtinyexr.a" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-release/lib/tinyexr/tinyexr.cbp" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectId" id="2S3zizHGjbtzqCflBrk893lbp3b" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.advertisement.text.has.clang-format&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/code/Y-PBR/cmake-build-debug-visual-studio/_deps&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;CMakeSettings&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\code\Y-PBR\cmake-build-debug-visual-studio\_deps" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\code\Y-PBR\lib" />
+    </key>
+  </component>
+  <component name="RunManager" selected="CMake Application.Y_PBR">
+    <configuration name="Y_PBR" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="E:\code\Y-PBR\example-scenes\cornell-box\scene.json" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Y-PBR" TARGET_NAME="Y_PBR" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Y-PBR" RUN_TARGET_NAME="Y_PBR">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="lib" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Y-PBR" TARGET_NAME="lib" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="miniz" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Y-PBR" TARGET_NAME="miniz" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="sampleTest" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Y-PBR" TARGET_NAME="sampleTest" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Y-PBR" RUN_TARGET_NAME="sampleTest">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="test_tinyexr" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Y-PBR" TARGET_NAME="test_tinyexr" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Y-PBR" RUN_TARGET_NAME="test_tinyexr">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="tinyexr" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Y-PBR" TARGET_NAME="tinyexr" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.sampleTest" />
+      <item itemvalue="CMake Application.Y_PBR" />
+      <item itemvalue="CMake Application.lib" />
+      <item itemvalue="CMake Application.miniz" />
+      <item itemvalue="CMake Application.test_tinyexr" />
+      <item itemvalue="CMake Application.tinyexr" />
+    </list>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3bc67e00-be72-4fc3-9449-a7a4f1302963" name="Changes" comment="" />
+      <created>1688390183786</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1688390183786</updated>
+      <workItem from="1688390184890" duration="673000" />
+      <workItem from="1688454362964" duration="4680000" />
+      <workItem from="1688459434767" duration="42000" />
+      <workItem from="1688459488352" duration="11497000" />
+      <workItem from="1688474176360" duration="1310000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VCPKGProject">
+    <isAutomaticEditVcpkgJson value="false" />
+    <isAutomaticCheckingOnLaunch value="false" />
+    <isAutomaticFoundErrors value="true" />
+    <isAutomaticFoundErrors value="true" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/test/main.cpp</url>
+          <line>27</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/test/main.cpp</url>
+          <line>5</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

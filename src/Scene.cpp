@@ -23,7 +23,7 @@
 #include "Texture/TextureFactory.hpp"
 #include "Common/Transform.hpp"
 
-#include <spdlog/spdlog.h>
+
 #include <iostream>
 
 static int occludedCount = 0;
@@ -75,7 +75,6 @@ void Scene::handleAddLight(const Json & p, int l, int r) {
 
 std::optional < Intersection > Scene::intersect(Ray & ray) const {
     if ( _useBVH ) {
-        auto tempray =ray;
         RTCRayHit rayHit;
         EmbreeUtils::convertRay(& ray, & rayHit);
         //return bvh->intersect(ray);
@@ -165,6 +164,7 @@ std::shared_ptr < BSDF > Scene::fetchBSDF(const Json & json) const {
             return bsdfs.contains(json) ? bsdfs.at(json) : bsdfs.at("default");
         else if(json.is_object())
             return BSDFFactory::LoadBsdfFromJson(json);
+        return nullptr ;
 }
 
 std::shared_ptr < Medium > Scene::fetchMedium(const std::string & mediumName) const {

@@ -37,9 +37,7 @@ public:
 
     virtual bool occluded(const Ray & ray) const {};
 
-    virtual vec3 operator ()(Float u, Float v) const {};
-
-    virtual vec3 normal(const vec3 & pos) const {};
+    virtual vec3 normal(const vec3 & pos) const  {return vec3();} ;
 
     virtual void transform(const mat4 & T) {};
 
@@ -47,7 +45,7 @@ public:
 
     virtual Intersection sample(const vec3 &ref, const vec2 &u, Float *pdf, vec3 *wi) const;
 
-    virtual Intersection sample(const vec2 & u, Float * pdf) const {};
+    virtual Intersection sample(const vec2 & u, Float * pdf) const { return Intersection();};
 
     virtual Float powerToRadianceScale( ) const { return inv_area; }
 

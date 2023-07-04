@@ -1,3 +1,4 @@
+#include <vector>
 #include "Common/math.hpp"
 #include "Rng.h"
 static const int PrimeTableSize = 1000;

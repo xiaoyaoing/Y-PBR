@@ -1,6 +1,6 @@
 #include <sys/stat.h>
 #include "FileUtils.hpp"
-
+#include <memory>
 std::string FileUtils::WorkingDir = "";
 
 inline bool fileExists (const std::string& name) {

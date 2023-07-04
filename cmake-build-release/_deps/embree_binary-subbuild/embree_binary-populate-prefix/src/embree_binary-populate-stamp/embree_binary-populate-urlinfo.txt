@@ -1,0 +1,12 @@
+# This is a generated file and its contents are an internal implementation detail.
+# The download step will be re-executed if anything in this file changes.
+# No other meaning or use of this file is supported.
+
+method=url
+command=C:/Users/pc/AppData/Local/JetBrains/CLion 2023.1.4/bin/cmake/win/x64/bin/cmake.exe;-P;E:/code/Y-PBR/cmake-build-release/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/download-embree_binary-populate.cmake;COMMAND;C:/Users/pc/AppData/Local/JetBrains/CLion 2023.1.4/bin/cmake/win/x64/bin/cmake.exe;-P;E:/code/Y-PBR/cmake-build-release/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/verify-embree_binary-populate.cmake;COMMAND;C:/Users/pc/AppData/Local/JetBrains/CLion 2023.1.4/bin/cmake/win/x64/bin/cmake.exe;-P;E:/code/Y-PBR/cmake-build-release/_deps/embree_binary-subbuild/embree_binary-populate-prefix/src/embree_binary-populate-stamp/extract-embree_binary-populate.cmake
+source_dir=E:/code/Y-PBR/cmake-build-release/_deps/embree_binary-src
+work_dir=E:/code/Y-PBR/cmake-build-release/_deps
+url(s)=https://github.com/embree/embree/releases/download/v3.13.5/embree-3.13.5.x64.vc14.windows.zip
+hash=
+no_extract=
+

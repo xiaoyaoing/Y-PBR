@@ -8,7 +8,7 @@
 #include <Integrator/VolPathIntegrator.h>
 #include <Integrator/BDPT/BDPTIntegrator.hpp>
 #include <thread>
-#include <spdlog/spdlog.h>
+
 #include <Sampler/UniformSampler.h>
 
 #include <iostream>

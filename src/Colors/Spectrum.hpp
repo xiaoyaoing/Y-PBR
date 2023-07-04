@@ -17,7 +17,6 @@ inline bool hasNan(const Spectrum & color){
 
 inline bool hasNeg(const Spectrum & color ){
     return color[0]<0 || color[1]<0 || color[2]<0;
-
 }
 
 //void from_json(const Json &j, Spectrum & spectrum);

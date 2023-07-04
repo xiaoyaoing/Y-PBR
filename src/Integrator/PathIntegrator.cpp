@@ -6,7 +6,7 @@
 #include "Bsdfs/BSSRDF.hpp"
 #include "TraceHelper.h"
 #include <optional>
-#include <spdlog/spdlog.h>
+
 #include "iostream"
 //2022/7/15
 Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &sampler) const {

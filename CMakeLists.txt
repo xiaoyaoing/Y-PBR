@@ -1,9 +1,11 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.19)
 project(Y-PBR)
 
 
-set( CMAKE_BUILD_TYPE Debug )
 
+if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
+    cmake_policy(SET CMP0135 NEW)
+endif()
 
 #set (CMAKE_C_COMPILER "/usr/local/bin/gcc-11")
 #set (CMAKE_CXX_COMPILER "/usr/local/bin/g++-11")
@@ -20,10 +22,7 @@ include_directories(${PROJECT_SOURCE_DIR}/lib/loadpng/)
 include_directories(${PROJECT_SOURCE_DIR}/lib/stbi/)
 
 
-
-include_directories(${YPBR_DEPENDENCIES_DIR})
 include_directories(${YPBR_SOURCE_DIR})
-include_directories($<BUILD_INTERFACE:${EMBREE_INCLUDE_DIRS}>)
 
 
 
@@ -31,28 +30,47 @@ include_directories($<BUILD_INTERFACE:${EMBREE_INCLUDE_DIRS}>)
 set(ASSIMP_BUILD_ASSIMP_TOOLS OFF)
 add_subdirectory(${YPBR_DEPENDENCIES_DIR})
 
+#
+#if(NOT TARGET spdlog)
+#    find_package(spdlog REQUIRED)
+#endif()
 
-if(NOT TARGET spdlog)
-    find_package(spdlog REQUIRED)
-endif()
-
-find_package(miniz REQUIRED)
-find_package(Embree 3.0 REQUIRED)
-
+#find_package(miniz REQUIRED)
 
 
-## complie for Zero
+
 file(GLOB_RECURSE YPBR_SOURCES ${YPBR_SOURCES_DIR}/*.cpp  lib/lodepng/lodepng.cpp lib/stbi/stb_image.c
         lib/skylight/ArHosekSkyModel.cpp)
-link_libraries(spdlog::spdlog )
-link_libraries(${EMBREE_LIBRARIES})
+#link_libraries(spdlog::spdlog )
+include_directories(${PROJECT_SOURCE_DIR}/src)
+
+
 
 
 add_executable(Y_PBR test/main.cpp ${YPBR_SOURCES})
-target_include_directories(Y_PBR PUBLIC ${PROJECT_SOURCE_DIR}/src )
-target_link_libraries(Y_PBR PRIVATE tinyexr)
+
+
+
+add_dependencies(Y_PBR lib)
+target_link_libraries(Y_PBR PUBLIC lib)
+
+#target_include_directories(Y_PBR PUBLIC  )
+
 
 
 add_executable(sampleTest test/samplerTest.cpp  ${YPBR_SOURCES})
-target_include_directories(sampleTest PUBLIC ${PROJECT_SOURCE_DIR}/src )
+#target_include_directories(sampleTest PUBLIC ${PROJECT_SOURCE_DIR}/src )
 target_link_libraries(sampleTest PRIVATE tinyexr)
+
+
+#config spdlog begin
+#add_subdirectory(lib/spdlog)
+#target_include_directories(Y_PBR PUBLIC lib/spdlog/include)
+#target_link_libraries(Y_PBR INTERFACE spdlog)
+#config spdlog end
+
+#config spdlog begin
+#add_subdirectory(lib/glm)
+#target_include_directories(Y_PBR PUBLIC lib/glm)
+#target_link_libraries(Y_PBR INTERFACE glm)
+#config spdlog end

@@ -14,7 +14,7 @@
 #include "Texture/TextureFactory.hpp"
 #include "TriangleMesh.hpp"
 
-#include <spdlog/spdlog.h>
+
 
 static std::shared_ptr < Texture < Spectrum>> getEmission(const Json & json, std::shared_ptr < const Primitive > prim) {
     if ( json.contains("emission") )

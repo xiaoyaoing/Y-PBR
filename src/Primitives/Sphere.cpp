@@ -49,10 +49,6 @@ bool Sphere::occluded(const Ray & ray) const {
     return false;
 }
 
-vec3 Sphere::operator ()(Float u, Float v) const {
-
-}
-
 vec3 Sphere::normal(const vec3 & pos) const {
     return normalize(pos - center);
 }
@@ -126,7 +122,7 @@ Intersection Sphere::sample(const vec3 &ref, const vec2 &u, Float *pdf, vec3 *wi
     Float sinAlpha = std::sqrt(std::max((Float)0.f, 1.f - cosAlpha*cosAlpha));
     Float phi = u[1] * 2 * Constant::PI;
 
-    vec3 nWorld = -(sinAlpha * cos(phi) * wx + sinAlpha * sin(phi) * wy +cosAlpha * w );
+    vec3 nWorld = -(sinAlpha * float(cos(phi)) * wx + sinAlpha * sin(phi) * wy +cosAlpha * w );
     vec3 pWorld = center + radius * nWorld;
     it.p = pWorld;
     it.Ng = nWorld;

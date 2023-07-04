@@ -1,6 +1,8 @@
 #include "lodepng/lodepng.h"
 #include "Common/math.hpp"
 
+#include <memory>
+
 
 
 enum class TexelConversion

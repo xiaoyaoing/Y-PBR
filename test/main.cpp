@@ -1,29 +1,8 @@
 
 #include "Common/Render.hpp"
-#include "iostream"
-#include "Texture/BitMapTexture.hpp"
-
-void convert(std::string file){
-    BitMapTexture<Spectrum> t(file);
-    t.LoadResources();
-    ivec2 res(t.width(),t.height());
-    Image image(res,ToneMap::LinearOnly);
-    for(int i =0;i<t.width();i++)
-        for(int j=0;j<t.height();j++){
-            auto value = t.getValue(i,j);
-            if(luminace(value)>0.2)
-                value = Spectrum(1);
-            else
-                value = Spectrum(0);
-            image.addPixel(i,j,value);
-        }
-    image.save(file,1);
-}
-
+#include <iostream>
 
 int main(int argc, const char *argv[]) {
-//    convert("/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/img.png");
-//    exit(0);
     spdlog::set_level(spdlog::level::off);
     std::cout << "Rendering Begin";
 

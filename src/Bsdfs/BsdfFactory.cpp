@@ -9,8 +9,7 @@
 #include "Texture/TextureFactory.hpp"
 
 #include <sstream>
-#include <spdlog/spdlog.h>
-
+#include "spdlog/spdlog.h"
 namespace BSDFFactory {
 
     typedef BSDF Material;

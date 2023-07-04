@@ -13,7 +13,6 @@ public:
     std::optional<Intersection> intersect(Ray& ray) const override;
     vec3 normal(const vec3& pos) const override;
     void transform(const mat4 & T) override;
-    vec3 operator()(Float u, Float v) const override;
     void computeBoundingBox() override;
     void computeArea() override;
 
