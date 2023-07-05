@@ -40,7 +40,7 @@ Spectrum PathVertex::eval(const PathVertex &vertex, bool adjoint) const {
     switch (type) {
         case VertexType::Surface: {
             const auto &event = _record.surfaceRecord.event;
-            return (1.f+event.toLocal(d))/2.f;
+          //  return (1.f+event.toLocal(d))/2.f;
             return _sampler.bsdf->f(event.makeWarpQuery( event.wi,event.toLocal(d)), false);
         }
         default:
@@ -104,6 +104,8 @@ bool PathVertex::sampleNext(const Scene &scene, bool adjoint, PathState &state, 
     if(hasNan(weight) || isinf(weight[0])){
         int k = 1;
     }
+    next._record = VertexRecord();
+    next._record.surfaceRecord = SurfaceRecord();
     next = PathVertex(record, beta * weight);
     next.pdfFwd = pdf;
     state.bounce++;

@@ -100,13 +100,14 @@ namespace ImageIO {
 
     static bool savePng(const std::string & path, const std::vector < unsigned char > & image, int width, int height,
                  int channels) {
-
         encodeOneStep(path.c_str(), image, width, height,channels);
+        return true;
     }
 
     bool saveBMP(const std::string & path, const std::vector < unsigned char > & image, int width, int height,
                  int channels) {
         //todo
+        return false;
     }
 
     static void nop(void *){}
@@ -339,7 +340,7 @@ uint8 * loadJpg(const std::string & path,int & w,int & h,int & channels){
         free(header.channels);
         free(header.pixel_types);
         free(header.requested_pixel_types);
-
+        return true;
     }
 
 
@@ -354,6 +355,7 @@ uint8 * loadJpg(const std::string & path,int & w,int & h,int & channels){
             return SaveEXR(img,w,h,fullPath.c_str());
 
         }
+        return false;
 //        if(suffix == "hdr"){
 //            std::ofstream out(path, std::ios::binary);
 //            if (!out)

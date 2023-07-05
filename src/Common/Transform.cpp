@@ -53,7 +53,7 @@ static void gramSchmidt(vec3 &a, vec3 &b, vec3 &c)
 }
 
 mat4 getTransform(const vec3 & position, const vec3 & scale, const vec3 & rotation){
-
+    return mat4();
 }
 
 void glm::from_json(const Json & j,mat4 & transform) {

@@ -531,7 +531,7 @@ void PhotonMapper::render(const Scene &scene) {
                         // photonN = photonsPerIteration;
                         Spectrum L(0);
                         //pixel.Ld / ( iteration + 1.f ); //+
-                        L += (pixel.flux) / Float(photonN * M_PI * pixel.radius * pixel.radius);
+                        L += (pixel.flux) / Float(photonN * Constant::PI * pixel.radius * pixel.radius);
                         if (iteration == iterations - 1)
                             L += pixel.Ld / (iteration + 1.f);
                         Spectrum c = Spectrum(1 - (pixel.radius - minR) / (maxR - minR));

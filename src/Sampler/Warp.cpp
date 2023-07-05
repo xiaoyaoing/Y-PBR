@@ -51,7 +51,7 @@ vec2 Warp::ConcentricSampleDisk(const vec2 & u) {
 }
 
 vec2 Warp::squareToUniformDisk(const vec2 & sample) {
-    auto phi = 2 * sample.x * M_PI;
+    auto phi = 2 * sample.x * Constant::PI;
     auto r = sqrt(sample.y);
     return {r * cos(phi), r * sin(phi)};
 }
@@ -63,7 +63,7 @@ Float Warp::squareToUniformDiskPdf(const vec2 & p) {
 vec3 Warp::squareToUniformSphere(const vec2 & sample) {
     Float z = 1 - 2 * sample[0];
     Float r = std::sqrt(std::fmax((Float) 0, (Float) 1 - z * z));
-    Float phi = 2 * M_PI * sample[1];
+    Float phi = 2 * Constant::PI * sample[1];
     return {r * std::cos(phi), r * std::sin(phi), z};
 }
 
@@ -75,7 +75,7 @@ Float Warp::squareToUniformSpherePdf(const vec3 & v) {
 vec3 Warp::squareToUniformHemisphere(const vec2 & sample) {
     Float z = 1 - 2 * sample[0];
     Float r = std::sqrt(std::fmax((Float) 0, (Float) 1 - z * z));
-    Float phi = 2 * M_PI * sample[1];
+    Float phi = 2 * Constant::PI * sample[1];
     return {r * std::cos(phi), r * std::sin(phi), abs(z)};
     //throw NoriException("Warp::squareToUniformHemisphere() is not yet implemented!");
 }
@@ -87,7 +87,7 @@ Float Warp::squareToUniformHemispherePdf(const vec3 & v) {
 
 vec3 Warp::squareToCosineHemisphere(const vec2 & sample) {
     Float z = sqrt(1 - sample.x);
-    Float phi = sample.y * 2 * M_PI;
+    Float phi = sample.y * 2 * Constant::PI;
 
     return {sqrt(sample.x) * cos(phi), sqrt(sample.x) * sin(phi), z};
 }
@@ -101,7 +101,7 @@ vec3 Warp::squareToBeckmann(const vec2 & sample, Float alpha) {
     auto tan2theta = - alpha * alpha * log(sample.x);
     auto cosTheta = sqrt(1 / ( 1 + tan2theta ));
     auto sinTheta = sqrt(1 - cosTheta * cosTheta);
-    auto phi = sample.y * 2 * M_PI;
+    auto phi = sample.y * 2 * Constant::PI;
     vec3 t1 = vec3(sinTheta * cos(phi), sinTheta * sin(phi), cosTheta);
     return t1;
 }
@@ -120,7 +120,7 @@ Float Warp::squareToBeckmannPdf(const vec3 & m, Float alpha) {
 ////    throw NoriException("Warp::squareToBeckmannPdf() is not yet implemented!");
 //}
 //    vec3 Warp::squareToBeckmann(const vec2 &sample, Float alpha) {
-//        Float phi = 2*M_PI*sample[0];
+//        Float phi = 2*Constant::PI*sample[0];
 //        Float invAlpha2 = 1.f/alpha; invAlpha2 *= invAlpha2;
 //        Float theta = acos(sqrt(1/(1-alpha*alpha*log(sample[1]))));
 //

@@ -22,6 +22,7 @@ bool LoadObj(std::ifstream & stream,std::vector<Vertex> & vertexs,std::vector<Tr
     ObjLoader objLoader(stream);
     vertexs = std::move(objLoader._verts);
     tris  = std::move(objLoader._tris);
+    return true;
 }
 bool LoadMeshFromFile(const std::string & path,std::vector<Vertex> & vertexs,std::vector<TriangleI>& tris){
         std::ifstream stream(FileUtils::WorkingDir+path);
@@ -31,7 +32,7 @@ bool LoadMeshFromFile(const std::string & path,std::vector<Vertex> & vertexs,std
             return LoadWo3(stream,vertexs,tris);
         if(FileUtils::getFileSuffix(path) == "obj")
             return LoadObj(stream,vertexs,tris);
-
+        return false;
     }
 
 }

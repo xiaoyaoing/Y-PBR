@@ -2,13 +2,14 @@
 #include "Bsdfs/Reflection.hpp"
 void LightPath::startCameraPath(const Camera *camera, ivec2 point) {
     _length = 1;
-    _vertexs[0] = PathVertex(camera, point);
+    _vertexs[0].initCamera(camera,point);
     adjoint = false;
 }
 
 void LightPath::startLightPath(const Light *light, Float lightPdf) {
     _length = 1;
-    _vertexs[0] = PathVertex(light, lightPdf);
+    _vertexs[0].initLight(light,lightPdf);
+ //   _vertexs[0] = PathVertex(light, lightPdf);
     adjoint = true;
 }
 

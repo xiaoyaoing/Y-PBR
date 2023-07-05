@@ -33,9 +33,9 @@ public:
 
     virtual ~Primitive( ) {}
 
-    virtual std::optional < Intersection > intersect(Ray & ray) const {};
+    virtual std::optional < Intersection > intersect(Ray & ray) const {return std::nullopt;};
 
-    virtual bool occluded(const Ray & ray) const {};
+    virtual bool occluded(const Ray & ray) const {return false;};
 
     virtual vec3 normal(const vec3 & pos) const  {return vec3();} ;
 
@@ -88,7 +88,7 @@ public:
     virtual  void load(const Json & json, const Scene & scene );
     virtual  bool sameBSDF(BSDF * _bsdf) { return bsdf.get() == _bsdf;}
 
-    RTCGeometry initRTC( );
+    bool initRTC( );
 
     std::shared_ptr < BSDF > bsdf;
     std::shared_ptr < BSSRDF > bssrdf;

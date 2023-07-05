@@ -34,10 +34,9 @@ struct SurfaceRecord{
     Intersection its;
     SurfaceEvent event;
 public:
-    ~SurfaceRecord(){
 
-    }
 };
+
 
 struct MediumRecord{
 

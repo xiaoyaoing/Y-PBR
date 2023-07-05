@@ -1,6 +1,6 @@
 #include "fstream"
 #include "vector"
-
+#include <string>
 #pragma once
 
 class  FileUtils{

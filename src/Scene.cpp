@@ -75,7 +75,7 @@ void Scene::handleAddLight(const Json & p, int l, int r) {
 
 std::optional < Intersection > Scene::intersect(Ray & ray) const {
     if ( _useBVH ) {
-        RTCRayHit rayHit;
+        EmbreeUtils::RTCRayHit1 rayHit;
         EmbreeUtils::convertRay(& ray, & rayHit);
         //return bvh->intersect(ray);
         RTCIntersectContext context;
@@ -90,18 +90,18 @@ std::optional < Intersection > Scene::intersect(Ray & ray) const {
         return {*its};
     }
 
-    std::optional < Intersection > minIntersection;
-    Ray _ray(ray);
-    for ( auto primitive: primitives ) {
-        auto its = primitive->intersect(_ray);
-        if ( its.has_value() ) {
-            minIntersection = its;
-        }
-    }
-    if ( minIntersection.has_value() ) {
-        minIntersection->w = ray.d;
-    }
-    return minIntersection;
+//    std::optional < Intersection > minIntersection;
+//    Ray _ray(ray);
+//    for ( auto primitive: primitives ) {
+//        auto its = primitive->intersect(_ray);
+//        if ( its.has_value() ) {
+//            minIntersection = its;
+//        }
+//    }
+//    if ( minIntersection.has_value() ) {
+//        minIntersection->w = ray.d;
+//    }
+//    return minIntersection;
 }
 
 bool Scene::intersectP(const Ray & ray) const {
@@ -133,7 +133,7 @@ void Scene::build( ) {
     if ( _useBVH ) {
         _scene = rtcNewScene(EmbreeUtils::getDevice());
         for ( const auto & primitve: primitives ) {
-            RTCGeometry geometry = primitve->initRTC();
+            primitve->initRTC();
             auto geom = rtcNewGeometry(EmbreeUtils::getDevice(), RTC_GEOMETRY_TYPE_USER);
             rtcEnableGeometry(geom);
             rtcSetGeometryUserPrimitiveCount(geom, 1);

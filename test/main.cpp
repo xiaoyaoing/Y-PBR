@@ -27,7 +27,7 @@ int main(int argc, const char *argv[]) {
 
     if(argc>0){
         for(int i =1; i<argc;i++)
-            Render::renderScene(std::string(argv[i]));
+            Render::renderScene(std::string("E:\\code\\Y-PBR\\example-scenes\\cornell-box\\"));
     }
     else {
         Render::renderScene();

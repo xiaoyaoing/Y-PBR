@@ -35,7 +35,7 @@ public:
         SurfaceRecord surfaceRecord;
         MediumRecord mediumRecord;
         VertexRecord(){}
-        VertexRecord(const SurfaceRecord & surfaceRecord): surfaceRecord((surfaceRecord)){
+        VertexRecord(const SurfaceRecord & surfaceRecord){
 
         }
         ~VertexRecord(){}
@@ -50,21 +50,30 @@ public:
     VertexSampler _sampler;
 public:
     PathVertex(){}
+//    PathVertex(PathVertex & other) = delete;
     PathVertex(const Light * light,Spectrum Le,Float pdf){
         type = VertexType::Light;
         _sampler.light = light;
         beta = Le;
         pdfFwd = pdf;
     }
-    PathVertex(const Light * light,Float lightPdf){
+    void initLight(const Light * light,Float lightPdf){
         type = VertexType::Light;
         _sampler.light = light;
         _record.lightRecord.lightPdf = lightPdf;
     }
-    PathVertex(const Camera * camera,vec2 point){
+
+    PathVertex(const Light * light,Float lightPdf){
+        initLight(light,lightPdf);
+    }
+    void initCamera(const Camera * camera,vec2 point){
         type = VertexType::Camera;
         _sampler.camera = camera;
         _record.cameraRecord.pixel = point;
+    }
+
+    PathVertex(const Camera * camera,vec2 point){
+       initCamera(camera,point);
     }
 
     PathVertex(const Camera * camera,PositionAndDirectionSample sample){
@@ -82,6 +91,13 @@ public:
         beta = sample.weight/lightPdf;
         pdfFwd =  0;
     }
+
+//    void initSurface(const SurfaceRecord & record,const Spectrum  &beta){
+//        type = VertexType::Surface;
+//        _record = record;
+//        _sampler.bsdf = record.its.bsdf;
+//        this->beta = beta;
+//    }
 
     PathVertex(const SurfaceRecord & record,const Spectrum  &beta):type(VertexType::Surface),
     _record(record)
@@ -106,6 +122,6 @@ public:
     Spectrum  eval(const PathVertex & vertex,bool adjoint) const;
 
     bool isInfiniteLight() const {
-
+        return false;
     }
 };

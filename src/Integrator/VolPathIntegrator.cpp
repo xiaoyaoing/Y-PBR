@@ -7,7 +7,7 @@ vec3 VolPathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &s
     Spectrum L(0);
     const Medium *medium;
     medium = _camera->_medium.get();
-    VolumeEvent voulumeEvent;
+    VolumeEvent voulumeEvent{};
     SurfaceEvent surfaceEvent;
     bool specularBounce = true;
     int bounce;
@@ -16,7 +16,6 @@ vec3 VolPathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &s
     std::optional<Intersection> temp;
     bool gemoback;
     bool tempHitSurface;
-    SurfaceEvent tempEvent;
     for (bounce = 0; bounce < maxBounces; bounce++) {
         std::optional<Intersection> its = scene.intersect(_ray);
         bool foundIntersection = its.has_value();
@@ -31,14 +30,15 @@ vec3 VolPathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &s
             if (!foundIntersection && hitSurface)
                 break;
         }
+
         if (hitSurface) {
             if (specularBounce) {
                 if (its.has_value())
                     L += beta * its->Le(-_ray.d);
 
             }
+            surfaceEvent = makeLocalScatterEvent(&(its.value()));
 
-            surfaceEvent = makeLocalScatterEvent(&its.value());
             if (its->bsdf->Pure(BSDF_FORWARD)) {
                 _ray = surfaceEvent.sctterRay(_ray.d);
             } else {
@@ -86,6 +86,7 @@ vec3 VolPathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &s
         if (bounce == 2 && luminace(L) > 2) {
             int k = 1;
         }
+
     }
 
     if (specularBounce)
@@ -96,6 +97,9 @@ vec3 VolPathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &s
         }
     if (luminace(L) == 0 ) {
         int k = 1;
+    }
+    if(bounce==3){
+
     }
     return L;
 }

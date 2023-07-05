@@ -383,6 +383,11 @@ inline Float PowerHeuristic(Float a, Float b) {
     return a * a / (a * a + b * b);
 }
 
+
+#ifdef _MSC_VER
+    // MSVC 编译器
+    // 在这里添加针对 MSVC 编译器的代码
+#else
 template<class T>
 inline bool isnan(T a){
     return std::isnan(a);
@@ -400,6 +405,13 @@ inline  Float sin(Float a ){
 inline  Float cos(Float a ){
     return std::cos(a);
 }
+    // 非 MSVC 编译器
+    // 在这里添加针对非 MSVC 编译器的代码
+#endif
+
+
+
+
 
 
 

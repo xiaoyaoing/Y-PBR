@@ -20,13 +20,6 @@ struct Intersection {
     vec2 uv;
     Float epsilon = Constant::EPSILON;
     Spectrum Le(const vec3 & wo) const;
-    Intersection() = default;
-    Intersection(const Intersection & its):p(its.p),w(its.w),bsdf(its.bsdf),bssrdf(its.bssrdf)
-                                        ,Ns(its.Ns),Ng(its.Ng),uv(its.uv),primitive(its.primitive),tangent(its.tangent){
-
-    }
-    ~Intersection(){
-    }
     Ray spawnRay(const vec3 & target){
         Float d = distance(p,target);
         vec3 dir = (target-p)/d;

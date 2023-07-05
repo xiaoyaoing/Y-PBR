@@ -117,6 +117,7 @@ namespace BSDFFactory {
     std::shared_ptr < Material > LoadRoughHairMaterial(const Json & j ) {
       //  RoughHair roughHair();
       //  return std::make_shared <RoughHair>();
+      return nullptr;
     }
 
 

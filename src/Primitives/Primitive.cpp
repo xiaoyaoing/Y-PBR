@@ -22,7 +22,7 @@ Float Primitive::directPdf(const Intersection & pShape, vec3 ref) const {
     return distance2(pShape.p,ref) * InvArea()/ (absDot(pShape.Ng,-pShape.w));
 }
 
-RTCGeometry Primitive::initRTC( ) {
+bool Primitive::initRTC( ) {
     _geom = rtcNewGeometry(EmbreeUtils::getDevice(), RTC_GEOMETRY_TYPE_USER);
 
     rtcSetGeometryUserPrimitiveCount(_geom, 1);
@@ -32,6 +32,7 @@ RTCGeometry Primitive::initRTC( ) {
     rtcSetGeometryOccludedFunction(_geom, &EmbreeUtils::instanceOccludedFunc);
     rtcCommitGeometry(_geom);
 
+    return true;
 }
 
 void Primitive::load(const Json & json, const Scene & scene) {

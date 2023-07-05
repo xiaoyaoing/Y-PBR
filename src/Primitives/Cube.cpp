@@ -107,5 +107,6 @@ vec3 Cube::operator ()(Float u, Float v) const {
 }
 
 Intersection Cube::sample(const vec2 & u, Float * pdf) const {
+    return Intersection();
     //to do
 }
