@@ -134,7 +134,7 @@ namespace ImageIO {
 
     uint8 * loadPng(const std::string & path,int & w,int & h,int & channels){
         size_t size = FileUtils::getFileSize(path);
-        std::shared_ptr < std::ifstream > in = std::make_shared < std::ifstream >(path);
+        std::shared_ptr < std::ifstream > in = std::make_shared < std::ifstream >(path,std::ios::binary);
         if(!in) return nullptr;
         std::unique_ptr<uint8[]> file(new uint8[size_t(size)]);
         FileUtils::streamRead(*in,file.get(),size);

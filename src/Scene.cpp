@@ -25,6 +25,7 @@
 
 
 #include <iostream>
+#include <spdlog.h>
 
 static int occludedCount = 0;
 static int occludedCount1 = 0;
@@ -87,7 +88,7 @@ std::optional < Intersection > Scene::intersect(Ray & ray) const {
         auto  its = EmbreeUtils::RTCRayHit1_(& rayHit)->its;
         its->w = ray.d;
         ray.farT = rayHit.ray.tfar;
-        return {*its};
+        return its;
     }
 
 //    std::optional < Intersection > minIntersection;
@@ -103,6 +104,8 @@ std::optional < Intersection > Scene::intersect(Ray & ray) const {
 //    }
 //    return minIntersection;
 }
+
+
 
 bool Scene::intersectP(const Ray & ray) const {
     if ( _useBVH ) {

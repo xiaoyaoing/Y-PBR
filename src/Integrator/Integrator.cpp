@@ -30,6 +30,7 @@ void SamplerIntegrator::render(const Scene & scene)  {
     int height = _camera->image->height();
     ivec2 numTiles{( renderBounds.x + tileSize - 1 ) / tileSize, ( renderBounds.y + tileSize - 1 ) / tileSize};
 
+
     int num_threads = std::thread::hardware_concurrency();
     parallel_init(num_threads);
 
@@ -55,7 +56,7 @@ void SamplerIntegrator::render(const Scene & scene)  {
                     {
                         Ray ray = _camera->sampleRay(x, y, tileSampler->getNext2D());
                         Spectrum radiance = integrate(ray, scene, * tileSampler);
-                        _camera->image->addPixel(x, y, radiance);
+                        _camera->image->addPixel(x, y, radiance, true);
                     }
                 }while(tileSampler->startNextSample());
         }}

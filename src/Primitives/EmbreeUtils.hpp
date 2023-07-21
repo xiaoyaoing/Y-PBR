@@ -1,9 +1,10 @@
 //2022/9/4
 #pragma  once
 
-#include "spdlog/spdlog-inl.h"
 #include <embree3/rtcore.h>
 #include <optional>
+#include "Ray/Intersection.hpp"
+
 
 #define   _CHECK_RTC_DEVICE  assert(rtcGetDeviceError(EmbreeUtils::getDevice())==RTC_ERROR_NONE);
 #define   _LOG_RTC_DEVICE_STATES_IF_ERROR if(rtcGetDeviceError(EmbreeUtils::getDevice())!=RTC_ERROR_NONE) \
@@ -12,10 +13,10 @@
 class Intersection;
 class Ray;
 namespace  EmbreeUtils {
-    struct RTCRayHit1 : RTCRayHit{
-        Intersection * its = nullptr ;
+    struct RTCRayHit1 : RTCRayHit
+    {
+        std::optional<Intersection> its = std::nullopt ;
     };
-
     inline RTCRay *  RTCRay_(RTCRayN *  ray) {
         return reinterpret_cast<RTCRay*>(ray); }
 

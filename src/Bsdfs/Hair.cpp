@@ -22,6 +22,7 @@ static Float I0(Float x) {
 }
 
 static Float getH(const SurfaceEvent & event){
+    return std::fabs(event.its->uv.y);
     return 2*std::fabs(event.its->uv.y)-1;
 }
 
@@ -157,9 +158,9 @@ Spectrum Hair::f(const SurfaceEvent & event) const {
     vec3 Nr = vec3(NR(_betaR, trigInverse(event.wo.y), phi, h));
     vec3 Ntt = NP(_betaR, cosThetaD, phi, 1, h);
     vec3 Ntrt = NP(_betaR, cosThetaD, phi, 2, h);
-  //  return Ntrt * MTRT;
+    //  return Ntrt * MTRT;
     vec3 fsum = MR * Nr + MTT * Ntt + MTRT * Ntrt;
-  //  return MR * Nr;
+    //  return MR * Nr;
     return fsum;
     vec3 res =  fsum ;
     //  if( AbsCosTheta(event.wi)>0) res/= AbsCosTheta(event.wi);

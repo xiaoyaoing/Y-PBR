@@ -32,7 +32,7 @@ int main() {
     Image image(res);
     for (int i = 0; i < sampleNum; i++) {
         auto sampled = sampler->getNext2D();
-        image.addPixel(sampled.x * res.x, sampled.y * res.y, Spectrum(0.2));
+        image.addPixel(sampled.x * res.x, sampled.y * res.y, Spectrum(0.2), true);
         if(!sampler->startNextSample())
             break;
     }

@@ -223,38 +223,26 @@ std::optional<Intersection> Curve::intersect(Ray &ray) const {
             float P[4], P1[4], P2[4];
             rtcInterpolate1(rtcGetGeometry(m_scene, rayHit.hit.geomID), rayHit.hit.primID, rayHit.hit.u, rayHit.hit.v,
                             RTC_BUFFER_TYPE_VERTEX, 0, P, P1, P2, 4);
-
             ray.farT = rayHit.ray.tfar;
-            Intersection its;
-            its.p = ray.operator()(ray.farT);
-            its.bsdf = bsdf.get();
-            its.primitive = this;
-            its.w = -ray.d;
-            uint32 p0 = _indices[rayHit.hit.primID];
+            Intersection intersection{};
+            intersection.p = ray.operator()(ray.farT);
+            intersection.bsdf = bsdf.get();
+            intersection.primitive = this;
+            intersection.w = -ray.d;
+            uint32 p1 = _indices[rayHit.hit.primID];
+            uint32_t p0=  p1;
             float t = rayHit.hit.u;
-          //  p0 = 5;t=0.5;
-            vec3 tangent = normalize(
-                    BSpline::quadraticDeriv(_nodeData[p0], _nodeData[p0 + 1], _nodeData[p0 + 2],  t));
 
-            vec3 point = BSpline::quadratic(_nodeData[p0], _nodeData[p0 + 1], _nodeData[p0 + 2], _nodeData[p0 + 3], t);
-            its.Ng = its.Ns = normalize((its.w - tangent * dot(tangent, its.w)));
-            its.tangent = {vec3(tangent)};
-            its.uv = {rayHit.hit.u, rayHit.hit.v};
-//            its.Ng = its.tangent.value();
-//            its.Ng = vec3(rayHit.hit.Ng_x,rayHit.hit.Ng_y,rayHit.hit.Ng_z);
-//            its.Ng = vec3(float(p0)/_nodeData.size());
-            return {its};
-//            its.Ng = its.Ns = normalize(v);
-//            its.Ng = vec3(t)*2.f - 1.f;
-//            return {its};
-//
-//            vec3 dp = derivSpline(_nodeData,p0,t);
-//            auto Tx = normalize(dp);
-//            auto Ty = normalize(cross(-(ray.d),Tx));
-//
-//            its.Ng = its.Ns = normalize(cross(Ty,Tx));
-//            its.Ng = its.Ns = vec3(rayHit.hit.Ng_x,rayHit.hit.Ng_y,rayHit.hit.Ng_z);
-//            return {its};
+            vec3 tangent = normalize(
+                    BSpline::quadraticDeriv(_nodeData[p1], _nodeData[p1 + 1], _nodeData[p1 + 2],  t));
+            vec3 point = BSpline::quadratic(_nodeData[p1], _nodeData[p1 + 1], _nodeData[p1 + 2], _nodeData[p1 + 3], t);
+            intersection.Ng = intersection.Ns = normalize((intersection.w - tangent * dot(tangent, intersection.w)));
+            intersection.tangent = {vec3(tangent)};
+            if(tangent == vec3(0,0,0)){
+                int k =1;
+            }
+            intersection.uv = {rayHit.hit.u, rayHit.hit.v};
+            return {intersection};
         }
         return std::nullopt;
     }

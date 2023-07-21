@@ -74,13 +74,13 @@ void Camera::drawLine(int x0, int x1, int y0, int y1, const Spectrum &color) {
     if (dy == 0) {
         if (x0 > x1) std::swap(x0, x1);
         for (int x = x0; x < x1; x++)
-            image->addPixel(x, y0, color);
+            image->addPixel(x, y0, color, true);
         return;
     }
     if (dx == 0) {
         if (y0 > y1) std::swap(y0, y1);
         for (int y = y0; y < y1; y++)
-            image->addPixel(x0, y, color);
+            image->addPixel(x0, y, color, true);
         return;
     }
 
@@ -94,7 +94,7 @@ void Camera::drawLine(int x0, int x1, int y0, int y1, const Spectrum &color) {
                 pi += dy2 - dx2;
                 y += 1;
             }
-            image->addPixel(x, y, color * factor(x0, x1, x));
+            image->addPixel(x, y, color * factor(x0, x1, x), true);
         }
     } else if (dx > 0 && dy > 0 && m >= 1) {
         Float pi = dx2 - dy;
@@ -105,7 +105,7 @@ void Camera::drawLine(int x0, int x1, int y0, int y1, const Spectrum &color) {
                 pi += dx2 - dy2;
                 x += 1;
             }
-            image->addPixel(x, y, color * factor(y0, y1, y));
+            image->addPixel(x, y, color * factor(y0, y1, y), true);
         }
     } else if (dx > 0 && dy < 0 && m < 1) {
         dy2 = -dy2;
@@ -118,7 +118,7 @@ void Camera::drawLine(int x0, int x1, int y0, int y1, const Spectrum &color) {
                 pi += dy2 - dx2;
                 y += 1;
             }
-            image->addPixel(x, -y, color * factor(x0, x1, x));
+            image->addPixel(x, -y, color * factor(x0, x1, x), true);
         }
     } else if (dx > 0 && dy < 0 && m >= 1) {
         dy2 = -dy2;
@@ -131,7 +131,7 @@ void Camera::drawLine(int x0, int x1, int y0, int y1, const Spectrum &color) {
                 pi += dx2 - dy2;
                 x += 1;
             }
-            image->addPixel(x, -y, color * factor(y0, y1, y));
+            image->addPixel(x, -y, color * factor(y0, y1, y), true);
         }
     } else if (dx < 0 && dy > 0 && m < 1) {
         dx2 = -dx2;
@@ -144,7 +144,7 @@ void Camera::drawLine(int x0, int x1, int y0, int y1, const Spectrum &color) {
                 pi += dy2 - dx2;
                 y += 1;
             }
-            image->addPixel(-x, y, color * factor(x0, x1, x));
+            image->addPixel(-x, y, color * factor(x0, x1, x), true);
         }
     } else if (dx < 0 && dy > 0 && m >= 1) {
         dx2 = -dx2;
@@ -157,7 +157,7 @@ void Camera::drawLine(int x0, int x1, int y0, int y1, const Spectrum &color) {
                 pi += dx2 - dy2;
                 x += 1;
             }
-            image->addPixel(-x, y, color * factor(y0, y1, y));
+            image->addPixel(-x, y, color * factor(y0, y1, y), true);
         }
     } else if (dx < 0 && dy < 0 && m < 1) {
         dx2 = -dx2;
@@ -172,7 +172,7 @@ void Camera::drawLine(int x0, int x1, int y0, int y1, const Spectrum &color) {
                 pi += dy2 - dx2;
                 y += 1;
             }
-            image->addPixel(-x, -y, color * factor(x0, x1, x));
+            image->addPixel(-x, -y, color * factor(x0, x1, x), true);
         }
     } else if (dx < 0 && dy < 0 && m >= 1) {
         dx2 = -dx2;
@@ -187,7 +187,7 @@ void Camera::drawLine(int x0, int x1, int y0, int y1, const Spectrum &color) {
                 pi += dx2 - dy2;
                 x += 1;
             }
-            image->addPixel(-x, -y, color * factor(y0, y1, y));
+            image->addPixel(-x, -y, color * factor(y0, y1, y), true);
         }
     }
 }

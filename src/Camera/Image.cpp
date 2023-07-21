@@ -27,13 +27,12 @@ vec3 Image::getPixel(int x, int y) const {
 }
 
 vec3 Image::getPixel(int idx) const {
-    if(sampleCounts[idx]!=0){
+    if (sampleCounts[idx] != 0) {
+        int k = 1;
+    } else {
         int k = 1;
     }
-     else {
-         int k = 1;
-     }
-    return sampleCounts[idx]!=0?buffers[idx].value():vec3(0);
+    return sampleCounts[idx] != 0 ? buffers[idx].value() : vec3(0);
 }
 
 uint32 Image::getIndex(uint32 x, uint32 y) const {
@@ -42,8 +41,8 @@ uint32 Image::getIndex(uint32 x, uint32 y) const {
 }
 
 
-void Image::addPixel(uint32 x, uint32 y, vec3 rgb) {
-    if(x<0 || x>=width() || y<0 || y>=height())
+void Image::addPixel(uint32 x, uint32 y, vec3 rgb, bool count) {
+    if (x < 0 || x >= width() || y < 0 || y >= height())
         return;
 //    if(hasNan(rgb)){
 //        throw("Rdiance NAN");
@@ -53,13 +52,12 @@ void Image::addPixel(uint32 x, uint32 y, vec3 rgb) {
 //    }
     uint32 idx = getIndex(x, y);
     buffers[idx].add(rgb);
-    sampleCounts[idx]++;
+    if (count)
+        sampleCounts[idx]++;
 }
 
 
-
-
-void Image::save(const std::string &fileName,Float scale,bool overwrite) const {
+void Image::save(const std::string &fileName, Float scale, bool overwrite) const {
     auto extension = FileUtils::getFileSuffix(fileName);
     if (extension.empty()) {
         spdlog::info("Invalid Path {0}", fileName);

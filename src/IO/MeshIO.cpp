@@ -25,7 +25,7 @@ bool LoadObj(std::ifstream & stream,std::vector<Vertex> & vertexs,std::vector<Tr
     return true;
 }
 bool LoadMeshFromFile(const std::string & path,std::vector<Vertex> & vertexs,std::vector<TriangleI>& tris){
-        std::ifstream stream(FileUtils::WorkingDir+path);
+        std::ifstream stream(FileUtils::WorkingDir+path,std::ios::binary);
         if(!stream.is_open())
             return false;
         if(FileUtils::getFileSuffix(path) == "wo3")

@@ -26,7 +26,7 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
 
         its = scene.intersect(_ray);
 
-        if (specularBounce && bounces>minBounces) {
+        if (specularBounce && bounces>=minBounces) {
             if (its.has_value())
                 L += beta * its->Le(-_ray.d);
             else
@@ -89,9 +89,6 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
                 surfaceEvent = makeLocalScatterEvent(&pi);
                 beta *= s / pdf;
                 L += beta * uniformSampleOneLight(surfaceEvent, scene, sampler, lightDistribution.get());
-                if(hasNeg(L)){
-                    int k =1;
-                }
                 surfaceEvent.requestType = BSDF_ALL;
                 f = pi.bsdf->sampleF(surfaceEvent, sampler.getNext2D(), false);
                 beta *= f / surfaceEvent.pdf;

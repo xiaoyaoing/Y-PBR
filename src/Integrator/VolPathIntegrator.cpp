@@ -16,12 +16,14 @@ vec3 VolPathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &s
     std::optional<Intersection> temp;
     bool gemoback;
     bool tempHitSurface;
+    std::optional<Intersection> its;
     for (bounce = 0; bounce < maxBounces; bounce++) {
-        std::optional<Intersection> its = scene.intersect(_ray);
+        its = scene.intersect(_ray);
         bool foundIntersection = its.has_value();
         bool hitSurface = true;
         if (!medium && !foundIntersection)
             break;
+
         if (medium) {
             medium->sampleDistance(_ray, sampler, voulumeEvent);
             beta *= medium->sampleDistance(_ray, sampler, voulumeEvent);
@@ -32,13 +34,13 @@ vec3 VolPathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &s
         }
 
         if (hitSurface) {
+
             if (specularBounce) {
                 if (its.has_value())
                     L += beta * its->Le(-_ray.d);
 
             }
             surfaceEvent = makeLocalScatterEvent(&(its.value()));
-
             if (its->bsdf->Pure(BSDF_FORWARD)) {
                 _ray = surfaceEvent.sctterRay(_ray.d);
             } else {
@@ -95,10 +97,10 @@ vec3 VolPathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &s
                 L += beta * light->Le(_ray);
             }
         }
-    if (luminace(L) == 0 ) {
+    if (luminace(L) == 0) {
         int k = 1;
     }
-    if(bounce==3){
+    if (bounce == 3) {
 
     }
     return L;

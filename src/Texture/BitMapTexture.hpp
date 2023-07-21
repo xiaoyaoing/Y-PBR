@@ -6,7 +6,7 @@
 #include "IO/ImageIO.hpp"
 #include "stb_image.h"
 #include "IO/FileUtils.hpp"
-
+#include "spdlog.h"
 struct Rgba {
     uint8 c[4];
 
@@ -122,6 +122,7 @@ public:
     }
 
     void LoadResources( ) {
+        spdlog::info("Loading {0}",_path);
         _linear = true;
         _clamp = false;
         _isHdr = ImageIO::isHdr(_path);
@@ -132,6 +133,8 @@ public:
             pixels = ImageIO::loadHdr(_path, TexelConversion::REQUEST_RGB, w, h).release();
         else
             pixels = ImageIO::loadLdr(_path, TexelConversion::REQUEST_RGB, w, h).release();
+        if(!pixels)
+            spdlog::error("Error while reading texture");
         _texels = pixels;
         _w = w;
         _h = h;

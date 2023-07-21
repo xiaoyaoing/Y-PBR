@@ -32,6 +32,6 @@ public:
             if(s==2 && t==1 ){
                 int k  = 1;
             }
-            images[pyramidIndex(s,t)].addPixel(pixel.x,pixel.y,rgb);
+        images[pyramidIndex(s, t)].addPixel(pixel.x, pixel.y, rgb, true);
     }
 };

@@ -5,6 +5,7 @@
 #include <memory>
 //Mainly Copyied From Tunsgten
 //https://benedikt-bitterli.me/tungsten.html
+#include <iostream>
 namespace CurveIO {
 
     static const std::array < uint8, 8 > FiberMagic{0x80, 0xBF, 0x80, 0x46, 0x49, 0x42, 0x45, 0x52};
@@ -74,10 +75,9 @@ namespace CurveIO {
     };
 
     static bool loadFiber(const std::string & path, CurveData & data) {
-        std::ifstream in(FileUtils::WorkingDir + path);
+        std::ifstream in(FileUtils::WorkingDir + path,std::ios_base::in | std::ios_base::_Nocreate | std::ios_base::binary);
         if ( ! in )
             return false;
-
         if ( FileUtils::streamRead < std::array < uint8, 8>>(in) != FiberMagic )
             return false;
 
@@ -97,9 +97,9 @@ namespace CurveIO {
         uint64 offset = headerLength;
         while ( true ) {
             in.seekg(size_t(offset), std::ios_base::beg);
-
             uint64 descriptorLength = FileUtils::streamRead < uint64 >(in);
-            if ( descriptorLength == 0 )
+            uint32_t a =descriptorLength;
+            if ( descriptorLength == 0  )
                 break;
 
             FiberAttribute attribute(in);

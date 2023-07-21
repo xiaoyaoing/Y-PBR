@@ -46,7 +46,7 @@ void BDPTIntegrator::render(const Scene &scene)  {
                     {
                         ivec2 pixel(x,y);
                         Spectrum  L  = tracer.traceSample(pixel,*tileSampler);
-                        _camera->image->addPixel(x,y,L);
+                        _camera->image->addPixel(x, y, L, true);
                     }
                 }
             }

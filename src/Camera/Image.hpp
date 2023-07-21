@@ -84,7 +84,7 @@ public:
             desired = current + add;
     }
 
-    void addPixel(uint32 x, uint32 y, vec3 rgb);
+    void addPixel(uint32 x, uint32 y, vec3 rgb, bool count = false);
 
     void saveTXT(const std::string &fileName) const;
 

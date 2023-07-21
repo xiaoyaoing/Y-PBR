@@ -20,6 +20,9 @@ public:
        minBounces = getOptional(json,"min_bounces",0);
        maxBounces = getOptional(json,"max_bounces",8);
    }
+   Integrator():minBounces(0),maxBounces(8){
+
+   }
    virtual void render(const Scene & scene)  = 0 ;
 
    virtual void  process(const Scene &scene, Sampler & sampler )  =0;
@@ -33,6 +36,9 @@ class SamplerIntegrator : public  Integrator{
 public:
     SamplerIntegrator(std::shared_ptr<Camera> camera,std::shared_ptr<Sampler> sampler,const Json & json):
     _camera(camera),_sampler(sampler), Integrator(json){}
+    SamplerIntegrator(std::shared_ptr<Camera> camera,std::shared_ptr<Sampler> sampler):
+    _camera(camera),_sampler(sampler){}
+
     void render(const Scene & scene)  override;
     virtual vec3  integrate(const Ray& ray, const Scene& scene, Sampler& sampler) const = 0 ;
     virtual void renderPixel(int x,int y) const ;

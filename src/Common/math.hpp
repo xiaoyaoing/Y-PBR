@@ -44,16 +44,17 @@ typedef std::int64_t int64;
 
 
 namespace Constant {
-    inline constexpr Float PI = 3.14159265358979323846;
-    inline constexpr Float PiOver2 = 1.57079632679489661923;
-    inline constexpr Float PiOver4 = 0.78539816339744830961;
-    inline constexpr Float INV_PI = 0.31830988618379067154;
-    inline constexpr Float INV_TWO_PI = INV_PI / 2;
-    inline constexpr Float INV_FOUR_PI = INV_PI / 4;
-    inline constexpr Float HALF_PI = 1.57079632679489661923;
-    inline constexpr Float TWO_PI = 6.283185307179586476925;
-    inline constexpr Float EPSILON = 5e-4f;
+    constexpr Float PI = 3.14159265358979323846;
+    constexpr Float PiOver2 = 1.57079632679489661923;
+    constexpr Float PiOver4 = 0.78539816339744830961;
+    constexpr Float INV_PI = 0.31830988618379067154;
+    constexpr Float INV_TWO_PI = INV_PI / 2;
+    constexpr Float INV_FOUR_PI = INV_PI / 4;
+    constexpr Float HALF_PI = 1.57079632679489661923;
+    constexpr Float TWO_PI = 6.283185307179586476925;
+    constexpr Float EPSILON = 5e-4f;
 }
+
 
 class BitManip {
 public :
@@ -301,7 +302,8 @@ glm::vec<size, Float, glm::defaultp> lerp(const glm::vec<size, Float, glm::defau
 ) {
     glm::vec<size, Float, glm::defaultp> res;
     for (uint32 i = 0; i < size; i++) {
-        res[i] = std::lerp(v1[i], v2[i], p);
+        res[i] = p * v1[i] + (1-p) * v2[i];
+       // res[i] = std::lerp(v1[i], v2[i], p);
     }
     return res;
 }

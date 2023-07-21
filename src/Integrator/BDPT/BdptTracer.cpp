@@ -26,7 +26,7 @@ Spectrum BdptTracer::traceSample(ivec2 pixel, Sampler &sampler) {
             if (c == 1) {
                 ivec2 pRaster;
                 Spectrum s = LightPath::connectCameraBDPT(scene, camera, sampler, *lightPath, l, pRaster);
-                image->addPixel(pixel.x, pixel.y, s);
+                image->addPixel(pixel.x, pixel.y, s, true);
                 if (imagePramid)
                     imagePramid->addPixel(l, c, pRaster, s);
             } else if (l == 1) {

@@ -535,7 +535,7 @@ void PhotonMapper::render(const Scene &scene) {
                         if (iteration == iterations - 1)
                             L += pixel.Ld / (iteration + 1.f);
                         Spectrum c = Spectrum(1 - (pixel.radius - minR) / (maxR - minR));
-                        _camera->image->addPixel(x, y, L);
+                        _camera->image->addPixel(x, y, L, true);
                     }
                 _camera->image->save(scene.options.outputFileName,1);
                 _camera->image->fill(Spectrum(0));

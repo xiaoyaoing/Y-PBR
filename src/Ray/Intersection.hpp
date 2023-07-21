@@ -1,6 +1,5 @@
 #pragma  once
 #include "../Common/math.hpp"
-//#include "../Bsdfs/Reflection.hpp"
 #include <optional>
 #include "../Colors/Spectrum.hpp"
 #include "Ray.hpp"

@@ -41,7 +41,7 @@ add_custom_command(TARGET lib POST_BUILD
         ${EMBREE_LIB_DIR}/bin/embree3.dll $<TARGET_FILE_DIR:${TARGET_NAME}>/embree3.dll
 
         COMMAND ${CMAKE_COMMAND} -E copy
-        ${EMBREE_LIB_DIR}/tbb12.dll $<TARGET_FILE_DIR:${TARGET_NAME}>/tbb12.dll)
+        ${EMBREE_LIB_DIR}/bin/tbb12.dll $<TARGET_FILE_DIR:${TARGET_NAME}>/tbb12.dll)
 
 endif()
 
@@ -72,5 +72,8 @@ if (NOT TARGET tinyexr)
     target_link_libraries(${TARGET_NAME} INTERFACE tinyexr)
     target_include_directories(tinyexr INTERFACE ${CMAKE_CURRENT_LIST_DIR}/tinyexr)
 endif ()
+
+#add_subdirectory(json)
+#target_link_libraries( ${TARGET_NAME} PUBLIC nlohmann_json)
 
 

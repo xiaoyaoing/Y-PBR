@@ -41,22 +41,6 @@ Render::Render(const Json & json) {
     }
 }
 
-class TimeCounter{
-public:
-    void printTimeCount(){
-        std::chrono::time_point < std::chrono::steady_clock > end = std::chrono::steady_clock::now();
-        auto s = std::chrono::duration_cast < std::chrono::seconds >(end - start).count();
-        std::cout <<std::endl<< event<<"done. Take " << s << "s";
-    }
-    TimeCounter(std::string event):event(std::move(event))
-    {
-        start = std::chrono::steady_clock::now();
-    }
-private:
-    std::chrono::time_point < std::chrono::steady_clock >  start;
-    std::string event;
-
-};
 
 void Render::Go( ) {
     TimeCounter counter("Rendering");

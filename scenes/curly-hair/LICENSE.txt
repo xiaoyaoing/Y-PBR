@@ -1,0 +1,14 @@
+This is the Tungsten version of 'Curly Hair' by Cem Yuksel, downloaded from https://benedikt-bitterli.me/resources/
+
+The original file may be obtained here: http://www.cemyuksel.com/research/hairmodels/
+
+This scene was released under a custom license. It is reproduced here:
+
+You may freely download and use the hair model files provided above for your
+personal or research projects. If you include any material (such as images,
+videos, or any other visual or numerical data) that you produce using these
+files in any public document (such as a web page, publication, technical
+report, a software release or documentation, or any other public document),
+you are expected to indicate where these models are obtained by placing a link
+to this web page: www.cemyuksel.com/research/hairmodels
+Any acknowledgements in your public documents are also highly appreciated.
