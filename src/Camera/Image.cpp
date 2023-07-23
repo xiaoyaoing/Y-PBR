@@ -81,6 +81,9 @@ void Image::save(const std::string &fileName, Float scale, bool overwrite) const
                 auto rgb = getPixel(i) * scale;
                 //rgb = vec3(sampleCounts[i]/100.f);
                 rgb = clamp(255.f * ToneMap::toneMap(_tonemapType, rgb), vec3(0), 255.f * vec3(1));
+                if(!isBlack(rgb)){
+                    int k =1;
+                }
                 ldr[3 * i] = uint8_t(rgb.r);
                 ldr[3 * i + 1] = uint8_t(rgb.g);
                 ldr[3 * i + 2] = uint8_t(rgb.b);

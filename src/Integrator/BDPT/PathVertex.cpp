@@ -40,8 +40,7 @@ Spectrum PathVertex::eval(const PathVertex &vertex, bool adjoint) const {
     switch (type) {
         case VertexType::Surface: {
             const auto &event = _record.surfaceRecord.event;
-          //  return (1.f+event.toLocal(d))/2.f;
-            return _sampler.bsdf->f(event.makeWarpQuery( event.wi,event.toLocal(d)), false);
+            return _sampler.bsdf->f(event.makeWarpQuery( event.wi,event.toLocal(d)),adjoint);
         }
         default:
             return Spectrum();
@@ -55,9 +54,7 @@ bool PathVertex::sampleNext(const Scene &scene, bool adjoint, PathState &state, 
     Ray ray;
     switch (type) {
         case VertexType::Light: {
-            auto &record = _record.lightRecord;
-          //  pdf = record.sample.dirPdf;
-//           weight = record.sample.radiance;
+            auto &record = _record.lightRecord;;
             ray = record.sample.ray;
             pdf = record.sample.dirPdf ;
             weight = Spectrum (dot(record.sample.n,ray.d) /(record.sample.dirPdf)) ;
@@ -65,7 +62,6 @@ bool PathVertex::sampleNext(const Scene &scene, bool adjoint, PathState &state, 
         }
         case VertexType::Camera: {
             auto &record = _record.cameraRecord;
-//            weight = record.sample.radiance;
             pdf = record.sample.dirPdf;
             ray = record.sample.ray;
             break;
@@ -76,7 +72,7 @@ bool PathVertex::sampleNext(const Scene &scene, bool adjoint, PathState &state, 
         case VertexType::Surface: {
             auto &record = _record.surfaceRecord;
             SurfaceEvent &event = record.event;
-            auto &bsdf = event.its->bsdf;
+            auto &bsdf = _sampler.bsdf;
             weight = bsdf->sampleF(event, state.sampler.getNext2D(), adjoint);
             if(isBlack(weight) || event.pdf == 0){
                 return false;
@@ -93,7 +89,7 @@ bool PathVertex::sampleNext(const Scene &scene, bool adjoint, PathState &state, 
             break;
         }
     }
-    auto its = scene.intersect(ray);
+    auto its  = scene.intersect(ray);
     if (!its) {
         return false;
     }
@@ -101,12 +97,8 @@ bool PathVertex::sampleNext(const Scene &scene, bool adjoint, PathState &state, 
     record.its = its.value();
     auto event = makeLocalScatterEvent(&record.its);
     record.event = event;
-    if(hasNan(weight) || isinf(weight[0])){
-        int k = 1;
-    }
-    next._record = VertexRecord();
-    next._record.surfaceRecord = SurfaceRecord();
     next = PathVertex(record, beta * weight);
+    next.pointerFixUp();
     next.pdfFwd = pdf;
     state.bounce++;
     return true;
@@ -129,6 +121,8 @@ bool PathVertex::sampleRootVertex(PathState &state) {
             auto light = _sampler.light;
             auto &record = _record.lightRecord;
             record.sample = light->sampleDirect(state.sampler.getNext2D(), state.sampler.getNext2D());
+            if(record.sample.dirPdf ==0 || record.sample.posPdf ==0)
+                return false;
             if (isInfiniteLight()) {
                 //todo
             } else {

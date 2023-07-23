@@ -13,8 +13,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 
 
-set(CUDAToolkit_ROOT "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1")
-set(CMAKE_CUDA_COMPILER "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/bin/nvcc.exe")
 
 
 
@@ -22,6 +20,11 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
     cmake_policy(SET CMP0135 NEW)
 endif()
 
+
+
+if(MSVC)
+set(CUDAToolkit_ROOT "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1")
+set(CMAKE_CUDA_COMPILER "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/bin/nvcc.exe")
 # Adapted from the CMake source code at https://github.com/Kitware/CMake/blob/master/Modules/FindCUDA/select_compute_arch.cmake
 # Simplified to return a semicolon-separated list of the compute capabilities of installed devices
 function(TCNN_AUTODETECT_CUDA_ARCHITECTURES OUT_VARIABLE)
@@ -80,6 +83,8 @@ message(STATUS "Obtained CUDA architectures automatically from installed GPUs")
 TCNN_AUTODETECT_CUDA_ARCHITECTURES(CMAKE_CUDA_ARCHITECTURES)
 
 
+endif()
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -104,7 +109,7 @@ add_subdirectory(${YPBR_DEPENDENCIES_DIR})
 
 
 
-file(GLOB_RECURSE YPBR_SOURCES ${YPBR_SOURCES_DIR}/*.cpp  lib/lodepng/lodepng.cpp lib/stbi/stb_image.c
+file(GLOB_RECURSE YPBR_SOURCES ${YPBR_SOURCES_DIR}/*.cpp  lib/lodepng/lodepng.cpp
         lib/skylight/ArHosekSkyModel.cpp)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
@@ -116,12 +121,18 @@ add_dependencies(Y_PBR lib)
 target_link_libraries(Y_PBR PUBLIC lib)
 target_include_directories(Y_PBR PRIVATE ${PROJECT_SOURCE_DIR}/lib/json/include)
 
+if(MSVC)
+    message("Using MSVC compiler")
+else()
+    message("Not using MSVC compiler")
+endif()
+
 if(MSVC )
 add_subdirectory(tiny-cuda-nn)
 
 #target_link_libraries(Y_PBR PUBLIC E:/code/Y-PBR/lib/embree/windows/lib/embree3.lib)
 
-add_executable(hair-nn test/hair-accleerate.cu ${YPBR_SOURCES}  test/HairIntegrator.cpp test/HairIntegrator.h)
+add_executable(hair-nn test/hair-accleerate.cu ${YPBR_SOURCES}  test/HairIntegrator.cpp test/HairIntegrator.h src/Bsdfs/PrecomputeALobe.cpp src/Bsdfs/PrecomputeALobe.h)
 target_compile_features(hair-nn PRIVATE cxx_std_17)
 
 add_dependencies(hair-nn lib)

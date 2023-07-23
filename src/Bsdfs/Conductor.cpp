@@ -42,7 +42,7 @@ Spectrum RoughConductor::f(const SurfaceEvent & event) const {
     Float cosI = dot(event.wo,faceForward(wh,vec3(0,0,1)));
     Spectrum F= Fresnel::conductorReflectance(m_eta,m_k,cosI);
     //return Spectrum(1);
-    return m_albedo->eval(event.its) * m_distrib->D(wh, alphaxy) * F * m_distrib->G(event.wo, event.wi, alphaxy) / ( 4 * cosThetaO);
+    return  m_albedo->eval(event.its) * m_distrib->D(wh, alphaxy) * F * m_distrib->G(event.wo, event.wi, alphaxy) / ( 4 * cosThetaO);
 }
 
 Float RoughConductor::Pdf(const SurfaceEvent & event) const {

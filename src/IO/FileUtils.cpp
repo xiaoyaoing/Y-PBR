@@ -1,6 +1,8 @@
 #include <sys/stat.h>
 #include "FileUtils.hpp"
 #include <memory>
+#include <algorithm>
+
 std::string FileUtils::WorkingDir = "";
 
 inline bool fileExists (const std::string& name) {
@@ -56,8 +58,13 @@ std::string FileUtils::getFilePath(const std::string &path, bool overwrite) {
     return getFilePath(getFilePrefix(path), getFileSuffix(path),overwrite);
 }
 
-std::string FileUtils::getFileFullPath(const std::string &path) {
-    return WorkingDir+path;
+std::string FileUtils::getFileFullPath(const std::string &path) {\
+    std::string realPath = path;
+#if _WIN32
+    std::replace(realPath.begin(), realPath.end(), '/', '\\');
+
+#endif
+    return WorkingDir+realPath;
 }
 
 

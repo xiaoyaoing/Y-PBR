@@ -1,5 +1,6 @@
 #include "Reflection.hpp"
 #include "MicrofacetDistribution.hpp"
+#include "PrecomputeALobe.h"
 
 const int pMax = 3;
 
@@ -24,9 +25,10 @@ protected:
 
     std::array<Float, pMax + 1> ComputeApPdf(Float cosThetaO,Float h) const;
 
-    vec3 getSmoothDir(vec3 wo,Float gammaI,Float  gammaT, int p ) const;
+    void precomputeGussAmz();
+
 private:
-    GGX ggx;
+    std::unique_ptr<PrecomputedAzimuthalLobe> _nR = nullptr, _nTT = nullptr, _nTRT = nullptr;
 
     vec2 alpha_r,alpha_tt,alpha_trt;
     Float betaM,betaN;

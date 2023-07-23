@@ -335,7 +335,7 @@ int main(int argc, const char *argv[]) {
     scene_file >> j;
     scene_file.close();
     Render render(j);
-    render.integrator.reset(new HairIntegrator(render.camera, render.sampler));
+   // render.integrator.reset(new HairIntegrator(render.camera, render.sampler));
     render.Go();
 }
 

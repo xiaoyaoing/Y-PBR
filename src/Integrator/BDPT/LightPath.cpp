@@ -36,18 +36,17 @@ LightPath::connectCameraBDPT(const Scene &scene, const Camera *camera, Sampler &
     if(!lightVertex.canConnect())
         return Spectrum(0);
     PositionAndDirectionSample sample;
-    if(!camera->sampleLi(lightVertex.pos(), &pixel, sampler.getNext2D(),sample))
-        return Spectrum(1,0,0);
 
+    if(!camera->sampleLi(lightVertex.pos(), &pixel, sampler.getNext2D(),sample))
+        return Spectrum(0,0,0);
+    //return Spectrum(1);
     auto cameraVertex = PathVertex(camera,sample);
+
     auto ray = generateRay(cameraVertex, lightVertex);
     auto tr = evalShadowDirect(scene, ray, nullptr);
-   // if (isBlack(tr))
-       // return Spectrum(0);
-   // return lightVertex.eval(cameraVertex, true);
-   // return lightVertex.beta;
-   return lightVertex.eval(cameraVertex, true);
-    auto res = tr *   lightVertex.beta  *  lightVertex.eval(cameraVertex, true) * cameraVertex.beta;
+
+
+    auto res = tr *   lightVertex.beta   * cameraVertex.beta * lightVertex.eval(cameraVertex, true);
     return res;
     return lightVertex.eval(cameraVertex, true);
   //  return abs(lightVertex.pos())/10.f;

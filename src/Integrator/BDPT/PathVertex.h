@@ -98,13 +98,17 @@ public:
 //        _sampler.bsdf = record.its.bsdf;
 //        this->beta = beta;
 //    }
+    //As the tungsten author said,
+    // this is an ugly situation,
+    // and hopefully, it can be resolved during the refactoring of the surface event.
+    void pointerFixUp(){
+        _record.surfaceRecord.event.its = &_record.surfaceRecord.its;
+    }
+    PathVertex(const SurfaceRecord & record,const Spectrum  &beta):type(VertexType::Surface)
 
-    PathVertex(const SurfaceRecord & record,const Spectrum  &beta):type(VertexType::Surface),
-    _record(record)
     {
+        _record.surfaceRecord = record;
         _sampler.bsdf = record.its.bsdf;
-        //avoid pointer error
-        //_record.surfaceRecord.event.its = &_record.surfaceRecord.its;
         this->beta = beta;
     }
 

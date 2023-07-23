@@ -59,6 +59,15 @@
             "substrate": "RoughMetal"
         },
         {
+            "name": "Lamp",
+            "albedo": 1,
+            "type": "rough_conductor",
+            "material": "VN",
+            "distribution": "beckmann",
+            "roughness": 0.25
+        },
+
+        {
             "name": "Stand",
             "albedo": 0.8,
             "type": "lambert",
@@ -93,7 +102,6 @@
             "bsdf": "null"
         },
 
-
         {
             "transform": {
                 "position": [
@@ -109,7 +117,7 @@
             "smooth": true,
             "backface_culling": false,
             "recompute_normals": false,
-            "bsdf": "RoughPlastic"
+            "bsdf": "Lamp"
         },
         {
             "transform": {
@@ -126,7 +134,7 @@
             "smooth": true,
             "backface_culling": false,
             "recompute_normals": false,
-            "bsdf": "RoughPlastic"
+            "bsdf": "Lamp"
         },
         {
             "transform": {
@@ -201,14 +209,14 @@
         "enable_two_sided_shading": true
     },
     "renderer": {
-        "output_file": "material-testball.exr",
+        "output_file": "material-testball.png",
         "resume_render_file": "RenderState.dat",
         "overwrite_output_files": false,
         "adaptive_sampling": true,
         "enable_resume_render": false,
         "stratified_sampler": true,
         "scene_bvh": true,
-        "spp": 16,
+        "spp": 4,
         "spp_step": 16,
         "checkpoint_interval": "0",
         "hdr_output_file": "material-testball.exr"

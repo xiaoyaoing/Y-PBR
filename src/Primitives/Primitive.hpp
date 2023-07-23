@@ -14,7 +14,7 @@
 #include "Lights/Light.hpp"
 
 #include <optional>
-
+#include <string>
 
 class AreaLight;
 
@@ -24,10 +24,12 @@ class Primitive {
 public:
     Primitive(const Json & json) {
         toWorld = getOptional(json, "transform", getIndentifyTransform());
-        _name = getOptional(json,"name",std::string(""));
+       // _name = getOptional(json,"name",std::string(""));
     }
 
-    Primitive( ) {}
+    Primitive( ){
+
+    }
 
     Primitive(const Bounds3 & bounds, uint32 id) : BB_(bounds), primId(id) {}
 
@@ -82,7 +84,7 @@ public:
     }
 
     inline std::string  name() const{
-        return _name;
+      //  return _name;
     }
 
     virtual  void load(const Json & json, const Scene & scene );
@@ -105,9 +107,9 @@ protected:
     Bounds3 BB_;
     RTCGeometry _geom;
     mat4 toWorld;
-    std::string _name;
-    std::shared_ptr <Medium > outMedium;
-    std::shared_ptr <Medium > inMedium;
+   // std::string _name;
+    std::shared_ptr <Medium > outMedium = nullptr;
+    std::shared_ptr <Medium > inMedium = nullptr;
     //mat4  toWorld;
 };
 

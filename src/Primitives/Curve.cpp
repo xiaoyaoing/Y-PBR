@@ -98,9 +98,13 @@ static inline void precomputeBSplineCoefficients(T &p0, T &p1, T &p2) {
     p2 = q2;
 }
 
-static bool pointOnSpline(vec4 q0, vec4 q1, vec4 q2,
-                          float tMin, float tMax, CurveIntersection &isect,
-                          vec3 n0, vec3 n1, vec3 n2) {
+void testfunc(vec4 q0, vec4 q1, vec4 q2,
+              float tMin, float tMax,
+              vec3 n0, vec3 n1, vec3 n2){
+
+}
+ bool pointOnSpline(vec4 q0, vec4 q1, vec4 q2,
+                          float tMin, float tMax, CurveIntersection * isect) {
     const int MaxDepth = 5;
 
     StackNode stackBuf[MaxDepth];
@@ -134,7 +138,7 @@ static bool pointOnSpline(vec4 q0, vec4 q1, vec4 q2,
         float maxWidth = std::max(cur.p0.w, cur.p1.w);
         if (pMin.x <= maxWidth && pMin.y <= maxWidth && pMax.x >= -maxWidth && pMax.y >= -maxWidth) {
             if (cur.depth >= MaxDepth) {
-                intersectHalfCylinder(cur, tMin, closestDepth, isect);
+                intersectHalfCylinder(cur, tMin, closestDepth, *isect);
             } else {
                 float splitT = (cur.tMin + cur.tMax) * 0.5f;
                 vec4 qSplit = q0 * (splitT * splitT) + q1 * splitT + q2;
@@ -209,20 +213,27 @@ inline vec3 derivSpline(const std::vector<vec4> &positions, const unsigned int p
 
 std::optional<Intersection> Curve::intersect(Ray &ray) const {
     // return std::nullopt;
+
+
     if (useEmbree) {
-        RTCRayHit rayHit;
+        EmbreeUtils::RTCRayHit1 rayHit;
         EmbreeUtils::convertRay(&ray, &rayHit);
 
         RTCIntersectContext context;
         rtcInitIntersectContext(&context);
 
+        if(useCurveI)
+        {rtcIntersect1(m_curveI_scene,&context,&rayHit);
+        if (rayHit.hit.geomID != RTC_INVALID_GEOMETRY_ID) {
+            auto  its = EmbreeUtils::RTCRayHit1_(& rayHit)->its;
+            its->bsdf = bsdf.get();
+            its->primitive = this;
+            return its;
+        }
+        return std::nullopt;}
         rtcIntersect1(m_scene, &context, &rayHit);
 
         if (rayHit.hit.geomID != RTC_INVALID_GEOMETRY_ID) {
-
-            float P[4], P1[4], P2[4];
-            rtcInterpolate1(rtcGetGeometry(m_scene, rayHit.hit.geomID), rayHit.hit.primID, rayHit.hit.u, rayHit.hit.v,
-                            RTC_BUFFER_TYPE_VERTEX, 0, P, P1, P2, 4);
             ray.farT = rayHit.ray.tfar;
             Intersection intersection{};
             intersection.p = ray.operator()(ray.farT);
@@ -230,83 +241,80 @@ std::optional<Intersection> Curve::intersect(Ray &ray) const {
             intersection.primitive = this;
             intersection.w = -ray.d;
             uint32 p1 = _indices[rayHit.hit.primID];
-            uint32_t p0=  p1;
             float t = rayHit.hit.u;
-
             vec3 tangent = normalize(
                     BSpline::quadraticDeriv(_nodeData[p1], _nodeData[p1 + 1], _nodeData[p1 + 2],  t));
             vec3 point = BSpline::quadratic(_nodeData[p1], _nodeData[p1 + 1], _nodeData[p1 + 2], _nodeData[p1 + 3], t);
             intersection.Ng = intersection.Ns = normalize((intersection.w - tangent * dot(tangent, intersection.w)));
-            intersection.tangent = {vec3(tangent)};
-            if(tangent == vec3(0,0,0)){
-                int k =1;
-            }
+            intersection.tangent = tangent;
             intersection.uv = {rayHit.hit.u, rayHit.hit.v};
             return {intersection};
         }
         return std::nullopt;
     }
 
-    CurveIntersection curveIts;
-    bool didIntersect = false;
-    auto len = length(ray.d);
-    vec3 o(ray.o), lz(ray.d);
-    float d = std::sqrt(lz.x * lz.x + lz.z * lz.z);
-    vec3 lx, ly;
-    if (d == 0.0f) {
-        lx = vec3(1.0f, 0.0f, 0.0f);
-        ly = vec3(0.0f, 0.0f, -lz.y);
-    } else {
-        lx = vec3(lz.z / d, 0.0f, -lz.x / d);
-        ly = vec3(lx.z * lz.y, d, -lz.y * lx.x);
-    }
-
-
-    _bvh->trace(ray, [&](Ray &ray, uint32 id) {
-
-        vec4 q0(project(o, lx, ly, lz, _nodeData[id - 2]));
-        vec4 q1(project(o, lx, ly, lz, _nodeData[id - 1]));
-        vec4 q2(project(o, lx, ly, lz, _nodeData[id - 0]));
-        auto t = curveBox(_nodeData[id - 2], _nodeData[id - 1], _nodeData[id - 0]);
-        vec3 invDir(1 / ray.d.x, 1 / ray.d.y, 1 / ray.d.z);
-        int dirIsNeg[3] = {invDir.x < 0, invDir.y < 0, invDir.z < 0};
-        bool temp = t.IntersectP(ray, invDir, dirIsNeg);
-        vec3 n0, n1, n2;
-
-        if (pointOnSpline(q0, q1, q2, ray.nearT, ray.farT, curveIts, n0, n1, n2)) {
-            ray.farT = curveIts.t;
-            curveIts.curveP0 = id - 2;
-            didIntersect = true;
-        }
-    });
-
-    if (!didIntersect) {
-        return std::nullopt;
-    }
-
-    Intersection its;
-    its.w = -ray.d;
-    uint32 p0 = curveIts.curveP0;
-    float t = curveIts.uv.x;
-
-    vec3 tangent = normalize(BSpline::quadraticDeriv(_nodeData[p0], _nodeData[p0 + 1], _nodeData[p0 + 2], t));
-
-    if (_mode == MODE_RIBBON) {
-        vec3 normal = BSpline::quadratic(_nodeNormals[p0], _nodeNormals[p0 + 1], _nodeNormals[p0 + 2], t);
-        its.Ng = its.Ns = normalize(dot(tangent * tangent, normal) - normal);
-    } else if (_mode == MODE_BCSDF_CYLINDER) {
-        its.Ng = its.Ns = normalize(-its.w - dot(tangent * tangent, -its.w));
-    } else if (_mode == MODE_HALF_CYLINDER || _mode == MODE_CYLINDER) {
-        vec3 point = BSpline::quadratic(_nodeData[p0], _nodeData[p0 + 1], _nodeData[p0 + 2], t);
-        vec3 localP = its.p - point;
-        localP -= tangent * (dot(localP, tangent));
-        its.Ng = its.Ns = normalize(localP);
-    }
-    its.uv = curveIts.uv;
-    its.primitive = this;
-    its.bsdf = bsdf.get();
-
-    return {its};
+//    CurveIntersection curveIts;
+//    bool didIntersect = false;
+//    auto len = length(ray.d);
+//    vec3 o(ray.o), lz(ray.d);
+//    float d = std::sqrt(lz.x * lz.x + lz.z * lz.z);
+//    vec3 lx, ly;
+//    if (d == 0.0f) {
+//        lx = vec3(1.0f, 0.0f, 0.0f);
+//        ly = vec3(0.0f, 0.0f, -lz.y);
+//    } else {
+//        lx = vec3(lz.z / d, 0.0f, -lz.x / d);
+//        ly = vec3(lx.z * lz.y, d, -lz.y * lx.x);
+//    }
+//
+//
+//    _bvh->trace(ray, [&](Ray &ray, uint32 id) {
+//
+//        vec4 q0(project(o, lx, ly, lz, _nodeData[id - 2]));
+//        vec4 q1(project(o, lx, ly, lz, _nodeData[id - 1]));
+//        vec4 q2(project(o, lx, ly, lz, _nodeData[id - 0]));
+//        auto t = curveBox(_nodeData[id - 2], _nodeData[id - 1], _nodeData[id - 0]);
+//        vec3 invDir(1 / ray.d.x, 1 / ray.d.y, 1 / ray.d.z);
+//        int dirIsNeg[3] = {invDir.x < 0, invDir.y < 0, invDir.z < 0};
+//        bool temp = t.IntersectP(ray, invDir, dirIsNeg);
+//        vec3 n0, n1, n2;
+//
+//        if (pointOnSpline(q0, q1, q2, ray.nearT, ray.farT,& curveIts, n0, n1, n2)) {
+//            ray.farT = curveIts.t;
+//            curveIts.curveP0 = id - 2;
+//            didIntersect = true;
+//        }
+//    });
+//
+//    if (!didIntersect) {
+//        return std::nullopt;
+//    }
+//    return std::nullopt;
+//
+//    Intersection its{};
+//    //return its;
+//    its.w = -ray.d;
+//    uint32 p0 = curveIts.curveP0;
+//    float t = curveIts.uv.x;
+//
+//    vec3 tangent = normalize(BSpline::quadraticDeriv(_nodeData[p0], _nodeData[p0 + 1], _nodeData[p0 + 2], t));
+//
+//    if (_mode == MODE_RIBBON) {
+//        vec3 normal = BSpline::quadratic(_nodeNormals[p0], _nodeNormals[p0 + 1], _nodeNormals[p0 + 2], t);
+//        its.Ng = its.Ns = normalize(dot(tangent * tangent, normal) - normal);
+//    } else if (_mode == MODE_BCSDF_CYLINDER) {
+//        its.Ng = its.Ns = normalize(-its.w - dot(tangent * tangent, -its.w));
+//    } else if (_mode == MODE_HALF_CYLINDER || _mode == MODE_CYLINDER) {
+//        vec3 point = BSpline::quadratic(_nodeData[p0], _nodeData[p0 + 1], _nodeData[p0 + 2], t);
+//        vec3 localP = its.p - point;
+//        localP -= tangent * (dot(localP, tangent));
+//        its.Ng = its.Ns = normalize(localP);
+//    }
+//    its.uv = curveIts.uv;
+//    its.primitive = this;
+//    its.bsdf = bsdf.get();
+//
+//    return {its};
 
 //    if (_mode == MODE_CYLINDER)
 //        its.epsilon = max(its.epsilon, 0.1f*isect.w);
@@ -315,8 +323,17 @@ std::optional<Intersection> Curve::intersect(Ray &ray) const {
 }
 
 bool Curve::occluded(const Ray &ray) const {
-    Ray _ray(ray);
-    return intersect(_ray).has_value();
+    if(useCurveI)
+    {RTCRay shadowRay;
+    EmbreeUtils::convertRay(& ray, & shadowRay);
+    RTCIntersectContext context;
+    rtcInitIntersectContext(& context);
+    rtcOccluded1(m_curveI_scene, & context, & shadowRay);
+    return shadowRay.tfar != ray.farT;}
+    else {
+        Ray _ray(ray);
+        return intersect(_ray).has_value();
+    }
 }
 
 Curve::Curve(const Json &json, Scene &scene) : Primitive(json) {
@@ -348,8 +365,11 @@ Curve::Curve(const Json &json, Scene &scene) : Primitive(json) {
     }
     _subSample = 0;
 
-    std::vector<std::shared_ptr<Primitive>> prims;
+    prims.reserve(_nodeData.size()- 2*_curveCount);
+
+
     UniformSampler rand(_curveCount);
+    int curveICount =0;
     for (uint32 i = 0; i < _curveCount; i++) {
         uint32 start = 0;
         if (i > 0) {
@@ -362,9 +382,8 @@ Curve::Curve(const Json &json, Scene &scene) : Primitive(json) {
 
             if (_subSample > 0.0f && rand.getNext1D() < _subSample)
                 continue;
-//            std::shared_ptr<BSDF> bsdf = scene.fetchBSDF(getOptional(json, "bsdf", Json()));
-//            //   prim->setBSDF(bsdf);
-//            //  scene.AddPrimitive(prim);
+            //CurveI cur();
+            prims.emplace_back(&_nodeData,t);
 //            );
         }
 
@@ -377,7 +396,7 @@ Curve::Curve(const Json &json, Scene &scene) : Primitive(json) {
     computeBoundingBox();
 
     m_scene = rtcNewScene(EmbreeUtils::getDevice());
-    m_geometry = rtcNewGeometry(EmbreeUtils::getDevice(), RTC_GEOMETRY_TYPE_FLAT_BSPLINE_CURVE);
+    m_geometry = rtcNewGeometry(EmbreeUtils::getDevice(), RTC_GEOMETRY_TYPE_FLAT_BEZIER_CURVE);
     float *vb = (float *) rtcSetNewGeometryBuffer(m_geometry, RTC_BUFFER_TYPE_VERTEX, 0,
                                                   RTC_FORMAT_FLOAT4,
                                                   4 * sizeof(float), _nodeData.size());
@@ -413,11 +432,28 @@ Curve::Curve(const Json &json, Scene &scene) : Primitive(json) {
     rtcCommitGeometry(m_geometry);
     rtcAttachGeometry(m_scene, m_geometry);
     rtcCommitScene(m_scene);
+
+
+    m_curveI_scene = rtcNewScene(EmbreeUtils::getDevice());
+    for ( auto & primitve: prims ) {
+       // primitve.initRTC();
+        auto geom = rtcNewGeometry(EmbreeUtils::getDevice(), RTC_GEOMETRY_TYPE_USER);
+        rtcEnableGeometry(geom);
+        rtcSetGeometryUserPrimitiveCount(geom, 1);
+        rtcSetGeometryUserData(geom, &primitve);
+        rtcSetGeometryBoundsFunction(geom, & EmbreeUtils::instanceBoundsFunc, nullptr);
+        rtcSetGeometryIntersectFunction(geom, & EmbreeUtils::instanceIntersectFunc);
+        rtcSetGeometryOccludedFunction(geom, & EmbreeUtils::instanceOccludedFunc);
+        rtcCommitGeometry(geom);
+        rtcAttachGeometry( m_curveI_scene, geom);
+    }
+    rtcCommitScene( m_curveI_scene);
 }
 
 Frame Curve::setTangentFrame(const Intersection *its) const {
     vec3 T, B, N;
-    N = its->Ns;
+    return Frame(its->Ns);
+    N = its->Ng;
     B = its->tangent.value();
     T = cross(B, N);
     T = normalize(T - dot(T, N) * N);
@@ -430,62 +466,65 @@ Frame Curve::setTangentFrame(const Intersection *its) const {
     return Frame(T, B, N);
 }
 
-//std::optional<Intersection> CurveI::intersect(Ray &ray) const {
-//    CurveIntersection curveIts;
-//    bool didIntersect = false;
-//    vec3 o(ray.o), lz(ray.d);
-//    float d = std::sqrt(lz.x * lz.x + lz.z * lz.z);
-//    vec3 lx, ly;
-//    if (d == 0.0f) {
-//        lx = vec3(1.0f, 0.0f, 0.0f);
-//        ly = vec3(0.0f, 0.0f, -lz.y);
-//    } else {
-//        lx = vec3(lz.z / d, 0.0f, -lz.x / d);
-//        ly = vec3(lx.z * lz.y, d, -lz.y * lx.x);
-//    }
-//
-//    vec4 q0(project(o, lx, ly, lz, (*_nodeData)[id - 2]));
-//    vec4 q1(project(o, lx, ly, lz, (*_nodeData)[id - 1]));
-//    vec4 q2(project(o, lx, ly, lz, (*_nodeData)[id - 0]));
-//    vec3 invDir(1 / ray.d.x, 1 / ray.d.y, 1 / ray.d.z);
-//    int dirIsNeg[3] = {invDir.x < 0, invDir.y < 0, invDir.z < 0};
-//    vec3 n0, n1, n2;
-//
-//    if (pointOnSpline(q0, q1, q2, ray.nearT, ray.farT, curveIts, n0, n1, n2)) {
-//        ray.farT = curveIts.t;
-//        curveIts.curveP0 = id - 2;
-//        didIntersect = true;
-//    }
-//
-//    if (!didIntersect) {
-//        return std::nullopt;
-//    }
-//
-//    Intersection its;
-//    its.w = -ray.d;
-//    its.p = ray.o + ray.d * ray.farT;
-//    uint32 p0 = curveIts.curveP0;
-//    float t = curveIts.uv.x;
-//    t = 0.5;
-//    vec3 tangent = normalize(BSpline::quadraticDeriv((*_nodeData)[p0], (*_nodeData)[p0 + 1], (*_nodeData)[p0 + 2], t));
-//    {
-//        vec3 point = BSpline::quadratic((*_nodeData)[p0], (*_nodeData)[p0 + 1], (*_nodeData)[p0 + 2], t);
+std::optional<Intersection> CurveI::intersect(Ray &ray) const {
+    CurveIntersection curveIts{};
+    bool didIntersect = false;
+    vec3 o(ray.o), lz(ray.d);
+    float d = std::sqrt(lz.x * lz.x + lz.z * lz.z);
+    vec3 lx, ly;
+    if (d == 0.0f) {
+        lx = vec3(1.0f, 0.0f, 0.0f);
+        ly = vec3(0.0f, 0.0f, -lz.y);
+    } else {
+        lx = vec3(lz.z / d, 0.0f, -lz.x / d);
+        ly = vec3(lx.z * lz.y, d, -lz.y * lx.x);
+    }
+
+    vec4 q0(project(o, lx, ly, lz, (*_nodeData)[id - 2]));
+    vec4 q1(project(o, lx, ly, lz, (*_nodeData)[id - 1]));
+    vec4 q2(project(o, lx, ly, lz, (*_nodeData)[id - 0]));
+    vec3 invDir(1 / ray.d.x, 1 / ray.d.y, 1 / ray.d.z);
+    int dirIsNeg[3] = {invDir.x < 0, invDir.y < 0, invDir.z < 0};
+    vec3 n0(0), n1(0), n2(0);
+    if (pointOnSpline(q0, q1, q2, ray.nearT, ray.farT, &curveIts)) {
+        ray.farT = curveIts.t;
+        curveIts.curveP0 = id - 2;
+        didIntersect = true;
+    }
+
+    if (!didIntersect) {
+        return std::nullopt;
+    }
+
+    Intersection its;
+    its.w = -ray.d;
+    its.p = ray.o + ray.d * ray.farT;
+    uint32 p0 = curveIts.curveP0;
+    float t = curveIts.uv.x;
+//    p0=5;
+//    t=0.5;
+    vec3 tangent = normalize(BSpline::quadraticDeriv((*_nodeData)[p0], (*_nodeData)[p0 + 1], (*_nodeData)[p0 + 2], t));
+    {
+       // vec3 point = BSpline::quadratic((*_nodeData)[p0], (*_nodeData)[p0 + 1], (*_nodeData)[p0 + 2], t);
 //        vec3 localP = its.p - point;
 //        localP -= tangent * (dot(localP, tangent));
 //        its.Ng = its.Ns = normalize(localP);
-//    }
-//    its.uv = curveIts.uv;
-//    its.primitive = this;
-//    its.bsdf = bsdf.get();
-//
-//    return {its};
-//}
-//
-//bool CurveI::occluded(const Ray &ray) const {
-//    Ray _ray(ray);
-//    return intersect(_ray).has_value();
-//}
-//
-//void CurveI::computeBoundingBox() {
-//    BB_ = curveBox((*_nodeData)[id - 2], (*_nodeData)[id - 1], (*_nodeData)[id - 0]);
-//}
+        its.Ng = its.Ns = normalize((its.w - tangent * dot(tangent, its.w)));
+
+        its.tangent = tangent;
+    }
+
+    its.uv = curveIts.uv;
+
+
+    return {its};
+}
+
+bool CurveI::occluded(const Ray &ray) const {
+    Ray _ray(ray);
+    return intersect(_ray).has_value();
+}
+
+void CurveI::computeBoundingBox() {
+    BB_ = curveBox((*_nodeData)[id - 2], (*_nodeData)[id - 1], (*_nodeData)[id - 0]);
+}

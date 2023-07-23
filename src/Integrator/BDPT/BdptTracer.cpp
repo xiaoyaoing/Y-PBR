@@ -19,28 +19,33 @@ Spectrum BdptTracer::traceSample(ivec2 pixel, Sampler &sampler) {
     for (int l = 1; l <= lightLength; ++l){
         int upperBound = std::min(maxBounces -l +1, cameraLength);
         for (int c = 1; c <= upperBound; ++c) {
-            if(l!=2 || c!=1)
-                continue;
+//            if(l==2){
+//                return lightPath->operator[](1).pos();
+//            }
+//            if(l!=2 || c!=2)
+//                continue;
             if (!cameraPath->operator[](c-1).canConnect() || !lightPath->operator[](l-1).canConnect())
                     continue;
             if (c == 1) {
                 ivec2 pRaster;
                 Spectrum s = LightPath::connectCameraBDPT(scene, camera, sampler, *lightPath, l, pRaster);
-                image->addPixel(pixel.x, pixel.y, s, true);
+                image->addPixel(pRaster.x,pRaster.y, s);
                 if (imagePramid)
                     imagePramid->addPixel(l, c, pRaster, s);
             } else if (l == 1) {
                 Spectrum s = LightPath::connectLightBDPT(scene, light.get(), sampler, *cameraPath, c,lightPdf);
-                if(luminace(s)<0){
-                    int k =1;
+                if(hasNan(L)){
+                    int k = 1;
                 }
                 L += s;
                 if (imagePramid)
                     imagePramid->addPixel(l, c, pixel, s);
             } else {
                 Spectrum s = LightPath::connectBDPT(scene, *lightPath, l, *cameraPath, c);
-                if(luminace(s)<0){
-                    int k =1;
+                if (imagePramid)
+                    imagePramid->addPixel(l, c, pixel, s);
+                if(hasNan(L)){
+                    int k = 1;
                 }
                 L += s;
             }

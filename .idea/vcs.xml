@@ -5,8 +5,8 @@
     <mapping directory="$PROJECT_DIR$/lib/spdlog" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/lib/tinyexr" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/lib/tinyexr/deps/ZFP" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/tiny-cuda-nn - 副本" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/tiny-cuda-nn - 副本/dependencies/cutlass" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/tiny-cuda-nn - 副本/dependencies/fmt" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/tiny-cuda-nn" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/tiny-cuda-nn/dependencies/cutlass" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/tiny-cuda-nn/dependencies/fmt" vcs="Git" />
   </component>
 </project>

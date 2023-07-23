@@ -91,10 +91,12 @@ public:
     inline Spectrum f(const SurfaceEvent &event, bool adjoint) const {
         Spectrum fResult = f(event);
         if (adjoint) {
+            auto deom =  dot((event.toWorld(event.wo)), event.its->Ng) * event.wi.z;
+            if(deom == 0)
+                return Spectrum (0.f);
             auto corrnectShading = std::abs(
-                    dot((event.toWorld(event.wo)), event.its->Ng) * event.wi.z /
-                    (dot((event.toWorld(event.wi)), event.its->Ng) * event.wo.z));
-            fResult *= corrnectShading;
+                    dot( event.toWorld(event.wi), event.its->Ng) * event.wo.z / deom);
+           fResult *= corrnectShading;
         } else fResult *= sqr(eta(event));
         return fResult;
     }

@@ -6,6 +6,7 @@
 #include "Common/Texture.hpp"
 #include "Sampler/Warp.hpp"
 #include "SampleRecords/PositionAndDirectionSample.h"
+#include "Primitives/Quad.hpp"
 
 Spectrum
 AreaLight::sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf, Float * distance) const {

@@ -43,14 +43,19 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
 
         if (!its.has_value() || bounces >= maxDepth)
             break;
-
         //  return Spectrum(its->uv.x,its->uv.y,0);
         if (DebugConfig::OnlyShowNormal) {
             return (its->Ng + Spectrum(1.f)) / 2.f;
         }
         surfaceEvent = makeLocalScatterEvent(&its.value());
-//        if(its)
-//            return (surfaceEvent.frame.n+1.f)/2.f;
+    //    return (its->Ng+1.f)/2.f;
+      //  return its->tangent.value();
+
+    //    return surfaceEvent.frame.bitTangent;
+
+//         if(its)
+//           return (its->tangent.value()+1.f)/2.f;
+//           return (surfaceEvent.frame.n+1.f)/2.f;
         if (its->bsdf->Pure(BSDF_FORWARD)) {
             _ray = surfaceEvent.sctterRay(_ray.d);
         } else {

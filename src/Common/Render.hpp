@@ -17,13 +17,19 @@ struct Bucket
 class Render{
 public:
     static void renderScene(const std::string path = FileUtils::WorkingDir) {
+
         FileUtils::WorkingDir = path;
         std::ifstream scene_file(FileUtils::WorkingDir + "scene.json");
+
         nlohmann::json j;
         scene_file >> j;
         scene_file.close();
+
         Render render(j);
+
         render.Go();
+
+
     }
     Render(const Json & json);
     void Go();

@@ -42,13 +42,13 @@ void BDPTIntegrator::render(const Scene &scene)  {
         std::unique_ptr<Sampler> tileSampler = _sampler->clone(tile.y * renderBounds.x + tile.x);
         for (int y = y0; y < y1; y++) {
             for (int x = x0; x < x1; x++) {
-                for (int s = 0; s < spp; s++) {
-                    {
-                        ivec2 pixel(x,y);
-                        Spectrum  L  = tracer.traceSample(pixel,*tileSampler);
-                        _camera->image->addPixel(x, y, L, true);
-                    }
+                tileSampler->startPixel(ivec2(x,y));
+                do{
+                    ivec2 pixel(x,y);
+                    Spectrum  L  = tracer.traceSample(pixel,*tileSampler);
+                    _camera->image->addPixel(x, y, L, true);
                 }
+                while(tileSampler->startNextSample());
             }
         }
         reporter.update(1);

@@ -115,6 +115,16 @@ Float GGX::roughnessToAlpha(Float roughness) const {
 }
 
 Float GGX::D(const vec3 & wh, const vec2 & alphaXY) const {
+    auto wm = wh;
+    auto alpha_x = alphaXY.x;
+    auto alpha_y = alphaXY.y;
+    Float tan2Theta = Tan2Theta(wm);
+
+    Float cos4Theta = sqr(Cos2Theta(wm));
+    if (cos4Theta < 1e-16f)
+        return 0;
+
+
     Float alphaX = alphaXY.x;
     Float alphaY = alphaXY.y;
     Float ax2 = alphaX * alphaX;

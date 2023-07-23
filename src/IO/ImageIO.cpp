@@ -1,6 +1,7 @@
 #include "ImageIO.hpp"
 #include "FileUtils.hpp"
 #include <lodepng/lodepng.h>
+#define STB_IMAGE_IMPLEMENTATION
 #include <stbi/stb_image.h>
 
 #define TINYEXR_IMPLEMENTATION
@@ -113,7 +114,7 @@ namespace ImageIO {
     static void nop(void *){}
 
     std::unique_ptr < float[] > loadHdr(const std::string & path, TexelConversion request, int & w, int & h) {
-        std::shared_ptr < std::ifstream > in = std::make_shared < std::ifstream >(FileUtils::getFileFullPath(path));
+        std::shared_ptr < std::ifstream > in = std::make_shared < std::ifstream >(FileUtils::getFileFullPath(path),std::ios::binary);
         if ( ! in )
             return nullptr;
 

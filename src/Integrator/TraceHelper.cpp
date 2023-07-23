@@ -172,8 +172,7 @@ evalLightDirect(const Scene &scene, const Light &light, Ray &ray,
     //avoid self shadow
     if (isBlack(L)) return Spectrum(0);
     if (lightPdf) *lightPdf = light.PdfLi(lightIts.value(), ray.o);
-    if (!medium) return L;
-    else return L * evalShadowDirect(scene, ray, medium);
+     return L * evalShadowDirect(scene, ray, medium);
 }
 
 Spectrum evalShadowDirect(const Scene &scene, Ray ray, const Medium *medium) {
@@ -181,7 +180,6 @@ Spectrum evalShadowDirect(const Scene &scene, Ray ray, const Medium *medium) {
         return scene.intersectP(ray) ? Spectrum(0) : Spectrum(1);
     }
     Spectrum Tr(1);
-    // return Tr;
     std::optional<Intersection> its;
     Float tHit = ray.farT;
     while (tHit > 0 && medium) {

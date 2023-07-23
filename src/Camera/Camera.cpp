@@ -35,8 +35,8 @@ void Camera::preCompute() {
     _rasterToCamera = getTransFormMatrix(vec3(-1, _ratio, _planeDist), vec3(2.f / _res.x, -2.f / _res.x, 1), vec3());
     _cameraToRaster = glm::inverse(_rasterToCamera);
 
-    vec3 pMin = transformPoint(_rasterToCamera,vec3(0,0,0));
-    vec3 pMax = transformPoint(_rasterToCamera,vec3(_res.x,_res.y,0));
+    vec3 pMin = transformPoint(_rasterToCamera, vec3(0, 0, 0));
+    vec3 pMax = transformPoint(_rasterToCamera, vec3(_res.x, _res.y, 0));
     pMin /= pMin.z;
     pMax /= pMax.z;
     A = std::abs((pMax.x - pMin.x) * (pMax.y - pMin.y));
@@ -226,7 +226,7 @@ Spectrum Camera::rayWeight(const Ray &ray, ivec2 *pRaster) const {
     }
     auto p = ray(_planeDist / cosTheta);
     auto pRaster3d = transformPoint(_cameraToRaster, transformPoint(_toLocal, p));
-    if (pRaster3d.x < _res.x && pRaster3d.y < _res.y && pRaster3d.x >=0 && pRaster3d.y>=0) {
+    if (pRaster3d.x < _res.x && pRaster3d.y < _res.y && pRaster3d.x >= 0 && pRaster3d.y >= 0) {
         if (pRaster)
             *pRaster = ivec2(pRaster3d.x, pRaster3d.y);
         return Spectrum(1.f / (A * cos2Theta * cos2Theta));
@@ -248,11 +248,11 @@ PositionAndDirectionSample Camera::sampleRay(ivec2 point, vec2 /*posSample*/, ve
     PositionAndDirectionSample result;
     auto localD = normalize(transformPoint(_rasterToCamera, vec3(point.x + dirSample.x, point.y + dirSample.y, 0)));
     result.posPdf = 1;
-    result.dirPdf =1.f / A * (localD.z * localD.z * localD.z);
+    result.dirPdf = 1.f / A * (localD.z * localD.z * localD.z);
     result.weight = Spectrum(1);
     result.n = transformVector(_cameraToWorld, vec3(0, 0, 1));
-    auto worldD = transformVector(_cameraToWorld,localD);
-    result.ray = Ray(_pos,worldD);
+    auto worldD = transformVector(_cameraToWorld, localD);
+    result.ray = Ray(_pos, worldD);
     return result;
 }
 
@@ -263,10 +263,10 @@ bool Camera::sampleLi(vec3 p, ivec2 *pRaster, vec2 sample, PositionAndDirectionS
     if (isBlack(result.weight))
         return false;
     result.dirPdf = distance2(p, cameraP) / absDot(result.ray.d, transformVector(_cameraToWorld, vec3(0, 0, 1)));
-    result.n= transformVector(_cameraToWorld, vec3(0, 0, 1));
+    result.n = transformVector(_cameraToWorld, vec3(0, 0, 1));
     result.posPdf = 1;
     return true;
-    }
+}
 
 
 

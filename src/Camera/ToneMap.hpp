@@ -48,7 +48,6 @@ public:
 
     static inline Spectrum toneMap(ToneMapType type, const vec3 &c)
     {
-        return c;
         switch (type) {
             case LinearOnly:
                 return c;
