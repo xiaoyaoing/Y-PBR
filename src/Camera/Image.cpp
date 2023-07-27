@@ -47,9 +47,12 @@ void Image::addPixel(uint32 x, uint32 y, vec3 rgb, bool count) {
 //    if(hasNan(rgb)){
 //        throw("Rdiance NAN");
 //    }
-//    if(rgb.r <0 || rgb.g<0 || rgb.z<0){
-//        throw("Radiance Neg");
-//    }
+    if(rgb.r <0 || rgb.g<0 || rgb.z<0){
+       // return;
+
+        //  rgb = abs(rgb);
+       // throw("Radiance Neg");
+    }
     uint32 idx = getIndex(x, y);
     buffers[idx].add(rgb);
     if (count)

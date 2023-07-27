@@ -53,8 +53,6 @@ class Image {
 
     };
 
-    vec3 getPixel(int x, int y) const;
-
     uint32 getIndex(uint32 x, uint32 y) const;
 
     std::vector<Pixel> buffers;
@@ -84,7 +82,7 @@ public:
             desired = current + add;
     }
 
-    void addPixel(uint32 x, uint32 y, vec3 rgb, bool count = false);
+    void addPixel(uint32 x, uint32 y, vec3 rgb, bool count = true);
 
     void saveTXT(const std::string &fileName) const;
 
@@ -108,4 +106,5 @@ public:
     vec3 getPixel(int idx) const;
 
 
+    vec3 getPixel(int x, int y) const;
 };

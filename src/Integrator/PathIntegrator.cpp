@@ -48,14 +48,6 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
             return (its->Ng + Spectrum(1.f)) / 2.f;
         }
         surfaceEvent = makeLocalScatterEvent(&its.value());
-    //    return (its->Ng+1.f)/2.f;
-      //  return its->tangent.value();
-
-    //    return surfaceEvent.frame.bitTangent;
-
-//         if(its)
-//           return (its->tangent.value()+1.f)/2.f;
-//           return (surfaceEvent.frame.n+1.f)/2.f;
         if (its->bsdf->Pure(BSDF_FORWARD)) {
             _ray = surfaceEvent.sctterRay(_ray.d);
         } else {
@@ -107,6 +99,7 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
     if(hasNeg(L)){
         int k = 1;
     }
+    //return vec3(bounces/10.f);
     return L;
 }
 

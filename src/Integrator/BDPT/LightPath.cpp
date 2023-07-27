@@ -104,3 +104,52 @@ LightPath::connectLightBDPT(const Scene &scene, const Light *light, Sampler &sam
     }
     return res;
 }
+
+Float LightPath::misWeight(const LightPath &lightPath, int l, const LightPath &cameraPath, int c) {
+    Float *pdfForward           = reinterpret_cast<float *>(alloca((l+c)*sizeof(float)));
+    Float *pdfBackward          = reinterpret_cast<float *>(alloca((l+c)*sizeof(float)));
+    Float *r          = reinterpret_cast<float *>(alloca((l+c)*sizeof(float)));
+    bool  *connectable          = reinterpret_cast<bool  *>(alloca((l+c)*sizeof(bool)));
+
+    //todo 判断相机路径末尾和光线路径末尾能否连接
+
+    for (int i = 0; i < l; ++i) {
+        pdfForward [i] = lightPath[i].pdfFwd;
+        pdfBackward[i] = lightPath[i].pdfBack;
+        connectable[i] = lightPath[i].canConnect();
+    }
+    for (int i = 0; i < c; ++i) {
+        pdfForward [l + c - (i + 1)] = cameraPath[i].pdfFwd;
+        pdfBackward[l + c - (i + 1)] = cameraPath[i].pdfBack;
+        connectable[l + c - (i + 1)] = cameraPath[i].canConnect();
+    }
+
+
+    /// 跟其他可能构成同样长度的路径来比
+    /// ps/sum(p0,p1,p2...pn)
+    /// pi =  pf_0 * pf_1 * ... *  pf_i-1  * pb_i * ... pb_(n-1)
+    /// mis weight : w_s
+    /// let ri = pi / ps;
+    /// w_s = 1/ (r0 + r1+r2+...+1+r_(s+1)+...r(n-1))
+    /// ri = {
+    ///         1  if i==s,
+    ///         pb_i / pf(i) * r_i+1 if i <s
+    ///          pf_(i-1) / pb(i-1) * r_(i-1) if i <s
+    /// }
+
+    /// 相机路径和光子路径的最后一个节点的pdfBack没有计算
+    
+
+    Float ri = 1,sumR = 1;
+    for(int i=l-1;i>=0;i--){
+        ri *= pdfBackward[i] / pdfForward[i];
+        sumR += ri;
+    }
+    ri = 1;
+    for(int i=0;i<l;i++){
+        ri *=   pdfForward[i-1] / pdfBackward[i-1];
+        sumR += ri;
+    }
+    return 1.f/sumR;
+
+}

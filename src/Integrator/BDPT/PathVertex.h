@@ -125,6 +125,8 @@ public:
 
     Spectrum  eval(const PathVertex & vertex,bool adjoint) const;
 
+    Float pdf(const PathVertex & prev,const PathVertex & next) const;
+
     bool isInfiniteLight() const {
         return false;
     }

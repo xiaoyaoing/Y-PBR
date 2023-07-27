@@ -34,6 +34,8 @@ public :
     static Spectrum
     connectLightBDPT(const Scene &scene, const Light *light, Sampler &sampler, const LightPath &cameraPath, int c,
                      Float lightPdf);
+    Float misWeight( const LightPath &lightPath, int l, const LightPath &cameraPath,
+                     int c);
 
     static Spectrum connectBDPT(const Scene &scene, const LightPath &lightPath, int l, const LightPath &cameraPath,
                                 int c);

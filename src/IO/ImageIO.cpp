@@ -261,6 +261,48 @@ uint8 * loadJpg(const std::string & path,int & w,int & h,int & channels){
 
         return std::move(texels);
     }
+    std::unique_ptr < float[] >
+    loadLdrNormalize(const std::string & path, TexelConversion request, int & w, int & h, bool gammaCorrect) {
+        auto fullPath = FileUtils::getFileFullPath(path);
+        int channels;
+        std::unique_ptr<uint8[], void(*)(void *)> img((uint8 *)0,&nop);
+#if JPEG_AVAILABLE
+        if(path.ends_with("jpg") || path.ends_with("jpeg")){
+            img = std::unique_ptr<uint8[], void(*)(void *)>(loadJpg(path,w,h,channels),free);
+        }
+#endif
+        if(path.ends_with("png")){
+            img = std::unique_ptr<uint8[], void(*)(void *)>(loadPng(fullPath,w,h,channels),free);
+        }
+        else {
+            spdlog::error("{} image not supported yet",path);
+            return nullptr;
+        }
+        if(!img){
+            spdlog::error("Error when reading {0}",path);
+            return nullptr;
+        }
+
+        int targetChannels = (request == TexelConversion::REQUEST_RGB) ? 4 : 1;
+
+        std::unique_ptr<uint8[]> texels(new uint8[w*h*targetChannels]);
+        std::unique_ptr<float[]> texelsNormalized(new float[w*h*targetChannels]);
+        if (targetChannels == 4) {
+            std::memcpy(texels.get(), img.get(), w*h*targetChannels*sizeof(uint8));
+            if (gammaCorrect)
+                for (int i = 0; i < w*h; ++i)
+                    for (int t = 0; t < 3; ++t)
+                        texels[i*4 + t] = GammaCorrection[texels[i*4 + t]];
+            std::transform(texels.get(), texels.get() + w*h*targetChannels, texelsNormalized.get(),
+                           [](uint8_t value) { return static_cast<float>(value) / 255.0f; });
+        } else {
+            for (int i = 0; i < w*h; ++i)
+                texels[i] = convertToScalar(request, int(img[i*4]), int(img[i*4 + 1]), int(img[i*4 + 2]),
+                                            int(img[i*4 + 3]), channels == 4);
+        }
+
+        return std::move(texelsNormalized);
+    }
 
     bool isHdr(const std::string &path) {
         auto  suffix = FileUtils::getFileSuffix(path);

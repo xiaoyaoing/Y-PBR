@@ -3,7 +3,7 @@
 #include <iostream>
 
 
-bool useGussianAmz = false;
+bool useGussianAmz = true;
 
 
 static Float trigInverse(Float x) {

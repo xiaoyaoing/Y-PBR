@@ -325,6 +325,7 @@ SeparableBSSRDF::sampleSp(const Scene & scene, Float u1, const vec2 & u2, const 
     }
     * pdf = this->pdfSP(po, * pi) / tempHitCount;
     // Compute sample PDF and sreturn the spatial BSSRDF term $\Sp$
+    return Sr(0.01f,po);
     return this->Sr(distance(pi->p, po.its->p), po);
 }
 

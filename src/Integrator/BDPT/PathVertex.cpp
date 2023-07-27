@@ -48,6 +48,17 @@ Spectrum PathVertex::eval(const PathVertex &vertex, bool adjoint) const {
     return Spectrum();
 }
 
+Float PathVertex::pdf(const PathVertex &prev, const PathVertex &next) const
+{   
+    if(prev.isLight()){
+        return 0;
+    }
+    //前一个节点是光源或者相机时需要特殊处理
+    //pdf需要从角度空间转成面积空间
+
+    return Float();
+}
+
 bool PathVertex::sampleNext(const Scene &scene, bool adjoint, PathState &state, PathVertex *prev, PathVertex &next) {
     Spectrum weight(1);
     Float pdf(1);
@@ -78,9 +89,6 @@ bool PathVertex::sampleNext(const Scene &scene, bool adjoint, PathState &state, 
                 return false;
             }
             weight/=event.pdf;
-            if(isinf(weight[0])){
-                int k = 1;
-            }
             if (russian(state.bounce, state.sampler,  weight * beta))
                 return false;
             pdf = event.pdf;
@@ -145,6 +153,6 @@ bool PathVertex::sampleRootVertex(PathState &state) {
 
 
 //PathVertex::VertexRecord::VertexRecord() {
-//
+//  
 //}
 

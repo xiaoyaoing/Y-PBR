@@ -132,7 +132,7 @@ add_subdirectory(tiny-cuda-nn)
 
 #target_link_libraries(Y_PBR PUBLIC E:/code/Y-PBR/lib/embree/windows/lib/embree3.lib)
 
-add_executable(hair-nn test/hair-accleerate.cu ${YPBR_SOURCES}  test/HairIntegrator.cpp test/HairIntegrator.h src/Bsdfs/PrecomputeALobe.cpp src/Bsdfs/PrecomputeALobe.h)
+add_executable(hair-nn test/hair-accleerate.cu ${YPBR_SOURCES} )
 target_compile_features(hair-nn PRIVATE cxx_std_17)
 
 add_dependencies(hair-nn lib)
