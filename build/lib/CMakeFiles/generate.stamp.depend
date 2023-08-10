@@ -1,0 +1,6 @@
+# CMake generation dependency list for this directory.
+E:/code/Y-PBR/lib/CMakeLists.txt
+E:/code/Y-PBR/lib/embree/windows/lib/cmake/embree-3.13.5/embree-config-version.cmake
+E:/code/Y-PBR/lib/embree/windows/lib/cmake/embree-3.13.5/embree-config.cmake
+E:/code/Y-PBR/lib/embree/windows/lib/cmake/embree-3.13.5/embree-targets-release.cmake
+E:/code/Y-PBR/lib/embree/windows/lib/cmake/embree-3.13.5/embree-targets.cmake

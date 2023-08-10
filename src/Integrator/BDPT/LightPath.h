@@ -28,13 +28,13 @@ public :
                                _vertexs(new PathVertex[maxlength + 2]) {}
 
     static Spectrum
-    connectCameraBDPT(const Scene &scene, const Camera *camera, Sampler &sampler, const LightPath &lightPath, int l,
+    connectCameraBDPT(const Scene &scene, Sampler &sampler,const LightPath &lightPath,  const LightPath &cameraPath, int l,
                       ivec2 &pixel);
 
     static Spectrum
-    connectLightBDPT(const Scene &scene, const Light *light, Sampler &sampler, const LightPath &cameraPath, int c,
+    connectLightBDPT(const Scene &scene, Sampler &sampler,const LightPath &lightPath,  const LightPath &cameraPath, int c,
                      Float lightPdf);
-    Float misWeight( const LightPath &lightPath, int l, const LightPath &cameraPath,
+    static Float misWeight( const LightPath &lightPath, int l, const LightPath &cameraPath,
                      int c);
 
     static Spectrum connectBDPT(const Scene &scene, const LightPath &lightPath, int l, const LightPath &cameraPath,
@@ -46,5 +46,19 @@ public :
         dir /= l;
         return Ray(a.pos(), dir, 1e-4f, l - 1e-4f);
     }
+
+    Float invGeomFactor(int vertexIndex) const {
+        const PathVertex & v = this->operator[](vertexIndex);
+        const PathVertex & next = this->operator[](vertexIndex+1);
+        Float result = 1/length2(next.pos() - v.pos());
+        if(next.isSurface())
+        {
+            auto dir = (next.pos() - v.pos()) * result;
+            result *= absDot(dir,next.ng());
+        }
+        return result;
+    }
+
+    void toAreaMeasure();
 
 };

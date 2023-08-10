@@ -4,7 +4,6 @@
 #include "Sampler/Distrib.hpp"
 #include "Colors/Spectrum.hpp"
 #include "IO/ImageIO.hpp"
-#include "stb_image.h"
 #include "IO/FileUtils.hpp"
 #include "spdlog.h"
 struct Rgba {

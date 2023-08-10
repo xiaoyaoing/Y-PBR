@@ -1,0 +1,8 @@
+# CMake generation dependency list for this directory.
+E:/code/Y-PBR/lib/tinyexr/CMakeLists.txt
+E:/code/Y-PBR/lib/tinyexr/cmake/sanitizers/FindASan.cmake
+E:/code/Y-PBR/lib/tinyexr/cmake/sanitizers/FindMSan.cmake
+E:/code/Y-PBR/lib/tinyexr/cmake/sanitizers/FindSanitizers.cmake
+E:/code/Y-PBR/lib/tinyexr/cmake/sanitizers/FindTSan.cmake
+E:/code/Y-PBR/lib/tinyexr/cmake/sanitizers/FindUBSan.cmake
+E:/code/Y-PBR/lib/tinyexr/cmake/sanitizers/sanitize-helpers.cmake

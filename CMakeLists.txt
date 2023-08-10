@@ -1,26 +1,19 @@
 
 cmake_minimum_required(VERSION 3.18)
-project(Y-PBR 	LANGUAGES CXX CUDA C
-        )
+
+message(STATUS "CMake version: ${CMAKE_VERSION}")
+
+
+project(Y-PBR 	LANGUAGES CXX CUDA C)
 # 设置C++标准为C++17
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CUDA_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-
-
-
-
-
-
-
-
 if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
     cmake_policy(SET CMP0135 NEW)
 endif()
-
-
 
 if(MSVC)
 set(CUDAToolkit_ROOT "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1")
@@ -92,9 +85,9 @@ set(YPBR_DEPENDENCIES_DIR ${PROJECT_SOURCE_DIR}/lib)
 set(YPBR_SOURCES_DIR ${PROJECT_SOURCE_DIR}/src)
 
 
-#include_directories(${PROJECT_SOURCE_DIR}/lib/json/)
+include_directories(${PROJECT_SOURCE_DIR}/lib/json/)
 include_directories(${PROJECT_SOURCE_DIR}/lib/loadpng/)
-include_directories(${PROJECT_SOURCE_DIR}/lib/stbi/)
+#include_directories(${PROJECT_SOURCE_DIR}/lib/stbi/)
 
 
 include_directories(${YPBR_SOURCE_DIR})
@@ -119,7 +112,7 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 add_executable(Y_PBR test/main.cpp ${YPBR_SOURCES})
 add_dependencies(Y_PBR lib)
 target_link_libraries(Y_PBR PUBLIC lib)
-target_include_directories(Y_PBR PRIVATE ${PROJECT_SOURCE_DIR}/lib/json/include)
+#target_include_directories(Y_PBR PRIVATE ${PROJECT_SOURCE_DIR}/lib/nlohmann/include)
 
 if(MSVC)
     message("Using MSVC compiler")
@@ -132,12 +125,12 @@ add_subdirectory(tiny-cuda-nn)
 
 #target_link_libraries(Y_PBR PUBLIC E:/code/Y-PBR/lib/embree/windows/lib/embree3.lib)
 
-add_executable(hair-nn test/hair-accleerate.cu ${YPBR_SOURCES} )
+add_executable(hair-nn test/hair-accleerate.cu ${YPBR_SOURCES} src/Camera/ImagePrid.h)
 target_compile_features(hair-nn PRIVATE cxx_std_17)
 
 add_dependencies(hair-nn lib)
 target_link_libraries(hair-nn PUBLIC lib ${CUDA_LIBRARIES} tiny-cuda-nn)
-target_include_directories(hair-nn PRIVATE ${PROJECT_SOURCE_DIR}/lib/json/)
+#target_include_directories(hair-nn PRIVATE ${PROJECT_SOURCE_DIR}/lib/nlohmann/)
 
 endif()
 

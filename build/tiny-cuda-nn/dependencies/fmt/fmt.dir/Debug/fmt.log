@@ -1,0 +1,4 @@
+﻿  Building Custom Rule E:/code/Y-PBR/tiny-cuda-nn/dependencies/fmt/CMakeLists.txt
+  format.cc
+  os.cc
+  fmt.vcxproj -> E:\code\Y-PBR\build\tiny-cuda-nn\dependencies\fmt\Debug\fmtd.lib

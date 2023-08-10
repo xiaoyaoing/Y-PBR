@@ -53,8 +53,8 @@ public:
 
     PositionAndDirectionSample sampleRay(ivec2 point,vec2 posSample,vec2 dirSample) const;
     Ray sampleRay(size_t x, size_t y, /*size_t width, size_t height, Ray &ray, */vec2 sample) const;
+    void pdfRay(const Ray & ray,Float *pdfPos, Float *pdfDir) const;
     bool samplePosition(ivec2 point,vec2 sample,PositionSample & pSample) const;
-    bool sampleDirection(ivec2 point,vec2 sample,PositionSample & pSample) const ;
     vec2 inverse(const vec3 & pos) const ;
     void drawLine(const vec3 & begin,const vec3 & end,const Spectrum & color);
     void drawLine(int x0,int x1,int y0,int y1, const Spectrum & color);

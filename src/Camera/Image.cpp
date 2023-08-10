@@ -27,12 +27,7 @@ vec3 Image::getPixel(int x, int y) const {
 }
 
 vec3 Image::getPixel(int idx) const {
-    if (sampleCounts[idx] != 0) {
-        int k = 1;
-    } else {
-        int k = 1;
-    }
-    return sampleCounts[idx] != 0 ? buffers[idx].value() : vec3(0);
+    return sampleCounts[idx] != 0 ? buffers[idx].value()/Float(sampleCounts[idx]) : vec3(0);
 }
 
 uint32 Image::getIndex(uint32 x, uint32 y) const {
@@ -44,14 +39,11 @@ uint32 Image::getIndex(uint32 x, uint32 y) const {
 void Image::addPixel(uint32 x, uint32 y, vec3 rgb, bool count) {
     if (x < 0 || x >= width() || y < 0 || y >= height())
         return;
-//    if(hasNan(rgb)){
-//        throw("Rdiance NAN");
-//    }
+    if(hasNan(rgb)){
+        throw("Rdiance NAN");
+    }
     if(rgb.r <0 || rgb.g<0 || rgb.z<0){
-       // return;
-
-        //  rgb = abs(rgb);
-       // throw("Radiance Neg");
+        //todo
     }
     uint32 idx = getIndex(x, y);
     buffers[idx].add(rgb);
@@ -72,21 +64,17 @@ void Image::save(const std::string &fileName, Float scale, bool overwrite) const
             std::unique_ptr<float[]> hdr(new float[byteNum]);
             for (int i = 0; i < buffers.size(); i++) {
                 auto rgb = getPixel(i) * scale;
-                hdr[3 * i] = rgb.r;
+               hdr[3 * i] = rgb.r;
                 hdr[3 * i + 1] = rgb.g;
                 hdr[3 * i + 2] = rgb.b;
             }
-            ImageIO::saveHdr(fileName, hdr.get(), width(), height(), 3, overwrite);
+            ImageIO::saveHdr( fileName, hdr.get(), width(), height(), 3, overwrite);
         } else {
             int byteNum = product() * 3;
             std::unique_ptr<uint8_t[]> ldr(new uint8_t[byteNum]);
             for (int i = 0; i < buffers.size(); i++) {
                 auto rgb = getPixel(i) * scale;
-                //rgb = vec3(sampleCounts[i]/100.f);
                 rgb = clamp(255.f * ToneMap::toneMap(_tonemapType, rgb), vec3(0), 255.f * vec3(1));
-                if(!isBlack(rgb)){
-                    int k =1;
-                }
                 ldr[3 * i] = uint8_t(rgb.r);
                 ldr[3 * i + 1] = uint8_t(rgb.g);
                 ldr[3 * i + 2] = uint8_t(rgb.b);

@@ -62,11 +62,15 @@ public:
     }
     ///sample from light
     virtual  PositionAndDirectionSample sampleDirect(const vec2 & positionSample, const vec2 & dirSample) const = 0;
+    virtual void pdfDirect(const Ray & ray,const vec3 & n,Float * pdfPos,Float * pdfDir) const  { };
+
     ///compute environment radiance
     virtual Spectrum Le(const Ray & ray) const  {return Spectrum(0);};
     /// returns total power of the light
     virtual Spectrum Power() { return Spectrum(); }
-    virtual  void Preprocess(const Scene & scene) {}
+    virtual  void Preprocess(const Scene & scene) {
+
+    }
     ///given a intersection compute lightPdf.Mainly used in mis
     virtual  Float PdfLi(const Intersection & pShape, const vec3 & ref) const {
         _NOT_IMPLEMENT_ERROR

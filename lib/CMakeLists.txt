@@ -48,8 +48,8 @@ endif()
 if (NOT TARGET glm)
     message(STATUS "============start config glm============")
     add_subdirectory(glm)
-    target_link_libraries(${TARGET_NAME} INTERFACE glm)
     target_include_directories(glm INTERFACE ${CMAKE_CURRENT_LIST_DIR}/glm)
+    target_link_libraries(${TARGET_NAME} INTERFACE glm)
 endif ()
 
 if(NOT MSVC AND WIN32)
@@ -73,6 +73,13 @@ if (NOT TARGET tinyexr)
     target_include_directories(tinyexr INTERFACE ${CMAKE_CURRENT_LIST_DIR}/tinyexr)
 endif ()
 
+
+if (NOT TARGET stb)
+    message(STATUS "============start config stb============")
+    add_subdirectory(stb)
+    target_link_libraries(${TARGET_NAME} PUBLIC stb)
+    target_include_directories(stb PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/stb)
+endif()
 #add_subdirectory(json)
 #target_link_libraries( ${TARGET_NAME} PUBLIC nlohmann_json)
 

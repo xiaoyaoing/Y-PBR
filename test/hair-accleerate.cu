@@ -270,7 +270,7 @@ Json config = {
         {"optimizer", {
                               {"otype",  "Adam"},
                               // {"otype", "Shampoo"},
-                              {"learning_rate", 1e-2},
+                              {"learning_rate", 5e-3},
                               {"beta1",           0.9f},
                               {"beta2",      0.99f},
                               {"l2_reg",            0.0f},
@@ -285,7 +285,7 @@ Json config = {
                               {"nested", {
                                                  {
                                                          {"n_dims_to_encode", 3},
-                                                         {"otype", "HashGrid"},
+                                                         {"otype", "HashGrid "}
                                                  }, {
                                                             {"n_dims_to_encode", 3},
                                                             {"otype", "OneBlob"},
@@ -297,12 +297,13 @@ Json config = {
                                                          {"n_bins", 32},
                                                  }
 
-                                         }}}},
+                                         }}
+                      }},
         {"network",   {
                               {"otype",  "FullyFusedMLP"},
                               // {"otype", "CutlassMLP"},
                               {"n_neurons",     64},
-                              {"n_hidden_layers", 4},
+                              {"n_hidden_layers", 2},
                               {"activation", "ReLU"},
                               {"output_activation", "None"},
                       }},
@@ -327,7 +328,7 @@ __global__ void save(vec3 pos, vec3 dir, vec3 tangent, float *__restrict__ resul
 }
 
 void cpu_save(vec3 pos, vec3 dir, vec3 tangent, float *result) {
-
+    //  tangent = vec3(0);
     //spdlog::info(dir);
     result[0] = pos[0];
     result[1] = pos[1];
@@ -374,12 +375,15 @@ __global__ void cuda_copy(uint32_t n_elements, float *__restrict__ src, float *_
     dst[idx + 2] = src[idx + 2];
 };
 
+const Float uv_scale_factor = 1.f;
 
 class HairIntegrator : public PathIntegrator {
     const uint32_t batch_size = 1 << 18;
-    const uint32_t n_input_dims = 9; //pos,tangent,dir
+    bool by_pos = true;
+    bool by_dir = false;
+    const uint32_t n_input_dims = 3; //pos,tangent,dir
     const uint32_t n_output_dims = 3;// rgb color
-    const int train_num = 128 * 128;
+    const int train_num = 512 * 512;
     cudaStream_t training_stream;
     cudaStream_t inference_stream;
 
@@ -390,7 +394,7 @@ class HairIntegrator : public PathIntegrator {
     std::atomic<int> train_count;
 
     std::shared_ptr<tcnn::Trainer<float, precision_t, precision_t>> trainer;
-    int beta = 3;
+    int beta = 2;
 public:
     HairIntegrator(std::shared_ptr<Camera> camera, std::shared_ptr<Sampler> sampler) : PathIntegrator(camera, sampler,
                                                                                                       Json()),
@@ -424,6 +428,32 @@ public:
                                                                                                submit_prdict_batch *
                                                                                                n_input_dims),
                                                                                        gt("") {
+        if (n_input_dims == 2 || n_input_dims == 3) {
+            config["encoding"] = {
+                    {"otype", "HashGrid"}
+            };
+        }
+        if (n_input_dims == 6) {
+            config["encoding"] = {
+                    {"nested", {
+                            {
+                                    {"n_dims_to_encode", 3},
+                                    {"otype", "OneBlob"},
+                                    {"n_bins", 32400},
+                            },
+                            {
+                                    {"n_dims_to_encode", 3},
+                                    {"otype", "OneBlob"},
+                                    {"n_bins", 32400},
+                            }
+
+                    }}
+            };
+        }
+        if (by_pos && n_input_dims == 3)
+            config["encoding"] = {
+                    {"otype", "HashGrid"}
+            };
         spdlog::info("Begin init NN");
         initNN();
         spdlog::info("End init NN");
@@ -438,11 +468,10 @@ public:
     //     auto E = L - LPrime;
     // }
 
-    Ray getSampleRay(ivec2 res, Sampler *sampler, int &x, int &y) {
-        vec2 samplePos = sampler->getNext2D();
-        x = samplePos.x * res.x;
-        y = samplePos.y * res.y;
-        return _camera->sampleRay(x, y, sampler->getNext2D());
+    Ray getSampleRay(ivec2 res, vec2 u1, vec2 u2) {
+        int x = u1.x * res.x;
+        int y = u1.y * res.y;
+        return _camera->sampleRay(x, y, u2);
     }
 
     const int submit_train_batch = 256;
@@ -493,36 +522,52 @@ public:
         std::vector<float> predict_data;
         for (int i = 0; i < res.x; i++)
             for (int j = 0; j < res.y; j++) {
-                // if (!isBlack(hit_hair_img.getPixel(i + j * res.x))) {
-                pixel_pos.emplace_back(i, j);
-                //  }
+                if (!isBlack(hit_hair_img.getPixel(i + j * res.x))) {
+                    pixel_pos.emplace_back(i, j);
+                }
             }
         int hair_pixel_size = (pixel_pos.size() / tcnn::BATCH_SIZE_GRANULARITY) * tcnn::BATCH_SIZE_GRANULARITY;
         predict_data.resize(n_input_dims * hair_pixel_size);
+        vec3 min_pos(1e5f);
+        vec3 max_pos(-1e5f);
         for (int i = 0; i < hair_pixel_size; i++) {
             auto p = pixel_pos[i];
             int idx = p.x + p.y * res.x;
-            cpu_save(pos_img.getPixel(idx), dir_img.getPixel(idx), tangent_img.getPixel(idx),
-                     predict_data.data() + i * n_input_dims);
-            cpu_save(vec3(p.x / 1024.f, 1 - p.y / 1024.f, 0), tangent_img.getPixel(idx), pos_img.getPixel(idx),
-                     predict_data.data() + i * n_input_dims);
-        }
-        //  tcnn::GPUMemory<float> xs_and_ys(hair_pixel_size * n_input_dims);
-        std::vector<float> host_xs_and_ys(1024 * 1024 * 2);
-        int sampling_height = 1024;
-        int sampling_width = 1024;
-        for (int y = 0; y < sampling_height; ++y) {
-            for (int x = 0; x < sampling_width; ++x) {
-                int idx = (y * sampling_width + x) * 2;
-                host_xs_and_ys[idx + 0] = (float) (x + 0.5) / (float) sampling_width;
-                host_xs_and_ys[idx + 1] = 1 - (float) (y + 0.5) / (float) sampling_height;
+            if (n_input_dims == 9)
+                cpu_save(pos_img.getPixel(idx), dir_img.getPixel(idx), tangent_img.getPixel(idx),
+                         predict_data.data() + i * n_input_dims);
+            if (n_input_dims == 2) {
+                vec2 uv((p.x / 1024.f) * uv_scale_factor, (1 - p.y / 1024.f) * uv_scale_factor);
+                if (by_pos)
+                    uv = pos_img.getPixel(idx);
+                (predict_data.data() + i * n_input_dims)[0] = uv.x;
+                (predict_data.data() + i * n_input_dims)[1] = uv.y;
+
+            }
+            if (n_input_dims == 3) {
+                auto vec = tangent_img.getPixel(idx);
+                if (by_pos) {
+                    vec = pos_img.getPixel(idx);
+                    min_pos = min(vec, min_pos);
+                    max_pos = max(vec, max_pos);
+                }
+                if (by_dir) vec = dir_img.getPixel(idx);
+                (predict_data.data() + i * n_input_dims)[0] = vec[0];
+                (predict_data.data() + i * n_input_dims)[1] = vec[1];
+                (predict_data.data() + i * n_input_dims)[2] = vec[2];
+            }
+            if (n_input_dims == 6) {
+                auto tangent = tangent_img.getPixel(idx);
+                auto dir = dir_img.getPixel(idx);
+                (predict_data.data() + i * n_input_dims)[0] = dir[0];
+                (predict_data.data() + i * n_input_dims)[1] = dir[1];
+                (predict_data.data() + i * n_input_dims)[2] = dir[2];
+                dir = tangent;
+                (predict_data.data() + i * n_input_dims)[3] = dir[0];
+                (predict_data.data() + i * n_input_dims)[4] = dir[1];
+                (predict_data.data() + i * n_input_dims)[5] = dir[2];
             }
         }
-
-
-        // xs_and_ys.copy_from_host(predict_data.data());
-        //  xs_and_ys.copy_from_host(host_xs_and_ys.data());
-
 
 
         predict_batch = tcnn::GPUMatrix<float>(n_input_dims, hair_pixel_size);
@@ -550,7 +595,13 @@ public:
 
     }
 
-    void train_image(const Scene &scene) {
+
+    void train_image(const Scene &scene, float &tmp_loss, bool count_loss) {
+
+
+
+        // Debug outputs
+
 
         ivec2 res = _camera->image->resoulation();
         training_batch = tcnn::GPUMatrix<float>(n_input_dims, train_num);
@@ -558,87 +609,124 @@ public:
         std::vector<float> host_traing_batch(train_num * n_input_dims);
         std::vector<float> host_traing_target(train_num * n_output_dims);
         auto sampler = _sampler.get();
+        vec3 min_pos(1e5f);
+        vec3 max_pos(-1e5f);
         for (int i = 0; i < train_num; i++) {
             int x, y;
-            auto ray = getSampleRay(res, sampler, x, y);
-            vec3 pos, tangent, dir(0), LPrime(0), L(0);
+            vec2 u1 = sampler->getNext2D(), u2 = sampler->getNext2D();
+            auto ray = getSampleRay(res, u1, u2);
+            vec3 pos(0), tangent(0), dir(0), LPrime(0), L(0);
             while (true) {
-                if (integrate(ray, scene, maxBounces, *sampler, pos, dir, tangent, LPrime, L))
+                if (integrate(ray, scene, 1, *sampler, pos, dir, tangent, L)) {
+                    //integrate(ray, scene, beta, *sampler, pos, dir, tangent, LPrime);
                     break;
-                ray = getSampleRay(res, sampler, x, y);
+                }
+                u1 = sampler->getNext2D(), u2 = sampler->getNext2D();
+                ray = getSampleRay(res, u1, u2);
             }
+            min_pos = min(min_pos, pos);
+            max_pos = max(max_pos, pos);
             vec3 E = (L - LPrime);
-            //    E = Spectrum(0);
-            //  E = L;
-            //   x = i % 1024;
-            // y = i / 1024;
-            auto uv = vec2(x / 1024.f, 1 - y / 1024.f) + sampler->getNext2D() / 1024.f;
-            // uv.y = 1-uv.y;
-            // uv = sampler->getNext2D();
-            // E = gt.eval(uv);
-            // cpu_save(pos, dir, tangent, host_traing_batch.data() + n_input_dims * i);
-            (host_traing_batch.data() + n_input_dims * i)[0] = uv.x;
-            (host_traing_batch.data() + n_input_dims * i)[1] = uv.y;
+            auto uv = (u1 + u2 / 1024.f) * uv_scale_factor;
+            if (n_input_dims == 2) {
+                //       uv = sampler->getNext2D();
+                E = gt.eval(uv);
+            }
+            E = gt.eval(uv);
+             x = uv.x * 1024;
+           y = uv.y * 1024;
+            if (by_pos)
+                uv = pos;
+        //    pos_img.addPixel(x, y,vec3( uv.x,uv.y,0), true);
+
+
+            if (n_input_dims == 9)
+                cpu_save(pos, dir, tangent, host_traing_batch.data() + n_input_dims * i);
+            if (n_input_dims == 2) {
+                (host_traing_batch.data() + n_input_dims * i)[0] = uv.x;
+                (host_traing_batch.data() + n_input_dims * i)[1] = uv.y;
+            }
+            if (n_input_dims == 3) {
+                auto vec = tangent;
+                if (by_pos) vec = pos;
+                if (by_dir) vec = dir;
+                (host_traing_batch.data() + i * n_input_dims)[0] = vec[0];
+                (host_traing_batch.data() + i * n_input_dims)[1] = vec[1];
+                (host_traing_batch.data() + i * n_input_dims)[2] = vec[2];
+//                (host_traing_batch.data() + n_input_dims * i)[0] = uv.x;
+//                (host_traing_batch.data() + n_input_dims * i)[1] = uv.y;
+            }
+            if (n_input_dims == 6) {
+                (host_traing_batch.data() + i * n_input_dims)[0] = dir[0];
+                (host_traing_batch.data() + i * n_input_dims)[1] = dir[1];
+                (host_traing_batch.data() + i * n_input_dims)[2] = dir[2];
+                dir = tangent;
+                (host_traing_batch.data() + i * n_input_dims)[3] = dir[0];
+                (host_traing_batch.data() + i * n_input_dims)[4] = dir[1];
+                (host_traing_batch.data() + i * n_input_dims)[5] = dir[2];
+            }
             host_traing_target[n_output_dims * i] = E[0];
             host_traing_target[n_output_dims * i + 1] = E[1];
             host_traing_target[n_output_dims * i + 2] = E[2];
         }
+        if ((by_pos && (n_input_dims == 3 || n_input_dims == 2)) || n_input_dims == 9) {
+            auto diff_pos = max_pos - min_pos;
+            for (int i = 0; i < train_num; i++) {
+                host_traing_batch[i * n_input_dims] =
+                        (host_traing_batch[i * n_input_dims] - min_pos[0]) / (diff_pos[0]);
+                host_traing_batch[i * n_input_dims + 1] =
+                        (host_traing_batch[i * n_input_dims + 1] - min_pos[1]) / (diff_pos[1]);
+//                host_traing_batch[i * n_input_dims] = uv.x;
+//                host_traing_batch[i * n_input_dims + 1] = uv.y;
+                if (n_input_dims >=3 )
+                    host_traing_batch[i * n_input_dims + 2] =
+                            (host_traing_batch[i * n_input_dims + 2] - min_pos[2]) / (diff_pos[2]);
+            }
+        }
+      //  pos_img.linerarNormalize();
+   //     pos_img.save("pos.exr", 1, false);
+     //   exit(-1);
+
         CUDA_CHECK_THROW(cudaMemcpy(training_batch.data(), host_traing_batch.data(),
                                     float_size_factor * host_traing_batch.size(), cudaMemcpyHostToDevice));
-        std::vector<float> temp_traing_batch(host_traing_batch.size());
-        cudaMemcpy(temp_traing_batch.data(), training_batch.data(), temp_traing_batch.size() * 4,
-                   cudaMemcpyDeviceToHost);
         auto error = cudaMemcpy(training_target.data(), host_traing_target.data(),
                                 float_size_factor * host_traing_target.size(), cudaMemcpyHostToDevice);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//        CUDA_CHECK_THROW(error);
+
         int width = 1024;
         int height = 1024;
-        tcnn::GPUMemory<float> image = load_image(
-                "curly-hair_PT_GROUD_TROUTH.png", width, height);
-        cudaResourceDesc resDesc;
-        memset(&resDesc, 0, sizeof(resDesc));
-        resDesc.resType = cudaResourceTypePitch2D;
-        resDesc.res.pitch2D.devPtr = image.data();
-        resDesc.res.pitch2D.desc = cudaCreateChannelDesc(32, 32, 32, 32, cudaChannelFormatKindFloat);
-        resDesc.res.pitch2D.width = width;
-        resDesc.res.pitch2D.height = height;
-        resDesc.res.pitch2D.pitchInBytes = width * 4 * sizeof(float);
+//        ImageIO::loadLdrNormalize("curly-hair_PT_GROUD_TROUTH.png", TexelConversion::REQUEST_RGB, width, height);
+//        load_image(
+//                "curly-hair_PT_GROUD_TROUTH.png", width, height);
+//        tcnn::GPUMemory<float> image = load_image(
+//                "curly-hair_PT_GROUD_TROUTH.png", width, height);
+//        cudaResourceDesc resDesc;
+//        memset(&resDesc, 0, sizeof(resDesc));
+//        resDesc.resType = cudaResourceTypePitch2D;
+//        resDesc.res.pitch2D.devPtr = image.data();
+//        resDesc.res.pitch2D.desc = cudaCreateChannelDesc(32, 32, 32, 32, cudaChannelFormatKindFloat);
+//        resDesc.res.pitch2D.width = width;
+//        resDesc.res.pitch2D.height = height;
+//        resDesc.res.pitch2D.pitchInBytes = width * 4 * sizeof(float);
+//
+//        cudaTextureDesc texDesc;
+//        memset(&texDesc, 0, sizeof(texDesc));
+//        texDesc.filterMode = cudaFilterModeLinear;
+//        texDesc.normalizedCoords = true;
+//        texDesc.addressMode[0] = cudaAddressModeClamp;
+//        texDesc.addressMode[1] = cudaAddressModeClamp;
+//        texDesc.addressMode[2] = cudaAddressModeClamp;
 
-        cudaTextureDesc texDesc;
-        memset(&texDesc, 0, sizeof(texDesc));
-        texDesc.filterMode = cudaFilterModeLinear;
-        texDesc.normalizedCoords = true;
-        texDesc.addressMode[0] = cudaAddressModeClamp;
-        texDesc.addressMode[1] = cudaAddressModeClamp;
-        texDesc.addressMode[2] = cudaAddressModeClamp;
-
-        cudaTextureObject_t texture;
-        CUDA_CHECK_THROW(cudaCreateTextureObject(&texture, &resDesc, &texDesc, nullptr));
+        //cudaTextureObject_t texture;
+        //CUDA_CHECK_THROW(cudaCreateTextureObject(&texture, &resDesc, &texDesc, nullptr));
         tcnn::default_rng_t rng{1337};
-        //  tcnn::generate_random_uniform<float>(training_stream, rng, batch_size * n_input_dims, training_batch.data());
-        help(training_stream, batch_size, texture, training_batch, training_target);
-        // std::vector<float> image_host_traing_target(host_traing_target.size());
-        //cudaMemcpy(image_host_traing_target.data(),training_target.data(),host_traing_target.size() *4,cudaMemcpyDeviceToHost);
+//          tcnn::generate_random_uniform<float>(training_stream, rng, batch_size * n_input_dims, training_batch.data());
+        //  help(training_stream, batch_size, texture, training_batch, training_target);
+        std::vector<float> image_host_traing_target(host_traing_target.size(), 1);
+        cudaMemcpy(image_host_traing_target.data(), training_target.data(), host_traing_target.size() * 4,
+                   cudaMemcpyDeviceToHost);
         auto ctx = trainer->training_step(training_stream, training_batch, training_target);
-        auto loss = trainer->loss(training_stream, *ctx);
+        if (count_loss)
+            tmp_loss += trainer->loss(training_stream, *ctx);
 
     }
 
@@ -697,9 +785,22 @@ public:
             }
         /// train one scenond
 
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
+        float tmp_loss = 0;
         for (int i = 0; i < spp; i++) {
-            train_image(scene);
+            int interval = 10;
+            bool print_loss = i % interval == 0;
+            print_loss = true;
+            train_image(scene, tmp_loss, print_loss);
+
+            if (print_loss) {
+                std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+                std::cout << "Step#" << i << ": " << "loss=" << tmp_loss << " time="
+                          << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]"
+                          << std::endl;
+                tmp_loss = 0;
+            }
             parallel_for([&](const vec2 &tile) {
                 //  return ;
                 int x0 = tile[0] * tileSize;
@@ -711,30 +812,23 @@ public:
                 for (int y = y0; y < y1; y++) {
                     for (int x = x0; x < x1; x++) {
                         Ray ray = _camera->sampleRay(x, y, tileSampler->getNext2D());
-                        vec3 pos, tangent, dir(0), LPrime(0), L(0);
+                        vec3 pos(0), tangent(0), dir(0), LPrime(0), L(0);
                         ///reutrn pos,dir,tangent,LPrime
                         //   Spectrum  l = PathIntegrator::integrate(ray,scene,*tileSampler);
 //                            _camera->image->addPixel(x, y, l, true);
 //                             continue;
-                        bool hitHair = true;// integrate(ray, scene, beta, *tileSampler, pos, dir, tangent, LPrime, L);
+                        bool hitHair = true;
+                        if (n_input_dims == 9 || n_input_dims == 3 || n_input_dims == 6) {
+                            hitHair = integrate(ray, scene, beta, *tileSampler, pos, dir, tangent, L);
+                        }
+                        if(n_input_dims ==2 )
+                            hitHair = integrate(ray, scene,1, *tileSampler, pos, dir, tangent, L);
                         if (hitHair) {
-                            // save<<<1, 1>>>(pos, dir, tangent, predict_batch.data()+n_input_dims*cur_predict_batch);
-                            //   if(cur_predict_batch >= submit_prdict_batch)
-                            //        save_predict();
-                            //    predict_pixel_vector[cur_predict_batch] = ivec2(x,y);
-                            //  cpu_save(pos,dir,tangent,predict_value_vecotr,cur_predict_batch);
-                            //cpu_save(pos,dir,tangent,&predict_value_vecotr[cur_predict_batch * n_input_dims]);
-                            //if(cur_predict_batch==1030){
-                            //    CUDA_CHECK_THROW(cudaMemcpy(host_predict_value.data(), predict_batch.data(), host_predict_value.size(), cudaMemcpyDeviceToHost));
-                            //
-                            // }
-                            //   if(++cur_predict_batch == submit_prdict_batch)
-                            //      save_predict();
-                            //     tangent_img.addPixel(x, y, tangent,true);
-                            //     pos_img.addPixel(x, y, pos);
-                            //   dir_img.addPixel(x, y, dir);
-                            //   hit_hair_img.addPixel(x, y, Spectrum(1));
-                            //   hit_hair[y*_camera->image->resoulation().x + x] = true;
+                            //integrate(ray, scene,maxBounces, *tileSampler, pos, dir, tangent, L);
+                            tangent_img.addPixel(x, y, tangent, true);
+                            pos_img.addPixel(x, y, pos);
+                            dir_img.addPixel(x, y, dir);
+                            hit_hair_img.addPixel(x, y, Spectrum(1));
                             _camera->image->addPixel(x, y, vec3(0), true);
                         } else _camera->image->addPixel(x, y, L, true);
 
@@ -743,19 +837,37 @@ public:
                 }
 
             }, numTiles);
+            //  tangent_img.save("curly-hair-tangent.png", 1.f, true);
+            auto getFileName = [](std::string name, int i) {
+                return name + std::to_string(i) + ".png";
+            };
+            //  tangent_img.save(getFileName("tangent",i) ,1, true);
+            //    dir_img.save(getFileName("dir",i),1, true);
+            //  pos_img.save(getFileName("pos",i), 1,true);
+            //      pos_img.normalize();
+//           dir_img.normalize();
+//            tangent_img.normalize();
+            pos_img.linerarNormalize();
             save_predict();
             tcnn::free_all_gpu_memory_arenas();
-            _camera->image->save(std::to_string(i) + ".png", 1.f / i, true);
+            _camera->image->save(std::to_string(i) + ".png", 1, true);
+
+
+            pos_img.clear();
+            dir_img.clear();
+            hit_hair_img.clear();
+            pos_img.clear();
+
+
         }
         parallel_cleanup();
         _camera->image->save(scene.options.outputFileName, 1.f / spp);
-        //   tangent_img.save("curly-hair-tangent.png", 1.f / spp,true);
 
     }
 
     bool
     integrate(const Ray &ray, const Scene &scene, int maxDepth, Sampler &sampler, vec3 &pos, vec3 &dir, vec3 &tangent,
-              vec3 &LPrime, vec3 &L) const {
+              vec3 &L) const {
         std::optional<Intersection> its;
         SurfaceEvent surfaceEvent;
         Spectrum thr(1.0);
@@ -777,8 +889,8 @@ public:
                     }
 
             }
-            if (bounces == beta)
-                LPrime = L;
+//            if (bounces == beta)
+//                LPrime = L;
             if (!its.has_value() || bounces >= maxDepth)
 
                 break;
@@ -788,9 +900,11 @@ public:
             if (bounces == 0) {
                 if (its.has_value()) {
                     tangent = its->tangent.value();
+                      tangent = its->Ng;
                     pos = its.value().p;
                     dir = surfaceEvent.wo;
                     dir = ray.d;
+                  //  dir = its->Ng;
                 }
             }
             if (its->bsdf->Pure(BSDF_FORWARD)) {
@@ -809,6 +923,7 @@ public:
                 specularBounce = (flags & BSDF_SPECULAR) != 0;
                 thr *= f / surfaceEvent.pdf;
                 _ray = surfaceEvent.sctterRay();
+                // if(bounces==1) dir = _ray.d;
                 if (russian(bounces, sampler, thr))
                     break;
             }
@@ -816,8 +931,8 @@ public:
         if (bounces > 4) {
             int k = 1;
         }
-        if (bounces < beta)
-            LPrime = L;
+//        if (bounces < beta)
+//            LPrime = L;
         //   L = vec3(bounces/10.f);
         return bounces > 0;
     }

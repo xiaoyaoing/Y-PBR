@@ -40,7 +40,7 @@ Spectrum PathVertex::eval(const PathVertex &vertex, bool adjoint) const {
     switch (type) {
         case VertexType::Surface: {
             const auto &event = _record.surfaceRecord.event;
-            return _sampler.bsdf->f(event.makeWarpQuery( event.wi,event.toLocal(d)),adjoint);
+            return _sampler.bsdf->f(event.makeWarpQuery(event.wi, event.toLocal(d)), adjoint);
         }
         default:
             return Spectrum();
@@ -48,16 +48,80 @@ Spectrum PathVertex::eval(const PathVertex &vertex, bool adjoint) const {
     return Spectrum();
 }
 
-Float PathVertex::pdf(const PathVertex &prev, const PathVertex &next) const
-{   
-    if(prev.isLight()){
-        return 0;
-    }
+Float PathVertex::pdf(const PathVertex *prev, const PathVertex &next) const {
+
     //前一个节点是光源或者相机时需要特殊处理
     //pdf需要从角度空间转成面积空间
+    if (isLight()) {
+        //光源有两种处理 第一种是自己就是光源 第二种是前面一个是光源
+        return pdfLight(next);
+    }
+    Float pdf = 0;
 
-    return Float();
+    vec3 wn = next.pos() - pos();
+    vec3 wp;
+    if (prev) {
+        wp = normalize(prev->pos());
+    } else {
+        CHECK(isCamera(), "Not camera vertex but without prev vertex");
+    }
+    if (isSurface()) {
+        wn = normalize(wn);
+        wn  = _record.surfaceRecord.event.toLocal(wn);
+        wp  = _record.surfaceRecord.event.toLocal(wp);
+        pdf = _sampler.bsdf->Pdf(_record.surfaceRecord.event.makeWarpQuery(wn, wp));
+    }
+    if (isCamera())
+        _sampler.camera->pdfRay(Ray(_record.cameraRecord.sample.ray.o, wn), nullptr, &pdf);
+    if (isMedium())
+        TODO("Impl medium pdf");
+    //return pdf;
+    return pdf * cosFactor(next) / distance2(pos(),next.pos());
+
 }
+
+Float PathVertex::pdfLight(const PathVertex &v) const {
+    vec3 d = v.pos() - pos();
+    Float invDist2 = 1 / length2(d);
+    d *= invDist2;
+    Float pdf = 0;
+    if (isInfiniteLight()) {
+        TODO("Handle Infinite");
+    } else {
+        const Light *light = type == VertexType::Light
+                             ? _sampler.light
+                             : _record.surfaceRecord.its.primitive->areaLight.get();
+
+        // Compute sampling density for non-infinite light sources
+        Float pdfDir;
+        light->pdfDirect(Ray(pos(), d), ng(), nullptr, &pdfDir);
+        pdf = pdfDir * invDist2;
+        if (v.isSurface())
+            pdf *= absDot(v.ng(), d);
+    }
+    return pdf;
+}
+
+Float PathVertex::pdfLightOrigin(const PathVertex &v, const Distribution1D &lightDistr,
+                                 const std::unordered_map<const Light *, size_t> map) const {
+    vec3 d = v.pos() - pos();
+    Float invDist2 = 1 / length2(d);
+    d *= invDist2;
+    Float pdf = 0;
+    if (isInfiniteLight()) {
+        TODO("Handle Infinite");
+    } else {
+        const Light *light = type == VertexType::Light
+                             ? _sampler.light
+                             : _record.surfaceRecord.its.primitive->areaLight.get();
+        // Compute sampling density for non-infinite light sources
+        Float pdfPos;
+        light->pdfDirect(Ray(pos(), d), ng(), &pdfPos, nullptr);
+        pdf = pdfPos * lightDistr.DiscretePDF(map.at(light));
+    }
+    return pdf;
+}
+
 
 bool PathVertex::sampleNext(const Scene &scene, bool adjoint, PathState &state, PathVertex *prev, PathVertex &next) {
     Spectrum weight(1);
@@ -67,8 +131,8 @@ bool PathVertex::sampleNext(const Scene &scene, bool adjoint, PathState &state, 
         case VertexType::Light: {
             auto &record = _record.lightRecord;;
             ray = record.sample.ray;
-            pdf = record.sample.dirPdf ;
-            weight = Spectrum (dot(record.sample.n,ray.d) /(record.sample.dirPdf)) ;
+            pdf = record.sample.dirPdf;
+            weight = Spectrum(dot(record.sample.n, ray.d) / (record.sample.dirPdf));
             break;
         }
         case VertexType::Camera: {
@@ -85,11 +149,13 @@ bool PathVertex::sampleNext(const Scene &scene, bool adjoint, PathState &state, 
             SurfaceEvent &event = record.event;
             auto &bsdf = _sampler.bsdf;
             weight = bsdf->sampleF(event, state.sampler.getNext2D(), adjoint);
-            if(isBlack(weight) || event.pdf == 0){
+            if (isBlack(weight) || event.pdf == 0) {
                 return false;
             }
-            weight/=event.pdf;
-            if (russian(state.bounce, state.sampler,  weight * beta))
+            if (event.sampleType & BXDFType::BSDF_SPECULAR)
+                diarc = true;
+            weight /= event.pdf;
+            if (russian(state.bounce, state.sampler, weight * beta))
                 return false;
             pdf = event.pdf;
             ray = event.sctterRay();
@@ -97,7 +163,7 @@ bool PathVertex::sampleNext(const Scene &scene, bool adjoint, PathState &state, 
             break;
         }
     }
-    auto its  = scene.intersect(ray);
+    auto its = scene.intersect(ray);
     if (!its) {
         return false;
     }
@@ -129,15 +195,12 @@ bool PathVertex::sampleRootVertex(PathState &state) {
             auto light = _sampler.light;
             auto &record = _record.lightRecord;
             record.sample = light->sampleDirect(state.sampler.getNext2D(), state.sampler.getNext2D());
-            if(record.sample.dirPdf ==0 || record.sample.posPdf ==0)
+            if (record.sample.dirPdf == 0 || record.sample.posPdf == 0)
                 return false;
             if (isInfiniteLight()) {
                 //todo
             } else {
-                beta = record.sample.weight/ record.lightPdf / record.sample.posPdf;
-                if(beta[0]==0){
-                    int k = 1;
-                }
+                beta = record.sample.weight / record.lightPdf / record.sample.posPdf;
                 pdfFwd = record.sample.posPdf * record.lightPdf;
             }
             return true;

@@ -6,7 +6,7 @@
 #include <thread>
 void BDPTIntegrator::process(const Scene &scene, Sampler &sampler) {
     lightDistrib = CreateLightSampleDistribution(std::string("uniform"), scene);
-    imagePramid = new ImagePramId(maxBounces,*_camera);
+    imagePramid = new ImagePrid(maxBounces, *_camera);
 }
 
 vec3 BDPTIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &sampler) const {
@@ -15,7 +15,7 @@ vec3 BDPTIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &samp
 }
 
 void BDPTIntegrator::render(const Scene &scene)  {
-    auto tileSize = scene.options.tileSize;
+    const int  tileSize = 16;
     ivec2 renderBounds = _camera->image->resoulation();
     int width = _camera->image->width();
     int height = _camera->image->height();
@@ -46,6 +46,7 @@ void BDPTIntegrator::render(const Scene &scene)  {
                 do{
                     ivec2 pixel(x,y);
                     Spectrum  L  = tracer.traceSample(pixel,*tileSampler);
+
                     _camera->image->addPixel(x, y, L, true);
                 }
                 while(tileSampler->startNextSample());
@@ -59,9 +60,9 @@ void BDPTIntegrator::render(const Scene &scene)  {
 
 void BDPTIntegrator::saveOutPuts(const std::string & fileName,int spp) {
     Float sppScale = 1.f/spp;
-    _camera->image->save(fileName,sppScale);
+    _camera->image->save(fileName,1);
     if(imagePramid){
-       imagePramid->saveOutPut(fileName,sppScale);
+       imagePramid->saveOutPut(fileName,1);
     }
 }
 

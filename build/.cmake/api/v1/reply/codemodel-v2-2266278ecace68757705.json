@@ -1,0 +1,1460 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						5
+					],
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						4,
+						5,
+						8,
+						12
+					]
+				},
+				{
+					"build" : "lib",
+					"childIndexes" : 
+					[
+						2,
+						3,
+						4
+					],
+					"jsonFile" : "directory-lib-Debug-e9069484d90298468a11.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "lib",
+					"targetIndexes" : 
+					[
+						9
+					]
+				},
+				{
+					"build" : "lib/glm",
+					"jsonFile" : "directory-lib.glm-Debug-ce07c1f5db497389ae15.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "lib/glm"
+				},
+				{
+					"build" : "lib/tinyexr",
+					"jsonFile" : "directory-lib.tinyexr-Debug-9f9471477442de4cd1aa.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "lib/tinyexr",
+					"targetIndexes" : 
+					[
+						1,
+						10,
+						14,
+						16
+					]
+				},
+				{
+					"build" : "lib/stb",
+					"jsonFile" : "directory-lib.stb-Debug-209083de59caa9f715e7.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "lib/stb",
+					"targetIndexes" : 
+					[
+						13
+					]
+				},
+				{
+					"build" : "tiny-cuda-nn",
+					"childIndexes" : 
+					[
+						6,
+						7,
+						8
+					],
+					"jsonFile" : "directory-tiny-cuda-nn-Debug-498a1ec56eac94bbda01.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "tiny-cuda-nn",
+					"targetIndexes" : 
+					[
+						2,
+						15
+					]
+				},
+				{
+					"build" : "tiny-cuda-nn/dependencies/fmt",
+					"jsonFile" : "directory-tiny-cuda-nn.dependencies.fmt-Debug-0508bda1c3374ab75ecc.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 3,
+					"source" : "tiny-cuda-nn/dependencies/fmt",
+					"targetIndexes" : 
+					[
+						3,
+						7
+					]
+				},
+				{
+					"build" : "tiny-cuda-nn/samples",
+					"jsonFile" : "directory-tiny-cuda-nn.samples-Debug-aa5c667f83d1e9f192b1.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 2,
+					"source" : "tiny-cuda-nn/samples",
+					"targetIndexes" : 
+					[
+						11
+					]
+				},
+				{
+					"build" : "tiny-cuda-nn/benchmarks/image",
+					"jsonFile" : "directory-tiny-cuda-nn.benchmarks.image-Debug-77c10edbdb9df00fb6a5.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 2,
+					"source" : "tiny-cuda-nn/benchmarks/image",
+					"targetIndexes" : 
+					[
+						6
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2,
+						4
+					],
+					"name" : "Y-PBR",
+					"targetIndexes" : 
+					[
+						0,
+						4,
+						5,
+						8,
+						9,
+						12,
+						13
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3
+					],
+					"name" : "tinyexr",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1,
+						10,
+						14,
+						16
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						3
+					],
+					"directoryIndexes" : 
+					[
+						5,
+						7,
+						8
+					],
+					"name" : "tiny-cuda-nn",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						2,
+						6,
+						11,
+						15
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						6
+					],
+					"name" : "FMT",
+					"parentIndex" : 2,
+					"targetIndexes" : 
+					[
+						3,
+						7
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ALL_BUILD-Debug-fd651b6baf1bd80d6f04.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "ALL_BUILD::@ee366eebf78e5aa6b184",
+					"jsonFile" : "target-ALL_BUILD-Debug-2d4c28be8c7485196da1.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "ALL_BUILD::@6817849eec151019dda8",
+					"jsonFile" : "target-ALL_BUILD-Debug-c6da0f47ac712dad25a0.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "ALL_BUILD::@2a0e9975111b09fa6be1",
+					"jsonFile" : "target-ALL_BUILD-Debug-c59d7365b0509df320ec.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Y_PBR::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Y_PBR-Debug-87c0201ac2ed1e0b8782.json",
+					"name" : "Y_PBR",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ZERO_CHECK-Debug-749caa362294fa1dfa83.json",
+					"name" : "ZERO_CHECK",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 8,
+					"id" : "bench_image_ours::@ea04414b4d7502305b6b",
+					"jsonFile" : "target-bench_image_ours-Debug-3f9fb3c60b777fc34fd0.json",
+					"name" : "bench_image_ours",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "fmt::@2a0e9975111b09fa6be1",
+					"jsonFile" : "target-fmt-Debug-c65f84ebcab961df757d.json",
+					"name" : "fmt",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "hair-nn::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-hair-nn-Debug-6d17cc3c57967ad4fe51.json",
+					"name" : "hair-nn",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "lib::@306ed2d68c6501e8728f",
+					"jsonFile" : "target-lib-Debug-5499b531b90683ab8b89.json",
+					"name" : "lib",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "miniz::@ee366eebf78e5aa6b184",
+					"jsonFile" : "target-miniz-Debug-da93ab3f1b0fc05b8572.json",
+					"name" : "miniz",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "mlp_learning_an_image::@650988d963ec4efcd14a",
+					"jsonFile" : "target-mlp_learning_an_image-Debug-da26504dca111cc28478.json",
+					"name" : "mlp_learning_an_image",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sampleTest::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sampleTest-Debug-5dee394379d2628ff863.json",
+					"name" : "sampleTest",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "stb::@3ee674e71b5b9076e1e5",
+					"jsonFile" : "target-stb-Debug-6b02443f3aa5e205407c.json",
+					"name" : "stb",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "test_tinyexr::@ee366eebf78e5aa6b184",
+					"jsonFile" : "target-test_tinyexr-Debug-5a8f0c9d85d8a7ef77a6.json",
+					"name" : "test_tinyexr",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "tiny-cuda-nn::@6817849eec151019dda8",
+					"jsonFile" : "target-tiny-cuda-nn-Debug-d08ca3a1e4792a9b68da.json",
+					"name" : "tiny-cuda-nn",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "tinyexr::@ee366eebf78e5aa6b184",
+					"jsonFile" : "target-tinyexr-Debug-10f7d3a6a38acf17f9b1.json",
+					"name" : "tinyexr",
+					"projectIndex" : 1
+				}
+			]
+		},
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						5
+					],
+					"jsonFile" : "directory-.-Release-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						4,
+						5,
+						8,
+						12
+					]
+				},
+				{
+					"build" : "lib",
+					"childIndexes" : 
+					[
+						2,
+						3,
+						4
+					],
+					"jsonFile" : "directory-lib-Release-e9069484d90298468a11.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "lib",
+					"targetIndexes" : 
+					[
+						9
+					]
+				},
+				{
+					"build" : "lib/glm",
+					"jsonFile" : "directory-lib.glm-Release-ce07c1f5db497389ae15.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "lib/glm"
+				},
+				{
+					"build" : "lib/tinyexr",
+					"jsonFile" : "directory-lib.tinyexr-Release-9f9471477442de4cd1aa.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "lib/tinyexr",
+					"targetIndexes" : 
+					[
+						1,
+						10,
+						14,
+						16
+					]
+				},
+				{
+					"build" : "lib/stb",
+					"jsonFile" : "directory-lib.stb-Release-209083de59caa9f715e7.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "lib/stb",
+					"targetIndexes" : 
+					[
+						13
+					]
+				},
+				{
+					"build" : "tiny-cuda-nn",
+					"childIndexes" : 
+					[
+						6,
+						7,
+						8
+					],
+					"jsonFile" : "directory-tiny-cuda-nn-Release-498a1ec56eac94bbda01.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "tiny-cuda-nn",
+					"targetIndexes" : 
+					[
+						2,
+						15
+					]
+				},
+				{
+					"build" : "tiny-cuda-nn/dependencies/fmt",
+					"jsonFile" : "directory-tiny-cuda-nn.dependencies.fmt-Release-0508bda1c3374ab75ecc.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 3,
+					"source" : "tiny-cuda-nn/dependencies/fmt",
+					"targetIndexes" : 
+					[
+						3,
+						7
+					]
+				},
+				{
+					"build" : "tiny-cuda-nn/samples",
+					"jsonFile" : "directory-tiny-cuda-nn.samples-Release-aa5c667f83d1e9f192b1.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 2,
+					"source" : "tiny-cuda-nn/samples",
+					"targetIndexes" : 
+					[
+						11
+					]
+				},
+				{
+					"build" : "tiny-cuda-nn/benchmarks/image",
+					"jsonFile" : "directory-tiny-cuda-nn.benchmarks.image-Release-77c10edbdb9df00fb6a5.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 2,
+					"source" : "tiny-cuda-nn/benchmarks/image",
+					"targetIndexes" : 
+					[
+						6
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2,
+						4
+					],
+					"name" : "Y-PBR",
+					"targetIndexes" : 
+					[
+						0,
+						4,
+						5,
+						8,
+						9,
+						12,
+						13
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3
+					],
+					"name" : "tinyexr",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1,
+						10,
+						14,
+						16
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						3
+					],
+					"directoryIndexes" : 
+					[
+						5,
+						7,
+						8
+					],
+					"name" : "tiny-cuda-nn",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						2,
+						6,
+						11,
+						15
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						6
+					],
+					"name" : "FMT",
+					"parentIndex" : 2,
+					"targetIndexes" : 
+					[
+						3,
+						7
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ALL_BUILD-Release-fd651b6baf1bd80d6f04.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "ALL_BUILD::@ee366eebf78e5aa6b184",
+					"jsonFile" : "target-ALL_BUILD-Release-2d4c28be8c7485196da1.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "ALL_BUILD::@6817849eec151019dda8",
+					"jsonFile" : "target-ALL_BUILD-Release-c6da0f47ac712dad25a0.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "ALL_BUILD::@2a0e9975111b09fa6be1",
+					"jsonFile" : "target-ALL_BUILD-Release-c59d7365b0509df320ec.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Y_PBR::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Y_PBR-Release-df88ec4cfca60043b8b8.json",
+					"name" : "Y_PBR",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ZERO_CHECK-Release-749caa362294fa1dfa83.json",
+					"name" : "ZERO_CHECK",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 8,
+					"id" : "bench_image_ours::@ea04414b4d7502305b6b",
+					"jsonFile" : "target-bench_image_ours-Release-b09a8470dcbea1efa1ff.json",
+					"name" : "bench_image_ours",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "fmt::@2a0e9975111b09fa6be1",
+					"jsonFile" : "target-fmt-Release-ad44794f21ecfdcf4558.json",
+					"name" : "fmt",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "hair-nn::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-hair-nn-Release-644fe9d7c0690422a3c2.json",
+					"name" : "hair-nn",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "lib::@306ed2d68c6501e8728f",
+					"jsonFile" : "target-lib-Release-2899953f67917fbb41c8.json",
+					"name" : "lib",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "miniz::@ee366eebf78e5aa6b184",
+					"jsonFile" : "target-miniz-Release-896449053b13f0df15c4.json",
+					"name" : "miniz",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "mlp_learning_an_image::@650988d963ec4efcd14a",
+					"jsonFile" : "target-mlp_learning_an_image-Release-c80daeae39967d07bafd.json",
+					"name" : "mlp_learning_an_image",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sampleTest::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sampleTest-Release-5628d4e7f4e35e40143c.json",
+					"name" : "sampleTest",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "stb::@3ee674e71b5b9076e1e5",
+					"jsonFile" : "target-stb-Release-48b6d8b39211a73ac7e4.json",
+					"name" : "stb",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "test_tinyexr::@ee366eebf78e5aa6b184",
+					"jsonFile" : "target-test_tinyexr-Release-44e8ee68ffbc2a45aa42.json",
+					"name" : "test_tinyexr",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "tiny-cuda-nn::@6817849eec151019dda8",
+					"jsonFile" : "target-tiny-cuda-nn-Release-07da293d1aeb5ca48ec2.json",
+					"name" : "tiny-cuda-nn",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "tinyexr::@ee366eebf78e5aa6b184",
+					"jsonFile" : "target-tinyexr-Release-442c39ab9cfcbbf92c15.json",
+					"name" : "tinyexr",
+					"projectIndex" : 1
+				}
+			]
+		},
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						5
+					],
+					"jsonFile" : "directory-.-MinSizeRel-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						4,
+						5,
+						8,
+						12
+					]
+				},
+				{
+					"build" : "lib",
+					"childIndexes" : 
+					[
+						2,
+						3,
+						4
+					],
+					"jsonFile" : "directory-lib-MinSizeRel-e9069484d90298468a11.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "lib",
+					"targetIndexes" : 
+					[
+						9
+					]
+				},
+				{
+					"build" : "lib/glm",
+					"jsonFile" : "directory-lib.glm-MinSizeRel-ce07c1f5db497389ae15.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "lib/glm"
+				},
+				{
+					"build" : "lib/tinyexr",
+					"jsonFile" : "directory-lib.tinyexr-MinSizeRel-9f9471477442de4cd1aa.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "lib/tinyexr",
+					"targetIndexes" : 
+					[
+						1,
+						10,
+						14,
+						16
+					]
+				},
+				{
+					"build" : "lib/stb",
+					"jsonFile" : "directory-lib.stb-MinSizeRel-209083de59caa9f715e7.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "lib/stb",
+					"targetIndexes" : 
+					[
+						13
+					]
+				},
+				{
+					"build" : "tiny-cuda-nn",
+					"childIndexes" : 
+					[
+						6,
+						7,
+						8
+					],
+					"jsonFile" : "directory-tiny-cuda-nn-MinSizeRel-498a1ec56eac94bbda01.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "tiny-cuda-nn",
+					"targetIndexes" : 
+					[
+						2,
+						15
+					]
+				},
+				{
+					"build" : "tiny-cuda-nn/dependencies/fmt",
+					"jsonFile" : "directory-tiny-cuda-nn.dependencies.fmt-MinSizeRel-0508bda1c3374ab75ecc.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 3,
+					"source" : "tiny-cuda-nn/dependencies/fmt",
+					"targetIndexes" : 
+					[
+						3,
+						7
+					]
+				},
+				{
+					"build" : "tiny-cuda-nn/samples",
+					"jsonFile" : "directory-tiny-cuda-nn.samples-MinSizeRel-aa5c667f83d1e9f192b1.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 2,
+					"source" : "tiny-cuda-nn/samples",
+					"targetIndexes" : 
+					[
+						11
+					]
+				},
+				{
+					"build" : "tiny-cuda-nn/benchmarks/image",
+					"jsonFile" : "directory-tiny-cuda-nn.benchmarks.image-MinSizeRel-77c10edbdb9df00fb6a5.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 2,
+					"source" : "tiny-cuda-nn/benchmarks/image",
+					"targetIndexes" : 
+					[
+						6
+					]
+				}
+			],
+			"name" : "MinSizeRel",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2,
+						4
+					],
+					"name" : "Y-PBR",
+					"targetIndexes" : 
+					[
+						0,
+						4,
+						5,
+						8,
+						9,
+						12,
+						13
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3
+					],
+					"name" : "tinyexr",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1,
+						10,
+						14,
+						16
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						3
+					],
+					"directoryIndexes" : 
+					[
+						5,
+						7,
+						8
+					],
+					"name" : "tiny-cuda-nn",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						2,
+						6,
+						11,
+						15
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						6
+					],
+					"name" : "FMT",
+					"parentIndex" : 2,
+					"targetIndexes" : 
+					[
+						3,
+						7
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ALL_BUILD-MinSizeRel-fd651b6baf1bd80d6f04.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "ALL_BUILD::@ee366eebf78e5aa6b184",
+					"jsonFile" : "target-ALL_BUILD-MinSizeRel-2d4c28be8c7485196da1.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "ALL_BUILD::@6817849eec151019dda8",
+					"jsonFile" : "target-ALL_BUILD-MinSizeRel-c6da0f47ac712dad25a0.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "ALL_BUILD::@2a0e9975111b09fa6be1",
+					"jsonFile" : "target-ALL_BUILD-MinSizeRel-c59d7365b0509df320ec.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Y_PBR::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Y_PBR-MinSizeRel-0207489e3b7d169354eb.json",
+					"name" : "Y_PBR",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ZERO_CHECK-MinSizeRel-749caa362294fa1dfa83.json",
+					"name" : "ZERO_CHECK",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 8,
+					"id" : "bench_image_ours::@ea04414b4d7502305b6b",
+					"jsonFile" : "target-bench_image_ours-MinSizeRel-8eb3b4aae759ad423d27.json",
+					"name" : "bench_image_ours",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "fmt::@2a0e9975111b09fa6be1",
+					"jsonFile" : "target-fmt-MinSizeRel-d11b8782a1d4af5e1243.json",
+					"name" : "fmt",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "hair-nn::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-hair-nn-MinSizeRel-9cd50b2452938af2c2af.json",
+					"name" : "hair-nn",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "lib::@306ed2d68c6501e8728f",
+					"jsonFile" : "target-lib-MinSizeRel-a6985e55e5cb5dff2332.json",
+					"name" : "lib",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "miniz::@ee366eebf78e5aa6b184",
+					"jsonFile" : "target-miniz-MinSizeRel-ce4d328ed828031ea1eb.json",
+					"name" : "miniz",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "mlp_learning_an_image::@650988d963ec4efcd14a",
+					"jsonFile" : "target-mlp_learning_an_image-MinSizeRel-8e9e6eb8b24897137179.json",
+					"name" : "mlp_learning_an_image",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sampleTest::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sampleTest-MinSizeRel-c5ba1ee09449a5403e12.json",
+					"name" : "sampleTest",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "stb::@3ee674e71b5b9076e1e5",
+					"jsonFile" : "target-stb-MinSizeRel-493b5b45960fae8fab4f.json",
+					"name" : "stb",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "test_tinyexr::@ee366eebf78e5aa6b184",
+					"jsonFile" : "target-test_tinyexr-MinSizeRel-fe29d7caae00dface47f.json",
+					"name" : "test_tinyexr",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "tiny-cuda-nn::@6817849eec151019dda8",
+					"jsonFile" : "target-tiny-cuda-nn-MinSizeRel-834076817f7c38097c2b.json",
+					"name" : "tiny-cuda-nn",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "tinyexr::@ee366eebf78e5aa6b184",
+					"jsonFile" : "target-tinyexr-MinSizeRel-2e1face4ff8616415c26.json",
+					"name" : "tinyexr",
+					"projectIndex" : 1
+				}
+			]
+		},
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						5
+					],
+					"jsonFile" : "directory-.-RelWithDebInfo-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						4,
+						5,
+						8,
+						12
+					]
+				},
+				{
+					"build" : "lib",
+					"childIndexes" : 
+					[
+						2,
+						3,
+						4
+					],
+					"jsonFile" : "directory-lib-RelWithDebInfo-e9069484d90298468a11.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "lib",
+					"targetIndexes" : 
+					[
+						9
+					]
+				},
+				{
+					"build" : "lib/glm",
+					"jsonFile" : "directory-lib.glm-RelWithDebInfo-ce07c1f5db497389ae15.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "lib/glm"
+				},
+				{
+					"build" : "lib/tinyexr",
+					"jsonFile" : "directory-lib.tinyexr-RelWithDebInfo-9f9471477442de4cd1aa.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "lib/tinyexr",
+					"targetIndexes" : 
+					[
+						1,
+						10,
+						14,
+						16
+					]
+				},
+				{
+					"build" : "lib/stb",
+					"jsonFile" : "directory-lib.stb-RelWithDebInfo-209083de59caa9f715e7.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "lib/stb",
+					"targetIndexes" : 
+					[
+						13
+					]
+				},
+				{
+					"build" : "tiny-cuda-nn",
+					"childIndexes" : 
+					[
+						6,
+						7,
+						8
+					],
+					"jsonFile" : "directory-tiny-cuda-nn-RelWithDebInfo-498a1ec56eac94bbda01.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "tiny-cuda-nn",
+					"targetIndexes" : 
+					[
+						2,
+						15
+					]
+				},
+				{
+					"build" : "tiny-cuda-nn/dependencies/fmt",
+					"jsonFile" : "directory-tiny-cuda-nn.dependencies.fmt-RelWithDebInfo-0508bda1c3374ab75ecc.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 3,
+					"source" : "tiny-cuda-nn/dependencies/fmt",
+					"targetIndexes" : 
+					[
+						3,
+						7
+					]
+				},
+				{
+					"build" : "tiny-cuda-nn/samples",
+					"jsonFile" : "directory-tiny-cuda-nn.samples-RelWithDebInfo-aa5c667f83d1e9f192b1.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 2,
+					"source" : "tiny-cuda-nn/samples",
+					"targetIndexes" : 
+					[
+						11
+					]
+				},
+				{
+					"build" : "tiny-cuda-nn/benchmarks/image",
+					"jsonFile" : "directory-tiny-cuda-nn.benchmarks.image-RelWithDebInfo-77c10edbdb9df00fb6a5.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 2,
+					"source" : "tiny-cuda-nn/benchmarks/image",
+					"targetIndexes" : 
+					[
+						6
+					]
+				}
+			],
+			"name" : "RelWithDebInfo",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2,
+						4
+					],
+					"name" : "Y-PBR",
+					"targetIndexes" : 
+					[
+						0,
+						4,
+						5,
+						8,
+						9,
+						12,
+						13
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3
+					],
+					"name" : "tinyexr",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1,
+						10,
+						14,
+						16
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						3
+					],
+					"directoryIndexes" : 
+					[
+						5,
+						7,
+						8
+					],
+					"name" : "tiny-cuda-nn",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						2,
+						6,
+						11,
+						15
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						6
+					],
+					"name" : "FMT",
+					"parentIndex" : 2,
+					"targetIndexes" : 
+					[
+						3,
+						7
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ALL_BUILD-RelWithDebInfo-fd651b6baf1bd80d6f04.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "ALL_BUILD::@ee366eebf78e5aa6b184",
+					"jsonFile" : "target-ALL_BUILD-RelWithDebInfo-2d4c28be8c7485196da1.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "ALL_BUILD::@6817849eec151019dda8",
+					"jsonFile" : "target-ALL_BUILD-RelWithDebInfo-c6da0f47ac712dad25a0.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "ALL_BUILD::@2a0e9975111b09fa6be1",
+					"jsonFile" : "target-ALL_BUILD-RelWithDebInfo-c59d7365b0509df320ec.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Y_PBR::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Y_PBR-RelWithDebInfo-af73ed9eead997fbbfb5.json",
+					"name" : "Y_PBR",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ZERO_CHECK-RelWithDebInfo-749caa362294fa1dfa83.json",
+					"name" : "ZERO_CHECK",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 8,
+					"id" : "bench_image_ours::@ea04414b4d7502305b6b",
+					"jsonFile" : "target-bench_image_ours-RelWithDebInfo-e6b41a52d67b12877c8a.json",
+					"name" : "bench_image_ours",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "fmt::@2a0e9975111b09fa6be1",
+					"jsonFile" : "target-fmt-RelWithDebInfo-b36f40d71d50a5bf901a.json",
+					"name" : "fmt",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "hair-nn::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-hair-nn-RelWithDebInfo-0ea1049ef4a7bc6ccaba.json",
+					"name" : "hair-nn",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "lib::@306ed2d68c6501e8728f",
+					"jsonFile" : "target-lib-RelWithDebInfo-c76b155a1f8f44d9d610.json",
+					"name" : "lib",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "miniz::@ee366eebf78e5aa6b184",
+					"jsonFile" : "target-miniz-RelWithDebInfo-a34d8e6ec3341a8af847.json",
+					"name" : "miniz",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "mlp_learning_an_image::@650988d963ec4efcd14a",
+					"jsonFile" : "target-mlp_learning_an_image-RelWithDebInfo-610a7f4be41957192182.json",
+					"name" : "mlp_learning_an_image",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sampleTest::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sampleTest-RelWithDebInfo-1ea00a2277f89117e640.json",
+					"name" : "sampleTest",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "stb::@3ee674e71b5b9076e1e5",
+					"jsonFile" : "target-stb-RelWithDebInfo-bd6e85a2a05a0cd83122.json",
+					"name" : "stb",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "test_tinyexr::@ee366eebf78e5aa6b184",
+					"jsonFile" : "target-test_tinyexr-RelWithDebInfo-cf64098fe09ef7ca6107.json",
+					"name" : "test_tinyexr",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "tiny-cuda-nn::@6817849eec151019dda8",
+					"jsonFile" : "target-tiny-cuda-nn-RelWithDebInfo-d2e5b598a7c336212b16.json",
+					"name" : "tiny-cuda-nn",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "tinyexr::@ee366eebf78e5aa6b184",
+					"jsonFile" : "target-tinyexr-RelWithDebInfo-25a1831def3e3edab104.json",
+					"name" : "tinyexr",
+					"projectIndex" : 1
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "E:/code/Y-PBR/build",
+		"source" : "E:/code/Y-PBR"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}

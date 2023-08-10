@@ -1,0 +1,591 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineSystem.cmake:211 (message)"
+      - "CMakeLists.txt:7 (project)"
+    message: |
+      The system is: Windows - 10.0.19045 - AMD64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:7 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler:  
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      用于 .NET Framework 的 Microsoft (R) 生成引擎版本 16.11.2+f32259642
+      版权所有(C) Microsoft Corporation。保留所有权利。
+      
+      生成启动时间为 2023/8/2 18:37:31。
+      节点 1 上的项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCXX\\CompilerIdCXX.vcxproj”(默认目标)。
+      PrepareForBuild:
+        正在创建目录“Debug\\”。
+        正在创建目录“Debug\\CompilerIdCXX.tlog\\”。
+      InitializeBuildStatus:
+        正在创建“Debug\\CompilerIdCXX.tlog\\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+      ClCompile:
+        C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\CL.exe /c /nologo /W0 /WX- /diagnostics:column /Od /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\\\" /Fd"Debug\\vc142.pdb" /external:W0 /Gd /TP /FC /errorReport:queue CMakeCXXCompilerId.cpp
+        CMakeCXXCompilerId.cpp
+      Link:
+        C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdCXX.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdCXX.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdCXX.lib" /MACHINE:X64 Debug\\CMakeCXXCompilerId.obj
+        CompilerIdCXX.vcxproj -> E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCXX\\CompilerIdCXX.exe
+      PostBuildEvent:
+        for %%i in (cl.exe) do @echo CMAKE_CXX_COMPILER=%%~$PATH:i
+        :VCEnd
+        CMAKE_CXX_COMPILER=C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\Hostx64\\x64\\cl.exe
+      FinalizeBuildStatus:
+        正在删除文件“Debug\\CompilerIdCXX.tlog\\unsuccessfulbuild”。
+        正在对“Debug\\CompilerIdCXX.tlog\\CompilerIdCXX.lastbuildstate”执行 Touch 任务。
+      已完成生成项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCXX\\CompilerIdCXX.vcxproj”(默认目标)的操作。
+      
+      已成功生成。
+          0 个警告
+          0 个错误
+      
+      已用时间 00:00:00.83
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.vcxproj"
+      
+      The CXX compiler identification is MSVC, found in:
+        E:/code/Y-PBR/build/CMakeFiles/3.27.0-rc4/CompilerIdCXX/CompilerIdCXX.exe
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCompilerId.cmake:53 (__determine_compiler_id_test)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCUDACompiler.cmake:307 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:7 (project)"
+    message: |
+      Compiling the CUDA compiler identification source file "CMakeCUDACompilerId.cu" succeeded.
+      Compiler:  
+      Build flags: 
+      Id flags: --keep;--keep-dir;tmp -v
+      
+      The output was:
+      0
+      用于 .NET Framework 的 Microsoft (R) 生成引擎版本 16.11.2+f32259642
+      版权所有(C) Microsoft Corporation。保留所有权利。
+      
+      生成启动时间为 2023/8/2 18:37:32。
+      节点 1 上的项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\CompilerIdCUDA.vcxproj”(默认目标)。
+      PrepareForBuild:
+        正在创建目录“Debug\\”。
+        正在创建目录“Debug\\CompilerIdCUDA.tlog\\”。
+      InitializeBuildStatus:
+        正在创建“Debug\\CompilerIdCUDA.tlog\\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+      AddCudaCompileDeps:
+        C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\cl.exe /E /nologo /showIncludes /TP /D__CUDACC__ /D__CUDACC_VER_MAJOR__=12 /D__CUDACC_VER_MINOR__=1 /D_MBCS /I"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\include" /I"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin" /I"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\include" /I. /FIcuda_runtime.h /c E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\CMakeCUDACompilerId.cu 
+      项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\CompilerIdCUDA.vcxproj”(1)正在节点 1 上生成“E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\CompilerIdCUDA.vcxproj”(1:2) (CudaBuildCore 个目标)。
+      CudaBuildCore:
+        Compiling CUDA source file CMakeCUDACompilerId.cu...
+        正在创建目录“E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\x64\\Debug”。
+        cmd.exe /C "C:\\Users\\pc\\AppData\\Local\\Temp\\tmp61110301ec1c4bdd93a6ba99808c5036.cmd"
+        "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin\\nvcc.exe" -gencode=arch=compute_52,code=\\"sm_52,compute_52\\" --use-local-env -ccbin "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64" -x cu   -I"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\include" -I"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\include"  -G   --keep-dir x64\\Debug  -maxrregcount=0   --machine 64 --compile -cudart static -v -g  -D_MBCS -Xcompiler "/EHsc /W0 /nologo /Od /FS /Zi /RTC1 /MDd " -Xcompiler "/FdDebug\\vc142.pdb" -o E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\x64\\Debug\\CMakeCUDACompilerId.cu.obj "E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\CMakeCUDACompilerId.cu"
+        
+        E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA>"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin\\nvcc.exe" -gencode=arch=compute_52,code=\\"sm_52,compute_52\\" --use-local-env -ccbin "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64" -x cu   -I"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\include" -I"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\include"  -G   --keep-dir x64\\Debug  -maxrregcount=0   --machine 64 --compile -cudart static -v -g  -D_MBCS -Xcompiler "/EHsc /W0 /nologo /Od /FS /Zi /RTC1 /MDd " -Xcompiler "/FdDebug\\vc142.pdb" -o E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\x64\\Debug\\CMakeCUDACompilerId.cu.obj "E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\CMakeCUDACompilerId.cu" 
+        #$ _NVVM_BRANCH_=nvvm
+        #$ _SPACE_= 
+        #$ _CUDART_=cudart
+        #$ _HERE_=C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin
+        #$ _THERE_=C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin
+        #$ _TARGET_SIZE_=
+        #$ _TARGET_DIR_=
+        #$ _TARGET_SIZE_=64
+        #$ _WIN_PLATFORM_=x64
+        #$ TOP=C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin/..
+        #$ NVVMIR_LIBRARY_DIR=C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin/../nvvm/libdevice
+        #$ PATH=C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin/../nvvm/bin;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin/../lib;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22000.0\\x64;;C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.8 Tools\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22000.0\\x86;;C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.8 Tools;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\Common7\\tools;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\Common7\\ide;C:\\Program Files (x86)\\HTML Help Workshop;;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\MSBuild\\Current\\Bin;C:\\windows\\Microsoft.NET\\Framework64\\v4.0.30319\\;C:\\windows\\Microsoft.NET\\Framework\\v4.0.30319\\;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\MSBuild\\Current\\Bin;C:\\windows\\Microsoft.NET\\Framework\\v4.0.30319\\;;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\libnvvp;C:\\VulkanSDK\\1.3.250.1\\Bin;C:\\Users\\pc\\AppData\\Local\\Programs\\Python\\Python37-32;C:\\Users\\pc\\AppData\\Local\\Programs\\Python\\Python37-32\\Scripts;C:\\Program Files\\Oculus\\Support\\oculus-runtime;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;D:\\deep_gradient_reconstruction\\KPCN\\tungsten;C:\\Program Files (x86)\\PuTTY\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\dotnet\\;C:\\texlive\\2023\\bin\\windows;C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\;C:\\Program Files\\Git\\cmd;C:\\Program Files\\TortoiseSVN\\bin;C:\\Program Files\\TortoiseHg\\;C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Tools\\MSVC\\14.16.27023\\bin\\Hostx86\\x86;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2023.1.1\\;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1;C:\\Program Files\\CMake\\bin;C:\\Users\\pc\\AppData\\Local\\Programs\\Python\\Python37-32\\Scripts\\;C:\\Users\\pc\\AppData\\Local\\Programs\\Python\\Python37-32\\;C:\\g3d\\G3D10\\build\\bin;C:\\g3d\\G3D10\\build\\bin;C:\\Users\\pc\\AppData\\Local\\Programs\\Python\\Python37\\Scripts\\;C:\\Users\\pc\\AppData\\Local\\Programs\\Python\\Python37\\;C:\\Users\\pc\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\pc\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\dachuang\\cuda\\lib;C:\\dachuang\\cuda\\bin;E:\\pycharm\\PyCharm Community Edition 2021.2.2\\bin;;C:\\mitsuba0.5.0;C:\\Users\\pc\\.dotnet\\tools;
+        #$ INCLUDES="-IC:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin/../include"  
+        #$ LIBRARIES=  "/LIBPATH:C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin/../lib/x64"
+        #$ CUDAFE_FLAGS=--sdk_dir "C:\\Program Files (x86)\\Windows Kits\\10"
+        #$ PTXAS_FLAGS=
+        CMakeCUDACompilerId.cu
+        #$ resource file C:\\Users\\pc\\AppData\\Local\\Temp/tmpxft_00005d80_00000000-8.res: [-D__CUDA_ARCH_LIST__=520 -nologo -E -TP -EHsc -D__CUDACC__ -D__NVCC__ -D__CUDACC_DEBUG__  /EHsc /W0 /nologo /Od /FS /Zi /RTC1 /MDd /FdDebug\\vc142.pdb -I"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/include" -I"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/include" "-IC:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin/../include"    -D "_MBCS" -D__CUDACC_VER_MAJOR__=12 -D__CUDACC_VER_MINOR__=1 -D__CUDACC_VER_BUILD__=105 -D__CUDA_API_VER_MAJOR__=12 -D__CUDA_API_VER_MINOR__=1 -D__NVCC_DIAG_PRAGMA_SUPPORT__=1 -FI "cuda_runtime.h" -Zi "E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\CMakeCUDACompilerId.cu" ]
+        #$ cl.exe @"C:\\Users\\pc\\AppData\\Local\\Temp/tmpxft_00005d80_00000000-8.res" > "C:/Users/pc/AppData/Local/Temp/tmpxft_00005d80_00000000-6_CMakeCUDACompilerId.cpp4.ii" 
+        CMakeCUDACompilerId.cu
+        #$ erase C:\\Users\\pc\\AppData\\Local\\Temp/tmpxft_00005d80_00000000-8.res
+        #$ cudafe++ --microsoft_version=1929 --msvc_target_version=1929 --compiler_bindir "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.29.30133/bin/HostX64/x64/../../../../../../.." --display_error_number --orig_src_file_name "E:/code/Y-PBR/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/CMakeCUDACompilerId.cu" --orig_src_path_name "E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\CMakeCUDACompilerId.cu" --allow_managed --debug_mode --sdk_dir "C:\\Program Files (x86)\\Windows Kits\\10" --m64 --parse_templates --gen_c_file_name "C:/Users/pc/AppData/Local/Temp/tmpxft_00005d80_00000000-7_CMakeCUDACompilerId.cudafe1.cpp" --stub_file_name "tmpxft_00005d80_00000000-7_CMakeCUDACompilerId.cudafe1.stub.c" --gen_module_id_file --module_id_file_name "C:/Users/pc/AppData/Local/Temp/tmpxft_00005d80_00000000-5_CMakeCUDACompilerId.module_id" "C:/Users/pc/AppData/Local/Temp/tmpxft_00005d80_00000000-6_CMakeCUDACompilerId.cpp4.ii" 
+        #$ resource file C:\\Users\\pc\\AppData\\Local\\Temp/tmpxft_00005d80_00000000-10.res: [-D__CUDA_ARCH__=520 -D__CUDA_ARCH_LIST__=520 -nologo -E -TP  -DCUDA_DOUBLE_MATH_FUNCTIONS -EHsc -D__CUDACC__ -D__NVCC__ -D__CUDACC_DEBUG__  /EHsc /W0 /nologo /Od /FS /Zi /RTC1 /MDd /FdDebug\\vc142.pdb -I"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/include" -I"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/include" "-IC:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin/../include"    -D "_MBCS" -D__CUDACC_VER_MAJOR__=12 -D__CUDACC_VER_MINOR__=1 -D__CUDACC_VER_BUILD__=105 -D__CUDA_API_VER_MAJOR__=12 -D__CUDA_API_VER_MINOR__=1 -D__NVCC_DIAG_PRAGMA_SUPPORT__=1 -FI "cuda_runtime.h" -Zi "E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\CMakeCUDACompilerId.cu" ]
+        #$ cl.exe @"C:\\Users\\pc\\AppData\\Local\\Temp/tmpxft_00005d80_00000000-10.res" > "C:/Users/pc/AppData/Local/Temp/tmpxft_00005d80_00000000-9_CMakeCUDACompilerId.cpp1.ii" 
+        CMakeCUDACompilerId.cu
+        #$ erase C:\\Users\\pc\\AppData\\Local\\Temp/tmpxft_00005d80_00000000-10.res
+        #$ cicc --microsoft_version=1929 --msvc_target_version=1929 --compiler_bindir "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.29.30133/bin/HostX64/x64/../../../../../../.." --display_error_number --orig_src_file_name "E:/code/Y-PBR/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/CMakeCUDACompilerId.cu" --orig_src_path_name "E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\CMakeCUDACompilerId.cu" --allow_managed --debug_mode --sdk_dir "C:\\Program Files (x86)\\Windows Kits\\10"  -arch compute_52 -m64 --no-version-ident -ftz=0 -prec_div=1 -prec_sqrt=1 -fmad=1 --include_file_name "tmpxft_00005d80_00000000-4_CMakeCUDACompilerId.fatbin.c" -g -O0 -tused --module_id_file_name "C:/Users/pc/AppData/Local/Temp/tmpxft_00005d80_00000000-5_CMakeCUDACompilerId.module_id" --gen_c_file_name "C:/Users/pc/AppData/Local/Temp/tmpxft_00005d80_00000000-7_CMakeCUDACompilerId.cudafe1.c" --stub_file_name "C:/Users/pc/AppData/Local/Temp/tmpxft_00005d80_00000000-7_CMakeCUDACompilerId.cudafe1.stub.c" --gen_device_file_name "C:/Users/pc/AppData/Local/Temp/tmpxft_00005d80_00000000-7_CMakeCUDACompilerId.cudafe1.gpu"  "C:/Users/pc/AppData/Local/Temp/tmpxft_00005d80_00000000-9_CMakeCUDACompilerId.cpp1.ii" -o "C:/Users/pc/AppData/Local/Temp/tmpxft_00005d80_00000000-7_CMakeCUDACompilerId.ptx"
+        #$ ptxas -arch=sm_52 -m64 -g --dont-merge-basicblocks --return-at-end "C:/Users/pc/AppData/Local/Temp/tmpxft_00005d80_00000000-7_CMakeCUDACompilerId.ptx"  -o "C:/Users/pc/AppData/Local/Temp/tmpxft_00005d80_00000000-11_CMakeCUDACompilerId.sm_52.cubin" 
+        #$ fatbinary -64 --ident="E:/code/Y-PBR/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/CMakeCUDACompilerId.cu" --cmdline="-g --dont-merge-basicblocks --return-at-end " --cicc-cmdline="-ftz=0 -prec_div=1 -prec_sqrt=1 -fmad=1 " -g "--image3=kind=elf,sm=52,file=C:/Users/pc/AppData/Local/Temp/tmpxft_00005d80_00000000-11_CMakeCUDACompilerId.sm_52.cubin" "--image3=kind=ptx,sm=52,file=C:/Users/pc/AppData/Local/Temp/tmpxft_00005d80_00000000-7_CMakeCUDACompilerId.ptx" --embedded-fatbin="C:/Users/pc/AppData/Local/Temp/tmpxft_00005d80_00000000-4_CMakeCUDACompilerId.fatbin.c" 
+        #$ erase C:/Users/pc/AppData/Local/Temp/tmpxft_00005d80_00000000-4_CMakeCUDACompilerId.fatbin
+        #$ resource file C:\\Users\\pc\\AppData\\Local\\Temp/tmpxft_00005d80_00000000-12.res: [-D__CUDA_ARCH__=520 -D__CUDA_ARCH_LIST__=520 -nologo -c -TP  -DCUDA_DOUBLE_MATH_FUNCTIONS -EHsc /EHsc /W0 /nologo /Od /FS /Zi /RTC1 /MDd /FdDebug\\vc142.pdb -I"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/include" -I"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/include" "-IC:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin/../include"   -Zi "C:\\Users\\pc\\AppData\\Local\\Temp\\tmpxft_00005d80_00000000-7_CMakeCUDACompilerId.cudafe1.cpp" ]
+        #$ cl.exe @"C:\\Users\\pc\\AppData\\Local\\Temp/tmpxft_00005d80_00000000-12.res" -Fo"E:/code/Y-PBR/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/x64/Debug/CMakeCUDACompilerId.cu.obj" 
+        tmpxft_00005d80_00000000-7_CMakeCUDACompilerId.cudafe1.cpp
+        #$ erase C:\\Users\\pc\\AppData\\Local\\Temp/tmpxft_00005d80_00000000-12.res
+      已完成生成项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\CompilerIdCUDA.vcxproj”(CudaBuildCore 个目标)的操作。
+      Link:
+        C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdCUDA.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\lib\\x64" cudart_static.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdCUDA.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdCUDA.lib" /MACHINE:X64 "E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\x64\\Debug\\CMakeCUDACompilerId.cu.obj"
+          正在创建库 .\\CompilerIdCUDA.lib 和对象 .\\CompilerIdCUDA.exp
+      LINK : warning LNK4098: 默认库“LIBCMT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library [E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\CompilerIdCUDA.vcxproj]
+        CompilerIdCUDA.vcxproj -> E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\CompilerIdCUDA.exe
+      PostBuildEvent:
+        echo CMAKE_CUDA_COMPILER=C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin\\nvcc.exe
+        :VCEnd
+        CMAKE_CUDA_COMPILER=C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin\\nvcc.exe
+      FinalizeBuildStatus:
+        正在删除文件“Debug\\CompilerIdCUDA.tlog\\unsuccessfulbuild”。
+        正在对“Debug\\CompilerIdCUDA.tlog\\CompilerIdCUDA.lastbuildstate”执行 Touch 任务。
+      已完成生成项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\CompilerIdCUDA.vcxproj”(默认目标)的操作。
+      
+      已成功生成。
+      
+      “E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\CompilerIdCUDA.vcxproj”(默认目标) (1) ->
+      (Link 目标) -> 
+        LINK : warning LNK4098: 默认库“LIBCMT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library [E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdCUDA\\CompilerIdCUDA.vcxproj]
+      
+          1 个警告
+          0 个错误
+      
+      已用时间 00:00:02.45
+      
+      
+      Compilation of the CUDA compiler identification source "CMakeCUDACompilerId.cu" produced "CompilerIdCUDA.exe"
+      
+      Compilation of the CUDA compiler identification source "CMakeCUDACompilerId.cu" produced "CompilerIdCUDA.exp"
+      
+      Compilation of the CUDA compiler identification source "CMakeCUDACompilerId.cu" produced "CompilerIdCUDA.lib"
+      
+      Compilation of the CUDA compiler identification source "CMakeCUDACompilerId.cu" produced "CompilerIdCUDA.vcxproj"
+      
+      The CUDA compiler identification is NVIDIA, found in:
+        E:/code/Y-PBR/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/CompilerIdCUDA.exe
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCUDACompiler.cmake:579 (message)"
+      - "CMakeLists.txt:7 (project)"
+    message: |
+      Parsed CUDA nvcc include information:
+        found 'INCLUDES=' string: ["-IC:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin/../include"  ]
+      
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:7 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler:  
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      用于 .NET Framework 的 Microsoft (R) 生成引擎版本 16.11.2+f32259642
+      版权所有(C) Microsoft Corporation。保留所有权利。
+      
+      生成启动时间为 2023/8/2 18:37:35。
+      节点 1 上的项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdC\\CompilerIdC.vcxproj”(默认目标)。
+      PrepareForBuild:
+        正在创建目录“Debug\\”。
+        正在创建目录“Debug\\CompilerIdC.tlog\\”。
+      InitializeBuildStatus:
+        正在创建“Debug\\CompilerIdC.tlog\\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+      ClCompile:
+        C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\CL.exe /c /nologo /W0 /WX- /diagnostics:column /Od /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\\\" /Fd"Debug\\vc142.pdb" /external:W0 /Gd /TC /FC /errorReport:queue CMakeCCompilerId.c
+        CMakeCCompilerId.c
+      Link:
+        C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdC.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdC.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdC.lib" /MACHINE:X64 Debug\\CMakeCCompilerId.obj
+        CompilerIdC.vcxproj -> E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdC\\CompilerIdC.exe
+      PostBuildEvent:
+        for %%i in (cl.exe) do @echo CMAKE_C_COMPILER=%%~$PATH:i
+        :VCEnd
+        CMAKE_C_COMPILER=C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\Hostx64\\x64\\cl.exe
+      FinalizeBuildStatus:
+        正在删除文件“Debug\\CompilerIdC.tlog\\unsuccessfulbuild”。
+        正在对“Debug\\CompilerIdC.tlog\\CompilerIdC.lastbuildstate”执行 Touch 任务。
+      已完成生成项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\3.27.0-rc4\\CompilerIdC\\CompilerIdC.vcxproj”(默认目标)的操作。
+      
+      已成功生成。
+          0 个警告
+          0 个错误
+      
+      已用时间 00:00:00.63
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj"
+      
+      The C compiler identification is MSVC, found in:
+        E:/code/Y-PBR/build/CMakeFiles/3.27.0-rc4/CompilerIdC/CompilerIdC.exe
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:7 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-5612ie"
+      binary: "E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-5612ie"
+    cmakeVariables:
+      CMAKE_CUDA_ARCHITECTURES: "52"
+      CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /GR /EHsc"
+      CMAKE_CXX_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: 'E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-5612ie'
+        
+        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/MSBuild.exe" cmTC_41abc.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=16.0 /v:n
+        用于 .NET Framework 的 Microsoft (R) 生成引擎版本 16.11.2+f32259642
+        版权所有(C) Microsoft Corporation。保留所有权利。
+        
+        生成启动时间为 2023/8/2 18:37:36。
+        节点 1 上的项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5612ie\\cmTC_41abc.vcxproj”(默认目标)。
+        PrepareForBuild:
+          正在创建目录“cmTC_41abc.dir\\Debug\\”。
+          正在创建目录“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5612ie\\Debug\\”。
+          正在创建目录“cmTC_41abc.dir\\Debug\\cmTC_41abc.tlog\\”。
+        InitializeBuildStatus:
+          正在创建“cmTC_41abc.dir\\Debug\\cmTC_41abc.tlog\\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+        ClCompile:
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_41abc.dir\\Debug\\\\" /Fd"cmTC_41abc.dir\\Debug\\vc142.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.27\\Modules\\CMakeCXXCompilerABI.cpp"
+          用于 x64 的 Microsoft (R) C/C++ 优化编译器 19.29.30145 版
+          版权所有(C) Microsoft Corporation。保留所有权利。
+          CMakeCXXCompilerABI.cpp
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_41abc.dir\\Debug\\\\" /Fd"cmTC_41abc.dir\\Debug\\vc142.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.27\\Modules\\CMakeCXXCompilerABI.cpp"
+        Link:
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5612ie\\Debug\\cmTC_41abc.exe" /INCREMENTAL /ILK:"cmTC_41abc.dir\\Debug\\cmTC_41abc.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-5612ie/Debug/cmTC_41abc.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-5612ie/Debug/cmTC_41abc.lib" /MACHINE:X64  /machine:x64 cmTC_41abc.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_41abc.vcxproj -> E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5612ie\\Debug\\cmTC_41abc.exe
+        FinalizeBuildStatus:
+          正在删除文件“cmTC_41abc.dir\\Debug\\cmTC_41abc.tlog\\unsuccessfulbuild”。
+          正在对“cmTC_41abc.dir\\Debug\\cmTC_41abc.tlog\\cmTC_41abc.lastbuildstate”执行 Touch 任务。
+        已完成生成项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5612ie\\cmTC_41abc.vcxproj”(默认目标)的操作。
+        
+        已成功生成。
+            0 个警告
+            0 个错误
+        
+        已用时间 00:00:00.63
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeTestCUDACompiler.cmake:19 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:7 (project)"
+    checks:
+      - "Detecting CUDA compiler ABI info"
+    directories:
+      source: "E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-s6b9x0"
+      binary: "E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-s6b9x0"
+    cmakeVariables:
+      CMAKE_CUDA_ARCHITECTURES: "52"
+      CMAKE_CUDA_FLAGS: "-D_WINDOWS -Xcompiler=\" /GR /EHsc\""
+      CMAKE_CUDA_FLAGS_DEBUG: "-Xcompiler=\" -Zi -Ob0 -Od /RTC1\""
+      CMAKE_CUDA_RUNTIME_LIBRARY: "Static"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "CMAKE_CUDA_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: 'E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-s6b9x0'
+        
+        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/MSBuild.exe" cmTC_f68c1.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=16.0 /v:n
+        用于 .NET Framework 的 Microsoft (R) 生成引擎版本 16.11.2+f32259642
+        版权所有(C) Microsoft Corporation。保留所有权利。
+        
+        生成启动时间为 2023/8/2 18:37:37。
+        节点 1 上的项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj”(默认目标)。
+        PrepareForBuild:
+          正在创建目录“cmTC_f68c1.dir\\Debug\\”。
+          正在创建目录“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\Debug\\”。
+          正在创建目录“cmTC_f68c1.dir\\Debug\\cmTC_f68c1.tlog\\”。
+        InitializeBuildStatus:
+          正在创建“cmTC_f68c1.dir\\Debug\\cmTC_f68c1.tlog\\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+        AddCudaCompileDeps:
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\cl.exe /E /nologo /showIncludes /TP /D__CUDACC__ /D__CUDACC_VER_MAJOR__=12 /D__CUDACC_VER_MINOR__=1 /D_WINDOWS /DCMAKE_INTDIR="Debug" /D_MBCS /DCMAKE_INTDIR="Debug" /I"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin" /I"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\include" /I. /FIcuda_runtime.h /c "C:\\Program Files\\CMake\\share\\cmake-3.27\\Modules\\CMakeCUDACompilerABI.cu" 
+        项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj”(1)正在节点 1 上生成“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj”(1:2) (CudaBuildCore 个目标)。
+        CudaBuildCore:
+          Compiling CUDA source file C:\\Program Files\\CMake\\share\\cmake-3.27\\Modules\\CMakeCUDACompilerABI.cu...
+          cmd.exe /C "C:\\Users\\pc\\AppData\\Local\\Temp\\tmpd778617d197843eab2f651c48eac128c.cmd"
+          "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin\\nvcc.exe"  --use-local-env -ccbin "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64" -x cu    -I"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\include"     --keep-dir x64\\Debug  -maxrregcount=0   --machine 64 --compile -cudart static --generate-code=arch=compute_52,code=[compute_52,sm_52] -Xcompiler="/EHsc -Zi -Ob0 -v" -g  -D_WINDOWS -D"CMAKE_INTDIR=\\"Debug\\"" -D_MBCS -D"CMAKE_INTDIR=\\"Debug\\"" -Xcompiler "/EHsc /W1 /nologo /Od /FS /Zi /RTC1 /MDd /GR" -Xcompiler "/FdcmTC_f68c1.dir\\Debug\\vc142.pdb" -o cmTC_f68c1.dir\\Debug\\CMakeCUDACompilerABI.obj "C:\\Program Files\\CMake\\share\\cmake-3.27\\Modules\\CMakeCUDACompilerABI.cu"
+          
+          E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0>"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin\\nvcc.exe"  --use-local-env -ccbin "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64" -x cu    -I"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\include"     --keep-dir x64\\Debug  -maxrregcount=0   --machine 64 --compile -cudart static --generate-code=arch=compute_52,code=[compute_52,sm_52] -Xcompiler="/EHsc -Zi -Ob0 -v" -g  -D_WINDOWS -D"CMAKE_INTDIR=\\"Debug\\"" -D_MBCS -D"CMAKE_INTDIR=\\"Debug\\"" -Xcompiler "/EHsc /W1 /nologo /Od /FS /Zi /RTC1 /MDd /GR" -Xcompiler "/FdcmTC_f68c1.dir\\Debug\\vc142.pdb" -o cmTC_f68c1.dir\\Debug\\CMakeCUDACompilerABI.obj "C:\\Program Files\\CMake\\share\\cmake-3.27\\Modules\\CMakeCUDACompilerABI.cu" 
+        cl : 命令行 warning D9002: 忽略未知选项“-v” [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]
+          CMakeCUDACompilerABI.cu
+        cl : 命令行 warning D9002: 忽略未知选项“-v” [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]
+          CMakeCUDACompilerABI.cu
+          CMakeCUDACompilerABI.cu
+        cl : 命令行 warning D9002: 忽略未知选项“-v” [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]
+          tmpxft_00005334_00000000-7_CMakeCUDACompilerABI.cudafe1.cpp
+        已完成生成项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj”(CudaBuildCore 个目标)的操作。
+        Link:
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\Debug\\cmTC_f68c1.exe" /INCREMENTAL /ILK:"cmTC_f68c1.dir\\Debug\\cmTC_f68c1.ilk" /NOLOGO /LIBPATH:"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\lib\\x64" cudadevrt.lib cudart_static.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-s6b9x0/Debug/cmTC_f68c1.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-s6b9x0/Debug/cmTC_f68c1.lib" /MACHINE:X64  /machine:x64 -v cmTC_f68c1.dir\\Debug\\CMakeCUDACompilerABI.obj
+        LINK : warning LNK4044: 无法识别的选项“/v”；已忽略 [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]
+            正在创建库 E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-s6b9x0/Debug/cmTC_f68c1.lib 和对象 E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-s6b9x0/Debug/cmTC_f68c1.exp
+        LINK : warning LNK4098: 默认库“LIBCMT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]
+          cmTC_f68c1.vcxproj -> E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\Debug\\cmTC_f68c1.exe
+        FinalizeBuildStatus:
+          正在删除文件“cmTC_f68c1.dir\\Debug\\cmTC_f68c1.tlog\\unsuccessfulbuild”。
+          正在对“cmTC_f68c1.dir\\Debug\\cmTC_f68c1.tlog\\cmTC_f68c1.lastbuildstate”执行 Touch 任务。
+        已完成生成项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj”(默认目标)的操作。
+        
+        已成功生成。
+        
+        “E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj”(默认目标) (1) ->
+        “E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj”(CudaBuildCore 目标) (1:2) ->
+        (CudaBuildCore 目标) -> 
+          cl : 命令行 warning D9002: 忽略未知选项“-v” [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]
+          cl : 命令行 warning D9002: 忽略未知选项“-v” [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]
+          cl : 命令行 warning D9002: 忽略未知选项“-v” [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]
+        
+        
+        “E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj”(默认目标) (1) ->
+        (Link 目标) -> 
+          LINK : warning LNK4044: 无法识别的选项“/v”；已忽略 [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]
+          LINK : warning LNK4098: 默认库“LIBCMT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]
+        
+            5 个警告
+            0 个错误
+        
+        已用时间 00:00:02.55
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCompilerABI.cmake:127 (message)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeTestCUDACompiler.cmake:19 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:7 (project)"
+    message: |
+      Parsed CUDA implicit include dir info: rv=start
+        warn: unable to parse implicit include dirs!
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCompilerABI.cmake:152 (message)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeTestCUDACompiler.cmake:19 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:7 (project)"
+    message: |
+      Parsed CUDA implicit link information:
+        link line regex: [^( *|.*[/\\])(link\\.exe|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        ignore line: [Change Dir: 'E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-s6b9x0']
+        ignore line: []
+        ignore line: [Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/MSBuild.exe" cmTC_f68c1.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=16.0 /v:n]
+        ignore line: [用于 .NET Framework 的 Microsoft (R) 生成引擎版本 16.11.2+f32259642]
+        ignore line: [版权所有(C) Microsoft Corporation。保留所有权利。]
+        ignore line: []
+        ignore line: [生成启动时间为 2023/8/2 18:37:37。]
+        ignore line: [节点 1 上的项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj”(默认目标)。]
+        ignore line: [PrepareForBuild:]
+        ignore line: [  正在创建目录“cmTC_f68c1.dir\\Debug\\”。]
+        ignore line: [  正在创建目录“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\Debug\\”。]
+        ignore line: [  正在创建目录“cmTC_f68c1.dir\\Debug\\cmTC_f68c1.tlog\\”。]
+        ignore line: [InitializeBuildStatus:]
+        ignore line: [  正在创建“cmTC_f68c1.dir\\Debug\\cmTC_f68c1.tlog\\unsuccessfulbuild”，因为已指定“AlwaysCreate”。]
+        ignore line: [AddCudaCompileDeps:]
+        ignore line: [  C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\cl.exe /E /nologo /showIncludes /TP /D__CUDACC__ /D__CUDACC_VER_MAJOR__=12 /D__CUDACC_VER_MINOR__=1 /D_WINDOWS /DCMAKE_INTDIR="Debug" /D_MBCS /DCMAKE_INTDIR="Debug" /I"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin" /I"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\include" /I. /FIcuda_runtime.h /c "C:\\Program Files\\CMake\\share\\cmake-3.27\\Modules\\CMakeCUDACompilerABI.cu" ]
+        ignore line: [项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj”(1)正在节点 1 上生成“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj”(1:2) (CudaBuildCore 个目标)。]
+        ignore line: [CudaBuildCore:]
+        ignore line: [  Compiling CUDA source file C:\\Program Files\\CMake\\share\\cmake-3.27\\Modules\\CMakeCUDACompilerABI.cu...]
+        ignore line: [  cmd.exe /C "C:\\Users\\pc\\AppData\\Local\\Temp\\tmpd778617d197843eab2f651c48eac128c.cmd"]
+        ignore line: [  "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin\\nvcc.exe"  --use-local-env -ccbin "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64" -x cu    -I"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\include"     --keep-dir x64\\Debug  -maxrregcount=0   --machine 64 --compile -cudart static --generate-code=arch=compute_52 code=[compute_52 sm_52] -Xcompiler="/EHsc -Zi -Ob0 -v" -g  -D_WINDOWS -D"CMAKE_INTDIR=\\"Debug\\"" -D_MBCS -D"CMAKE_INTDIR=\\"Debug\\"" -Xcompiler "/EHsc /W1 /nologo /Od /FS /Zi /RTC1 /MDd /GR" -Xcompiler "/FdcmTC_f68c1.dir\\Debug\\vc142.pdb" -o cmTC_f68c1.dir\\Debug\\CMakeCUDACompilerABI.obj "C:\\Program Files\\CMake\\share\\cmake-3.27\\Modules\\CMakeCUDACompilerABI.cu"]
+        ignore line: [  ]
+        ignore line: [  E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0>"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin\\nvcc.exe"  --use-local-env -ccbin "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64" -x cu    -I"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\include"     --keep-dir x64\\Debug  -maxrregcount=0   --machine 64 --compile -cudart static --generate-code=arch=compute_52 code=[compute_52 sm_52] -Xcompiler="/EHsc -Zi -Ob0 -v" -g  -D_WINDOWS -D"CMAKE_INTDIR=\\"Debug\\"" -D_MBCS -D"CMAKE_INTDIR=\\"Debug\\"" -Xcompiler "/EHsc /W1 /nologo /Od /FS /Zi /RTC1 /MDd /GR" -Xcompiler "/FdcmTC_f68c1.dir\\Debug\\vc142.pdb" -o cmTC_f68c1.dir\\Debug\\CMakeCUDACompilerABI.obj "C:\\Program Files\\CMake\\share\\cmake-3.27\\Modules\\CMakeCUDACompilerABI.cu" ]
+        ignore line: [cl : 命令行 warning D9002: 忽略未知选项“-v” [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]]
+        ignore line: [  CMakeCUDACompilerABI.cu]
+        ignore line: [cl : 命令行 warning D9002: 忽略未知选项“-v” [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]]
+        ignore line: [  CMakeCUDACompilerABI.cu]
+        ignore line: [  CMakeCUDACompilerABI.cu]
+        ignore line: [cl : 命令行 warning D9002: 忽略未知选项“-v” [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]]
+        ignore line: [  tmpxft_00005334_00000000-7_CMakeCUDACompilerABI.cudafe1.cpp]
+        ignore line: [已完成生成项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj”(CudaBuildCore 个目标)的操作。]
+        ignore line: [Link:]
+        ignore line: [  C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\Debug\\cmTC_f68c1.exe" /INCREMENTAL /ILK:"cmTC_f68c1.dir\\Debug\\cmTC_f68c1.ilk" /NOLOGO /LIBPATH:"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\lib\\x64" cudadevrt.lib cudart_static.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-s6b9x0/Debug/cmTC_f68c1.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-s6b9x0/Debug/cmTC_f68c1.lib" /MACHINE:X64  /machine:x64 -v cmTC_f68c1.dir\\Debug\\CMakeCUDACompilerABI.obj]
+        ignore line: [LINK : warning LNK4044: 无法识别的选项“/v”；已忽略 [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]]
+        ignore line: [    正在创建库 E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-s6b9x0/Debug/cmTC_f68c1.lib 和对象 E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-s6b9x0/Debug/cmTC_f68c1.exp]
+        ignore line: [LINK : warning LNK4098: 默认库“LIBCMT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]]
+        ignore line: [  cmTC_f68c1.vcxproj -> E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\Debug\\cmTC_f68c1.exe]
+        ignore line: [FinalizeBuildStatus:]
+        ignore line: [  正在删除文件“cmTC_f68c1.dir\\Debug\\cmTC_f68c1.tlog\\unsuccessfulbuild”。]
+        ignore line: [  正在对“cmTC_f68c1.dir\\Debug\\cmTC_f68c1.tlog\\cmTC_f68c1.lastbuildstate”执行 Touch 任务。]
+        ignore line: [已完成生成项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj”(默认目标)的操作。]
+        ignore line: []
+        ignore line: [已成功生成。]
+        ignore line: []
+        ignore line: [“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj”(默认目标) (1) ->]
+        ignore line: [“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj”(CudaBuildCore 目标) (1:2) ->]
+        ignore line: [(CudaBuildCore 目标) -> ]
+        ignore line: [  cl : 命令行 warning D9002: 忽略未知选项“-v” [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]]
+        ignore line: [  cl : 命令行 warning D9002: 忽略未知选项“-v” [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]]
+        ignore line: [  cl : 命令行 warning D9002: 忽略未知选项“-v” [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]]
+        ignore line: []
+        ignore line: []
+        ignore line: [“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj”(默认目标) (1) ->]
+        ignore line: [(Link 目标) -> ]
+        ignore line: [  LINK : warning LNK4044: 无法识别的选项“/v”；已忽略 [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]]
+        ignore line: [  LINK : warning LNK4098: 默认库“LIBCMT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s6b9x0\\cmTC_f68c1.vcxproj]]
+        ignore line: []
+        ignore line: [    5 个警告]
+        ignore line: [    0 个错误]
+        ignore line: []
+        ignore line: [已用时间 00:00:02.55]
+        ignore line: []
+        ignore line: []
+        implicit libs: []
+        implicit objs: []
+        implicit dirs: []
+        implicit fwks: []
+      
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:7 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-dz2yvw"
+      binary: "E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-dz2yvw"
+    cmakeVariables:
+      CMAKE_CUDA_ARCHITECTURES: "52"
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
+      CMAKE_C_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: 'E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-dz2yvw'
+        
+        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/MSBuild.exe" cmTC_0458f.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=16.0 /v:n
+        用于 .NET Framework 的 Microsoft (R) 生成引擎版本 16.11.2+f32259642
+        版权所有(C) Microsoft Corporation。保留所有权利。
+        
+        生成启动时间为 2023/8/2 18:37:40。
+        节点 1 上的项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-dz2yvw\\cmTC_0458f.vcxproj”(默认目标)。
+        PrepareForBuild:
+          正在创建目录“cmTC_0458f.dir\\Debug\\”。
+          正在创建目录“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-dz2yvw\\Debug\\”。
+          正在创建目录“cmTC_0458f.dir\\Debug\\cmTC_0458f.tlog\\”。
+        InitializeBuildStatus:
+          正在创建“cmTC_0458f.dir\\Debug\\cmTC_0458f.tlog\\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+        ClCompile:
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_0458f.dir\\Debug\\\\" /Fd"cmTC_0458f.dir\\Debug\\vc142.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.27\\Modules\\CMakeCCompilerABI.c"
+          用于 x64 的 Microsoft (R) C/C++ 优化编译器 19.29.30145 版
+          版权所有(C) Microsoft Corporation。保留所有权利。
+          CMakeCCompilerABI.c
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_0458f.dir\\Debug\\\\" /Fd"cmTC_0458f.dir\\Debug\\vc142.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.27\\Modules\\CMakeCCompilerABI.c"
+        Link:
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-dz2yvw\\Debug\\cmTC_0458f.exe" /INCREMENTAL /ILK:"cmTC_0458f.dir\\Debug\\cmTC_0458f.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-dz2yvw/Debug/cmTC_0458f.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:/code/Y-PBR/build/CMakeFiles/CMakeScratch/TryCompile-dz2yvw/Debug/cmTC_0458f.lib" /MACHINE:X64  /machine:x64 cmTC_0458f.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_0458f.vcxproj -> E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-dz2yvw\\Debug\\cmTC_0458f.exe
+        FinalizeBuildStatus:
+          正在删除文件“cmTC_0458f.dir\\Debug\\cmTC_0458f.tlog\\unsuccessfulbuild”。
+          正在对“cmTC_0458f.dir\\Debug\\cmTC_0458f.tlog\\cmTC_0458f.lastbuildstate”执行 Touch 任务。
+        已完成生成项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeScratch\\TryCompile-dz2yvw\\cmTC_0458f.vcxproj”(默认目标)的操作。
+        
+        已成功生成。
+            0 个警告
+            0 个错误
+        
+        已用时间 00:00:00.63
+        
+      exitCode: 0
+  -
+    kind: "try_run-v1"
+    backtrace:
+      - "CMakeLists.txt:50 (try_run)"
+      - "CMakeLists.txt:76 (TCNN_AUTODETECT_CUDA_ARCHITECTURES)"
+    directories:
+      source: "E:/code/Y-PBR/build/CMakeFiles/CMakeTmp"
+      binary: "E:/code/Y-PBR/build/CMakeFiles/CMakeTmp"
+    cmakeVariables:
+      CMAKE_CUDA_ARCHITECTURES: "52"
+      CMAKE_CUDA_FLAGS: "-D_WINDOWS -Xcompiler=\" /GR /EHsc\""
+      CMAKE_CUDA_FLAGS_DEBUG: "-Xcompiler=\" -Zi -Ob0 -Od /RTC1\""
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "compile_result"
+      cached: true
+      stdout: |
+        Change Dir: 'E:/code/Y-PBR/build/CMakeFiles/CMakeTmp'
+        
+        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/MSBuild.exe" cmTC_5ede2.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=16.0 /v:n
+        用于 .NET Framework 的 Microsoft (R) 生成引擎版本 16.11.2+f32259642
+        版权所有(C) Microsoft Corporation。保留所有权利。
+        
+        生成启动时间为 2023/8/2 18:37:41。
+        节点 1 上的项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeTmp\\cmTC_5ede2.vcxproj”(默认目标)。
+        PrepareForBuild:
+          正在创建目录“cmTC_5ede2.dir\\Debug\\”。
+          正在创建目录“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeTmp\\Debug\\”。
+          正在创建目录“cmTC_5ede2.dir\\Debug\\cmTC_5ede2.tlog\\”。
+        InitializeBuildStatus:
+          正在创建“cmTC_5ede2.dir\\Debug\\cmTC_5ede2.tlog\\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+        AddCudaCompileDeps:
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\cl.exe /E /nologo /showIncludes /TP /D__CUDACC__ /D__CUDACC_VER_MAJOR__=12 /D__CUDACC_VER_MINOR__=1 /D_WINDOWS /DCMAKE_INTDIR="Debug" /D_MBCS /DCMAKE_INTDIR="Debug" /I"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin" /I"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\include" /I. /FIcuda_runtime.h /c E:\\code\\Y-PBR\\build\\detect_tcnn_cuda_architectures.cu 
+        项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeTmp\\cmTC_5ede2.vcxproj”(1)正在节点 1 上生成“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeTmp\\cmTC_5ede2.vcxproj”(1:2) (CudaBuildCore 个目标)。
+        CudaBuildCore:
+          Compiling CUDA source file ..\\..\\detect_tcnn_cuda_architectures.cu...
+          cmd.exe /C "C:\\Users\\pc\\AppData\\Local\\Temp\\tmp0c3bbb2643694284a4ec5049103cb7c5.cmd"
+          "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin\\nvcc.exe"  --use-local-env -ccbin "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64" -x cu    -I"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\include"     --keep-dir x64\\Debug  -maxrregcount=0   --machine 64 --compile -cudart static -std=c++17 --generate-code=arch=compute_52,code=[compute_52,sm_52] -Xcompiler="/EHsc -Zi -Ob0" -g  -D_WINDOWS -D"CMAKE_INTDIR=\\"Debug\\"" -D_MBCS -D"CMAKE_INTDIR=\\"Debug\\"" -Xcompiler "/EHsc /W1 /nologo /Od /FS /Zi /RTC1 /MDd /GR" -Xcompiler "/FdcmTC_5ede2.dir\\Debug\\vc142.pdb" -o cmTC_5ede2.dir\\Debug\\detect_tcnn_cuda_architectures.obj "E:\\code\\Y-PBR\\build\\detect_tcnn_cuda_architectures.cu"
+          
+          E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeTmp>"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin\\nvcc.exe"  --use-local-env -ccbin "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64" -x cu    -I"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\include"     --keep-dir x64\\Debug  -maxrregcount=0   --machine 64 --compile -cudart static -std=c++17 --generate-code=arch=compute_52,code=[compute_52,sm_52] -Xcompiler="/EHsc -Zi -Ob0" -g  -D_WINDOWS -D"CMAKE_INTDIR=\\"Debug\\"" -D_MBCS -D"CMAKE_INTDIR=\\"Debug\\"" -Xcompiler "/EHsc /W1 /nologo /Od /FS /Zi /RTC1 /MDd /GR" -Xcompiler "/FdcmTC_5ede2.dir\\Debug\\vc142.pdb" -o cmTC_5ede2.dir\\Debug\\detect_tcnn_cuda_architectures.obj "E:\\code\\Y-PBR\\build\\detect_tcnn_cuda_architectures.cu" 
+          detect_tcnn_cuda_architectures.cu
+          tmpxft_00004538_00000000-7_detect_tcnn_cuda_architectures.cudafe1.cpp
+        已完成生成项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeTmp\\cmTC_5ede2.vcxproj”(CudaBuildCore 个目标)的操作。
+        Link:
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeTmp\\Debug\\cmTC_5ede2.exe" /INCREMENTAL /ILK:"cmTC_5ede2.dir\\Debug\\cmTC_5ede2.ilk" /NOLOGO /LIBPATH:"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\lib\\x64" cudadevrt.lib cudart_static.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:/code/Y-PBR/build/CMakeFiles/CMakeTmp/Debug/cmTC_5ede2.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:/code/Y-PBR/build/CMakeFiles/CMakeTmp/Debug/cmTC_5ede2.lib" /MACHINE:X64  /machine:x64 cmTC_5ede2.dir\\Debug\\detect_tcnn_cuda_architectures.obj
+            正在创建库 E:/code/Y-PBR/build/CMakeFiles/CMakeTmp/Debug/cmTC_5ede2.lib 和对象 E:/code/Y-PBR/build/CMakeFiles/CMakeTmp/Debug/cmTC_5ede2.exp
+        LINK : warning LNK4098: 默认库“LIBCMT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeTmp\\cmTC_5ede2.vcxproj]
+          cmTC_5ede2.vcxproj -> E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeTmp\\Debug\\cmTC_5ede2.exe
+        FinalizeBuildStatus:
+          正在删除文件“cmTC_5ede2.dir\\Debug\\cmTC_5ede2.tlog\\unsuccessfulbuild”。
+          正在对“cmTC_5ede2.dir\\Debug\\cmTC_5ede2.tlog\\cmTC_5ede2.lastbuildstate”执行 Touch 任务。
+        已完成生成项目“E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeTmp\\cmTC_5ede2.vcxproj”(默认目标)的操作。
+        
+        已成功生成。
+        
+        “E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeTmp\\cmTC_5ede2.vcxproj”(默认目标) (1) ->
+        (Link 目标) -> 
+          LINK : warning LNK4098: 默认库“LIBCMT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library [E:\\code\\Y-PBR\\build\\CMakeFiles\\CMakeTmp\\cmTC_5ede2.vcxproj]
+        
+            1 个警告
+            0 个错误
+        
+        已用时间 00:00:02.50
+        
+      exitCode: 0
+    runResult:
+      variable: "run_result"
+      cached: true
+      stdout: |
+        75
+      exitCode: 0
+...

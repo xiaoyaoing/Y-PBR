@@ -1,0 +1,46 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"lib/tinyexr/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "miniz::@ee366eebf78e5aa6b184"
+		},
+		{
+			"id" : "tinyexr::@ee366eebf78e5aa6b184"
+		},
+		{
+			"id" : "test_tinyexr::@ee366eebf78e5aa6b184"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@ee366eebf78e5aa6b184",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "lib/tinyexr",
+		"source" : "lib/tinyexr"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

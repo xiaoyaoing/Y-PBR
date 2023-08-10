@@ -1,0 +1,352 @@
+﻿  Building Custom Rule E:/code/Y-PBR/CMakeLists.txt
+  main.cpp
+  lodepng.cpp
+  ArHosekSkyModel.cpp
+  BSSRDF.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\type_traits(1534,67): warning C4244: “参数”: 从“_Ty1”转换到“int”，可能丢失数据
+          with
+          [
+              _Ty1=int64_t
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(650): message : 查看对正在编译的函数 模板 实例化“void std::invoke<_Callable&,_Ty,>(computeBeamDiffusionBSSRDF::<lambda_1>&,_Ty1 &&) noexcept(false)”的引用
+          with
+          [
+              _Callable=computeBeamDiffusionBSSRDF::<lambda_1>,
+              _Ty=int64_t,
+              _Ty1=int64_t
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(821): message : 查看对正在编译的函数 模板 实例化“void std::_Invoker_ret<_Rx,true>::_Call<_Callable&,_Ty>(_Fx,_Ty &&) noexcept(false)”的引用
+          with
+          [
+              _Rx=void,
+              _Callable=computeBeamDiffusionBSSRDF::<lambda_1>,
+              _Ty=int64_t,
+              _Fx=computeBeamDiffusionBSSRDF::<lambda_1> &
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(822): message : 查看对正在编译的函数 模板 实例化“void std::_Invoker_ret<_Rx,true>::_Call<_Callable&,_Ty>(_Fx,_Ty &&) noexcept(false)”的引用
+          with
+          [
+              _Rx=void,
+              _Callable=computeBeamDiffusionBSSRDF::<lambda_1>,
+              _Ty=int64_t,
+              _Fx=computeBeamDiffusionBSSRDF::<lambda_1> &
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(821): message : 在编译 类 模板 成员函数“_Rx std::_Func_impl_no_alloc<computeBeamDiffusionBSSRDF::<lambda_1>,_Rx,int64_t>::_Do_call(int64_t &&)”时
+          with
+          [
+              _Rx=void
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(717): message : 查看对正在编译的 类 模板 实例化“std::_Func_impl_no_alloc<computeBeamDiffusionBSSRDF::<lambda_1>,_Ret,int64_t>”的引用
+          with
+          [
+              _Ret=void
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(911): message : 查看指向正在编译的变量模板“const bool _Is_large<std::_Func_impl_no_alloc<`computeBeamDiffusionBSSRDF'::`2'::<lambda_1>,void,__int64> >”的引用
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(1042): message : 查看对正在编译的函数 模板 实例化“void std::_Func_class<_Ret,int64_t>::_Reset<computeBeamDiffusionBSSRDF::<lambda_1>>(_Fx &&)”的引用
+          with
+          [
+              _Ret=void,
+              _Fx=computeBeamDiffusionBSSRDF::<lambda_1>
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(1042): message : 查看对正在编译的函数 模板 实例化“void std::_Func_class<_Ret,int64_t>::_Reset<computeBeamDiffusionBSSRDF::<lambda_1>>(_Fx &&)”的引用
+          with
+          [
+              _Ret=void,
+              _Fx=computeBeamDiffusionBSSRDF::<lambda_1>
+          ]
+E:\code\Y-PBR\src\Bsdfs\BSSRDF.cpp(605): message : 查看对正在编译的函数 模板 实例化“std::function<void (int64_t)>::function<computeBeamDiffusionBSSRDF::<lambda_1>,0>(_Fx)”的引用
+          with
+          [
+              _Fx=computeBeamDiffusionBSSRDF::<lambda_1>
+          ]
+E:\code\Y-PBR\src\Bsdfs\BSSRDF.cpp(584): message : 查看对正在编译的函数 模板 实例化“std::function<void (int64_t)>::function<computeBeamDiffusionBSSRDF::<lambda_1>,0>(_Fx)”的引用
+          with
+          [
+              _Fx=computeBeamDiffusionBSSRDF::<lambda_1>
+          ]
+  BsdfFactory.cpp
+E:\code\Y-PBR\src\Texture\BitMapTexture.hpp(141,46): warning C4805: “|”: 在操作中将类型“int”与类型“bool”混合不安全
+E:\code\Y-PBR\src\Texture\BitMapTexture.hpp(124): message : 在编译 类 模板 成员函数“void BitMapTexture<T>::LoadResources(void)”时
+          with
+          [
+              T=Float
+          ]
+E:\code\Y-PBR\src\Texture/TextureFactory.hpp(24): message : 查看对正在编译的函数 模板 实例化“void BitMapTexture<T>::LoadResources(void)”的引用
+          with
+          [
+              T=Float
+          ]
+E:\code\Y-PBR\src\Texture/TextureFactory.hpp(24): message : 查看对正在编译的 类 模板 实例化“BitMapTexture<T>”的引用
+          with
+          [
+              T=Float
+          ]
+E:\code\Y-PBR\src\Texture/TextureFactory.hpp(54): message : 查看对正在编译的函数 模板 实例化“std::shared_ptr<Texture<Float>> TextureFactory::LoadTexture<T>(const Json &)”的引用
+          with
+          [
+              T=Float
+          ]
+E:\code\Y-PBR\src\Bsdfs\BsdfFactory.cpp(24): message : 查看对正在编译的函数 模板 实例化“std::shared_ptr<Texture<Float>> TextureFactory::LoadTexture<Float>(const Json &,const std::string &)”的引用
+  ComplexIor.cpp
+  Conductor.cpp
+  Dielectric.cpp
+  Disney.cpp
+  Forward.cpp
+  Hair.cpp
+  Hair_GGX.cpp
+  MicrofacetDistribution.cpp
+  Plastic.cpp
+E:\code\Y-PBR\src\Texture\BitMapTexture.hpp(141,46): warning C4805: “|”: 在操作中将类型“int”与类型“bool”混合不安全
+E:\code\Y-PBR\src\Texture\BitMapTexture.hpp(124): message : 在编译 类 模板 成员函数“void BitMapTexture<T>::LoadResources(void)”时
+          with
+          [
+              T=Spectrum
+          ]
+E:\code\Y-PBR\src\Texture/TextureFactory.hpp(24): message : 查看对正在编译的函数 模板 实例化“void BitMapTexture<T>::LoadResources(void)”的引用
+          with
+          [
+              T=Spectrum
+          ]
+E:\code\Y-PBR\src\Texture/TextureFactory.hpp(24): message : 查看对正在编译的 类 模板 实例化“BitMapTexture<T>”的引用
+          with
+          [
+              T=Spectrum
+          ]
+E:\code\Y-PBR\src\Texture/TextureFactory.hpp(54): message : 查看对正在编译的函数 模板 实例化“std::shared_ptr<Texture<Spectrum>> TextureFactory::LoadTexture<T>(const Json &)”的引用
+          with
+          [
+              T=Spectrum
+          ]
+E:\code\Y-PBR\src\Texture/TextureFactory.hpp(59): message : 查看对正在编译的函数 模板 实例化“std::shared_ptr<Texture<Spectrum>> TextureFactory::LoadTexture<T>(const Json &,const std::string &)”的引用
+          with
+          [
+              T=Spectrum
+          ]
+E:\code\Y-PBR\src\Bsdfs\Plastic.cpp(11): message : 查看对正在编译的函数 模板 实例化“std::shared_ptr<Texture<Spectrum>> TextureFactory::LoadTexture<Spectrum>(const Json &,const std::string &,T)”的引用
+          with
+          [
+              T=Spectrum
+          ]
+  PrecomputeALobe.cpp
+  Reflection.cpp
+E:\code\Y-PBR\src\Texture\BitMapTexture.hpp(141,46): warning C4805: “|”: 在操作中将类型“int”与类型“bool”混合不安全
+E:\code\Y-PBR\src\Texture\BitMapTexture.hpp(124): message : 在编译 类 模板 成员函数“void BitMapTexture<T>::LoadResources(void)”时
+          with
+          [
+              T=Float
+          ]
+E:\code\Y-PBR\src\Texture/TextureFactory.hpp(24): message : 查看对正在编译的函数 模板 实例化“void BitMapTexture<T>::LoadResources(void)”的引用
+          with
+          [
+              T=Float
+          ]
+E:\code\Y-PBR\src\Texture/TextureFactory.hpp(24): message : 查看对正在编译的 类 模板 实例化“BitMapTexture<T>”的引用
+          with
+          [
+              T=Float
+          ]
+E:\code\Y-PBR\src\Texture/TextureFactory.hpp(54): message : 查看对正在编译的函数 模板 实例化“std::shared_ptr<Texture<Float>> TextureFactory::LoadTexture<T>(const Json &)”的引用
+          with
+          [
+              T=Float
+          ]
+E:\code\Y-PBR\src\Bsdfs\Reflection.cpp(15): message : 查看对正在编译的函数 模板 实例化“std::shared_ptr<Texture<Float>> TextureFactory::LoadTexture<Float>(const Json &,const std::string &)”的引用
+  RoughHair.cpp
+  Camera.cpp
+  Image.cpp
+  ImagePramid.cpp
+  正在生成代码...
+E:\code\Y-PBR\src\Bsdfs\Plastic.cpp(226): warning C4715: “Plastic::f”: 不是所有的控件路径都返回值
+E:\code\Y-PBR\src\Bsdfs\Plastic.cpp(329): warning C4715: “Plastic1::f”: 不是所有的控件路径都返回值
+E:\code\Y-PBR\src\Bsdfs\MicrofacetDistribution.cpp(211): warning C4715: “LoadMicrofacetDistribution”: 不是所有的控件路径都返回值
+  正在编译...
+  ToneMap.cpp
+  Spectral.cpp
+  Spectrum.cpp
+  API.cpp
+  BoundingBox.cpp
+  Debug.cpp
+  Frame.cpp
+  Json.cpp
+  Parallel.cpp
+  ProgressReporter.cpp
+  Render.cpp
+  Texture.cpp
+  Transform.cpp
+  histogram.cpp
+  BVH.cpp
+E:\code\Y-PBR\src\Hierancy\../Common/Macro.hpp(3,1): warning C4005: “_DEBUG”: 宏重定义
+E:\code\Y-PBR\src\Hierancy\BVH.cpp : message : 参见“_DEBUG”的前一个定义
+  KdTree.cpp
+  CurveIO.cpp
+  FileUtils.cpp
+  ImageIO.cpp
+  MeshIO.cpp
+  正在生成代码...
+E:\code\Y-PBR\src\IO\CurveIO.cpp(141): warning C4715: “CurveIO::load”: 不是所有的控件路径都返回值
+  正在编译...
+  ObjLoader.cpp
+  BdptTracer.cpp
+  CameraPath.cpp
+  LightPath.cpp
+  PathVertex.cpp
+  Integrator.cpp
+  PathIntegrator.cpp
+  PhotonMapper.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\type_traits(1534,67): warning C4244: “参数”: 从“_Ty1”转换到“int”，可能丢失数据
+          with
+          [
+              _Ty1=int64_t
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(650): message : 查看对正在编译的函数 模板 实例化“void std::invoke<_Callable&,_Ty,>(PhotonMapper::render::<lambda_4>&,_Ty1 &&) noexcept(false)”的引用
+          with
+          [
+              _Callable=PhotonMapper::render::<lambda_4>,
+              _Ty=int64_t,
+              _Ty1=int64_t
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(821): message : 查看对正在编译的函数 模板 实例化“void std::_Invoker_ret<_Rx,true>::_Call<_Callable&,_Ty>(_Fx,_Ty &&) noexcept(false)”的引用
+          with
+          [
+              _Rx=void,
+              _Callable=PhotonMapper::render::<lambda_4>,
+              _Ty=int64_t,
+              _Fx=PhotonMapper::render::<lambda_4> &
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(822): message : 查看对正在编译的函数 模板 实例化“void std::_Invoker_ret<_Rx,true>::_Call<_Callable&,_Ty>(_Fx,_Ty &&) noexcept(false)”的引用
+          with
+          [
+              _Rx=void,
+              _Callable=PhotonMapper::render::<lambda_4>,
+              _Ty=int64_t,
+              _Fx=PhotonMapper::render::<lambda_4> &
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(821): message : 在编译 类 模板 成员函数“_Rx std::_Func_impl_no_alloc<PhotonMapper::render::<lambda_4>,_Rx,int64_t>::_Do_call(int64_t &&)”时
+          with
+          [
+              _Rx=void
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(717): message : 查看对正在编译的 类 模板 实例化“std::_Func_impl_no_alloc<PhotonMapper::render::<lambda_4>,_Ret,int64_t>”的引用
+          with
+          [
+              _Ret=void
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(911): message : 查看指向正在编译的变量模板“const bool _Is_large<std::_Func_impl_no_alloc<`PhotonMapper::render'::`6'::<lambda_4>,void,__int64> >”的引用
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(1042): message : 查看对正在编译的函数 模板 实例化“void std::_Func_class<_Ret,int64_t>::_Reset<PhotonMapper::render::<lambda_4>>(_Fx &&)”的引用
+          with
+          [
+              _Ret=void,
+              _Fx=PhotonMapper::render::<lambda_4>
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(1042): message : 查看对正在编译的函数 模板 实例化“void std::_Func_class<_Ret,int64_t>::_Reset<PhotonMapper::render::<lambda_4>>(_Fx &&)”的引用
+          with
+          [
+              _Ret=void,
+              _Fx=PhotonMapper::render::<lambda_4>
+          ]
+E:\code\Y-PBR\src\Integrator\PhotonMapper.cpp(485): message : 查看对正在编译的函数 模板 实例化“std::function<void (int64_t)>::function<PhotonMapper::render::<lambda_4>,0>(_Fx)”的引用
+          with
+          [
+              _Fx=PhotonMapper::render::<lambda_4>
+          ]
+E:\code\Y-PBR\src\Integrator\PhotonMapper.cpp(432): message : 查看对正在编译的函数 模板 实例化“std::function<void (int64_t)>::function<PhotonMapper::render::<lambda_4>,0>(_Fx)”的引用
+          with
+          [
+              _Fx=PhotonMapper::render::<lambda_4>
+          ]
+  TraceHelper.cpp
+  VolPathIntegrator.cpp
+  Distant.cpp
+  InfiniteSphere.cpp
+E:\code\Y-PBR\src\Texture/BitMapTexture.hpp(141,46): warning C4805: “|”: 在操作中将类型“int”与类型“bool”混合不安全
+E:\code\Y-PBR\src\Texture/BitMapTexture.hpp(124): message : 在编译 类 模板 成员函数“void BitMapTexture<Spectrum>::LoadResources(void)”时
+E:\code\Y-PBR\src\Lights\InfiniteSphere.cpp(108): message : 查看对正在编译的函数 模板 实例化“void BitMapTexture<Spectrum>::LoadResources(void)”的引用
+E:\code\Y-PBR\src\Lights\InfiniteSphere.cpp(17): message : 查看对正在编译的 类 模板 实例化“BitMapTexture<Spectrum>”的引用
+  InfiniteSphereCap.cpp
+  Light.cpp
+  LightFactory.cpp
+  SkyDome.cpp
+  Medium.cpp
+  MediumFactory.cpp
+  PhaseFunction.cpp
+  PhaseFunctionFactory.cpp
+  正在生成代码...
+E:\code\Y-PBR\src\Integrator\BDPT\PathVertex.cpp(36): warning C4715: “PathVertex::pos”: 不是所有的控件路径都返回值
+E:\code\Y-PBR\src\Integrator\BDPT\PathVertex.h(141): warning C4715: “PathVertex::ng”: 不是所有的控件路径都返回值
+E:\code\Y-PBR\src\Integrator\BDPT\PathVertex.h(141): warning C4715: “PathVertex::ng”: 不是所有的控件路径都返回值
+  正在编译...
+  Cube.cpp
+  Curve.cpp
+  Disk.cpp
+  EmbreeUtils.cpp
+  Primitive.cpp
+  PrimitiveFactory.cpp
+E:\code\Y-PBR\src\Texture/BitMapTexture.hpp(141,46): warning C4805: “|”: 在操作中将类型“int”与类型“bool”混合不安全
+E:\code\Y-PBR\src\Texture/BitMapTexture.hpp(124): message : 在编译 类 模板 成员函数“void BitMapTexture<Spectrum>::LoadResources(void)”时
+E:\code\Y-PBR\src\Texture/TextureFactory.hpp(24): message : 查看对正在编译的函数 模板 实例化“void BitMapTexture<Spectrum>::LoadResources(void)”的引用
+E:\code\Y-PBR\src\Texture/TextureFactory.hpp(24): message : 查看对正在编译的 类 模板 实例化“BitMapTexture<Spectrum>”的引用
+E:\code\Y-PBR\src\Texture/TextureFactory.hpp(54): message : 查看对正在编译的函数 模板 实例化“std::shared_ptr<Texture<Spectrum>> TextureFactory::LoadTexture<T>(const Json &)”的引用
+          with
+          [
+              T=Spectrum
+          ]
+E:\code\Y-PBR\src\Primitives\PrimitiveFactory.cpp(21): message : 查看对正在编译的函数 模板 实例化“std::shared_ptr<Texture<Spectrum>> TextureFactory::LoadTexture<Spectrum>(const Json &,const std::string &)”的引用
+  Quad.cpp
+  Sphere.cpp
+  Triangle.cpp
+  TriangleHelper.cpp
+  TriangleMesh.cpp
+  Intersection.cpp
+  Ray.cpp
+  Distrib.cpp
+  HaltonSampler.cpp
+  LightDistrib.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xutility(4484,24): warning C4244: “=”: 从“const _Ty”转换到“float”，可能丢失数据
+          with
+          [
+              _Ty=int
+          ]
+E:\code\Y-PBR\src\Sampler\LightDistrib.cpp(11): message : 查看对正在编译的函数 模板 实例化“void std::fill<std::_Vector_iterator<std::_Vector_val<std::_Simple_types<_Ty>>>,int>(const _FwdIt,const _FwdIt,const int &)”的引用
+          with
+          [
+              _Ty=Float,
+              _FwdIt=std::_Vector_iterator<std::_Vector_val<std::_Simple_types<Float>>>
+          ]
+  LowDiscrepancy.cpp
+  SamplerFactory.cpp
+  UniformSampler.cpp
+  Warp.cpp
+  正在生成代码...
+E:\code\Y-PBR\src\Primitives\Curve.cpp(323): warning C4715: “Curve::intersect”: 不是所有的控件路径都返回值
+  正在编译...
+  Scene.cpp
+E:\code\Y-PBR\src\Texture/BitMapTexture.hpp(141,46): warning C4805: “|”: 在操作中将类型“int”与类型“bool”混合不安全
+E:\code\Y-PBR\src\Texture/BitMapTexture.hpp(124): message : 在编译 类 模板 成员函数“void BitMapTexture<Spectrum>::LoadResources(void)”时
+E:\code\Y-PBR\src\Texture/TextureFactory.hpp(24): message : 查看对正在编译的函数 模板 实例化“void BitMapTexture<Spectrum>::LoadResources(void)”的引用
+E:\code\Y-PBR\src\Texture/TextureFactory.hpp(24): message : 查看对正在编译的 类 模板 实例化“BitMapTexture<Spectrum>”的引用
+E:\code\Y-PBR\src\Texture/TextureFactory.hpp(54): message : 查看对正在编译的函数 模板 实例化“std::shared_ptr<Texture<Spectrum>> TextureFactory::LoadTexture<T>(const Json &)”的引用
+          with
+          [
+              T=Spectrum
+          ]
+E:\code\Y-PBR\src\Texture/TextureFactory.hpp(59): message : 查看对正在编译的函数 模板 实例化“std::shared_ptr<Texture<Spectrum>> TextureFactory::LoadTexture<T>(const Json &,const std::string &)”的引用
+          with
+          [
+              T=Spectrum
+          ]
+E:\code\Y-PBR\src\Scene.cpp(51): message : 查看对正在编译的函数 模板 实例化“std::shared_ptr<Texture<Spectrum>> TextureFactory::LoadTexture<Spectrum>(const Json &,const std::string &,T)”的引用
+          with
+          [
+              T=Spectrum
+          ]
+  BitMapTexture.cpp
+  CheckTexture.cpp
+  ConstantTexture.cpp
+  TextureFactory.cpp
+  正在生成代码...
+E:\code\Y-PBR\src\Scene.cpp(106): warning C4715: “Scene::intersect”: 不是所有的控件路径都返回值
+  Material.cpp
+  BDPTIntegrator.cpp
+  BDPTIntegrator.cpp
+  Material.cpp
+  Y_PBR.vcxproj -> E:\code\Y-PBR\build\Debug\Y_PBR.exe

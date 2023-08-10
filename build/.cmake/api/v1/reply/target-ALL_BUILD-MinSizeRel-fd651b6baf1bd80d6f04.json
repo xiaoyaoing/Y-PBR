@@ -1,0 +1,73 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "sampleTest::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "Y_PBR::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "hair-nn::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tiny-cuda-nn::@6817849eec151019dda8"
+		},
+		{
+			"id" : "lib::@306ed2d68c6501e8728f"
+		},
+		{
+			"id" : "miniz::@ee366eebf78e5aa6b184"
+		},
+		{
+			"id" : "tinyexr::@ee366eebf78e5aa6b184"
+		},
+		{
+			"id" : "test_tinyexr::@ee366eebf78e5aa6b184"
+		},
+		{
+			"id" : "stb::@3ee674e71b5b9076e1e5"
+		},
+		{
+			"id" : "bench_image_ours::@ea04414b4d7502305b6b"
+		},
+		{
+			"id" : "fmt::@2a0e9975111b09fa6be1"
+		},
+		{
+			"id" : "mlp_learning_an_image::@650988d963ec4efcd14a"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

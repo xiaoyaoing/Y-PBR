@@ -42,6 +42,22 @@ typedef std::int64_t int64;
 #define _NOT_IMPLEMENT_ERROR throw("This not implemented yet!");
 #define _ERROR(message) throw(message);
 
+#define CHECK(condition, message) \
+  do { \
+    if (!(condition)) { \
+      throw std::runtime_error(std::string("Check failed at ") + __FILE__ + ":" + std::to_string(__LINE__) + " - " + message); \
+    } \
+  } while (false)
+
+#define TODO(message) \
+  do { \
+    std::cout << "TODO: " << __FILE__ << ":" << __LINE__; \
+    if (message != nullptr) { \
+      std::cout << " - " << message; \
+    } \
+    std::cout << std::endl; \
+  } while (false)
+
 
 namespace Constant {
     constexpr Float PI = 3.14159265358979323846;

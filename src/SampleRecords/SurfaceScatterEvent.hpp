@@ -36,7 +36,7 @@ public:
 
     Ray sctterRay(const vec3 & w) {
         vec3 offsetPos = its->p + w * its->epsilon;
-        return Ray(offsetPos, w, 0);
+        return Ray(offsetPos, w, 1);
     }
     Ray sctterRay() {
         return sctterRay(toWorld(wi));

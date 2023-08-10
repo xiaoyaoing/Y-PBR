@@ -85,7 +85,6 @@
         },
         {
             "transform": {},
-            "int_medium": "Tea",
             "type": "mesh",
             "file": "models/Mesh002.wo3",
             "smooth": false,
@@ -114,7 +113,6 @@
         },
         {
             "transform": {},
-            "ext_medium": "Tea",
             "type": "mesh",
             "file": "models/Mesh000.wo3",
             "smooth": true,

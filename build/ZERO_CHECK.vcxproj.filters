@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="E:\code\Y-PBR\build\CMakeFiles\d026f2662284bbd54e8052f104e30a8b\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="E:\code\Y-PBR\lib\CMakeLists.txt">
+      <Filter>Buildsystem Input Files\lib</Filter>
+    </None>
+    <None Include="E:\code\Y-PBR\lib\embree\windows\lib\cmake\embree-3.13.5\embree-config-version.cmake">
+      <Filter>Buildsystem Input Files\lib\embree\windows\lib\cmake\embree-3.13.5</Filter>
+    </None>
+    <None Include="E:\code\Y-PBR\lib\embree\windows\lib\cmake\embree-3.13.5\embree-config.cmake">
+      <Filter>Buildsystem Input Files\lib\embree\windows\lib\cmake\embree-3.13.5</Filter>
+    </None>
+    <None Include="E:\code\Y-PBR\lib\embree\windows\lib\cmake\embree-3.13.5\embree-targets-release.cmake">
+      <Filter>Buildsystem Input Files\lib\embree\windows\lib\cmake\embree-3.13.5</Filter>
+    </None>
+    <None Include="E:\code\Y-PBR\lib\embree\windows\lib\cmake\embree-3.13.5\embree-targets.cmake">
+      <Filter>Buildsystem Input Files\lib\embree\windows\lib\cmake\embree-3.13.5</Filter>
+    </None>
+    <None Include="E:\code\Y-PBR\lib\glm\CMakeLists.txt">
+      <Filter>Buildsystem Input Files\lib\glm</Filter>
+    </None>
+    <None Include="E:\code\Y-PBR\lib\stb\CMakeLists.txt">
+      <Filter>Buildsystem Input Files\lib\stb</Filter>
+    </None>
+    <None Include="E:\code\Y-PBR\lib\tinyexr\CMakeLists.txt">
+      <Filter>Buildsystem Input Files\lib\tinyexr</Filter>
+    </None>
+    <None Include="E:\code\Y-PBR\lib\tinyexr\cmake\sanitizers\FindASan.cmake">
+      <Filter>Buildsystem Input Files\lib\tinyexr\cmake\sanitizers</Filter>
+    </None>
+    <None Include="E:\code\Y-PBR\lib\tinyexr\cmake\sanitizers\FindMSan.cmake">
+      <Filter>Buildsystem Input Files\lib\tinyexr\cmake\sanitizers</Filter>
+    </None>
+    <None Include="E:\code\Y-PBR\lib\tinyexr\cmake\sanitizers\FindSanitizers.cmake">
+      <Filter>Buildsystem Input Files\lib\tinyexr\cmake\sanitizers</Filter>
+    </None>
+    <None Include="E:\code\Y-PBR\lib\tinyexr\cmake\sanitizers\FindTSan.cmake">
+      <Filter>Buildsystem Input Files\lib\tinyexr\cmake\sanitizers</Filter>
+    </None>
+    <None Include="E:\code\Y-PBR\lib\tinyexr\cmake\sanitizers\FindUBSan.cmake">
+      <Filter>Buildsystem Input Files\lib\tinyexr\cmake\sanitizers</Filter>
+    </None>
+    <None Include="E:\code\Y-PBR\lib\tinyexr\cmake\sanitizers\sanitize-helpers.cmake">
+      <Filter>Buildsystem Input Files\lib\tinyexr\cmake\sanitizers</Filter>
+    </None>
+    <None Include="E:\code\Y-PBR\tiny-cuda-nn\CMakeLists.txt">
+      <Filter>Buildsystem Input Files\tiny-cuda-nn</Filter>
+    </None>
+    <None Include="E:\code\Y-PBR\tiny-cuda-nn\benchmarks\image\CMakeLists.txt">
+      <Filter>Buildsystem Input Files\tiny-cuda-nn\benchmarks\image</Filter>
+    </None>
+    <None Include="E:\code\Y-PBR\tiny-cuda-nn\dependencies\fmt\CMakeLists.txt">
+      <Filter>Buildsystem Input Files\tiny-cuda-nn\dependencies\fmt</Filter>
+    </None>
+    <None Include="E:\code\Y-PBR\tiny-cuda-nn\dependencies\fmt\support\cmake\JoinPaths.cmake">
+      <Filter>Buildsystem Input Files\tiny-cuda-nn\dependencies\fmt\support\cmake</Filter>
+    </None>
+    <None Include="E:\code\Y-PBR\tiny-cuda-nn\samples\CMakeLists.txt">
+      <Filter>Buildsystem Input Files\tiny-cuda-nn\samples</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{B86B36F6-EE69-3E1E-AE83-0FFE4CE4C50D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buildsystem Input Files\lib">
+      <UniqueIdentifier>{3BA6BBBB-A2D2-3435-8D7D-60CC3702BC87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buildsystem Input Files\lib\embree\windows\lib\cmake\embree-3.13.5">
+      <UniqueIdentifier>{DF4D2A85-6200-393F-AC3F-9D677060FEA0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buildsystem Input Files\lib\glm">
+      <UniqueIdentifier>{C8A1B5AF-852C-3D7A-BDF4-212562A9AFDB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buildsystem Input Files\lib\stb">
+      <UniqueIdentifier>{DB2932D7-995F-305D-B480-95ECF9171379}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buildsystem Input Files\lib\tinyexr">
+      <UniqueIdentifier>{27E32B8B-0E41-31D5-A4CF-F7367C746C99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buildsystem Input Files\lib\tinyexr\cmake\sanitizers">
+      <UniqueIdentifier>{369A12EB-D053-3D08-9915-EB1AF84FEA3C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buildsystem Input Files\tiny-cuda-nn">
+      <UniqueIdentifier>{EDCE0730-F835-3F0F-81C9-358457F2824E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buildsystem Input Files\tiny-cuda-nn\benchmarks\image">
+      <UniqueIdentifier>{521B994C-18BB-329C-9EA6-8872CC362301}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buildsystem Input Files\tiny-cuda-nn\dependencies\fmt">
+      <UniqueIdentifier>{BDE33607-2C7E-3DE1-A1B6-79388F865774}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buildsystem Input Files\tiny-cuda-nn\dependencies\fmt\support\cmake">
+      <UniqueIdentifier>{29160BB1-1B67-3E2F-8A7A-2C74DB67B105}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buildsystem Input Files\tiny-cuda-nn\samples">
+      <UniqueIdentifier>{BCBD3B58-8BBC-3603-8F3E-4D405093A0B9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

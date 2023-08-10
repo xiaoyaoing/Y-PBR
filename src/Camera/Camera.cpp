@@ -256,6 +256,8 @@ PositionAndDirectionSample Camera::sampleRay(ivec2 point, vec2 /*posSample*/, ve
     return result;
 }
 
+
+
 bool Camera::sampleLi(vec3 p, ivec2 *pRaster, vec2 sample, PositionAndDirectionSample &result) const {
     auto cameraP = transformPoint(_cameraToWorld, vec3(0, 0, 0));
     result.ray = Ray(cameraP, direction(cameraP, p));
@@ -266,6 +268,12 @@ bool Camera::sampleLi(vec3 p, ivec2 *pRaster, vec2 sample, PositionAndDirectionS
     result.n = transformVector(_cameraToWorld, vec3(0, 0, 1));
     result.posPdf = 1;
     return true;
+}
+
+void Camera::pdfRay(const Ray &ray, Float *pdfPos, Float *pdfDir) const{
+    auto localD = transformVector(_toLocal,ray.d);
+    if(pdfPos)  *pdfPos = 1;
+    if(pdfDir)  *pdfDir = 1.f / A * (localD.z * localD.z * localD.z);
 }
 
 

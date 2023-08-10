@@ -1,7 +1,7 @@
 #pragma  once
 #include "math.hpp"
-#include "json/json.hpp"
-#include <memory>
+#include "nlohmann/json.hpp"
+#include "Json.hpp"
 
 typedef  nlohmann::json Json ;
 

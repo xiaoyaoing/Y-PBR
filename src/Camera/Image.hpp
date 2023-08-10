@@ -24,6 +24,22 @@ class Image {
             Pixel(Spectrum(0));
         }
 
+        Pixel(const Pixel & another){
+            rgb[0] = another.rgb[0].load();
+            rgb[1] = another.rgb[1].load();
+            rgb[2] = another.rgb[2].load();
+        }
+
+        Pixel& operator=(const Pixel& another) {
+            if (this == &another) {
+                return *this; // Handle self-assignment
+            }
+            rgb[0] = another.rgb[0].load();
+            rgb[1] = another.rgb[1].load();
+            rgb[2] = another.rgb[2].load();
+            return *this;
+        }
+
 
         Pixel(vec3 s) {
             rgb[0] = s.x;
@@ -89,6 +105,69 @@ public:
     void save(const std::string &fileName,Float scale,bool overwrite = false) const;
 
 
+    void linerarNormalize(){
+       // return ;
+        vec3 minVal(1e5f),maxVal(-1e5f);
+        for(int x=0;x<width();x++){
+            for(int y=0;y<height();y++){
+                int idx = getIndex(x,y);
+                if(sampleCounts[idx]){
+                    minVal = min(minVal,buffers[idx].value()/Float(sampleCounts[idx]));
+                    maxVal = max(maxVal,buffers[idx].value()/Float(sampleCounts[idx]));
+                }
+            }
+        }
+        auto diffVal = maxVal - minVal;
+        for(int i=0;i<buffers.size();i++){
+            if(sampleCounts[i]<=0)
+                continue;
+            auto value = getPixel(i) ;
+            auto temp  = value;
+            value = (value - minVal)/diffVal;
+            buffers[i] = Pixel(value * Float(sampleCounts[i]));
+    }
+    }
+
+    void normalize(){
+        return ;
+        vec3 average(0);
+        int count = 0 ;
+        for(int x=0;x<width();x++){
+            for(int y=0;y<height();y++){
+                int idx = getIndex(x,y);
+                if(sampleCounts[idx]){
+                    average = average * Float(count)/Float(count+1) + buffers[idx].value()/Float(count+1);
+                    count++;
+                }
+            }
+        }
+        vec3 diff_squared_i;
+         count = 0;
+        for(int x=0;x<width();x++){
+            for(int y=0;y<height();y++){
+                int idx = getIndex(x,y);
+                if(sampleCounts[idx]){
+                    diff_squared_i  *= Float(count)/Float(count+1);
+                    diff_squared_i+=  sqr(buffers[idx].value() - average)/Float(count+1);
+                    count++;
+                }
+            }
+        }
+        diff_squared_i /= count;
+        diff_squared_i = sqrt(diff_squared_i);
+        auto normalize_pixel = [&](const Pixel & pixel){
+            auto value = pixel.value();
+            value = (value - average)/diff_squared_i;
+            return Pixel(value);
+        };
+        std::transform(buffers.begin(),buffers.end(),buffers.begin(),normalize_pixel);
+    }
+
+
+    void clear(){
+        std::fill(buffers.begin(),buffers.end(),Pixel());
+        std::fill(sampleCounts.begin(), sampleCounts.end(),0);
+    }
 
     ivec2 resoulation() const { return ivec2(_width, _height); }
 
@@ -99,8 +178,8 @@ public:
     inline int product() const { return width() * height(); }
 
     inline void fill(const Spectrum &spectrum) {
-        for (auto &pixel: buffers)
-            pixel = vec3();
+        std::fill(buffers.begin(),buffers.end(),spectrum);
+
     }
 
     vec3 getPixel(int idx) const;

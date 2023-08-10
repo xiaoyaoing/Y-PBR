@@ -1,0 +1,10 @@
+^E:\CODE\Y-PBR\BUILD\CMAKEFILES\D026F2662284BBD54E8052F104E30A8B\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/code/Y-PBR -BE:/code/Y-PBR/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file E:/code/Y-PBR/build/Y-PBR.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

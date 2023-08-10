@@ -36,7 +36,7 @@ protected:
     }
 
     std::unique_ptr<Distribution1D> lightDistrib;
-    ImagePramId *imagePramid;
+    ImagePrid *imagePramid;
     std::vector<BdptTracer> _tracers;
 
     void saveOutPuts(const std::string &fileName,int spp);

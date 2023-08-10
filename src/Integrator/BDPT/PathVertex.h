@@ -48,6 +48,8 @@ public:
     };
     VertexRecord _record;
     VertexSampler _sampler;
+
+    bool diarc = false;
 public:
     PathVertex(){}
 //    PathVertex(PathVertex & other) = delete;
@@ -118,6 +120,46 @@ public:
     inline bool isLight() const {
         return type == VertexType::Light;
     }
+    inline bool isCamera() const {
+        return type == VertexType::Camera;
+    }
+
+    inline bool isSurface() const {
+        return type == VertexType::Surface;
+    }
+    inline bool isMedium() const {
+        return type == VertexType::Medium;
+    }
+
+    inline vec3 ng() const {
+        if(isSurface())
+            return _record.surfaceRecord.its.Ng;
+        if(isCamera())
+            return _record.cameraRecord.sample.n;
+        if(isLight())
+            return _record.lightRecord.sample.n;
+    }
+
+    Float cosFactor(const PathVertex & v) const {
+        if(isMedium())
+            return 1.f;
+        auto dir = normalize(v.pos()-pos());
+        return absDot(v.ng(),dir);
+    }
+
+    inline bool isDelta() const {
+        return diarc;
+    }
+    Float ConvertDensity(Float pdf, const PathVertex &next) const {
+        // Return solid angle density if _next_ is an infinite area light
+        if (next.isInfiniteLight()) return pdf;
+        vec3 w = next.pos() - pos();
+        if (length2(w) ==0) return 0;
+        Float invDist2 = 1 / length2(w);
+        if (next.isSurface())
+            pdf *= absDot(next.ng(), w * std::sqrt(invDist2));
+        return pdf * invDist2;
+    }
 
     bool canConnect() const;
 
@@ -125,7 +167,16 @@ public:
 
     Spectrum  eval(const PathVertex & vertex,bool adjoint) const;
 
-    Float pdf(const PathVertex & prev,const PathVertex & next) const;
+    //对于相机和光源节点 prev可能为nullptr
+    Float pdf(const PathVertex * prev,const PathVertex & next) const;
+    //计算作为光源，给定下一个节点v的pdf
+    Float pdfLight(const PathVertex & v) const;
+    //计算被选中光源，采样出给定方向的pdf
+    Float pdfLightOrigin(const PathVertex &v,
+                         const Distribution1D &lightDistr,
+                         const std::unordered_map<const Light *, size_t>) const;
+
+
 
     bool isInfiniteLight() const {
         return false;
