@@ -23,7 +23,8 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
     std::string firstHitName;
     std::string Path;
     for (bounces = 0;; ++bounces) {
-
+      //  if(bounces==2)
+        //    return beta;
         its = scene.intersect(_ray);
 
         if (specularBounce && bounces>=minBounces) {
@@ -39,13 +40,11 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
                 int k = 1;
             }
         }
-        //  break;
 
         if (!its.has_value() || bounces >= maxDepth)
             break;
-    //    return Spectrum(its->uv.x,its->uv.y,0);
         if (DebugConfig::OnlyShowNormal) {
-            return (its->Ng + Spectrum(1.f)) / 2.f;
+            return (its->Ns + Spectrum(1.f)) / 2.f;
         }
         surfaceEvent = makeLocalScatterEvent(&its.value());
         its->bsdf->sampleF(surfaceEvent,sampler.getNext2D(),false);
@@ -57,6 +56,7 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
                         (surfaceEvent, scene, sampler, nullptr);  //direct lighting
                 if (DebugConfig::OnlyDirectLighting)
                     return Ld;
+
                  L += beta * Ld;
                 if(hasNan(L)){
                     int k = 1;
@@ -65,17 +65,18 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
             }
             surfaceEvent.requestType = BSDF_ALL;
             Spectrum f = its->bsdf->sampleF(surfaceEvent, sampler.getNext2D(), false);
+
             if (isBlack(f) || surfaceEvent.pdf == 0)
                 break;
             BXDFType flags = surfaceEvent.sampleType;
             specularBounce = (flags & BSDF_SPECULAR) != 0;
             beta *= f / surfaceEvent.pdf;
+           // return beta;
 
-            if(hasNan(beta)){
+            if(std::isinf(beta[0])){
                 int k = 1;
             }
             _ray = surfaceEvent.sctterRay();
-
 
             if (its->bssrdf && (flags & BSDF_TRANSMISSION) ) {
                 Intersection pi;
@@ -101,7 +102,7 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
         int k = 1;
     }
     //return vec3(bounces/10.f);
-    return L;
+    return  L;
 }
 
 

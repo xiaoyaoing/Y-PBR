@@ -109,16 +109,7 @@ public:
     public:
         PrecomputedAzimuthalLobe(std::unique_ptr<vec3[]> table);
 
-        void sample(float cosThetaD, float xi, float &phi, float &pdf) const {
-
-            float v = (AzimuthalResolution - 1) * cosThetaD;
-
-            int x;
-            _sampler->warp(v, xi, x);
-
-            phi = Constant::TWO_PI * (x + xi) * (1.0f / AzimuthalResolution);
-            pdf = _sampler->pdf(v, x) * float(AzimuthalResolution * Constant::INV_TWO_PI);
-        }
+        void sample(float cosThetaD, float xi, float &phi, float &pdf) const ;
 
         vec3 eval(float phi, float cosThetaD) const {
 

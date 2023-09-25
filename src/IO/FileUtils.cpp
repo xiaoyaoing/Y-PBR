@@ -41,14 +41,14 @@ size_t FileUtils::getFileSize(const std::string & path) {
 }
 
 std::string FileUtils::getFileSuffix(const std::string & path) {
-    int dotIdx = path.find(".");
+    int dotIdx = path.find_last_of(".");
     if(dotIdx == -1)
         return "";
     return path.substr(dotIdx+1,path.size());
 }
 
 std::string FileUtils::getFilePrefix(const std::string & path){
-    int dotIdx = path.find(".");
+    int dotIdx = path.find_last_of(".");
     if(dotIdx == -1)
         return path;
     return path.substr(0,dotIdx);

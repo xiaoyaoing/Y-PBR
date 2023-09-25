@@ -85,7 +85,7 @@ set(YPBR_DEPENDENCIES_DIR ${PROJECT_SOURCE_DIR}/lib)
 set(YPBR_SOURCES_DIR ${PROJECT_SOURCE_DIR}/src)
 
 
-include_directories(${PROJECT_SOURCE_DIR}/lib/json/)
+include_directories(${PROJECT_SOURCE_DIR}/lib/nlohmann/)
 include_directories(${PROJECT_SOURCE_DIR}/lib/loadpng/)
 #include_directories(${PROJECT_SOURCE_DIR}/lib/stbi/)
 
@@ -102,7 +102,7 @@ add_subdirectory(${YPBR_DEPENDENCIES_DIR})
 
 
 
-file(GLOB_RECURSE YPBR_SOURCES ${YPBR_SOURCES_DIR}/*.cpp  lib/lodepng/lodepng.cpp
+file(GLOB_RECURSE YPBR_SOURCES ${YPBR_SOURCES_DIR}/*.cpp   ${YPBR_SOURCES_DIR}/*.h  lib/lodepng/lodepng.cpp
         lib/skylight/ArHosekSkyModel.cpp)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
@@ -122,6 +122,8 @@ endif()
 
 if(MSVC )
 add_subdirectory(tiny-cuda-nn)
+
+
 
 #target_link_libraries(Y_PBR PUBLIC E:/code/Y-PBR/lib/embree/windows/lib/embree3.lib)
 

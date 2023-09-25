@@ -8,6 +8,7 @@ class Ray {
 public:
     Ray();
 
+    Ray(const Ray & rhs) = default;
 
     Ray(vec3 start,vec3 direction,Float nt = Constant::EPSILON,Float ft = std::numeric_limits<Float>::max());
 

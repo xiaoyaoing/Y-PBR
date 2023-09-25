@@ -34,26 +34,13 @@ public:
 //    }
     SurfaceEvent() {}
 
-    Ray sctterRay(const vec3 & w) {
-        vec3 offsetPos = its->p + w * its->epsilon;
-        return Ray(offsetPos, w, 1);
-    }
+    Ray sctterRay(const vec3 & w) ;
     Ray sctterRay() {
         return sctterRay(toWorld(wi));
     }
 
-    SurfaceEvent makeFlipQuery() const{
-        SurfaceEvent event(*this);
-        event.wi = wo;
-        event.wo = wi;
-        return event;
-    }
-    SurfaceEvent makeWarpQuery(const vec3 &newWi, const vec3 &newWo) const{
-        SurfaceEvent event(*this);
-        event.wo = newWo;
-        event.wi = newWi;
-        return event;
-    }
+    SurfaceEvent makeFlipQuery() const;
+    SurfaceEvent makeWarpQuery(const vec3 &newWi, const vec3 &newWo) const;
 };
 
 struct VolumeEvent {

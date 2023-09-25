@@ -62,7 +62,7 @@ void SamplerIntegrator::render(const Scene & scene)  {
         }}
         reporter.update(1);
     }, numTiles);
-    _camera->image->save(scene.options.outputFileName,1.f);
+    _camera->image->save(scene.options.outputFileName,1.f,scene.options.overwrite);
 
     parallel_cleanup();
 }

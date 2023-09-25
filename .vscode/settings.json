@@ -91,5 +91,10 @@
         "xstring": "cpp",
         "xtr1common": "cpp",
         "xtree": "cpp"
+    },
+    "cmake.debugConfig": {
+        "args": [
+            "E:\\code\\Y-PBR\\example-scenes\\water-caustic"
+        ]
     }
 }

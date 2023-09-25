@@ -18,11 +18,7 @@ public:
 
     Spectrum sampleF(SurfaceEvent & event, const vec2 & u) const override;
 
-    Float eta(const SurfaceEvent & event) const override {
-        if(event.wi.z * event.wo.z >0)
-            return 1;
-        return event.wo.z<0?ior:invIor;
-    }
+    Float eta(const SurfaceEvent & event) const override;
 
 protected:
     Float  ior,invIor;

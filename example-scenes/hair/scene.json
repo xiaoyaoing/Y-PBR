@@ -8,7 +8,6 @@
             "scale_angle": 2.5,
             "melanin_ratio": 1,
             "melanin_concentration": 1.3,
-            "melanin_concentration": 1.3,
             "roughness": 0.1,
             "beta_m" : 0.3,
             "beta_n" : 0.3
@@ -95,7 +94,7 @@
         "enable_volume_light_sampling": true
     },
     "renderer": {
-        "output_file": "TungstenRender.png",
+        "output_file": "hair.png",
         "resume_render_file": "TungstenRenderState.dat",
         "overwrite_output_files": false,
         "adaptive_sampling": false,

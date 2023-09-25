@@ -3,7 +3,7 @@
 #include <iostream>
 
 int main(int argc, const char *argv[]) {
-    spdlog::set_level(spdlog::level::off);
+   // spdlog::set_level(spdlog::level::off);
     std::cout << "Rendering Begin";
 
     FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/sssdragon/";

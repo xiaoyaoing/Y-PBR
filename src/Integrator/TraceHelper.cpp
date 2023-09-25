@@ -24,10 +24,14 @@ Spectrum estimateDirect(SurfaceEvent &event, const vec2 &uShading, const Light &
 
     event.requestType =
             specular ? BSDF_ALL : BSDF_NO_SPECULAR;
+
+
+//    if ( ! event.its->bsdf->MatchesFlags(event.requestType) )
+//        return Spectrum(0);
+//    assert(!event.its->bsdf->HasFlag(BSDF_TRANSMISSION));
     vec3 wi;
     Float lightPdf = 0, scatteringPdf = 0;
     VisibilityTester visibility;
-
     Spectrum Ld(0);
     if (sampleLight) {
         Float distance;
@@ -48,7 +52,7 @@ Spectrum estimateDirect(SurfaceEvent &event, const vec2 &uShading, const Light &
                             PowerHeuristic(lightPdf, scatteringPdf);
                     if (!sampleBSDF) weight = 1;
                     Ld += f * weight * Li / lightPdf;
-                    if (hasNeg(Ld)) {
+                    if (hasNan(Ld)) {
                         int k = 1;
                     }
                 }
@@ -75,7 +79,7 @@ Spectrum estimateDirect(SurfaceEvent &event, const vec2 &uShading, const Light &
                 }
 
                 Ld += f * weight * Li / scatteringPdf;
-                if (hasNeg(Ld)) {
+                if (hasNan(Ld)) {
                     bsdf->f(event, false);
                     int k = 1;
                 }
@@ -83,7 +87,7 @@ Spectrum estimateDirect(SurfaceEvent &event, const vec2 &uShading, const Light &
         }
     }
     if (hasNan(Ld)) {
-
+        int k = 1;
     }
     // assert(isBlack(Ld));
     return Ld;

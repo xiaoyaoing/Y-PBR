@@ -46,6 +46,9 @@ void Image::addPixel(uint32 x, uint32 y, vec3 rgb, bool count) {
         //todo
     }
     uint32 idx = getIndex(x, y);
+    if(idx == 233499){
+        int k = 1;
+    }
     buffers[idx].add(rgb);
     if (count)
         sampleCounts[idx]++;

@@ -71,35 +71,9 @@ public:
     virtual Float Pdf(const SurfaceEvent &event) const = 0;
 
 
-    inline Spectrum sampleF(SurfaceEvent &event, const vec2 &u, bool adjoint) const {
-//        if (!MatchesFlags(event.requestType))
-//            return Spectrum();
-        Spectrum fResult = sampleF(event, u);
-        if (adjoint)
-            fResult *= std::abs(
-                    dot((event.toWorld(event.wo)), event.its->Ng) * event.wi.z /
-                    dot((event.toWorld(event.wi)), event.its->Ng) * event.wo.z);
-        else
-            fResult *= sqr(eta(event));
+    Spectrum sampleF(SurfaceEvent &event, const vec2 &u, bool adjoint) const ;
 
-        if(hasNeg(fResult) || hasNan(fResult)){
-            int  k =1;
-        }
-        return fResult;
-    }
-
-    inline Spectrum f(const SurfaceEvent &event, bool adjoint) const {
-        Spectrum fResult = f(event);
-        if (adjoint) {
-            auto deom =  dot((event.toWorld(event.wo)), event.its->Ng) * event.wi.z;
-            if(deom == 0)
-                return Spectrum (0.f);
-            auto corrnectShading = std::abs(
-                    dot( event.toWorld(event.wi), event.its->Ng) * event.wo.z / deom);
-           fResult *= corrnectShading;
-        } else fResult *= sqr(eta(event));
-        return fResult;
-    }
+     Spectrum f(const SurfaceEvent &event, bool adjoint) const ;
 
     ///If there is a match in one lobe, it can be considered a match.
     bool MatchesFlags(BXDFType typeToMatch) const {

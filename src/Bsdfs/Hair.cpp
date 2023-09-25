@@ -5,6 +5,7 @@
 
 bool useGussianAmz = true;
 
+std::array<float,3> lobeSamples = {1,1,1};
 
 static Float trigInverse(Float x) {
     return std::min(std::sqrt(std::max(1.0f - x * x, 0.0f)), 1.0f);
@@ -163,7 +164,10 @@ Spectrum Hair::f(const SurfaceEvent &event) const {
     vec3 Ntt = NP(_betaR, cosThetaD, phi, 1, h);
     vec3 Ntrt = NP(_betaR, cosThetaD, phi, 2, h);
     //  return Ntrt * MTRT;
-    vec3 fsum = MR * Nr + MTT * Ntt + MTRT * Ntrt;
+    vec3 fsum = MR * Nr * lobeSamples[0] + MTT * Ntt * lobeSamples[1] + MTRT * Ntrt * lobeSamples[2];
+    if(hasNan(fsum)){
+        int k =  1;
+    }
     //  return MR * Nr;
     return fsum;
     vec3 res = fsum;
@@ -220,14 +224,15 @@ Float Hair::Pdf(const SurfaceEvent &event) const {
                 + pdfTT * _nTT->pdf(phi, cosThetaD)
                 + pdfTRT * _nTRT->pdf(phi, cosThetaD));
     }
+
     pdf += M(_vR, sin(thetaOR), sinThetaI, cos(thetaOR), cosThetaI) * apPdf[0] *
            TrimmedLogistic(phi - Phi(gammaI, gammaT, 0), _betaR, -Constant::PI, Constant::PI);
     pdf += M(_vTT, sin(thetaOTT), sinThetaI, cos(thetaOTT), cosThetaI) * apPdf[1] *
            TrimmedLogistic(phi - Phi(gammaI, gammaT, 1), _betaR, -Constant::PI, Constant::PI);
     pdf += M(_vTRT, sin(thetaOTRT), sinThetaI, cos(thetaOTRT), cosThetaI) * apPdf[2] *
            TrimmedLogistic(phi - Phi(gammaI, gammaT, 2), _betaR, -Constant::PI, Constant::PI);
-    if (isnan(pdf)) {
-
+    if (isnan(pdf) || pdf<1e-8) {
+        int k =  1;
     }
     return pdf;
 }
@@ -241,6 +246,11 @@ Spectrum Hair::sampleF(SurfaceEvent &event, const vec2 &u) const {
     //First choose a lobe to sample
     Float h = getH(event);
     std::array<Float, pMax + 1> apPdf = ComputeApPdf(costhetaO, h);
+    if(std::accumulate(apPdf.begin(),apPdf.end()-1,0) == 0 )
+    {
+        event.pdf = 0;
+        return vec3(0);
+    }
     int p;
     for (p = 0; p < pMax; ++p) {
         if (u0[0] <= apPdf[p])
@@ -278,6 +288,9 @@ Spectrum Hair::sampleF(SurfaceEvent &event, const vec2 &u) const {
             _nTT->sample(cosThetaD, u0[1], phi, phiPdf);
         else if (p == 2)
             _nTRT->sample(cosThetaD, u0[1], phi, phiPdf);
+        if(phiPdf <1e-5){
+            return vec3(0);
+        }
     } else {
         deltaphi = Phi(gammaI, gammaT, p) + SampleTrimmedLogistic(u0[1], _betaR, -Constant::PI, Constant::PI);
         phi = phiO + deltaphi;
@@ -288,7 +301,14 @@ Spectrum Hair::sampleF(SurfaceEvent &event, const vec2 &u) const {
     event.wi = vec3(sinPhi * cosThetaI, sinThetaI, cosPhi * cosThetaI);
     event.sampleType = this->m_type;
     event.pdf = Pdf(event);
-    return f(event);
+
+    if(event.pdf <=1e-5)
+    {
+        event.pdf  = 0 ;
+        return {};
+    }
+
+
 }
 
 
@@ -320,7 +340,7 @@ Hair::Hair(const Json &json) : BSDF(BXDFType(BSDF_GLOSSY | BSDF_TRANSMISSION | B
     betaN = getOptional(json, "beta_n", 0.3);
 
     if (!useGussianAmz) {
-        _betaR = std::max(Constant::PI * 0.5f * betaM, 0.04f);
+        _betaR = std::max(Constant::PI * 0.5f * betaM, 0.004f);
         _betaTT = _betaR * 0.5f;
         _betaTRT = _betaR * 2.0f;
 
@@ -355,6 +375,7 @@ Float Hair::sampleM(Float v, Float sinThetaO, Float cosThetaO, Float xi1, Float 
 
 std::array<Float, pMax + 1> Hair::ComputeApPdf(Float cosThetaO, Float h) const {
 
+    cosThetaO =  1;
     Float sinThetaO = trigInverse(cosThetaO);
 
     Float sinThetaT = sinThetaO / _eta;
@@ -373,8 +394,21 @@ std::array<Float, pMax + 1> Hair::ComputeApPdf(Float cosThetaO, Float h) const {
             std::accumulate(ap.begin(), ap.end() - 1, Float(0),
                             [](Float s, const Spectrum &ap) { return s + luminace(ap); });
     for (int i = 0; i < pMax; ++i) apPdf[i] = luminace(ap[i]) / sumY;
-    if (isnan(apPdf[0])) {
 
+
+    Float allPdf{0.f};
+    for(int i = 0 ;i<3;i++){
+        if(lobeSamples[i])
+            allPdf += apPdf[i];
+    }
+    if(allPdf ==0){
+        return apPdf;
+    }
+    for (int i = 0; i <3 ; ++i) {
+        apPdf[i] = lobeSamples[i]?apPdf[i]/allPdf:0;
+    }
+    if (isnan(apPdf[1])) {
+        int k = 1 ;
     }
     return apPdf;
 }

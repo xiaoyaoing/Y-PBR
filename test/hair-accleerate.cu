@@ -18,6 +18,9 @@
 #include <tiny-cuda-nn/encodings/oneblob.h>
 #include <concurrent_vector.h>
 
+float img_width;
+float img_height;
+vec2 img_extent;
 
 template<uint32_t stride>
 __global__ void eval_image(uint32_t n_elements, cudaTextureObject_t texture, float *__restrict__ xs_and_ys,
@@ -151,15 +154,15 @@ void origin(BitMapTexture<vec3> *BitMaptexture, std::shared_ptr<tcnn::Trainer<fl
     cudaTextureObject_t texture;
     CUDA_CHECK_THROW(cudaCreateTextureObject(&texture, &resDesc, &texDesc, nullptr));
 
-    uint32_t n_coords = 1024 * 1024;
+    uint32_t n_coords = img_width * img_height;
     uint32_t n_coords_padded = tcnn::next_multiple(n_coords, tcnn::BATCH_SIZE_GRANULARITY);
 
     tcnn::GPUMemory<float> sampled_image(n_coords * 3);
     tcnn::GPUMemory<float> xs_and_ys(n_coords_padded * 2);
 
     std::vector<float> host_xs_and_ys(n_coords * 2);
-    int sampling_height = 1024;
-    int sampling_width = 1024;
+    int sampling_height = img_width;
+    int sampling_width = img_height;
     for (int y = 0; y < sampling_height; ++y) {
         for (int x = 0; x < sampling_width; ++x) {
             int idx = (y * sampling_width + x) * 2;
@@ -381,7 +384,7 @@ class HairIntegrator : public PathIntegrator {
     const uint32_t batch_size = 1 << 18;
     bool by_pos = true;
     bool by_dir = false;
-    const uint32_t n_input_dims = 3; //pos,tangent,dir
+    const uint32_t n_input_dims = 9; //pos,tangent,dir
     const uint32_t n_output_dims = 3;// rgb color
     const int train_num = 512 * 512;
     cudaStream_t training_stream;
@@ -537,7 +540,7 @@ public:
                 cpu_save(pos_img.getPixel(idx), dir_img.getPixel(idx), tangent_img.getPixel(idx),
                          predict_data.data() + i * n_input_dims);
             if (n_input_dims == 2) {
-                vec2 uv((p.x / 1024.f) * uv_scale_factor, (1 - p.y / 1024.f) * uv_scale_factor);
+                vec2 uv((p.x / img_width) * uv_scale_factor, (1 - p.y / img_height) * uv_scale_factor);
                 if (by_pos)
                     uv = pos_img.getPixel(idx);
                 (predict_data.data() + i * n_input_dims)[0] = uv.x;
@@ -598,11 +601,7 @@ public:
 
     void train_image(const Scene &scene, float &tmp_loss, bool count_loss) {
 
-
-
         // Debug outputs
-
-
         ivec2 res = _camera->image->resoulation();
         training_batch = tcnn::GPUMatrix<float>(n_input_dims, train_num);
         training_target = tcnn::GPUMatrix<float>(n_output_dims, train_num);
@@ -627,16 +626,18 @@ public:
             min_pos = min(min_pos, pos);
             max_pos = max(max_pos, pos);
             vec3 E = (L - LPrime);
-            auto uv = (u1 + u2 / 1024.f) * uv_scale_factor;
+            auto uv = (u1 + u2 / img_extent ) * uv_scale_factor;
             if (n_input_dims == 2) {
                 //       uv = sampler->getNext2D();
                 E = gt.eval(uv);
             }
             E = gt.eval(uv);
-             x = uv.x * 1024;
-           y = uv.y * 1024;
+             x = uv.x * img_width;
+           y = uv.y * img_height;
             if (by_pos)
                 uv = pos;
+
+//            _camera->image->addPixel(x,y,E);
         //    pos_img.addPixel(x, y,vec3( uv.x,uv.y,0), true);
 
 
@@ -692,8 +693,8 @@ public:
         auto error = cudaMemcpy(training_target.data(), host_traing_target.data(),
                                 float_size_factor * host_traing_target.size(), cudaMemcpyHostToDevice);
 
-        int width = 1024;
-        int height = 1024;
+        int width = img_width;
+        int height = img_height;
 //        ImageIO::loadLdrNormalize("curly-hair_PT_GROUD_TROUTH.png", TexelConversion::REQUEST_RGB, width, height);
 //        load_image(
 //                "curly-hair_PT_GROUD_TROUTH.png", width, height);
@@ -814,7 +815,7 @@ public:
                         Ray ray = _camera->sampleRay(x, y, tileSampler->getNext2D());
                         vec3 pos(0), tangent(0), dir(0), LPrime(0), L(0);
                         ///reutrn pos,dir,tangent,LPrime
-                        //   Spectrum  l = PathIntegrator::integrate(ray,scene,*tileSampler);
+//                           Spectrum  l = PathIntegrator::integrate(ray,scene,*tileSampler);
 //                            _camera->image->addPixel(x, y, l, true);
 //                             continue;
                         bool hitHair = true;
@@ -826,6 +827,9 @@ public:
                         if (hitHair) {
                             //integrate(ray, scene,maxBounces, *tileSampler, pos, dir, tangent, L);
                             tangent_img.addPixel(x, y, tangent, true);
+                            if(hasNan(pos)){
+                                int k = 1;
+                            }
                             pos_img.addPixel(x, y, pos);
                             dir_img.addPixel(x, y, dir);
                             hit_hair_img.addPixel(x, y, Spectrum(1));
@@ -841,9 +845,10 @@ public:
             auto getFileName = [](std::string name, int i) {
                 return name + std::to_string(i) + ".png";
             };
-            //  tangent_img.save(getFileName("tangent",i) ,1, true);
-            //    dir_img.save(getFileName("dir",i),1, true);
-            //  pos_img.save(getFileName("pos",i), 1,true);
+//              tangent_img.save(getFileName("tangent",i) ,1, true);
+//                dir_img.save(getFileName("dir",i),1, true);
+//              pos_img.save(getFileName("pos",i), 1,true);
+//              exit(-1);
             //      pos_img.normalize();
 //           dir_img.normalize();
 //            tangent_img.normalize();
@@ -897,7 +902,7 @@ public:
 
 
             surfaceEvent = makeLocalScatterEvent(&its.value());
-            if (bounces == 0) {
+            if (bounces == beta) {
                 if (its.has_value()) {
                     tangent = its->tangent.value();
                       tangent = its->Ng;
@@ -934,13 +939,16 @@ public:
 //        if (bounces < beta)
 //            LPrime = L;
         //   L = vec3(bounces/10.f);
-        return bounces > 0;
+        return bounces > 0 ;
     }
 
 };
 
 
 int main(int argc, const char *argv[]) {
+    img_width = 300;
+    img_height = 1000;
+    img_extent = vec2(img_width,img_height);
     FileUtils::WorkingDir = argv[1];
     std::ifstream scene_file(FileUtils::WorkingDir + "scene.json");
     nlohmann::json j;

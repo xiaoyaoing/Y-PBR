@@ -29,3 +29,20 @@ PrecomputedAzimuthalLobe::PrecomputedAzimuthalLobe(std::unique_ptr<vec3[]> table
 
     _sampler.reset(new InterpolatedDistribution1D(std::move(weights), Size, Size));
 }
+
+void PrecomputedAzimuthalLobe::sample(float cosThetaD, float xi, float &phi, float &pdf) const {
+
+
+        float v = (AzimuthalResolution - 1) * cosThetaD;
+
+        int x;
+        _sampler->warp(v, xi, x);
+
+        phi = Constant::TWO_PI * (x + xi) * (1.0f / AzimuthalResolution);
+        pdf = _sampler->pdf(v, x) * float(AzimuthalResolution * Constant::INV_TWO_PI);
+
+        if(isnan(phi)){
+            _sampler->warp(v, xi, x);
+        }
+    }
+

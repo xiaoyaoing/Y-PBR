@@ -41,8 +41,8 @@ struct SPPMPIxel {
 };
 
 struct SPPMListNode {
-    SPPMPIxel *pixel;
-    SPPMListNode *next;
+    SPPMPIxel *pixel{nullptr};
+    SPPMListNode *next{nullptr};
 
     int length() {
         SPPMListNode *node = this;
@@ -52,6 +52,10 @@ struct SPPMListNode {
             node = node->next;
         }
         return ans;
+    }
+
+    ~SPPMListNode(){
+        if(next) delete next;
     }
 };
 
@@ -152,33 +156,40 @@ void PhotonMapper::render(const Scene &scene) {
     //generate visible points
     ProgressReporter reporter(iterations);
     for (int iteration = 0; iteration < iterations; iteration++) {
+
+        spdlog::info("Iteration {0} begin",iteration);
+
+        //Generate pixel information
         parallel_for([&](ivec2 tileIndex) {
-            std::unique_ptr<Sampler> tileSampler = sampler.clone(0);
-          //  tileSampler->setSeed((tileIndex.y * nTiles.x + tileIndex.x) * (iteration + 1));
+            std::unique_ptr<Sampler> tileSampler = sampler.clone((tileIndex.y * nTiles.x + tileIndex.x) * (iteration + 1));
+
             int x0 = tileIndex.x * tileSize;
             int x1 = std::min(x0 + tileSize - 1, pixelBounds.x - 1);
             int y0 = tileIndex.y * tileSize;
             int y1 = std::min(y0 + tileSize - 1, pixelBounds.y - 1);
+
             for (int y = y0; y <= y1; y++)
                 for (int x = x0; x <= x1; x++) {
-                    int pixelIndex = y * pixelBounds.x + x;
-                    SPPMPIxel &pixel = pixels[pixelIndex];
-                    pixel.pos = ivec2(x, y);
-                    if (iteration > 0 && pixel.radius != 0.25) {
 
-                    }
+                    int pixelIndex = y * pixelBounds.x + x;
+                    auto  & pixel = pixels[pixelIndex];
+                    pixel.pos = {x,y};
                     Ray ray = _camera->sampleRay(x, y, tileSampler->getNext2D());
+
                     bool specularBounce = true;
-                    Spectrum beta = Spectrum(1);
-                    if (pixelIndex == 0)
-                        int k = 1;
+                    Spectrum beta(1);
                     bool isDielectric = false;
+
                     for (int bounce = 0; bounce < maxBounces; bounce++) {
                         std::optional<Intersection> its = scene.intersect(ray);
                         if (!its) {
-                            for (auto light: scene.lights);// pixel.Ld += beta * light->environmentLighting(ray);
+                            for (auto light: scene.lights)
+                                pixel.Ld += beta * light->Le(ray);
                             break;
                         }
+                     //   pixel.Ld +=its->Ng;
+                       // break;
+
                         if (bounce == 0 && its->bsdf->HasFlag(BSDF_SPECULAR)) {
                             isDielectric = true;
                         }
@@ -186,21 +197,23 @@ void PhotonMapper::render(const Scene &scene) {
                         const BSDF *bsdf = its->bsdf;
                         if (specularBounce)
                             pixel.Ld += beta * its->Le(-ray.d);
+                       // if(bounce!=0 && bsdf->HasFlag(BSDF_DIFFUSE))
                         pixel.Ld += beta * uniformSampleOneLight(event, scene, *tileSampler);
                         bool isDiffuse = bsdf->HasFlag(BSDF_DIFFUSE);
                         bool isGlossy = bsdf->HasFlag(BSDF_GLOSSY);
-                        //find visible point
-                        if (isDiffuse || (isGlossy && bounce == maxBounces - 1)) {
-                            pixel.vp.event = new SurfaceEvent(event);
+                        //find visible {point}
+                        if (isDiffuse || (isGlossy && bounce == maxBounces - 1)){
+
+
+                        pixel.vp.event = new SurfaceEvent(event);
+                            pixel.vp.event->its = new Intersection(*event.its);
                             pixel.vp.beta = beta;
                             pixel.isDielectric = isDielectric;
                             break;
                         }
-                        pixel.vp.event->its->p;
                         if (bounce < maxBounces - 1) {
                             event.requestType = BSDF_ALL;
                             Spectrum f = bsdf->sampleF(event, tileSampler->getNext2D(), false);
-                            //if(!specularBounce) f*=AbsCosTheta(event.wi);
                             if (event.pdf == 0 || isBlack(f)) break;
                             specularBounce = (event.sampleType & BSDF_SPECULAR) != 0;
                             beta *= f / event.pdf;
@@ -213,6 +226,8 @@ void PhotonMapper::render(const Scene &scene) {
                                 }
                             }
                             ray = event.sctterRay(event.toWorld(event.wi));
+                         //   pixel.Ld += beta;
+                           // break;
                         }
                     }
                     //  averageSPosition.add(pixel.vp.event->its->p);
@@ -273,6 +288,7 @@ void PhotonMapper::render(const Scene &scene) {
                         photonGridNum++;
                     }
         }, pixelNum, 4096);
+        spdlog::info("Visiable point generated");
 
         int count = 0;
         std::vector<int> counts;
@@ -314,7 +330,8 @@ void PhotonMapper::render(const Scene &scene) {
             dir += photonRay.d / Float(photonsPerIteration);
             photonRayPos += photonRay.o / Float(photonsPerIteration);
 
-            Spectrum beta = lightSample.weight;
+            Spectrum beta = lightSample.weight * absDot(photonRay.d,lightSample.n) /  (lightSample.dirPdf * lightSample.posPdf);
+         //   beta = Spectrum(20.f);
             bool firstDielectric = false;
             for (int bounce = 0; bounce < 8; bounce++) {
                 std::optional<Intersection> its = scene.intersect(photonRay);
@@ -328,6 +345,7 @@ void PhotonMapper::render(const Scene &scene) {
                         photonSNull++;
                     break;
                 }
+
                 if (bounce == 0) {
                     count1++;
                     photonBounce0AveragePosition.add(its->p);
@@ -379,6 +397,7 @@ void PhotonMapper::render(const Scene &scene) {
                                 continue;
                             event->wi = event->toLocal(-photonRay.d);
                             Spectrum contrib = event->its->bsdf->f(*event, false) * beta;
+                           // contrib = beta;
                             //f(event->its->bsdf->hasFlag(BSDF_SPECULAR)) contrib /= AbsCosTheta(event->wi);
                             if (hasNan(contrib)) {
 
@@ -391,12 +410,14 @@ void PhotonMapper::render(const Scene &scene) {
                     } else {
 
                     }
+                //    break;
                 }
                 const BSDF *photonBsdf = its->bsdf;
                 SurfaceEvent event = makeLocalScatterEvent(&its.value());
                 event.requestType = BSDF_ALL;
                 Spectrum f = photonBsdf->sampleF(event, vec2(RadicalInverse(haltonDim + 0, haltonIndex),
                                                              RadicalInverse(haltonDim + 1, haltonIndex)), true);
+
                 //if(!isSpecualr(event.sampleType)) f *=abs(event.wi.z);
                 haltonDim += 2;
                 Spectrum betaNew = beta * f / event.pdf;
@@ -409,6 +430,7 @@ void PhotonMapper::render(const Scene &scene) {
                         photonSRuss++;
                     break;
                 }
+             //   beta = Spectrum(0);
                 beta = betaNew / (1 - russProb);
                 vec3 wi = event.toWorld(event.wi);
                 photonRay = event.sctterRay(wi);
@@ -417,6 +439,17 @@ void PhotonMapper::render(const Scene &scene) {
                 }
             }
         }, photonsPerIteration, 8192);
+
+        for(auto & node :grids){
+            while(node){
+                auto next = node.load()->next;
+                delete node;
+                node = node.load()->next;
+            }
+        }
+
+
+        spdlog::info("Trace photons and accumlate contribution completed");
 
 
         photonBounce1AveragePosition.divide(count2);
@@ -445,8 +478,9 @@ void PhotonMapper::render(const Scene &scene) {
                 Spectrum phi;
                 for (int i = 0; i < 3; i++)
                     phi[i] = pixel.phi[i];
-                pixel.flux = (pixel.flux + phi * pixel.vp.beta) * (newRadius * newRadius) /
+                pixel.flux = (pixel.flux + phi * pixel.vp.beta ) * (newRadius * newRadius) /
                              (pixel.radius * pixel.radius);
+               // pixel.flux = phi;
                 int a = pixel.curPhotonCount;
                 Float b = pixel.lastPhotonCount;
                 pixel.lastPhotonCount = newPhotons;
@@ -480,9 +514,12 @@ void PhotonMapper::render(const Scene &scene) {
 
             }
             pixel.vp.beta = Spectrum(0);
+            if(pixel.vp.event)
+            {delete pixel.vp.event->its;
             delete pixel.vp.event;
-            pixel.vp.event = nullptr;
+            pixel.vp.event = nullptr;}
         }, pixelNum, 4096);
+        spdlog::info("Update pixel completed");
 
         Float minR = initRadius;
         Float maxR = 0;
@@ -537,12 +574,13 @@ void PhotonMapper::render(const Scene &scene) {
                         Spectrum c = Spectrum(1 - (pixel.radius - minR) / (maxR - minR));
                         _camera->image->addPixel(x, y, L, true);
                     }
-                _camera->image->save(scene.options.outputFileName,1);
-                _camera->image->fill(Spectrum(0));
+                _camera->image->save(scene.options.outputFileName,1,false);
+            //    _camera->image->fill(Spectrum(0));
             }
 
         }
         reporter.update(1);
+        spdlog::info("Iteration {0} end",iteration);
 
     }
 
@@ -556,10 +594,10 @@ void PhotonMapper::process(const Scene &scene, Sampler &sampler) {
 
 PhotonMapper::PhotonMapper(const std::shared_ptr<Camera> &camera, const Json &json) : Integrator(json),
                                                                                       _camera(camera) {
-    initRadius = getOptional(json, "radius", 0.05);
-    iterations = getOptional(json, "interation_num", 32);
+    initRadius = getOptional(json, "radius", 0.01);
+    iterations = getOptional(json, "interation_num", 16);
     photonsPerIteration = getOptional(json, "photons_per",
                                       camera->image->width() * camera->image->height());
-    writeFrequency = getOptional(json, "write_frequency", 64);
+    writeFrequency = getOptional(json, "write_frequency", 128);
 }
 

@@ -329,14 +329,14 @@
         "volume_gather_radius": 0.05
     },
     "renderer": {
-        "output_file": "TungstenRender.png",
+        "output_file": "TungstenRender.exr",
         "resume_render_file": "TungstenRenderState.dat",
         "overwrite_output_files": false,
         "adaptive_sampling": false,
         "enable_resume_render": false,
         "stratified_sampler": false,
         "scene_bvh": true,
-        "spp": 16,
+        "spp": 128,
         "spp_step": 1,
         "checkpoint_interval": "0",
         "timeout": "0"

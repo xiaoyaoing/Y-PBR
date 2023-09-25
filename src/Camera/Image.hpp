@@ -51,6 +51,10 @@ class Image {
             atomicAdd(rgb[0], value.x);
             atomicAdd(rgb[1], value.y);
             atomicAdd(rgb[2], value.z);
+            if(isnan(rgb[0].load()))
+            {
+                spdlog::info("error");
+            }
             return vec3();
         }
 
@@ -79,8 +83,8 @@ class Image {
     uint32 _height;
 public:
     Image(const ivec2 &res, ToneMap::ToneMapType toneMapType = ToneMap::Filmic)
-            : _width(res.x), _height(res.y), _tonemapType(toneMapType), buffers(res.x * res.y),
-              sampleCounts(res.x * res.y) {
+            : _width(res.x), _height(res.y), _tonemapType(toneMapType), buffers(res.x * res.y,Pixel()),
+              sampleCounts(res.x * res.y,0) {
     }
 
     Image(const Image &another) {

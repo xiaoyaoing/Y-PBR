@@ -38,6 +38,13 @@ Spectrum Dielectric::sampleF(SurfaceEvent & event, const vec2 & u) const {
     return f;
 }
 
+Float Dielectric::eta(const SurfaceEvent &event) const
+{
+        if(event.wi.z * event.wo.z >0)
+            return 1;
+        return event.wo.z<0?ior:invIor;
+}
+
 
 Spectrum RoughDielectric::f(const SurfaceEvent & event) const {
     const Spectrum albedo = m_albedo->eval(event.its->uv);

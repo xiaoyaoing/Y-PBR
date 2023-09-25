@@ -14,12 +14,14 @@ struct RenderOptions{
     int spp;
     int sppStep;
     int tileSize;
+    bool overwrite{false};
     std::string outputFileName;
     RenderOptions(const Json & renderJson){
         spp = getOptional(renderJson,"spp",64);
         sppStep = getOptional(renderJson,"spp_step",1);
         tileSize = getOptional(renderJson,"tile_size",16);
         outputFileName = getOptional(renderJson,"output_file",std::string("image.png"));
+        overwrite = getOptional(renderJson,"overwrite_output_files",false);
     }
 };
 
