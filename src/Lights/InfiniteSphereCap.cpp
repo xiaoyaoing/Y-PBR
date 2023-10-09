@@ -1,6 +1,7 @@
 #include "InfiniteSphereCap.h"
 #include "scene.hpp"
 #include "SampleRecords/PositionAndDirectionSample.h"
+#include "Sampler/Warp.hpp"
 
 static inline vec3 uniformSphericalCap(const vec2 & xi, float cosThetaMax) {
     float phi = xi.x * Constant::TWO_PI;
@@ -25,7 +26,17 @@ Spectrum InfinteSphereCap::sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi,
     return _emission;
 }
 
-PositionAndDirectionSample InfinteSphereCap::sampleDirect(const vec2 & positionSample, const vec2 & u2) const{
+PositionAndDirectionSample InfinteSphereCap::sampleDirect(const vec2 & positionSample, const vec2 & dirSample) const{
+    PositionAndDirectionSample sample;
+    auto dir = _capFrame.toWorld(uniformSphericalCap(dirSample,_cosCapAngle));
+    sample.dirPdf = uniformSphericalCapPdf(_cosCapAngle);
+    sample.n = dir;
+    vec3 v1, v2;
+    coordinateSystem(- dir, v1, v2);
+    vec2 cd = Warp::ConcentricSampleDisk(positionSample);
+    vec3 pDisk = _worldCenter + ( cd.x * v1 + cd.y * v2 ) * _worldRadius;
+    sample.posPdf  =1 / (_worldRadius * _worldRadius * Constant::PI );
+    sample.weight =  _emission;
     _NOT_IMPLEMENT_ERROR;
 }
 

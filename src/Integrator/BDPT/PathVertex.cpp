@@ -72,10 +72,9 @@ Float PathVertex::pdf(const PathVertex *prev, const PathVertex &next) const {
         pdf = _sampler.bsdf->Pdf(_record.surfaceRecord.event.makeWarpQuery(wn, wp));
     }
     if (isCamera())
-        _sampler.camera->pdfRay(Ray(_record.cameraRecord.sample.ray.o, wn), nullptr, &pdf);
+        _sampler.camera->pdfRay(Ray(_record.cameraRecord.sample.ray.o, normalize(wn)), nullptr, &pdf);
     if (isMedium())
         TODO("Impl medium pdf");
-    //return pdf;
     return pdf * cosFactor(next) / distance2(pos(),next.pos());
 
 }

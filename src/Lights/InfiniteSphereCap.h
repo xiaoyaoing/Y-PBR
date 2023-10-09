@@ -13,7 +13,7 @@ public:
     Spectrum
     sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf, Float * distance) const override;
 
-    PositionAndDirectionSample sampleDirect(const vec2 & positionSample, const vec2 & u2) const override;
+    PositionAndDirectionSample sampleDirect(const vec2 & positionSample, const vec2 & dirSample) const override;
 
     Spectrum Le(const Ray & ray) const override;
 

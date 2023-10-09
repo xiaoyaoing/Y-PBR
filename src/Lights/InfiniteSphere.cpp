@@ -90,10 +90,9 @@ PositionAndDirectionSample InfinteSphere::sampleDirect(const vec2 & positionSamp
     float sinTheta;
     vec3 dir = - uvToDirection(uv, sinTheta);
     result.n = dir;
-//    *pdf = mapPdf / ( 2 * Constant::PI * Constant::PI * sinTheta );
     result.dirPdf = _emission->pdf(MAP_SPHERICAL, uv) / (2 * Constant::PI * Constant::PI * sinTheta );
     result.posPdf = 1 / (_worldRadius * _worldRadius * Constant::PI );
-    result.weight = _emission->eval(uv) / (result.dirPdf * result.posPdf );
+    result.weight = _emission->eval(uv);
     vec3 v1, v2;
     coordinateSystem(- dir, v1, v2);
     vec2 cd = Warp::ConcentricSampleDisk(positionSample);

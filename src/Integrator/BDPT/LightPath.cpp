@@ -30,9 +30,13 @@ void LightPath::tracePath(const Scene &scene, Sampler &sampler, int traceMaxLeng
     toAreaMeasure();
 }
 
+bool onlyMisWeight = true;
+bool onlyLight = false;
+
 Spectrum
 LightPath::connectCameraBDPT(const Scene &scene, Sampler &sampler,const LightPath &lightPath,  const LightPath &cameraPath, int l,
                              ivec2 &pixel) {
+
     auto camera = cameraPath[0]._sampler.camera;
     const auto &lightVertex = lightPath[l - 1];
     if (!lightVertex.canConnect())
@@ -41,6 +45,8 @@ LightPath::connectCameraBDPT(const Scene &scene, Sampler &sampler,const LightPat
 
     if (!camera->sampleLi(lightVertex.pos(), &pixel, sampler.getNext2D(), sample))
         return Spectrum(0, 0, 0);
+
+
     //return Spectrum(1);
     auto cameraVertex = PathVertex(camera, sample);
 
@@ -49,7 +55,20 @@ LightPath::connectCameraBDPT(const Scene &scene, Sampler &sampler,const LightPat
 
 
     auto res = tr * lightVertex.beta * cameraVertex.beta * lightVertex.eval(cameraVertex, true);
-    return res * misWeight(lightPath,l,cameraPath,1);
+    if(isBlack(res))
+        return Spectrum(0);
+   // return Spectrum(1);
+//    return Spectrum(misWeight(lightPath,l,cameraPath,1));
+//
+//    return Spectrum(distance2(lightVertex.pos(),lightPath[l-2].pos()));
+//    return  Spectrum(lightPath[l-1].pdfFwd);
+//    return Spectrum(misWeight(lightPath,l,cameraPath,1));
+    Float weight = misWeight(lightPath,l,cameraPath,1);
+    if(onlyMisWeight)
+        return  Spectrum(weight);
+    if(onlyLight)
+        return res;
+    return res * weight;
 }
 
 Spectrum
@@ -60,17 +79,37 @@ LightPath::connectBDPT(const Scene &scene, const LightPath &lightPath, int l, co
 
  //   return lightVertex.beta;
     auto s = lightVertex.eval(cameraVertex, true) * cameraVertex.eval(lightVertex, false) * lightVertex.beta *
-             cameraVertex.beta /
-             distance2(lightVertex.pos(), cameraVertex.pos());
+             cameraVertex.beta
+             /distance2(lightVertex.pos(), cameraVertex.pos())
+             ;
+    //s = Spectrum(20.f/distance2(lightVertex.pos(), cameraVertex.pos()));
+    if(luminace(s)>20){
+        int k = 1;
+    }
+    // return Spectrum(distance2(lightVertex.pos(), cameraVertex.pos()));
+
+    //return s;
+  //  return Spectrum(1);
+  //  return  cameraVertex.pos();
    // return normalize(abs(cameraPath[1].pos()-cameraPath[0].pos()));
-    return vec3(misWeight(lightPath,l,cameraPath,c));
+   // return vec3(misWeight(lightPath,l,cameraPath,c));
     // return s;
     if (isBlack(s))
         return s;
     auto ray = generateRay(cameraVertex, lightVertex);
 
     auto tr = evalShadowDirect(scene, ray, nullptr);
-    return s * tr *  misWeight(lightPath,l,cameraPath,c);
+  //  return Spectrum(distance2(lightVertex.pos(),lightPath[l-2].pos()));
+    if(isBlack(s * tr))
+        return Spectrum(0);
+ //   return  Spectrum(lightPath[l-1].pdfFwd);
+  //  return  Spectrum(misWeight(lightPath,l,cameraPath,c));
+    Float weight = misWeight(lightPath,l,cameraPath,c);
+    if(onlyMisWeight)
+        return  Spectrum(weight);
+    if(onlyLight)
+        return s * tr;
+    return s * tr * weight;
 
 }
 
@@ -97,12 +136,20 @@ LightPath::connectLightBDPT(const Scene &scene, Sampler &sampler,const LightPath
         //   return Spectrum(0);
     }
     auto res = lightVertex.beta * cameraVertex.beta * cameraVertex.eval(lightVertex, false);
-    return res * misWeight(lightPath,1,cameraPath,c);
+    if(isBlack(res))
+        return Spectrum(0);
+    //return  Spectrum(misWeight(lightPath,1,cameraPath,c));
+    Float weight = misWeight(lightPath,1,cameraPath,c);
+    if(onlyMisWeight)
+        return  Spectrum(weight);
+    if(onlyLight)
+        return res;
+    return res * weight;
 }
 
 Float LightPath::misWeight(const LightPath &lightPath, int l, const LightPath &cameraPath, int c) {
 
-  //  return 1.f;
+   // return 1.f;
  //   return (1.f/(l+c));
     Float *pdfForward = reinterpret_cast<float *>(alloca((l + c) * sizeof(float)));
     Float *pdfBackward = reinterpret_cast<float *>(alloca((l + c) * sizeof(float)));
@@ -149,7 +196,13 @@ Float LightPath::misWeight(const LightPath &lightPath, int l, const LightPath &c
     if (lightMinus)
         pdfBackward[l - 2] = lightEnd->pdf(cameraEnd, *lightMinus);
 
-
+    if(pdfForward[l-1]==0){
+        int k =1;
+    }
+    if(isinf(pdfBackward[l-1]/pdfForward[l-1])){
+        int k = 1;
+    }
+  //  return pdfBackward[l-1];
 
 
     auto remap0 = [](Float f) -> Float { return f != 0 ? f : 1; };
@@ -161,7 +214,7 @@ Float LightPath::misWeight(const LightPath &lightPath, int l, const LightPath &c
             auto t = length(cameraPath[1].pos() -  cameraPath[2].pos());
             int k  = 1;
         }
-        return pdfForward[i];
+       // return pdfForward[i];
         ri *= pdfBackward[i] / pdfForward[i]  ;
         if(isnan(ri) || isinf(ri)){
             cameraEnd->pdf(lightEnd, *cameraMinus);
@@ -194,19 +247,24 @@ Float LightPath::misWeight(const LightPath &lightPath, int l, const LightPath &c
     if(1.f/sumR<0.01){
         int k =1;
     }
-
+  //  return sumR;
     return 1.f / sumR;
 
 }
 
 void LightPath::toAreaMeasure() {
+   // return ;
     for(int i=1;i<_length;i++){
         if(_vertexs[i-1].isDelta())
             continue;
         _vertexs[i].pdfFwd /= distance2(_vertexs[i].pos(),_vertexs[i-1].pos());
+        auto d= distance2(_vertexs[i].pos(),_vertexs[i-1].pos());
+        if(i==2 && _vertexs[i].pdfFwd <=0.003){
+            int k  = 1;
+        }
         if(_vertexs[i].isSurface())
             _vertexs[i].pdfFwd *= _vertexs[i-1].cosFactor(_vertexs[i]);
-        _vertexs[i].pdfFwd = 1/ distance2(_vertexs[i].pos(),_vertexs[i-1].pos());
+        //_vertexs[i].pdfFwd = 1/ distance2(_vertexs[i].pos(),_vertexs[i-1].pos());
         if(isinf(_vertexs[i].pdfFwd)){
             int k  = 1;
         }

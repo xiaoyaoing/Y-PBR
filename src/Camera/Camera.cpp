@@ -217,7 +217,6 @@ Spectrum Camera::evalDirection(vec3 p, ivec2 *pRaster, Float *pdf) const {
 
 //默认是从相机那一点出发
 Spectrum Camera::rayWeight(const Ray &ray, ivec2 *pRaster) const {
-    auto localO = transformPoint(_toLocal, ray.o);
     auto localD = transformVector(_toLocal, ray.d);
     auto cosTheta = dot(localD, vec3(0, 0, 1));
     auto cos2Theta = cosTheta * cosTheta;
@@ -271,9 +270,25 @@ bool Camera::sampleLi(vec3 p, ivec2 *pRaster, vec2 sample, PositionAndDirectionS
 }
 
 void Camera::pdfRay(const Ray &ray, Float *pdfPos, Float *pdfDir) const{
-    auto localD = transformVector(_toLocal,ray.d);
-    if(pdfPos)  *pdfPos = 1;
-    if(pdfDir)  *pdfDir = 1.f / A * (localD.z * localD.z * localD.z);
+
+    Float cosTheta = dot(ray.d, transformVector(_cameraToWorld,vec3(0,0,1)));
+    if(cosTheta<=0){
+        if(pdfPos) *pdfPos = 0;
+        if(pdfDir) *pdfDir = 0;
+        return;
+    }
+    auto p = ray(_planeDist / cosTheta);
+    auto pRaster3d = transformPoint(_cameraToRaster, transformPoint(_toLocal, p));
+    if (pRaster3d.x < _res.x && pRaster3d.y < _res.y && pRaster3d.x >= 0 && pRaster3d.y >= 0) {
+        auto localD = transformVector(_toLocal,ray.d);
+        if(pdfPos)  *pdfPos = 1;
+        if(pdfDir)  *pdfDir = 1.f / A * (cosTheta * cosTheta * cosTheta);
+    } else {
+        if(pdfPos) *pdfPos = 0;
+        if(pdfDir) *pdfDir = 0;
+        return;
+    }
+
 }
 
 

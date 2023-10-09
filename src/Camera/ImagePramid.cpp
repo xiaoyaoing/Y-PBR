@@ -7,7 +7,7 @@ void ImagePrid::saveOutPut(const std::string &fileName, Float scale) {
                 int s = length + 1 - t;
                 int idx = pyramidIndex(s, t);
                 char buffer[100];
-                sprintf(buffer, "%s-s=%d-t=%d.exr", prefix.c_str(),s,t);
+                sprintf(buffer, "%s-l=%d-c=%d.exr", prefix.c_str(),s,t);
                 images[idx].save(std::string(buffer),scale,true);
             }
         }

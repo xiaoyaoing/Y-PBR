@@ -35,10 +35,10 @@ Float Warp::squareToTentPdf(const vec2 & p) {
 vec2 Warp::ConcentricSampleDisk(const vec2 & u) {
     vec2 uOffset = 2.f * u - vec2(1, 1);
 
-// Handle degeneracy at the origin
+    // Handle degeneracy at the origin
     if ( uOffset.x == 0 && uOffset.y == 0 ) return vec2(0, 0);
 
-// Apply concentric mapping to point
+    // Apply concentric mapping to point
     Float theta, r;
     if ( std::abs(uOffset.x) > std::abs(uOffset.y) ) {
         r = uOffset.x;

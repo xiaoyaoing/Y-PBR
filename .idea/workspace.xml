@@ -37,633 +37,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3bc67e00-be72-4fc3-9449-a7a4f1302963" name="Changes" comment="save">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/query/client-vscode/query.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/cache-v2-dedea7b0331041a346b1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/cmakeFiles-v1-647e9f776be28a623367.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/codemodel-v2-2266278ecace68757705.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-.-Debug-d0094a50bb2071803777.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-.-MinSizeRel-d0094a50bb2071803777.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-.-RelWithDebInfo-d0094a50bb2071803777.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-.-Release-d0094a50bb2071803777.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-lib-Debug-e9069484d90298468a11.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-lib-MinSizeRel-e9069484d90298468a11.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-lib-RelWithDebInfo-e9069484d90298468a11.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-lib-Release-e9069484d90298468a11.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-lib.glm-Debug-ce07c1f5db497389ae15.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-lib.glm-MinSizeRel-ce07c1f5db497389ae15.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-lib.glm-RelWithDebInfo-ce07c1f5db497389ae15.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-lib.glm-Release-ce07c1f5db497389ae15.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-lib.stb-Debug-209083de59caa9f715e7.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-lib.stb-MinSizeRel-209083de59caa9f715e7.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-lib.stb-RelWithDebInfo-209083de59caa9f715e7.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-lib.stb-Release-209083de59caa9f715e7.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-lib.tinyexr-Debug-9f9471477442de4cd1aa.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-lib.tinyexr-MinSizeRel-9f9471477442de4cd1aa.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-lib.tinyexr-RelWithDebInfo-9f9471477442de4cd1aa.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-lib.tinyexr-Release-9f9471477442de4cd1aa.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-tiny-cuda-nn-Debug-498a1ec56eac94bbda01.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-tiny-cuda-nn-MinSizeRel-498a1ec56eac94bbda01.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-tiny-cuda-nn-RelWithDebInfo-498a1ec56eac94bbda01.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-tiny-cuda-nn-Release-498a1ec56eac94bbda01.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-tiny-cuda-nn.benchmarks.image-Debug-77c10edbdb9df00fb6a5.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-tiny-cuda-nn.benchmarks.image-MinSizeRel-77c10edbdb9df00fb6a5.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-tiny-cuda-nn.benchmarks.image-RelWithDebInfo-77c10edbdb9df00fb6a5.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-tiny-cuda-nn.benchmarks.image-Release-77c10edbdb9df00fb6a5.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-tiny-cuda-nn.dependencies.fmt-Debug-0508bda1c3374ab75ecc.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-tiny-cuda-nn.dependencies.fmt-MinSizeRel-0508bda1c3374ab75ecc.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-tiny-cuda-nn.dependencies.fmt-RelWithDebInfo-0508bda1c3374ab75ecc.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-tiny-cuda-nn.dependencies.fmt-Release-0508bda1c3374ab75ecc.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-tiny-cuda-nn.samples-Debug-aa5c667f83d1e9f192b1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-tiny-cuda-nn.samples-MinSizeRel-aa5c667f83d1e9f192b1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-tiny-cuda-nn.samples-RelWithDebInfo-aa5c667f83d1e9f192b1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/directory-tiny-cuda-nn.samples-Release-aa5c667f83d1e9f192b1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/index-2023-08-06T06-40-44-0297.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ALL_BUILD-Debug-2d4c28be8c7485196da1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ALL_BUILD-Debug-c59d7365b0509df320ec.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ALL_BUILD-Debug-c6da0f47ac712dad25a0.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ALL_BUILD-Debug-fd651b6baf1bd80d6f04.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ALL_BUILD-MinSizeRel-2d4c28be8c7485196da1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ALL_BUILD-MinSizeRel-c59d7365b0509df320ec.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ALL_BUILD-MinSizeRel-c6da0f47ac712dad25a0.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ALL_BUILD-MinSizeRel-fd651b6baf1bd80d6f04.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ALL_BUILD-RelWithDebInfo-2d4c28be8c7485196da1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ALL_BUILD-RelWithDebInfo-c59d7365b0509df320ec.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ALL_BUILD-RelWithDebInfo-c6da0f47ac712dad25a0.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ALL_BUILD-RelWithDebInfo-fd651b6baf1bd80d6f04.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ALL_BUILD-Release-2d4c28be8c7485196da1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ALL_BUILD-Release-c59d7365b0509df320ec.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ALL_BUILD-Release-c6da0f47ac712dad25a0.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ALL_BUILD-Release-fd651b6baf1bd80d6f04.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-Y_PBR-Debug-87c0201ac2ed1e0b8782.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-Y_PBR-MinSizeRel-0207489e3b7d169354eb.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-Y_PBR-RelWithDebInfo-af73ed9eead997fbbfb5.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-Y_PBR-Release-df88ec4cfca60043b8b8.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ZERO_CHECK-Debug-749caa362294fa1dfa83.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ZERO_CHECK-MinSizeRel-749caa362294fa1dfa83.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ZERO_CHECK-RelWithDebInfo-749caa362294fa1dfa83.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-ZERO_CHECK-Release-749caa362294fa1dfa83.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-bench_image_ours-Debug-3f9fb3c60b777fc34fd0.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-bench_image_ours-MinSizeRel-8eb3b4aae759ad423d27.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-bench_image_ours-RelWithDebInfo-e6b41a52d67b12877c8a.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-bench_image_ours-Release-b09a8470dcbea1efa1ff.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-fmt-Debug-c65f84ebcab961df757d.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-fmt-MinSizeRel-d11b8782a1d4af5e1243.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-fmt-RelWithDebInfo-b36f40d71d50a5bf901a.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-fmt-Release-ad44794f21ecfdcf4558.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-hair-nn-Debug-6d17cc3c57967ad4fe51.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-hair-nn-MinSizeRel-9cd50b2452938af2c2af.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-hair-nn-RelWithDebInfo-0ea1049ef4a7bc6ccaba.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-hair-nn-Release-644fe9d7c0690422a3c2.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-lib-Debug-5499b531b90683ab8b89.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-lib-MinSizeRel-a6985e55e5cb5dff2332.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-lib-RelWithDebInfo-c76b155a1f8f44d9d610.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-lib-Release-2899953f67917fbb41c8.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-miniz-Debug-da93ab3f1b0fc05b8572.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-miniz-MinSizeRel-ce4d328ed828031ea1eb.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-miniz-RelWithDebInfo-a34d8e6ec3341a8af847.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-miniz-Release-896449053b13f0df15c4.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-mlp_learning_an_image-Debug-da26504dca111cc28478.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-mlp_learning_an_image-MinSizeRel-8e9e6eb8b24897137179.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-mlp_learning_an_image-RelWithDebInfo-610a7f4be41957192182.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-mlp_learning_an_image-Release-c80daeae39967d07bafd.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-sampleTest-Debug-5dee394379d2628ff863.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-sampleTest-MinSizeRel-c5ba1ee09449a5403e12.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-sampleTest-RelWithDebInfo-1ea00a2277f89117e640.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-sampleTest-Release-5628d4e7f4e35e40143c.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-stb-Debug-6b02443f3aa5e205407c.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-stb-MinSizeRel-493b5b45960fae8fab4f.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-stb-RelWithDebInfo-bd6e85a2a05a0cd83122.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-stb-Release-48b6d8b39211a73ac7e4.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-test_tinyexr-Debug-5a8f0c9d85d8a7ef77a6.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-test_tinyexr-MinSizeRel-fe29d7caae00dface47f.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-test_tinyexr-RelWithDebInfo-cf64098fe09ef7ca6107.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-test_tinyexr-Release-44e8ee68ffbc2a45aa42.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-tiny-cuda-nn-Debug-d08ca3a1e4792a9b68da.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-tiny-cuda-nn-MinSizeRel-834076817f7c38097c2b.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-tiny-cuda-nn-RelWithDebInfo-d2e5b598a7c336212b16.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-tiny-cuda-nn-Release-07da293d1aeb5ca48ec2.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-tinyexr-Debug-10f7d3a6a38acf17f9b1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-tinyexr-MinSizeRel-2e1face4ff8616415c26.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-tinyexr-RelWithDebInfo-25a1831def3e3edab104.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-tinyexr-Release-442c39ab9cfcbbf92c15.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/toolchains-v1-ad2cd22ae6981089bfea.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.vs/Y-PBR/v16/.suo" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.vs/Y-PBR/v16/Browse.VC.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.vs/Y-PBR/v16/Solution.VC.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/.vs/Y-PBR/v16/ipch/AutoPCH/5b1a6019a003208a/BSDFFACTORY.ipch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ALL_BUILD.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ALL_BUILD.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ALL_BUILD.vcxproj.user" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeCache.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/1dffe6be0c73dd405c412294144418d4/INSTALL_force.rule" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CMakeCCompiler.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CMakeCUDACompiler.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CMakeCXXCompiler.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CMakeDetermineCompilerABI_CUDA.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CMakeRCCompiler.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CMakeSystem.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdC/CompilerIdC.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdC/CompilerIdC.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdC/Debug/CMakeCCompilerId.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdC/Debug/CompilerIdC.exe.recipe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdC/Debug/CompilerIdC.tlog/CL.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdC/Debug/CompilerIdC.tlog/CL.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdC/Debug/CompilerIdC.tlog/CL.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdC/Debug/CompilerIdC.tlog/CompilerIdC.lastbuildstate" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdC/Debug/CompilerIdC.tlog/link.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdC/Debug/CompilerIdC.tlog/link.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdC/Debug/CompilerIdC.tlog/link.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/CMakeCUDACompilerId.cu" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/CompilerIdCUDA.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/CompilerIdCUDA.exp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/CompilerIdCUDA.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/CompilerIdCUDA.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/Debug/CMakeCUDACompilerId.cu.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/Debug/CMakeCUDACompilerId.cu529074966.deps" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/Debug/CompilerIdCUDA.exe.recipe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/Debug/CompilerIdCUDA.tlog/CompilerIdCUDA.lastbuildstate" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/Debug/CompilerIdCUDA.tlog/CompilerIdCUDA.write.1u.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/Debug/CompilerIdCUDA.tlog/CudaCompile.read.1u.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/Debug/CompilerIdCUDA.tlog/CudaCompile.write.1u.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/Debug/CompilerIdCUDA.tlog/link.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/Debug/CompilerIdCUDA.tlog/link.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/Debug/CompilerIdCUDA.tlog/link.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/Debug/vc142.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCUDA/x64/Debug/CMakeCUDACompilerId.cu.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCXX/CompilerIdCXX.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCXX/CompilerIdCXX.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCXX/Debug/CMakeCXXCompilerId.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCXX/Debug/CompilerIdCXX.exe.recipe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCXX/Debug/CompilerIdCXX.tlog/CL.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCXX/Debug/CompilerIdCXX.tlog/CL.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCXX/Debug/CompilerIdCXX.tlog/CL.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCXX/Debug/CompilerIdCXX.tlog/CompilerIdCXX.lastbuildstate" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCXX/Debug/CompilerIdCXX.tlog/link.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCXX/Debug/CompilerIdCXX.tlog/link.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/CompilerIdCXX/Debug/CompilerIdCXX.tlog/link.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/VCTargetsPath.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/VCTargetsPath.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/x64/Debug/VCTargetsPath.recipe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.27.0-rc4/x64/Debug/VCTargetsPath.tlog/VCTargetsPath.lastbuildstate" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/4ed2b72b90e104b0c3b75ea895453ea0/INSTALL_force.rule" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/9bf53630f84721529989c19fad03154c/INSTALL_force.rule" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/9f8e8b07274063c07b732c05afa4334e/INSTALL_force.rule" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/CMakeConfigureLog.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/TargetDirectories.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/c090c3d7c00937c7300dd3180f15a8fd/INSTALL_force.rule" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/cmake.check_cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/d026f2662284bbd54e8052f104e30a8b/INSTALL_force.rule" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/d026f2662284bbd54e8052f104e30a8b/generate.stamp.rule" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/d8e50a9a3814bc91b55199b78aabfdff/INSTALL_force.rule" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/eb7391c434ff06af95bcbef71aad883d/INSTALL_force.rule" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/f5d0ca1af8f7a41e11005ee64f7fdfc0/INSTALL_force.rule" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/generate.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/generate.stamp.depend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/generate.stamp.list" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Debug/Y_PBR.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Debug/Y_PBR.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/INSTALL.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/INSTALL.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y-PBR.sln" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/API.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/ArHosekSkyModel.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/BSSRDF.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/BVH.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/BdptTracer.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/BitMapTexture.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/BoundingBox.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/BsdfFactory.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Camera.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/CameraPath.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/CheckTexture.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/ComplexIor.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Conductor.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/ConstantTexture.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Cube.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Curve.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/CurveIO.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Debug.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Dielectric.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Disk.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Disney.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Distant.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Distrib.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/EmbreeUtils.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/FileUtils.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Forward.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Frame.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Hair.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Hair_GGX.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/HaltonSampler.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Image.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/ImageIO.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/ImagePramid.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/InfiniteSphere.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/InfiniteSphereCap.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Integrator.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Intersection.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Json.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/KdTree.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Light.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/LightDistrib.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/LightFactory.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/LightPath.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/LowDiscrepancy.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Medium.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/MediumFactory.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/MeshIO.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/MicrofacetDistribution.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/ObjLoader.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Parallel.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/PathIntegrator.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/PathVertex.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/PhaseFunction.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/PhaseFunctionFactory.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/PhotonMapper.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Plastic.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/PrecomputeALobe.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Primitive.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/PrimitiveFactory.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/ProgressReporter.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Quad.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Ray.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Reflection.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Render.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/RoughHair.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/SamplerFactory.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Scene.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/SkyDome.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Spectral.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Spectrum.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Sphere.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Texture.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/TextureFactory.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/ToneMap.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/TraceHelper.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Transform.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Triangle.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/TriangleHelper.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/TriangleMesh.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/UniformSampler.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/VolPathIntegrator.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Warp.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Y_PBR.exe.recipe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Y_PBR.ilk" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Y_PBR.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Y_PBR.tlog/CL.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Y_PBR.tlog/CL.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Y_PBR.tlog/CL.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Y_PBR.tlog/CustomBuild.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Y_PBR.tlog/CustomBuild.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Y_PBR.tlog/CustomBuild.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Y_PBR.tlog/Y_PBR.lastbuildstate" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Y_PBR.tlog/link.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Y_PBR.tlog/link.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/Y_PBR.tlog/link.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/histogram.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/lodepng.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/main.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/src/Bsdfs/Material.cpp.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/src/Integrator/BDPT/BDPTIntegrator.cpp.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/src/Integrator/BDPTIntegrator.cpp.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/src/Materials/Material.cpp.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.dir/Debug/vc142.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Y_PBR.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ZERO_CHECK.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ZERO_CHECK.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/bench_image_ours.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/bench_image_ours.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/cmake_install.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/detect_tcnn_cuda_architectures.cu" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hair-nn.dir/Debug/hair-accleerate.cu-266317137.deps" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hair-nn.dir/Debug/hair-accleerate.cu.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hair-nn.dir/Debug/hair-nn.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hair-nn.dir/Debug/hair-nn.tlog/CudaCompile.read.1u.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hair-nn.dir/Debug/hair-nn.tlog/CudaCompile.write.1u.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hair-nn.dir/Debug/hair-nn.tlog/CustomBuild.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hair-nn.dir/Debug/hair-nn.tlog/CustomBuild.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hair-nn.dir/Debug/hair-nn.tlog/CustomBuild.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hair-nn.dir/Debug/hair-nn.tlog/hair-nn.lastbuildstate" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hair-nn.dir/Debug/hair-nn.tlog/unsuccessfulbuild" beforeDir="false" afterPath="$PROJECT_DIR$/src/SampleRecords/SurfaceScatterEvent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hair-nn.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hair-nn.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/CMakeFiles/generate.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/CMakeFiles/generate.stamp.depend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/Debug/embree3.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/Debug/lib.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/Debug/lib.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/Debug/tbb12.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/INSTALL.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/INSTALL.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/cmake_install.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/glm/CMakeFiles/generate.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/glm/CMakeFiles/generate.stamp.depend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/glm/INSTALL.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/glm/INSTALL.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/glm/cmake_install.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/lib.dir/Debug/lib.lib.recipe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/lib.dir/Debug/lib.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/lib.dir/Debug/lib.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/lib.dir/Debug/lib.tlog/CL.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/lib.dir/Debug/lib.tlog/CL.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/lib.dir/Debug/lib.tlog/CL.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/lib.dir/Debug/lib.tlog/CustomBuild.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/lib.dir/Debug/lib.tlog/CustomBuild.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/lib.dir/Debug/lib.tlog/CustomBuild.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/lib.dir/Debug/lib.tlog/Lib-link.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/lib.dir/Debug/lib.tlog/Lib-link.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/lib.dir/Debug/lib.tlog/Lib.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/lib.dir/Debug/lib.tlog/lib.lastbuildstate" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/lib.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/lib.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/stb/CMakeFiles/generate.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/stb/CMakeFiles/generate.stamp.depend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/stb/INSTALL.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/stb/INSTALL.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/stb/cmake_install.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/stb/stb.dir/Debug/objects.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/stb/stb.dir/MinSizeRel/objects.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/stb/stb.dir/RelWithDebInfo/objects.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/stb/stb.dir/Release/objects.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/stb/stb.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/stb/stb.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/ALL_BUILD.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/ALL_BUILD.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/CMakeFiles/generate.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/CMakeFiles/generate.stamp.depend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/Debug/miniz.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/Debug/miniz.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/Debug/test_tinyexr.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/Debug/test_tinyexr.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/Debug/tinyexr.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/Debug/tinyexr.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/INSTALL.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/INSTALL.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/cmake_install.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/miniz.dir/Debug/miniz.lib.recipe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/miniz.dir/Debug/miniz.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/miniz.dir/Debug/miniz.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/miniz.dir/Debug/miniz.tlog/CL.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/miniz.dir/Debug/miniz.tlog/CL.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/miniz.dir/Debug/miniz.tlog/CL.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/miniz.dir/Debug/miniz.tlog/CustomBuild.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/miniz.dir/Debug/miniz.tlog/CustomBuild.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/miniz.dir/Debug/miniz.tlog/CustomBuild.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/miniz.dir/Debug/miniz.tlog/Lib-link.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/miniz.dir/Debug/miniz.tlog/Lib-link.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/miniz.dir/Debug/miniz.tlog/Lib.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/miniz.dir/Debug/miniz.tlog/miniz.lastbuildstate" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/miniz.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/miniz.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/test_tinyexr.dir/Debug/test_tinyexr.exe.recipe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/test_tinyexr.dir/Debug/test_tinyexr.ilk" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/test_tinyexr.dir/Debug/test_tinyexr.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/test_tinyexr.dir/Debug/test_tinyexr.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/test_tinyexr.dir/Debug/test_tinyexr.tlog/CL.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/test_tinyexr.dir/Debug/test_tinyexr.tlog/CL.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/test_tinyexr.dir/Debug/test_tinyexr.tlog/CL.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/test_tinyexr.dir/Debug/test_tinyexr.tlog/CustomBuild.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/test_tinyexr.dir/Debug/test_tinyexr.tlog/CustomBuild.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/test_tinyexr.dir/Debug/test_tinyexr.tlog/CustomBuild.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/test_tinyexr.dir/Debug/test_tinyexr.tlog/link.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/test_tinyexr.dir/Debug/test_tinyexr.tlog/link.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/test_tinyexr.dir/Debug/test_tinyexr.tlog/link.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/test_tinyexr.dir/Debug/test_tinyexr.tlog/test_tinyexr.lastbuildstate" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/test_tinyexr.dir/Debug/vc142.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/test_tinyexr.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/test_tinyexr.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/tinyexr.dir/Debug/tinyexr.lib.recipe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/tinyexr.dir/Debug/tinyexr.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/tinyexr.dir/Debug/tinyexr.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/tinyexr.dir/Debug/tinyexr.tlog/CL.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/tinyexr.dir/Debug/tinyexr.tlog/CL.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/tinyexr.dir/Debug/tinyexr.tlog/CL.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/tinyexr.dir/Debug/tinyexr.tlog/CustomBuild.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/tinyexr.dir/Debug/tinyexr.tlog/CustomBuild.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/tinyexr.dir/Debug/tinyexr.tlog/CustomBuild.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/tinyexr.dir/Debug/tinyexr.tlog/Lib-link.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/tinyexr.dir/Debug/tinyexr.tlog/Lib-link.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/tinyexr.dir/Debug/tinyexr.tlog/Lib.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/tinyexr.dir/Debug/tinyexr.tlog/tinyexr.lastbuildstate" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/tinyexr.sln" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/tinyexr.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/lib/tinyexr/tinyexr.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/mlp_learning_an_image.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/mlp_learning_an_image.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/ArHosekSkyModel.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/BitMapTexture.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/CameraPath.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/Debug.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/Disney.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/FileUtils.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/Hair_GGX.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/KdTree.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/LightFactory.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/RoughHair.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/ToneMap.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/Triangle.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/histogram.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/lodepng.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/sampleTest.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/sampleTest.tlog/CL.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/sampleTest.tlog/CL.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/sampleTest.tlog/CL.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/sampleTest.tlog/CustomBuild.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/sampleTest.tlog/CustomBuild.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/sampleTest.tlog/CustomBuild.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/sampleTest.tlog/sampleTest.lastbuildstate" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/sampleTest.tlog/unsuccessfulbuild" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.dir/Debug/vc142.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/sampleTest.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/ALL_BUILD.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/ALL_BUILD.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/CMakeFiles/generate.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/CMakeFiles/generate.stamp.depend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/Debug/tiny-cuda-nn.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/Debug/tiny-cuda-nn.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/INSTALL.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/INSTALL.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/CMakeFiles/generate.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/CMakeFiles/generate.stamp.depend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/Debug/bench_image_ours.exp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/Debug/bench_image_ours.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/INSTALL.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/INSTALL.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/bench_image_ours.exe.recipe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/bench_image_ours.ilk" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/bench_image_ours.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/bench_image_ours.tlog/CL.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/bench_image_ours.tlog/CL.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/bench_image_ours.tlog/CL.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/bench_image_ours.tlog/CudaCompile.read.1u.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/bench_image_ours.tlog/CudaCompile.write.1u.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/bench_image_ours.tlog/CustomBuild.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/bench_image_ours.tlog/CustomBuild.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/bench_image_ours.tlog/CustomBuild.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/bench_image_ours.tlog/bench_image_ours.lastbuildstate" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/bench_image_ours.tlog/bench_image_ours.write.1u.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/bench_image_ours.tlog/link.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/bench_image_ours.tlog/link.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/bench_image_ours.tlog/link.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/bench_ours.cu.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/bench_ours.cu1584584558.deps" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/bench_ours.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/stbi_wrapper.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.dir/Debug/vc142.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/bench_image_ours.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/benchmarks/image/cmake_install.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/cmake_install.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/ALL_BUILD.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/ALL_BUILD.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/CMakeFiles/generate.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/CMakeFiles/generate.stamp.depend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/Debug/fmtd.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/Debug/fmtd.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/FMT.sln" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/INSTALL.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/INSTALL.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/cmake_install.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/fmt.dir/Debug/fmt.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/fmt.dir/Debug/fmt.tlog/CL.14236.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/fmt.dir/Debug/fmt.tlog/CL.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/fmt.dir/Debug/fmt.tlog/CL.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/fmt.dir/Debug/fmt.tlog/CustomBuild.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/fmt.dir/Debug/fmt.tlog/CustomBuild.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/fmt.dir/Debug/fmt.tlog/CustomBuild.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/fmt.dir/Debug/fmt.tlog/Lib-link.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/fmt.dir/Debug/fmt.tlog/Lib-link.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/fmt.dir/Debug/fmt.tlog/Lib.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/fmt.dir/Debug/fmt.tlog/fmt.lastbuildstate" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/fmt.dir/Debug/fmtd.lib.recipe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/fmt.dir/Debug/format.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/fmt.dir/Debug/os.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/fmt.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/dependencies/fmt/fmt.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/CMakeFiles/generate.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/CMakeFiles/generate.stamp.depend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/Debug/mlp_learning_an_image.exp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/Debug/mlp_learning_an_image.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/INSTALL.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/INSTALL.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/cmake_install.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/mlp_lear.CBE3ED3D.tlog/CL.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/mlp_lear.CBE3ED3D.tlog/CL.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/mlp_lear.CBE3ED3D.tlog/CL.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/mlp_lear.CBE3ED3D.tlog/CudaCompile.read.1u.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/mlp_lear.CBE3ED3D.tlog/CudaCompile.write.1u.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/mlp_lear.CBE3ED3D.tlog/CustomBuild.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/mlp_lear.CBE3ED3D.tlog/CustomBuild.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/mlp_lear.CBE3ED3D.tlog/CustomBuild.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/mlp_lear.CBE3ED3D.tlog/link.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/mlp_lear.CBE3ED3D.tlog/link.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/mlp_lear.CBE3ED3D.tlog/link.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/mlp_lear.CBE3ED3D.tlog/mlp_learning_an_image.lastbuildstate" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/mlp_lear.CBE3ED3D.tlog/mlp_learning_an_image.write.1u.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/mlp_learning_an_image.cu.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/mlp_learning_an_image.cu478149130.deps" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/mlp_learning_an_image.exe.recipe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/mlp_learning_an_image.ilk" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/mlp_learning_an_image.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/mlp_learning_an_image.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/stbi_wrapper.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.dir/Debug/vc142.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/samples/mlp_learning_an_image.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/common_host.cu-1418598476.deps" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/common_host.cu.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/common_host.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/cpp_api.cu-84146845.deps" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/cpp_api.cu.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/cpp_api.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/cutlass_mlp.cu.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/cutlass_mlp.cu522069594.deps" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/cutlass_mlp.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/encoding.cu.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/encoding.cu1173792482.deps" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/encoding.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/fully_fused_mlp.cu-1405014576.deps" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/fully_fused_mlp.cu.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/fully_fused_mlp.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/loss.cu-425935940.deps" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/loss.cu.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/loss.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/network.cu.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/network.cu999276830.deps" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/network.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/object.cu-1168629974.deps" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/object.cu.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/object.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/optimizer.cu.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/optimizer.cu1608600510.deps" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/optimizer.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/reduce_sum.cu.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/reduce_sum.cu1050017647.deps" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/reduce_sum.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/tiny-cuda-nn.lib.recipe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/tiny-cuda-nn.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/tiny-cuda-nn.tlog/CudaCompile.read.1u.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/tiny-cuda-nn.tlog/CudaCompile.write.1u.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/tiny-cuda-nn.tlog/CustomBuild.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/tiny-cuda-nn.tlog/CustomBuild.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/tiny-cuda-nn.tlog/CustomBuild.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/tiny-cuda-nn.tlog/Lib-link.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/tiny-cuda-nn.tlog/Lib-link.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/tiny-cuda-nn.tlog/Lib.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.dir/Debug/tiny-cuda-nn.tlog/tiny-cuda-nn.lastbuildstate" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.sln" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tiny-cuda-nn/tiny-cuda-nn.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/x64/Debug/ALL_BUILD/ALL_BUILD.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/x64/Debug/ALL_BUILD/ALL_BUILD.recipe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/x64/Debug/ALL_BUILD/ALL_BUILD.tlog/ALL_BUILD.lastbuildstate" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/x64/Debug/ALL_BUILD/ALL_BUILD.tlog/CustomBuild.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/x64/Debug/ALL_BUILD/ALL_BUILD.tlog/CustomBuild.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/x64/Debug/ALL_BUILD/ALL_BUILD.tlog/CustomBuild.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/x64/Debug/ZERO_CHECK/ZERO_CHECK.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/x64/Debug/ZERO_CHECK/ZERO_CHECK.recipe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/x64/Debug/ZERO_CHECK/ZERO_CHECK.tlog/CustomBuild.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/x64/Debug/ZERO_CHECK/ZERO_CHECK.tlog/CustomBuild.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/x64/Debug/ZERO_CHECK/ZERO_CHECK.tlog/CustomBuild.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/x64/Debug/ZERO_CHECK/ZERO_CHECK.tlog/ZERO_CHECK.lastbuildstate" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example-scenes/hair/scene.json" beforeDir="false" afterPath="$PROJECT_DIR$/example-scenes/hair/scene.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example-scenes/water-caustic/scene.json" beforeDir="false" afterPath="$PROJECT_DIR$/example-scenes/water-caustic/scene.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lib/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Bsdfs/Dielectric.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bsdfs/Dielectric.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Bsdfs/Dielectric.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bsdfs/Dielectric.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Bsdfs/Hair.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bsdfs/Hair.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Bsdfs/PrecomputeALobe.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bsdfs/PrecomputeALobe.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Bsdfs/PrecomputeALobe.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bsdfs/PrecomputeALobe.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Bsdfs/Reflection.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bsdfs/Reflection.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Bsdfs/Reflection.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bsdfs/Reflection.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Camera/Image.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Camera/Image.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Camera/Image.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Camera/Image.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Common/Json.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Common/Json.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Common/Render.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Common/Render.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Common/Render.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Common/Render.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Common/math.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Common/math.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/IO/FileUtils.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/IO/FileUtils.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Integrator/Integrator.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Integrator/Integrator.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Integrator/PathIntegrator.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Integrator/PathIntegrator.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Integrator/PhotonMapper.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Integrator/PhotonMapper.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Integrator/TraceHelper.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Integrator/TraceHelper.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Ray/Ray.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Ray/Ray.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SampleRecords/SurfaceScatterEvent.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/SampleRecords/SurfaceScatterEvent.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Sampler/UniformSampler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sampler/UniformSampler.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Sampler/UniformSampler.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sampler/UniformSampler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scene.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/scene.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/hair-accleerate.cu" beforeDir="false" afterPath="$PROJECT_DIR$/test/hair-accleerate.cu" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Camera/Camera.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Camera/Camera.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Camera/ImagePramid.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Camera/ImagePramid.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Integrator/BDPT/BdptTracer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Integrator/BDPT/BdptTracer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Integrator/BDPT/LightPath.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Integrator/BDPT/LightPath.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Integrator/BDPT/PathVertex.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Integrator/BDPT/PathVertex.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Lights/InfiniteSphere.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Lights/InfiniteSphere.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Lights/InfiniteSphere.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Lights/InfiniteSphere.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Lights/InfiniteSphereCap.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Lights/InfiniteSphereCap.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Lights/InfiniteSphereCap.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Lights/InfiniteSphereCap.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SampleRecords/PositionAndDirectionSample.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/SampleRecords/PositionAndDirectionSample.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Sampler/Warp.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sampler/Warp.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tiny-cuda-nn" beforeDir="false" afterPath="$PROJECT_DIR$/tiny-cuda-nn" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tiny-cuda-nn/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tiny-cuda-nn/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tiny-cuda-nn/bindings/torch/tinycudann/bindings.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tiny-cuda-nn/bindings/torch/tinycudann/bindings.cpp" afterDir="false" />
@@ -686,7 +71,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:RelWithDebInfo-Visual Studio" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Release-Visual Studio  2022" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
@@ -702,28 +87,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "ToolWindowRun.ShowToolbar": "false",
-    "WebServerToolWindowFactoryState": "false",
-    "cf.advertisement.text.has.clang-format": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "E:/code/Y-PBR/example-scenes/caustics",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "CMakeSettings",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;ToolWindowRun.ShowToolbar&quot;: &quot;false&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.advertisement.text.has.clang-format&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/code/Y-PBR/example-scenes/caustics&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;CMakeSettings&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\code\Y-PBR\example-scenes\caustics" />
@@ -740,12 +125,7 @@
     </key>
   </component>
   <component name="RunManager" selected="CMake Application.Y_PBR">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Y_PBR" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="E:\code\Y-PBR\example-scenes\caustics\" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Y-PBR" TARGET_NAME="Y_PBR" CONFIG_NAME="Debug-Visual Studio" RUN_TARGET_PROJECT_NAME="Y-PBR" RUN_TARGET_NAME="Y_PBR">
+    <configuration name="Y_PBR" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="E:\code\Y-PBR\example-scenes\veach-bidir\" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Y-PBR" TARGET_NAME="Y_PBR" CONFIG_NAME="Debug-Visual Studio" RUN_TARGET_PROJECT_NAME="Y-PBR" RUN_TARGET_NAME="Y_PBR">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -926,6 +306,19 @@
       <workItem from="1694501979134" duration="1792000" />
       <workItem from="1694516566975" duration="589000" />
       <workItem from="1695454839606" duration="41635000" />
+      <workItem from="1695623754113" duration="4040000" />
+      <workItem from="1695696854312" duration="3967000" />
+      <workItem from="1695785298073" duration="1782000" />
+      <workItem from="1696164258830" duration="2164000" />
+      <workItem from="1696168241912" duration="586000" />
+      <workItem from="1696172057503" duration="2334000" />
+      <workItem from="1696226199956" duration="117000" />
+      <workItem from="1696236337732" duration="2210000" />
+      <workItem from="1696308698929" duration="17632000" />
+      <workItem from="1696339175938" duration="11465000" />
+      <workItem from="1696654697337" duration="102000" />
+      <workItem from="1696830073433" duration="16928000" />
+      <workItem from="1696872168693" duration="7000" />
     </task>
     <task id="LOCAL-00001" summary="modify cmake">
       <option name="closed" value="true" />
@@ -1018,18 +411,13 @@
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/Integrator/BDPT/LightPath.cpp</url>
-          <line>210</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/test/hair-accleerate.cu</url>
           <line>299</line>
           <option name="timeStamp" value="22" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/Lights/InfiniteSphere.cpp</url>
-          <line>109</line>
+          <line>108</line>
           <option name="timeStamp" value="25" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
@@ -1046,6 +434,26 @@
           <url>file://$PROJECT_DIR$/src/Integrator/PathIntegrator.cpp</url>
           <line>80</line>
           <option name="timeStamp" value="98" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/Sampler/Warp.cpp</url>
+          <line>37</line>
+          <option name="timeStamp" value="99" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/Integrator/BDPT/LightPath.cpp</url>
+          <line>199</line>
+          <option name="timeStamp" value="103" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/Integrator/BDPT/LightPath.cpp</url>
+          <line>202</line>
+          <option name="timeStamp" value="104" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/Integrator/BDPT/LightPath.cpp</url>
+          <line>86</line>
+          <option name="timeStamp" value="111" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="CMakeLineBreakpoint">
           <url>file://$PROJECT_DIR$/CMakeLists.txt</url>
