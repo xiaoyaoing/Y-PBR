@@ -3,7 +3,6 @@
 #include <iostream>
 
 
-bool useGussianAmz = true;
 
 std::array<float,3> lobeSamples = {1,1,1};
 
@@ -150,7 +149,9 @@ Spectrum Hair::f(const SurfaceEvent &event) const {
     Float MTT = M(_vTT, sin(thetaOTT), sinThetaI, cos(thetaOTT), cosThetaI);
     Float MTRT = M(_vTRT, sin(thetaOTRT), sinThetaI, cos(thetaOTRT), cosThetaI);
 
+    //fixme
     Float phi = std::atan2(event.wi.x, event.wi.z) - std::atan2(event.wo.x, event.wo.z);
+    //Float phi = std::atan2(event.wi.x, event.wi.z) ;
     if (phi < 0.0f)
         phi += Constant::TWO_PI;
 
@@ -168,12 +169,13 @@ Spectrum Hair::f(const SurfaceEvent &event) const {
     if(hasNan(fsum)){
         int k =  1;
     }
+
     //  return MR * Nr;
     return fsum;
-    vec3 res = fsum;
+    //vec3 res = fsum;
     //  if( AbsCosTheta(event.wi)>0) res/= AbsCosTheta(event.wi);
-    res = MTRT * Ntrt;
-    return res;
+   // res = MTRT * Ntrt;
+  // return res;
 }
 
 
@@ -246,7 +248,7 @@ Spectrum Hair::sampleF(SurfaceEvent &event, const vec2 &u) const {
     //First choose a lobe to sample
     Float h = getH(event);
     std::array<Float, pMax + 1> apPdf = ComputeApPdf(costhetaO, h);
-    if(std::accumulate(apPdf.begin(),apPdf.end()-1,0) == 0 )
+    if(std::accumulate(apPdf.begin(),apPdf.end()-1,0.f) == 0 )
     {
         event.pdf = 0;
         return vec3(0);
@@ -302,14 +304,18 @@ Spectrum Hair::sampleF(SurfaceEvent &event, const vec2 &u) const {
     event.sampleType = this->m_type;
     event.pdf = Pdf(event);
 
+
     if(event.pdf <=1e-5)
     {
         event.pdf  = 0 ;
         return {};
     }
 
+    return f(event);
 
 }
+
+
 
 
 Float Hair::D(Float beta, Float phi) const {
@@ -321,6 +327,7 @@ Float Hair::D(Float beta, Float phi) const {
         result += delta;
         shift += Constant::TWO_PI;
     } while (delta > 1e-4f);
+
     return result;
 }
 
@@ -335,12 +342,12 @@ Hair::Hair(const Json &json) : BSDF(BXDFType(BSDF_GLOSSY | BSDF_TRANSMISSION | B
 
         _sigmaA = melaninConcentration * lerp(eumelaninSigmaA, pheomelaninSigmaA, melaninRatio);
     }
-
+    useGussianAmz = getOptional(json,"use_gussian_amz",true);
     betaM = getOptional(json, "beta_m", 0.3);
     betaN = getOptional(json, "beta_n", 0.3);
 
-    if (!useGussianAmz) {
-        _betaR = std::max(Constant::PI * 0.5f * betaM, 0.004f);
+    if (useGussianAmz) {
+        _betaR = std::max(Constant::PI * 0.5f * getOptional(json,"roughness",0.1f), 0.004f);
         _betaTT = _betaR * 0.5f;
         _betaTRT = _betaR * 2.0f;
 

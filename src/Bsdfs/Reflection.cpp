@@ -49,8 +49,8 @@ Spectrum LambertainT::sampleF(SurfaceEvent &event, const vec2 &u) const {
 
 
 Float LambertainR::Pdf(const SurfaceEvent &event) const {
-    if (event.wi.z <= 0.0f || event.wo.z <= 0.0f)
-        return 0.0f;
+   // if (event.wi.z <= 0.0f || event.wo.z <= 0.0f)
+   //     return 0.0f;
     return Warp::squareToCosineHemispherePdf(event.wo);
 }
 
@@ -87,7 +87,9 @@ Spectrum BSDF::sampleF(SurfaceEvent &event, const vec2 &u, bool adjoint) const {
         return fResult;
 
     } else
+    {
         fResult *= sqr(eta(event));
+    }
 
     if (hasNeg(fResult) || hasNan(fResult)) {
         int k = 1;

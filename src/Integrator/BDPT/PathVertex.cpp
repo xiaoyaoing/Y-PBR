@@ -40,7 +40,7 @@ Spectrum PathVertex::eval(const PathVertex &vertex, bool adjoint) const {
     switch (type) {
         case VertexType::Surface: {
             const auto &event = _record.surfaceRecord.event;
-            return _sampler.bsdf->f(event.makeWarpQuery(event.wi, event.toLocal(d)), adjoint);
+            return _sampler.bsdf->f(event.makeWarpQuery(event.toLocal(d), event.wo), adjoint);
         }
         default:
             return Spectrum();
@@ -61,7 +61,7 @@ Float PathVertex::pdf(const PathVertex *prev, const PathVertex &next) const {
     vec3 wn = next.pos() - pos();
     vec3 wp;
     if (prev) {
-        wp = normalize(prev->pos());
+        wp = normalize(prev->pos()-pos());
     } else {
         CHECK(isCamera(), "Not camera vertex but without prev vertex");
     }
@@ -75,6 +75,9 @@ Float PathVertex::pdf(const PathVertex *prev, const PathVertex &next) const {
         _sampler.camera->pdfRay(Ray(_record.cameraRecord.sample.ray.o, normalize(wn)), nullptr, &pdf);
     if (isMedium())
         TODO("Impl medium pdf");
+ //   pdf = 1;
+    //return cosFactor(next);
+    //return distance2(pos(),next.pos());
     return pdf * cosFactor(next) / distance2(pos(),next.pos());
 
 }
@@ -199,7 +202,7 @@ bool PathVertex::sampleRootVertex(PathState &state) {
             if (isInfiniteLight()) {
                 //todo
             } else {
-                beta = record.sample.weight / record.lightPdf / record.sample.posPdf;
+                beta = record.sample.weight * absDot(record.sample.n,record.sample.ray.d) / record.lightPdf / record.sample.posPdf;
                 pdfFwd = record.sample.posPdf * record.lightPdf;
             }
             return true;

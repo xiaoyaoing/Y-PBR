@@ -125,9 +125,32 @@ namespace ImageIO
     }
 
     static void nop(void *) {}
+    bool SaveEXR(const float *rgb, int width, int height, const char *outfilename);
+
+    std::unique_ptr<float[]> LoadEXRImage( const std::string & path,int &w, int &h){
+        int targetChannels = 3;
+        float  * img;
+        int ret = LoadEXR(&img, &w, &h, FileUtils::getFileFullPath(path).c_str(),  nullptr);
+        auto  texels = new float[w * h * targetChannels];
+        for(int i = 0 ;i<w * h;i++){
+            texels[3 * i] = img[4 * i];
+            texels[3 * i+1] = img[4 * i + 1];
+            texels[3 * i+2] = img[4 * i + 2];
+        }
+        //     std::memcpy(texels, img, w * h * targetChannels * sizeof(Float));
+        delete img;
+       // SaveEXR(texels,w,h,"b.exr");
+        return std::move(std::unique_ptr<float[]>(texels));
+    }
 
     std::unique_ptr<float[]> loadHdr(const std::string &path, TexelConversion request, int &w, int &h)
     {
+        int targetChannels = (request == TexelConversion::REQUEST_RGB) ? 3 : 1;
+
+        if(FileUtils::getFileSuffix(path)=="exr"){
+            return LoadEXRImage(path,w,h);
+        }
+
         std::shared_ptr<std::ifstream> in = std::make_shared<std::ifstream>(FileUtils::getFileFullPath(path), std::ios::binary);
         if (!in)
             return nullptr;
@@ -136,11 +159,12 @@ namespace ImageIO
         std::unique_ptr<float[], void (*)(void *)> img(stbi_loadf_from_callbacks(&istreamCallback, in.get(),
                                                                                  &w, &h, &channels, 0),
                                                        stbi_image_free);
+        std::unique_ptr<float[]> texels(new float[w * h * targetChannels]);
+
         // We only expect Radiance HDR for now, which only has RGB support.
         if (!img || channels != 3)
             return nullptr;
-        int targetChannels = (request == TexelConversion::REQUEST_RGB) ? 3 : 1;
-        std::unique_ptr<float[]> texels(new float[w * h * targetChannels]);
+
         if (targetChannels == 3)
         {
             std::memcpy(texels.get(), img.get(), w * h * targetChannels * sizeof(Float));
@@ -367,6 +391,8 @@ namespace ImageIO
         }
         return false;
     }
+
+
 
     // See `examples/rgbe2exr/` for more details.
     bool SaveEXR(const float *rgb, int width, int height, const char *outfilename)

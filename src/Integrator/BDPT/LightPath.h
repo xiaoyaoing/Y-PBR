@@ -24,7 +24,7 @@ public :
 
     void tracePath(const Scene &scene, Sampler &sampler, int traceMaxLength = -1);
 
-    LightPath(int maxlength) : _length(0), maxlength(maxlength), adjoint(false),
+    LightPath(int maxlength,bool adjoint ) : _length(0), maxlength(maxlength), adjoint(adjoint),
                                _vertexs(new PathVertex[maxlength + 2]) {}
 
     static Spectrum

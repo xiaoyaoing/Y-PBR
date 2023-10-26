@@ -1,3 +1,5 @@
 /cmake*/
 example-scenes
 build
+tiny-cuda-nn
+.idea

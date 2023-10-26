@@ -14,6 +14,7 @@ Spectrum BdptTracer::traceSample(ivec2 pixel, Sampler &sampler) {
     int cameraLength = cameraPath->getLength();
     int lightLength = lightPath->getLength();
 
+
     Spectrum L(0);
     for (int l = 1; l <= lightLength; ++l){
         int upperBound = std::min(maxBounces -l +1, cameraLength);
@@ -52,8 +53,8 @@ BdptTracer::BdptTracer(const Scene &scene, const Distribution1D * distrib, const
                        int maxBounces) : scene(scene), camera(camera), image(camera->image.get()),
                                          lightDistrib(distrib),
                                          imagePramid(imagePramId),
-                                         lightPath(std::make_unique<LightPath>(maxBounces + 1)),
-                                         cameraPath(std::make_unique<LightPath>(maxBounces + 1)),
+                                         lightPath(std::make_unique<LightPath>(maxBounces + 1,false)),
+                                         cameraPath(std::make_unique<LightPath>(maxBounces + 1,false)),
                                          maxBounces(maxBounces){
 
 }

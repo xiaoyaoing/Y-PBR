@@ -121,7 +121,7 @@ vec3 SkyDome::uvToDirection(vec2 uv, float & sinTheta) const {
     sinTheta = std::sin(theta);
     return vec3(
             std::cos(phi)*sinTheta,
-            std::cos(theta),
+            -std::cos(theta),
             std::sin(phi)*sinTheta
     );
 }

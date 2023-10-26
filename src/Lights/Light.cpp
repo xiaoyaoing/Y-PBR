@@ -22,9 +22,6 @@ AreaLight::sampleLi(const vec3 & ref, const vec2 & u, vec3 * wi, Float * pdf, Fl
 
 
 Spectrum AreaLight::directLighting(const Intersection & intr,const vec3 & wo) const {
-    if( dot(intr.Ng, wo) <0){
-        int k = 1;
-    }
     return (twoSide || dot(intr.Ng, wo) > 0) ? emssision->eval(& intr) : Spectrum(0.f);
 }
 
@@ -76,6 +73,16 @@ PositionAndDirectionSample AreaLight::sampleDirect(const vec2 & positionSample, 
 
 std::optional < Intersection > AreaLight::intersect(Ray & ray) const {
     return primitive->intersect(ray);
+}
+
+void AreaLight::pdfDirect(const Ray &ray, const vec3 &n, Float *pdfPos, Float *pdfDir) const {
+    if(pdfDir){
+        *pdfDir = Constant::INV_PI * absDot(ray.d,n);
+        if(twoSide) *pdfDir *= 0.5;
+    }
+    if(pdfPos){
+        *pdfPos = 1.f/primitive->Area();
+    }
 }
 
 bool VisibilityTester::Unoccluded(const Scene & scene) const {

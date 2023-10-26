@@ -144,7 +144,11 @@ public:
         if(isMedium())
             return 1.f;
         auto dir = normalize(v.pos()-pos());
-        return absDot(v.ng(),dir);
+        auto result = absDot(v.ng(),dir);
+        if(result==0){
+            int k =1;
+        }
+        return  result;
     }
 
     inline bool isDelta() const {

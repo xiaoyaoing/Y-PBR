@@ -98,6 +98,8 @@ public:
                          bool twoSide=false);
     Float PdfLi(const Intersection & pShape, const vec3 & ref) const override;
 
+    void pdfDirect(const Ray &ray, const vec3 &n, Float *pdfPos, Float *pdfDir) const override;
+
     std::optional<Intersection> intersect(Ray & ray) const override;
 
 protected:

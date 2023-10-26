@@ -38,6 +38,7 @@ private:
     Float _vR,_vTT,_vTRT;
     vec3 _sigmaA;
     const Float _eta = 1.55;
+    bool useGussianAmz ;
 };
 
 // https://fgiesen.wordpress.com/2009/12/13/decoding-morton-codes/

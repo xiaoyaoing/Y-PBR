@@ -27,6 +27,7 @@ void TriangleMesh::computeBoundingBox( ) {
     for ( int i = 0 ; i < m_tris.size() ; i ++ ) {
         bb = Union(bb, getTriBounds(i));
     }
+
     BB_ = bb;
 }
 

@@ -67,11 +67,13 @@ Spectrum PathIntegrator::integrate(const Ray &ray, const Scene &scene, Sampler &
             Spectrum f = its->bsdf->sampleF(surfaceEvent, sampler.getNext2D(), false);
 
             if (isBlack(f) || surfaceEvent.pdf == 0)
+            {
                 break;
+            }
             BXDFType flags = surfaceEvent.sampleType;
             specularBounce = (flags & BSDF_SPECULAR) != 0;
             beta *= f / surfaceEvent.pdf;
-           // return beta;
+//            return beta;
 
             if(std::isinf(beta[0])){
                 int k = 1;

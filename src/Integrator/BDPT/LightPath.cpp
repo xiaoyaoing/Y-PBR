@@ -30,8 +30,8 @@ void LightPath::tracePath(const Scene &scene, Sampler &sampler, int traceMaxLeng
     toAreaMeasure();
 }
 
-bool onlyMisWeight = true;
-bool onlyLight = false;
+bool onlyMisWeight = false;
+bool onlyLight = true;
 
 Spectrum
 LightPath::connectCameraBDPT(const Scene &scene, Sampler &sampler,const LightPath &lightPath,  const LightPath &cameraPath, int l,
@@ -53,19 +53,22 @@ LightPath::connectCameraBDPT(const Scene &scene, Sampler &sampler,const LightPat
     auto ray = generateRay(cameraVertex, lightVertex);
     auto tr = evalShadowDirect(scene, ray, nullptr);
 
+    Float weight = misWeight(lightPath,l,cameraPath,1);
+    if(onlyMisWeight)
+        return  Spectrum(weight);
 
     auto res = tr * lightVertex.beta * cameraVertex.beta * lightVertex.eval(cameraVertex, true);
+    //res = lightVertex.beta * lightVertex.eval(cameraVertex,true);
     if(isBlack(res))
         return Spectrum(0);
+    return lightVertex.beta;
    // return Spectrum(1);
 //    return Spectrum(misWeight(lightPath,l,cameraPath,1));
 //
 //    return Spectrum(distance2(lightVertex.pos(),lightPath[l-2].pos()));
 //    return  Spectrum(lightPath[l-1].pdfFwd);
 //    return Spectrum(misWeight(lightPath,l,cameraPath,1));
-    Float weight = misWeight(lightPath,l,cameraPath,1);
-    if(onlyMisWeight)
-        return  Spectrum(weight);
+
     if(onlyLight)
         return res;
     return res * weight;
@@ -149,7 +152,7 @@ LightPath::connectLightBDPT(const Scene &scene, Sampler &sampler,const LightPath
 
 Float LightPath::misWeight(const LightPath &lightPath, int l, const LightPath &cameraPath, int c) {
 
-   // return 1.f;
+//    return 1.f;
  //   return (1.f/(l+c));
     Float *pdfForward = reinterpret_cast<float *>(alloca((l + c) * sizeof(float)));
     Float *pdfBackward = reinterpret_cast<float *>(alloca((l + c) * sizeof(float)));
@@ -215,7 +218,9 @@ Float LightPath::misWeight(const LightPath &lightPath, int l, const LightPath &c
             int k  = 1;
         }
        // return pdfForward[i];
-        ri *= pdfBackward[i] / pdfForward[i]  ;
+    //   return pdfBackward[i];
+        ri *= remap0(pdfBackward[i]) / remap0(pdfForward[i]) ;
+      //  return ri;
         if(isnan(ri) || isinf(ri)){
             cameraEnd->pdf(lightEnd, *cameraMinus);
             int k = 1;
@@ -225,7 +230,8 @@ Float LightPath::misWeight(const LightPath &lightPath, int l, const LightPath &c
     }
     ri=1;
     for (int i = l - 1; i >= 1; i--) {
-        ri *= pdfBackward[i] / pdfForward[i];
+        ri *= remap0(pdfBackward[i]) / remap0(pdfForward[i]);
+       // return pdfBackward[i];
         if(isnan(ri) || isinf(ri)){
             int k = 1;
         }
@@ -236,6 +242,7 @@ Float LightPath::misWeight(const LightPath &lightPath, int l, const LightPath &c
 
     if (!lightPath[0]._sampler.light->isDeltaLight()) {
         ri *= pdfBackward[0] / pdfForward[0];
+        //return 1;
         if(isnan(ri)|| isinf(ri)){
             int k = 1;
         }
@@ -247,7 +254,13 @@ Float LightPath::misWeight(const LightPath &lightPath, int l, const LightPath &c
     if(1.f/sumR<0.01){
         int k =1;
     }
-  //  return sumR;
+    if(isinf(sumR) || isinf(-sumR)){
+        int k = 1;
+    }
+    if(l == 1 && c == 3){
+        int k =1;
+    }
+   // return sumR;
     return 1.f / sumR;
 
 }
