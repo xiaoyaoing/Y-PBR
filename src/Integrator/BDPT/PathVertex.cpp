@@ -134,7 +134,7 @@ bool PathVertex::sampleNext(const Scene &scene, bool adjoint, PathState &state, 
             auto &record = _record.lightRecord;;
             ray = record.sample.ray;
             pdf = record.sample.dirPdf;
-            weight = Spectrum(dot(record.sample.n, ray.d) / (record.sample.dirPdf));
+            weight = Spectrum(1.f) / (record.sample.dirPdf);
             break;
         }
         case VertexType::Camera: {

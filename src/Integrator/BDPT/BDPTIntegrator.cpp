@@ -62,7 +62,7 @@ void BDPTIntegrator::saveOutPuts(const std::string & fileName,int spp) {
     Float sppScale = 1.f/spp;
     _camera->image->save(fileName,1);
     if(imagePramid){
-       imagePramid->saveOutPut(fileName,1);
+       imagePramid->saveOutPut(fileName,sppScale);
     }
 }
 

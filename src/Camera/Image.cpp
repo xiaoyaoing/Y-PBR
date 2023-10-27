@@ -27,7 +27,7 @@ vec3 Image::getPixel(int x, int y) const {
 }
 
 vec3 Image::getPixel(int idx) const {
-    return sampleCounts[idx] != 0 ? buffers[idx].value()/Float(sampleCounts[idx]) : vec3(0);
+    return sampleCounts[idx] != 0 ? buffers[idx].value()/Float(sampleCounts[idx]) : buffers[idx].value();
 }
 
 uint32 Image::getIndex(uint32 x, uint32 y) const {
@@ -67,7 +67,7 @@ void Image::save(const std::string &fileName, Float scale, bool overwrite) const
             std::unique_ptr<float[]> hdr(new float[byteNum]);
             for (int i = 0; i < buffers.size(); i++) {
                 auto rgb = getPixel(i) * scale;
-               hdr[3 * i] = rgb.r;
+                hdr[3 * i] = rgb.r;
                 hdr[3 * i + 1] = rgb.g;
                 hdr[3 * i + 2] = rgb.b;
             }

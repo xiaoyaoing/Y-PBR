@@ -31,7 +31,7 @@ void LightPath::tracePath(const Scene &scene, Sampler &sampler, int traceMaxLeng
 }
 
 bool onlyMisWeight = false;
-bool onlyLight = true;
+bool onlyLight = false;
 
 Spectrum
 LightPath::connectCameraBDPT(const Scene &scene, Sampler &sampler,const LightPath &lightPath,  const LightPath &cameraPath, int l,
@@ -46,32 +46,28 @@ LightPath::connectCameraBDPT(const Scene &scene, Sampler &sampler,const LightPat
     if (!camera->sampleLi(lightVertex.pos(), &pixel, sampler.getNext2D(), sample))
         return Spectrum(0, 0, 0);
 
-
-    //return Spectrum(1);
     auto cameraVertex = PathVertex(camera, sample);
 
     auto ray = generateRay(cameraVertex, lightVertex);
+
+    auto s=  lightVertex.beta * cameraVertex.beta * lightVertex.eval(cameraVertex, true);
+
+    if(isBlack(s))
+        return Spectrum(0);
+
     auto tr = evalShadowDirect(scene, ray, nullptr);
+    s *= tr;
+
+    if(isBlack(s))
+        return Spectrum(0);
 
     Float weight = misWeight(lightPath,l,cameraPath,1);
     if(onlyMisWeight)
         return  Spectrum(weight);
 
-    auto res = tr * lightVertex.beta * cameraVertex.beta * lightVertex.eval(cameraVertex, true);
-    //res = lightVertex.beta * lightVertex.eval(cameraVertex,true);
-    if(isBlack(res))
-        return Spectrum(0);
-    return lightVertex.beta;
-   // return Spectrum(1);
-//    return Spectrum(misWeight(lightPath,l,cameraPath,1));
-//
-//    return Spectrum(distance2(lightVertex.pos(),lightPath[l-2].pos()));
-//    return  Spectrum(lightPath[l-1].pdfFwd);
-//    return Spectrum(misWeight(lightPath,l,cameraPath,1));
-
     if(onlyLight)
-        return res;
-    return res * weight;
+        return s;
+    return s * weight;
 }
 
 Spectrum
@@ -80,33 +76,17 @@ LightPath::connectBDPT(const Scene &scene, const LightPath &lightPath, int l, co
     const PathVertex &lightVertex = lightPath[l - 1];
     const PathVertex &cameraVertex = cameraPath[c - 1];
 
- //   return lightVertex.beta;
     auto s = lightVertex.eval(cameraVertex, true) * cameraVertex.eval(lightVertex, false) * lightVertex.beta *
              cameraVertex.beta
-             /distance2(lightVertex.pos(), cameraVertex.pos())
-             ;
-    //s = Spectrum(20.f/distance2(lightVertex.pos(), cameraVertex.pos()));
-    if(luminace(s)>20){
-        int k = 1;
-    }
-    // return Spectrum(distance2(lightVertex.pos(), cameraVertex.pos()));
+             /distance2(lightVertex.pos(), cameraVertex.pos());
 
-    //return s;
-  //  return Spectrum(1);
-  //  return  cameraVertex.pos();
-   // return normalize(abs(cameraPath[1].pos()-cameraPath[0].pos()));
-   // return vec3(misWeight(lightPath,l,cameraPath,c));
-    // return s;
-    if (isBlack(s))
+    if(isBlack(s))
         return s;
-    auto ray = generateRay(cameraVertex, lightVertex);
 
+    auto ray = generateRay(cameraVertex, lightVertex);
     auto tr = evalShadowDirect(scene, ray, nullptr);
-  //  return Spectrum(distance2(lightVertex.pos(),lightPath[l-2].pos()));
     if(isBlack(s * tr))
         return Spectrum(0);
- //   return  Spectrum(lightPath[l-1].pdfFwd);
-  //  return  Spectrum(misWeight(lightPath,l,cameraPath,c));
     Float weight = misWeight(lightPath,l,cameraPath,c);
     if(onlyMisWeight)
         return  Spectrum(weight);
@@ -132,12 +112,6 @@ LightPath::connectLightBDPT(const Scene &scene, Sampler &sampler,const LightPath
     auto tr = evalShadowDirect(scene, ray, nullptr);
     if (isBlack(tr))
         return Spectrum(0, 0, 0);
-    if (isBlack(lightVertex.beta * cameraVertex.beta) || luminace(lightVertex.beta * cameraVertex.beta) < 1e-3f) {
-        int k = 1;
-    }
-    if (cameraVertex._sampler.bsdf->HasFlag(BXDFType(BSDF_SPECULAR | BSDF_REFLECTION))) {
-        //   return Spectrum(0);
-    }
     auto res = lightVertex.beta * cameraVertex.beta * cameraVertex.eval(lightVertex, false);
     if(isBlack(res))
         return Spectrum(0);
@@ -199,68 +173,25 @@ Float LightPath::misWeight(const LightPath &lightPath, int l, const LightPath &c
     if (lightMinus)
         pdfBackward[l - 2] = lightEnd->pdf(cameraEnd, *lightMinus);
 
-    if(pdfForward[l-1]==0){
-        int k =1;
-    }
-    if(isinf(pdfBackward[l-1]/pdfForward[l-1])){
-        int k = 1;
-    }
-  //  return pdfBackward[l-1];
-
-
     auto remap0 = [](Float f) -> Float { return f != 0 ? f : 1; };
 
 
     Float ri = 1, sumR = 1;
     for (int i = l ; i < l + c -1 ; i++) {
-        if(pdfForward[i]>1000){
-            auto t = length(cameraPath[1].pos() -  cameraPath[2].pos());
-            int k  = 1;
-        }
-       // return pdfForward[i];
-    //   return pdfBackward[i];
+
+
         ri *= remap0(pdfBackward[i]) / remap0(pdfForward[i]) ;
-      //  return ri;
-        if(isnan(ri) || isinf(ri)){
-            cameraEnd->pdf(lightEnd, *cameraMinus);
-            int k = 1;
-        }
+
         if (connectable[i] && connectable[i + 1])
             sumR += ri;
     }
     ri=1;
     for (int i = l - 1; i >= 1; i--) {
         ri *= remap0(pdfBackward[i]) / remap0(pdfForward[i]);
-       // return pdfBackward[i];
-        if(isnan(ri) || isinf(ri)){
-            int k = 1;
-        }
         if (connectable[i] && connectable[i - 1])
             sumR += ri;
     }
-    ri = 1;
 
-    if (!lightPath[0]._sampler.light->isDeltaLight()) {
-        ri *= pdfBackward[0] / pdfForward[0];
-        //return 1;
-        if(isnan(ri)|| isinf(ri)){
-            int k = 1;
-        }
-        sumR += ri;
-    }
-//    if(cameraPath[2]._sampler.bsdf->HasFlag(BSDF_SPECULAR)){
-//        int k = 1;
-//    }
-    if(1.f/sumR<0.01){
-        int k =1;
-    }
-    if(isinf(sumR) || isinf(-sumR)){
-        int k = 1;
-    }
-    if(l == 1 && c == 3){
-        int k =1;
-    }
-   // return sumR;
     return 1.f / sumR;
 
 }
