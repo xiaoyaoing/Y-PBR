@@ -6,6 +6,10 @@
 #include <thread>
 void BDPTIntegrator::process(const Scene &scene, Sampler &sampler) {
     lightDistrib = CreateLightSampleDistribution(std::string("uniform"), scene);
+//    for(size_t i=0;i<scene.lights.size();i++)
+//        lightIdx[scene.lights[i].get()] = i;
+    lightIdx = std::make_unique<std::map<const Light *,size_t>>();
+   // lightIdx = {{scene.lights[0].get(),0}};
     imagePramid = new ImagePrid(maxBounces, *_camera);
 }
 
@@ -22,10 +26,9 @@ void BDPTIntegrator::render(const Scene &scene)  {
     ivec2 numTiles{(renderBounds.x + tileSize - 1) / tileSize, (renderBounds.y + tileSize - 1) / tileSize};
     for(int i=0 ;i<numTiles.x * numTiles.y;i++)
     {
-        _tracers.emplace_back(BdptTracer(scene,lightDistrib.get(),_camera.get(),imagePramid,maxBounces));
+        _tracers.emplace_back(BdptTracer(scene,*lightDistrib,*lightIdx,_camera.get(),imagePramid,maxBounces));
     }
     int num_threads = std::thread::hardware_concurrency();
-    num_threads=1;
     parallel_init(num_threads);
 
     int spp = scene.options.spp;

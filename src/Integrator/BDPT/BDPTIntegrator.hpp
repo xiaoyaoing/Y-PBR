@@ -35,7 +35,10 @@ protected:
         return pyramidCount(s + t - 2) + t - 1;
     }
 
-    std::unique_ptr<Distribution1D> lightDistrib;
+
+
+    std::unique_ptr<Distribution1D> lightDistrib{nullptr};
+    std::unique_ptr<std::map<const Light *,size_t>> lightIdx{};
     ImagePrid *imagePramid;
     std::vector<BdptTracer> _tracers;
 

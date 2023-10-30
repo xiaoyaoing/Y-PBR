@@ -27,6 +27,8 @@ public :
     LightPath(int maxlength,bool adjoint ) : _length(0), maxlength(maxlength), adjoint(adjoint),
                                _vertexs(new PathVertex[maxlength + 2]) {}
 
+    static Spectrum cameraDirectLight(const Scene & scene,const LightPath & cameraPath,int l);
+
     static Spectrum
     connectCameraBDPT(const Scene &scene, Sampler &sampler,const LightPath &lightPath,  const LightPath &cameraPath, int l,
                       ivec2 &pixel);
@@ -35,7 +37,8 @@ public :
     connectLightBDPT(const Scene &scene, Sampler &sampler,const LightPath &lightPath,  const LightPath &cameraPath, int c,
                      Float lightPdf);
     static Float misWeight( const LightPath &lightPath, int l, const LightPath &cameraPath,
-                     int c);
+                     int c,const Distribution1D &lightDistr,
+                            const std::map<const Light *, size_t> & map);
 
     static Spectrum connectBDPT(const Scene &scene, const LightPath &lightPath, int l, const LightPath &cameraPath,
                                 int c);

@@ -90,10 +90,8 @@ Float PathVertex::pdfLight(const PathVertex &v) const {
     if (isInfiniteLight()) {
         TODO("Handle Infinite");
     } else {
-        const Light *light = type == VertexType::Light
-                             ? _sampler.light
-                             : _record.surfaceRecord.its.primitive->areaLight.get();
-
+        assert(isLight());
+        const Light *light = getLight();
         // Compute sampling density for non-infinite light sources
         Float pdfDir;
         light->pdfDirect(Ray(pos(), d), ng(), nullptr, &pdfDir);
@@ -105,7 +103,7 @@ Float PathVertex::pdfLight(const PathVertex &v) const {
 }
 
 Float PathVertex::pdfLightOrigin(const PathVertex &v, const Distribution1D &lightDistr,
-                                 const std::unordered_map<const Light *, size_t> map) const {
+                                 const std::map<const Light *, size_t> map) const {
     vec3 d = v.pos() - pos();
     Float invDist2 = 1 / length2(d);
     d *= invDist2;
@@ -113,13 +111,11 @@ Float PathVertex::pdfLightOrigin(const PathVertex &v, const Distribution1D &ligh
     if (isInfiniteLight()) {
         TODO("Handle Infinite");
     } else {
-        const Light *light = type == VertexType::Light
-                             ? _sampler.light
-                             : _record.surfaceRecord.its.primitive->areaLight.get();
+        const Light *light = getLight();
         // Compute sampling density for non-infinite light sources
         Float pdfPos;
         light->pdfDirect(Ray(pos(), d), ng(), &pdfPos, nullptr);
-        pdf = pdfPos * lightDistr.DiscretePDF(map.at(light));
+        pdf = pdfPos * lightDistr.DiscretePDF(0);
     }
     return pdf;
 }
@@ -205,7 +201,6 @@ bool PathVertex::sampleRootVertex(PathState &state) {
                 beta = record.sample.weight * absDot(record.sample.n,record.sample.ray.d) / record.lightPdf / record.sample.posPdf;
                 pdfFwd = record.sample.posPdf * record.lightPdf;
             }
-            return true;
         }
         default:
             return false;

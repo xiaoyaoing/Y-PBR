@@ -13,6 +13,8 @@ Intersection Primitive::sample(const vec3 &ref, const vec2 &u, Float *pdf, vec3 
         // Convert from area measure, as returned by the Sample() call
         // above, to solid angle measure.
         *pdf *= l * l / abs(dot(*wi,intr.Ng)) ;
+     //   *pdf = abs(dot(*wi,intr.Ng));
+       // *pdf = l*l;
         if (std::isinf(*pdf)) *pdf = 0.f;
     }
     return intr;

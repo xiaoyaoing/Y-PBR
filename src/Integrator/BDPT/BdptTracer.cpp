@@ -5,54 +5,71 @@ Spectrum BdptTracer::traceSample(ivec2 pixel, Sampler &sampler) {
     cameraPath->tracePath(scene, sampler);
 
     float lightPdf;
-    auto lightIdx = lightDistrib->SampleDiscrete(sampler.getNext1D(), &lightPdf);
+    auto lightIdx = lightDistrib.SampleDiscrete(sampler.getNext1D(), &lightPdf);
     const auto &light = scene.lights[lightIdx];
     auto lightSample = light->sampleDirect(sampler.getNext2D(), sampler.getNext2D());
     lightPath->startLightPath(light.get(), lightPdf);
-    lightPath->tracePath(scene,sampler);
+    lightPath->tracePath(scene, sampler);
 
     int cameraLength = cameraPath->getLength();
     int lightLength = lightPath->getLength();
 
 
     Spectrum L(0);
-    for (int l = 1; l <= lightLength; ++l){
-        int upperBound = std::min(maxBounces -l +1, cameraLength);
+    for (int l = 0; l <= lightLength; ++l) {
+        int upperBound = std::min(maxBounces - l + 1, cameraLength);
         for (int c = 1; c <= upperBound; ++c) {
-
-            if (!cameraPath->operator[](c-1).canConnect() || !lightPath->operator[](l-1).canConnect())
-            {
+            if (l + c < 2)
                 continue;
+            Spectrum pathContributionWithoutMis;
+            ivec2 pRaster;
+            if (l == 0) {
+                pathContributionWithoutMis = LightPath::cameraDirectLight(scene, *cameraPath, c);
             }
+            else {
+                if (!cameraPath->operator[](c - 1).canConnect() || !lightPath->operator[](l - 1).canConnect()) {
+                    continue;
+                }
+
+                if (c == 1) {
+                    pathContributionWithoutMis = LightPath::connectCameraBDPT(scene, sampler, *lightPath, *cameraPath,
+                                                                              l,
+                                                                              pRaster);
+                } else if (l == 1) {
+                    pathContributionWithoutMis = LightPath::connectLightBDPT(scene, sampler, *lightPath, *cameraPath, c,
+                                                                             lightPdf);
+                } else {
+                    pathContributionWithoutMis = LightPath::connectBDPT(scene, *lightPath, l, *cameraPath, c);
+
+                }
+            }
+            if(isBlack(pathContributionWithoutMis))
+                continue;
+            pathContributionWithoutMis *=LightPath::misWeight(*lightPath, l, *cameraPath, c, lightDistrib, lightIdxs);
+            L+=pathContributionWithoutMis;
+         //   pathContributionWithoutMis = Spectrum(1/LightPath::misWeight(*lightPath, l, *cameraPath, c, lightDistrib, lightIdxs));
             if (c == 1) {
-                ivec2 pRaster;
-                Spectrum s = LightPath::connectCameraBDPT(scene, sampler, *lightPath,*cameraPath,l, pRaster);
-                image->addPixel(pRaster.x,pRaster.y, s,false);
-                if (imagePramid)
-                    imagePramid->addPixel(l, c, pRaster, s,false);
-            } else if (l == 1) {
-                Spectrum s = LightPath::connectLightBDPT(scene,  sampler,*lightPath,*cameraPath,c,lightPdf);
-                L += s;
-                if (imagePramid)
-                    imagePramid->addPixel(l, c, pixel, s,false);
-            } else {
-                Spectrum s = LightPath::connectBDPT(scene, *lightPath, l, *cameraPath, c);
-                if (imagePramid)
-                    imagePramid->addPixel(l, c, pixel,s,false);
-                L += s;
+                {
+                    image->addPixel(pRaster.x, pRaster.y, pathContributionWithoutMis, false);
+                }
             }
+            if (imagePramid)
+                imagePramid->addPixel(l, c, pixel, pathContributionWithoutMis, false);
         }
     }
     return L;
 }
 
-BdptTracer::BdptTracer(const Scene &scene, const Distribution1D * distrib, const Camera *camera, ImagePrid *imagePramId,
+BdptTracer::BdptTracer(const Scene &scene, const Distribution1D &distrib,
+                       const std::map<const Light *, size_t> &lightIdxs, const Camera *camera,
+                       ImagePrid *imagePramId,
                        int maxBounces) : scene(scene), camera(camera), image(camera->image.get()),
                                          lightDistrib(distrib),
+                                         lightIdxs(lightIdxs),
                                          imagePramid(imagePramId),
-                                         lightPath(std::make_unique<LightPath>(maxBounces + 1,false)),
-                                         cameraPath(std::make_unique<LightPath>(maxBounces + 1,false)),
-                                         maxBounces(maxBounces){
+                                         lightPath(std::make_unique<LightPath>(maxBounces + 1, false)),
+                                         cameraPath(std::make_unique<LightPath>(maxBounces + 1, false)),
+                                         maxBounces(maxBounces) {
 
 }
 

@@ -19,9 +19,7 @@ public:
     }
     void saveOutPut(const std::string & fileName,Float scale);
     inline  void addPixel(int s,int t,ivec2 pixel,vec3 rgb,bool count = true){
-        if(s==2 && t==1 ){
-            int k  = 1;
-        }
+
         images[pyramidIndex(s, t)].addPixel(pixel.x, pixel.y, rgb, count);
     }
 };

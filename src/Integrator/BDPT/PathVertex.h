@@ -117,8 +117,16 @@ public:
     bool sampleNext(const Scene & scene, bool adjoint, PathState &state, PathVertex *prev, PathVertex & next);
     bool sampleRootVertex(PathState &state);
 
+    inline  const Light * getLight() const{
+        if(type == VertexType::Light)
+            return _sampler.light;
+        if(type == VertexType::Surface)
+            return _record.surfaceRecord.its.primitive->getAreaLight();
+        return nullptr;
+    }
+
     inline bool isLight() const {
-        return type == VertexType::Light;
+        return type == VertexType::Light || (isSurface() && _record.surfaceRecord.its.primitive->getAreaLight());
     }
     inline bool isCamera() const {
         return type == VertexType::Camera;
@@ -178,7 +186,7 @@ public:
     //计算被选中光源，采样出给定方向的pdf
     Float pdfLightOrigin(const PathVertex &v,
                          const Distribution1D &lightDistr,
-                         const std::unordered_map<const Light *, size_t>) const;
+                         const std::map<const Light *, size_t>) const;
 
 
 

@@ -87,6 +87,10 @@ public:
       //  return _name;
     }
 
+    inline const AreaLight * getAreaLight( ) const {
+        return areaLight.get();
+    }
+
     virtual  void load(const Json & json, const Scene & scene );
     virtual  bool sameBSDF(BSDF * _bsdf) { return bsdf.get() == _bsdf;}
 
@@ -94,7 +98,7 @@ public:
 
     std::shared_ptr < BSDF > bsdf;
     std::shared_ptr < BSSRDF > bssrdf;
-    std::shared_ptr < AreaLight > areaLight;
+    std::shared_ptr < AreaLight > areaLight{nullptr};
 
     uint32 primId;
 protected:
