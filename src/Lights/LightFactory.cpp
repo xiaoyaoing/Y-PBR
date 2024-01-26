@@ -1,10 +1,10 @@
 #include "LightFactory.hpp"
 
-enum LightType{
-    POINT,AREA,DIRECTIONAL
+enum LightType {
+    POINT,
+    AREA,
+    DIRECTIONAL
 };
-class LightFactory{
-    public:
-
-
+class LightFactory {
+public:
 };

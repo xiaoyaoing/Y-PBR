@@ -1,10 +1,10 @@
 #include "BoundingBox.hpp"
 
-bool Bounds3::IntersectP(const Ray & ray, const vec3 & invDir, const int * dirIsNeg) const {
-    const Bounds3 &bounds = *this;
+bool Bounds3::IntersectP(const Ray& ray, const vec3& invDir, const int* dirIsNeg) const {
+    const Bounds3& bounds = *this;
     // Check for ray intersection against $x$ and $y$ slabs
-    Float tMin = (bounds[dirIsNeg[0]].x - ray.o.x) * invDir.x;
-    Float tMax = (bounds[1 - dirIsNeg[0]].x - ray.o.x) * invDir.x;
+    Float tMin  = (bounds[dirIsNeg[0]].x - ray.o.x) * invDir.x;
+    Float tMax  = (bounds[1 - dirIsNeg[0]].x - ray.o.x) * invDir.x;
     Float tyMin = (bounds[dirIsNeg[1]].y - ray.o.y) * invDir.y;
     Float tyMax = (bounds[1 - dirIsNeg[1]].y - ray.o.y) * invDir.y;
 
@@ -26,6 +26,3 @@ bool Bounds3::IntersectP(const Ray & ray, const vec3 & invDir, const int * dirIs
     if (tzMax < tMax) tMax = tzMax;
     return (tMin < ray.farT) && (tMax > 0);
 }
-
-
-

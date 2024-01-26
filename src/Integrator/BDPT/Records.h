@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2022
  *
  */
-#pragma  once
+#pragma once
 
 #include "Common/math.hpp"
 #include "Camera/Camera.hpp"
@@ -17,27 +17,24 @@
 #include "Lights/Light.hpp"
 #include "SampleRecords/PositionAndDirectionSample.h"
 
-struct LightRecord{
+struct LightRecord {
     PositionAndDirectionSample sample;
-    float lightPdf;
-    LightRecord(){
-
+    float                      lightPdf;
+    LightRecord() {
     }
 };
 
-struct CameraRecord{
-    ivec2 pixel;
+struct CameraRecord {
+    ivec2                      pixel;
     PositionAndDirectionSample sample;
 };
 
-struct SurfaceRecord{
+struct SurfaceRecord {
     Intersection its;
     SurfaceEvent event;
-public:
 
+public:
 };
 
-
-struct MediumRecord{
-
+struct MediumRecord {
 };

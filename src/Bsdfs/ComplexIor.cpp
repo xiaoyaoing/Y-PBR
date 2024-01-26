@@ -4,8 +4,8 @@
 //https://benedikt-bitterli.me/tungsten.html
 #include "ComplexIorData.hpp"
 
-namespace  ComplexIorList{
-    bool lookup(const std::string &name, vec3 &eta, vec3 &k){
+namespace ComplexIorList {
+    bool lookup(const std::string& name, vec3& eta, vec3& k) {
         for (int i = 0; i < ComplexIorCount; ++i) {
             if (complexIorList[i].name == name) {
                 eta = complexIorList[i].eta;

@@ -2,6 +2,5 @@
 
 class PhaseFunction;
 namespace PhaseFunctionFactory {
-    std::shared_ptr < PhaseFunction > loadPhaseFromJson(const Json & json);
+    std::shared_ptr<PhaseFunction> loadPhaseFromJson(const Json& json);
 }
-

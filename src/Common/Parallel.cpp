@@ -15,34 +15,34 @@ public:
     void Wait();
 
 private:
-    std::mutex mutex;
+    std::mutex              mutex;
     std::condition_variable cv;
-    int count;
+    int                     count;
 };
 
 static std::vector<std::thread> threads;
-static bool shutdownThreads = false;
+static bool                     shutdownThreads = false;
 struct ParallelForLoop;
-static ParallelForLoop *workList = nullptr;
-static std::mutex workListMutex;
+static ParallelForLoop* workList = nullptr;
+static std::mutex       workListMutex;
 
 struct ParallelForLoop {
     ParallelForLoop(std::function<void(int)> func1D, int64_t maxIndex, int64_t chunkSize)
-            : func1D(std::move(func1D)), maxIndex(maxIndex), chunkSize(chunkSize) {
+        : func1D(std::move(func1D)), maxIndex(maxIndex), chunkSize(chunkSize) {
     }
-    ParallelForLoop(const std::function<void(ivec2)> &f, const ivec2 count)
-            : func2D(f), maxIndex(count[0] * count[1]), chunkSize(1) {
+    ParallelForLoop(const std::function<void(ivec2)>& f, const ivec2 count)
+        : func2D(f), maxIndex(count[0] * count[1]), chunkSize(1) {
         nX = count[0];
     }
 
-    std::function<void(int)> func1D;
+    std::function<void(int)>   func1D;
     std::function<void(ivec2)> func2D;
-    const int64_t maxIndex;
-    const int64_t chunkSize;
-    int64_t nextIndex = 0;
-    int activeWorkers = 0;
-    ParallelForLoop *next = nullptr;
-    int nX = -1;
+    const int64_t              maxIndex;
+    const int64_t              chunkSize;
+    int64_t                    nextIndex     = 0;
+    int                        activeWorkers = 0;
+    ParallelForLoop*           next          = nullptr;
+    int                        nX            = -1;
 
     bool Finished() const {
         return nextIndex >= maxIndex && activeWorkers == 0;
@@ -84,13 +84,13 @@ static void worker_thread_func(const int tIndex, std::shared_ptr<Barrier> barrie
             workListCondition.wait(lock);
         } else {
             // Get work from _workList_ and run loop iterations
-            ParallelForLoop &loop = *workList;
+            ParallelForLoop& loop = *workList;
 
             // Run a chunk of loop iterations for _loop_
 
             // Find the set of loop iterations to run next
             int64_t indexStart = loop.nextIndex;
-            int64_t indexEnd = std::min(indexStart + loop.chunkSize, loop.maxIndex);
+            int64_t indexEnd   = std::min(indexStart + loop.chunkSize, loop.maxIndex);
 
             // Update _loop_ to reflect iterations this thread will run
             loop.nextIndex = indexEnd;
@@ -104,11 +104,11 @@ static void worker_thread_func(const int tIndex, std::shared_ptr<Barrier> barrie
                 if (loop.func1D) {
                     loop.func1D((int)index);
                 }
-                    // Handle other types of loops
+                // Handle other types of loops
                 else {
                     assert(loop.func2D != nullptr);
                     loop.func2D(ivec2{int(index % loop.nX),
-                                         int(index / loop.nX)});
+                                      int(index / loop.nX)});
                 }
             }
             lock.lock();
@@ -122,9 +122,9 @@ static void worker_thread_func(const int tIndex, std::shared_ptr<Barrier> barrie
     }
 }
 
-void parallel_for(const std::function<void(int64_t)> &func,
-                  int64_t count,
-                  int64_t chunkSize) {
+void parallel_for(const std::function<void(int64_t)>& func,
+                  int64_t                             count,
+                  int64_t                             chunkSize) {
     // Run iterations immediately if not using threads or if _count_ is small
     if (threads.empty() || count < chunkSize) {
         for (int i = 0; i < (int)count; i++) {
@@ -137,7 +137,7 @@ void parallel_for(const std::function<void(int64_t)> &func,
     ParallelForLoop loop(func, count, chunkSize);
     workListMutex.lock();
     loop.next = workList;
-    workList = &loop;
+    workList  = &loop;
     workListMutex.unlock();
 
     // Notify worker threads of work to be done
@@ -150,7 +150,7 @@ void parallel_for(const std::function<void(int64_t)> &func,
 
         // Find the set of loop iterations to run next
         int64_t indexStart = loop.nextIndex;
-        int64_t indexEnd = std::min(indexStart + loop.chunkSize, loop.maxIndex);
+        int64_t indexEnd   = std::min(indexStart + loop.chunkSize, loop.maxIndex);
 
         // Update _loop_ to reflect iterations this thread will run
         loop.nextIndex = indexEnd;
@@ -165,11 +165,11 @@ void parallel_for(const std::function<void(int64_t)> &func,
             if (loop.func1D) {
                 loop.func1D((int)index);
             }
-                // Handle other types of loops
+            // Handle other types of loops
             else {
                 assert(loop.func2D != nullptr);
                 loop.func2D(ivec2{int(index % loop.nX),
-                                     int(index / loop.nX)});
+                                  int(index / loop.nX)});
             }
         }
         lock.lock();
@@ -196,7 +196,7 @@ void parallel_for(std::function<void(ivec2)> func, const ivec2 count) {
     {
         std::lock_guard<std::mutex> lock(workListMutex);
         loop.next = workList;
-        workList = &loop;
+        workList  = &loop;
     }
 
     std::unique_lock<std::mutex> lock(workListMutex);
@@ -208,7 +208,7 @@ void parallel_for(std::function<void(ivec2)> func, const ivec2 count) {
 
         // Find the set of loop iterations to run next
         int64_t indexStart = loop.nextIndex;
-        int64_t indexEnd = std::min(indexStart + loop.chunkSize, loop.maxIndex);
+        int64_t indexEnd   = std::min(indexStart + loop.chunkSize, loop.maxIndex);
 
         // Update _loop_ to reflect iterations this thread will run
         loop.nextIndex = indexEnd;
@@ -223,11 +223,11 @@ void parallel_for(std::function<void(ivec2)> func, const ivec2 count) {
             if (loop.func1D) {
                 loop.func1D((int)index);
             }
-                // Handle other types of loops
+            // Handle other types of loops
             else {
                 assert(loop.func2D != nullptr);
                 loop.func2D(ivec2{int(index % loop.nX),
-                                     int(index / loop.nX)});
+                                  int(index / loop.nX)});
             }
         }
         lock.lock();
@@ -267,10 +267,9 @@ void parallel_cleanup() {
         workListCondition.notify_all();
     }
 
-    for (std::thread &thread : threads) {
+    for (std::thread& thread : threads) {
         thread.join();
     }
     threads.erase(threads.begin(), threads.end());
     shutdownThreads = false;
 }
-

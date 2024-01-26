@@ -2,10 +2,9 @@
 
 namespace Fresnel {
 
-
-    static inline Float dielectricReflectance(Float eta, Float cosThetaI, Float &cosThetaT) {
+    static inline Float dielectricReflectance(Float eta, Float cosThetaI, Float& cosThetaT) {
         if (cosThetaI < 0.0) {
-            eta = 1.0 / eta;
+            eta       = 1.0 / eta;
             cosThetaI = -cosThetaI;
         }
         Float sinThetaTSq = eta * eta * (1.0f - cosThetaI * cosThetaI);
@@ -20,7 +19,6 @@ namespace Fresnel {
 
         return (Rs * Rs + Rp * Rp) * 0.5;
     }
-
 
     static inline Float dielectricReflectance(Float eta, Float cosThetaI) {
         Float cosThetaT;
@@ -37,9 +35,9 @@ namespace Fresnel {
         Float sinThetaISq = std::max(1.0f - cosThetaISq, 0.0f);
         Float sinThetaIQu = sinThetaISq * sinThetaISq;
 
-        Float innerTerm = eta * eta - k * k - sinThetaISq;
+        Float innerTerm  = eta * eta - k * k - sinThetaISq;
         Float aSqPlusBSq = std::sqrt(std::max(innerTerm * innerTerm + 4.0f * eta * eta * k * k, 0.0f));
-        Float a = std::sqrt(std::max((aSqPlusBSq + innerTerm) * 0.5f, 0.0f));
+        Float a          = std::sqrt(std::max((aSqPlusBSq + innerTerm) * 0.5f, 0.0f));
 
         Float Rs = ((aSqPlusBSq + cosThetaISq) - (2.0f * a * cosThetaI)) /
                    ((aSqPlusBSq + cosThetaISq) + (2.0f * a * cosThetaI));
@@ -49,21 +47,19 @@ namespace Fresnel {
         return 0.5f * (Rs + Rs * Rp);
     }
 
-
-    static inline vec3 conductorReflectance(const vec3 &eta, const vec3 &k, float cosThetaI) {
+    static inline vec3 conductorReflectance(const vec3& eta, const vec3& k, float cosThetaI) {
         return vec3(
-                conductorReflectance(eta.x, k.x, cosThetaI),
-                conductorReflectance(eta.y, k.y, cosThetaI),
-                conductorReflectance(eta.z, k.z, cosThetaI)
-        );
+            conductorReflectance(eta.x, k.x, cosThetaI),
+            conductorReflectance(eta.y, k.y, cosThetaI),
+            conductorReflectance(eta.z, k.z, cosThetaI));
     }
 
     static inline Float diffuseReflectance(Float eta, Float sampleCount) {
         double diffuseFresnel = 0.0;
-        float fb = Fresnel::dielectricReflectance(eta, 0.0f);
+        float  fb             = Fresnel::dielectricReflectance(eta, 0.0f);
         for (int i = 1; i <= sampleCount; ++i) {
             float cosThetaSq = float(i) / sampleCount;
-            float fa = Fresnel::dielectricReflectance(eta, std::min(std::sqrt(cosThetaSq), 1.0f));
+            float fa         = Fresnel::dielectricReflectance(eta, std::min(std::sqrt(cosThetaSq), 1.0f));
             diffuseFresnel += double(fa + fb) * (0.5 / sampleCount);
             fb = fa;
         }

@@ -3,18 +3,17 @@
 #include "Camera.hpp"
 #include "../Common/Json.hpp"
 
-
-Camera::Camera(const Json &c) {
+Camera::Camera(const Json& c) {
 
     _fovDeg = getOptional(c, "fov", 45);
-    _res = getOptional(c, "resolution", ivec2(512, 512));
-    image = std::make_unique<Image>(_res);
+    _res    = getOptional(c, "resolution", ivec2(512, 512));
+    image   = std::make_unique<Image>(_res);
     if (c.contains("transform")) {
-        const auto &transformJson = c["transform"];
-        _cameraToWorld = c["transform"];
-        _pos = vec3(_cameraToWorld[0][3], _cameraToWorld[1][3], _cameraToWorld[2][3]);
-        _lookAt = _pos + vec3(_cameraToWorld[0][2], _cameraToWorld[1][2], _cameraToWorld[2][2]);
-        _up = vec3(_cameraToWorld[0][1], _cameraToWorld[1][1], _cameraToWorld[2][1]);
+        const auto& transformJson = c["transform"];
+        _cameraToWorld            = c["transform"];
+        _pos                      = vec3(_cameraToWorld[0][3], _cameraToWorld[1][3], _cameraToWorld[2][3]);
+        _lookAt                   = _pos + vec3(_cameraToWorld[0][2], _cameraToWorld[1][2], _cameraToWorld[2][2]);
+        _up                       = vec3(_cameraToWorld[0][1], _cameraToWorld[1][1], _cameraToWorld[2][1]);
         containsAndGet(transformJson, "lookAt", _lookAt);
         containsAndGet(transformJson, "up", _up);
         _cameraToWorld[0][0] = -_cameraToWorld[0][0];
@@ -27,9 +26,9 @@ Camera::Camera(const Json &c) {
 }
 
 void Camera::preCompute() {
-    _fovRad = Angle::degToRad(_fovDeg);
+    _fovRad    = Angle::degToRad(_fovDeg);
     _planeDist = 1.0f / std::tan(_fovRad * 0.5f);
-    _ratio = Float(_res.y) / Float(_res.x);
+    _ratio     = Float(_res.y) / Float(_res.x);
     _pixelSize = vec2(1.0 / _res.x, 1.0 / _res.y);
 
     _rasterToCamera = getTransFormMatrix(vec3(-1, _ratio, _planeDist), vec3(2.f / _res.x, -2.f / _res.x, 1), vec3());
@@ -44,15 +43,14 @@ void Camera::preCompute() {
 
 Ray Camera::sampleRay(size_t x, size_t y, vec2 sample) const {
     auto localD = normalize(transformPoint(_rasterToCamera, vec3(x + sample.x, y + sample.y, 0)));
-    vec3 d = transformVector(_cameraToWorld, localD);
-    d = normalize(d);
+    vec3 d      = transformVector(_cameraToWorld, localD);
+    d           = normalize(d);
     return Ray(_pos, d);
 }
 
-
-vec2 Camera::inverse(const vec3 &pos) const {
+vec2 Camera::inverse(const vec3& pos) const {
     vec3 worldDir = normalize(pos - _pos);
-    vec3 localD = transformVector(_toLocal, worldDir);
+    vec3 localD   = transformVector(_toLocal, worldDir);
     localD *= _planeDist / localD.z;
     return {(localD.x + 1) / (2.f * _pixelSize.x), (-localD.y + _ratio) / (2 * _pixelSize.x)};
 }
@@ -65,9 +63,9 @@ static Float factor(Float a, Float b, Float c) {
     return (c - a) / (b - a);
 }
 
-void Camera::drawLine(int x0, int x1, int y0, int y1, const Spectrum &color) {
-    int dy = y1 - y0;
-    int dx = x1 - x0;
+void Camera::drawLine(int x0, int x1, int y0, int y1, const Spectrum& color) {
+    int dy  = y1 - y0;
+    int dx  = x1 - x0;
     int dy2 = 2 * dy;
     int dx2 = 2 * dx;
 
@@ -108,8 +106,8 @@ void Camera::drawLine(int x0, int x1, int y0, int y1, const Spectrum &color) {
             image->addPixel(x, y, color * factor(y0, y1, y), true);
         }
     } else if (dx > 0 && dy < 0 && m < 1) {
-        dy2 = -dy2;
-        dy = -dy;
+        dy2      = -dy2;
+        dy       = -dy;
         Float pi = dy2 - dx;
         for (int x = x0, y = -y0; x < x1; x++) {
             if (pi < 0)
@@ -121,8 +119,8 @@ void Camera::drawLine(int x0, int x1, int y0, int y1, const Spectrum &color) {
             image->addPixel(x, -y, color * factor(x0, x1, x), true);
         }
     } else if (dx > 0 && dy < 0 && m >= 1) {
-        dy2 = -dy2;
-        dy = -dy;
+        dy2      = -dy2;
+        dy       = -dy;
         Float pi = dx - dy2;
         for (int x = x0, y = -y0; y < -y1; y++) {
             if (pi < 0)
@@ -134,8 +132,8 @@ void Camera::drawLine(int x0, int x1, int y0, int y1, const Spectrum &color) {
             image->addPixel(x, -y, color * factor(y0, y1, y), true);
         }
     } else if (dx < 0 && dy > 0 && m < 1) {
-        dx2 = -dx2;
-        dx = dx;
+        dx2      = -dx2;
+        dx       = dx;
         Float pi = dy2 - dx;
         for (int x = -x0, y = y0; x < -x1; x++) {
             if (pi < 0)
@@ -147,8 +145,8 @@ void Camera::drawLine(int x0, int x1, int y0, int y1, const Spectrum &color) {
             image->addPixel(-x, y, color * factor(x0, x1, x), true);
         }
     } else if (dx < 0 && dy > 0 && m >= 1) {
-        dx2 = -dx2;
-        dx = dx;
+        dx2      = -dx2;
+        dx       = dx;
         Float pi = dx - dy2;
         for (int x = x0, y = -y0; y < -y1; y++) {
             if (pi < 0)
@@ -160,10 +158,10 @@ void Camera::drawLine(int x0, int x1, int y0, int y1, const Spectrum &color) {
             image->addPixel(-x, y, color * factor(y0, y1, y), true);
         }
     } else if (dx < 0 && dy < 0 && m < 1) {
-        dx2 = -dx2;
-        dx = -dx;
-        dy2 = -dy2;
-        dy = -dy;
+        dx2      = -dx2;
+        dx       = -dx;
+        dy2      = -dy2;
+        dy       = -dy;
         Float pi = dy2 - dx;
         for (int x = -x0, y = -y0; x < -x1; x++) {
             if (pi < 0)
@@ -175,10 +173,10 @@ void Camera::drawLine(int x0, int x1, int y0, int y1, const Spectrum &color) {
             image->addPixel(-x, -y, color * factor(x0, x1, x), true);
         }
     } else if (dx < 0 && dy < 0 && m >= 1) {
-        dx2 = -dx2;
-        dx = -dx;
-        dy2 = -dy2;
-        dy = -dy;
+        dx2      = -dx2;
+        dx       = -dx;
+        dy2      = -dy2;
+        dy       = -dy;
         Float pi = dx - dy2;
         for (int x = -x0, y = -y0; y < -y1; y++) {
             if (pi < 0)
@@ -192,38 +190,38 @@ void Camera::drawLine(int x0, int x1, int y0, int y1, const Spectrum &color) {
     }
 }
 
-static bool draw = false;
-static int count = 0;
+static bool draw  = false;
+static int  count = 0;
 
-void Camera::drawLine(const vec3 &begin, const vec3 &end, const Spectrum &color) {
+void Camera::drawLine(const vec3& begin, const vec3& end, const Spectrum& color) {
     ivec2 screenBegin = inverse(begin);
-    ivec2 screenEnd = inverse(end);
-    screenBegin = clamp(screenBegin, ivec2(0), image->resoulation());
-    screenEnd = clamp(screenEnd, ivec2(0), image->resoulation());
+    ivec2 screenEnd   = inverse(end);
+    screenBegin       = clamp(screenBegin, ivec2(0), image->resoulation());
+    screenEnd         = clamp(screenEnd, ivec2(0), image->resoulation());
     int x0 = screenBegin.x, x1 = screenEnd.x;
     int y0 = screenBegin.y, y1 = screenEnd.y;
     drawLine(x0, x1, y0, y1, color);
     draw = true;
 }
 
-Spectrum Camera::evalDirection(vec3 p, ivec2 *pRaster, Float *pdf) const {
+Spectrum Camera::evalDirection(vec3 p, ivec2* pRaster, Float* pdf) const {
     auto cameraP = transformPoint(_cameraToWorld, vec3(0, 0, 0));
-    auto ray = Ray(cameraP, direction(cameraP, p));
-    auto sw = rayWeight(ray, pRaster);
+    auto ray     = Ray(cameraP, direction(cameraP, p));
+    auto sw      = rayWeight(ray, pRaster);
     if (!isBlack(sw))
         *pdf = distance2(p, cameraP) / dot(ray.d, transformVector(_cameraToWorld, vec3(0, 0, 1)));
     return sw;
 }
 
 //默认是从相机那一点出发
-Spectrum Camera::rayWeight(const Ray &ray, ivec2 *pRaster) const {
-    auto localD = transformVector(_toLocal, ray.d);
-    auto cosTheta = dot(localD, vec3(0, 0, 1));
+Spectrum Camera::rayWeight(const Ray& ray, ivec2* pRaster) const {
+    auto localD    = transformVector(_toLocal, ray.d);
+    auto cosTheta  = dot(localD, vec3(0, 0, 1));
     auto cos2Theta = cosTheta * cosTheta;
     if (cosTheta < 0) {
         return Spectrum(0);
     }
-    auto p = ray(_planeDist / cosTheta);
+    auto p         = ray(_planeDist / cosTheta);
     auto pRaster3d = transformPoint(_cameraToRaster, transformPoint(_toLocal, p));
     if (pRaster3d.x < _res.x && pRaster3d.y < _res.y && pRaster3d.x >= 0 && pRaster3d.y >= 0) {
         if (pRaster)
@@ -235,66 +233,56 @@ Spectrum Camera::rayWeight(const Ray &ray, ivec2 *pRaster) const {
 }
 
 //pinole sample
-bool Camera::samplePosition(ivec2 point, vec2 sample, PositionSample &pSample) const {
-    pSample.p = _pos;
+bool Camera::samplePosition(ivec2 point, vec2 sample, PositionSample& pSample) const {
+    pSample.p      = _pos;
     pSample.weight = Spectrum(1);
-    pSample.pdf = 1;
+    pSample.pdf    = 1;
     pSample.normal = transformVector(_cameraToWorld, vec3(0, 0, 1));
     return true;
 }
 
 PositionAndDirectionSample Camera::sampleRay(ivec2 point, vec2 /*posSample*/, vec2 dirSample) const {
     PositionAndDirectionSample result;
-    auto localD = normalize(transformPoint(_rasterToCamera, vec3(point.x + dirSample.x, point.y + dirSample.y, 0)));
-    result.posPdf = 1;
-    result.dirPdf = 1.f / A * (localD.z * localD.z * localD.z);
-    result.weight = Spectrum(1);
-    result.n = transformVector(_cameraToWorld, vec3(0, 0, 1));
-    auto worldD = transformVector(_cameraToWorld, localD);
-    result.ray = Ray(_pos, worldD);
+    auto                       localD = normalize(transformPoint(_rasterToCamera, vec3(point.x + dirSample.x, point.y + dirSample.y, 0)));
+    result.posPdf                     = 1;
+    result.dirPdf                     = 1.f / A * (localD.z * localD.z * localD.z);
+    result.weight                     = Spectrum(1);
+    result.n                          = transformVector(_cameraToWorld, vec3(0, 0, 1));
+    auto worldD                       = transformVector(_cameraToWorld, localD);
+    result.ray                        = Ray(_pos, worldD);
     return result;
 }
 
-
-
-bool Camera::sampleLi(vec3 p, ivec2 *pRaster, vec2 sample, PositionAndDirectionSample &result) const {
-    auto cameraP = transformPoint(_cameraToWorld, vec3(0, 0, 0));
-    result.ray = Ray(cameraP, direction(cameraP, p));
+bool Camera::sampleLi(vec3 p, ivec2* pRaster, vec2 sample, PositionAndDirectionSample& result) const {
+    auto cameraP  = transformPoint(_cameraToWorld, vec3(0, 0, 0));
+    result.ray    = Ray(cameraP, direction(cameraP, p));
     result.weight = rayWeight(result.ray, pRaster);
     if (isBlack(result.weight))
         return false;
     result.dirPdf = distance2(p, cameraP) / absDot(result.ray.d, transformVector(_cameraToWorld, vec3(0, 0, 1)));
-    result.n = transformVector(_cameraToWorld, vec3(0, 0, 1));
+    result.n      = transformVector(_cameraToWorld, vec3(0, 0, 1));
     result.posPdf = 1;
     return true;
 }
 
-void Camera::pdfRay(const Ray &ray, Float *pdfPos, Float *pdfDir) const{
+void Camera::pdfRay(const Ray& ray, Float* pdfPos, Float* pdfDir) const {
 
-    Float cosTheta = dot(ray.d, transformVector(_cameraToWorld,vec3(0,0,1)));
-    if(cosTheta<=0){
-        if(pdfPos) *pdfPos = 0;
-        if(pdfDir) *pdfDir = 0;
+    Float cosTheta = dot(ray.d, transformVector(_cameraToWorld, vec3(0, 0, 1)));
+    if (cosTheta <= 0) {
+        if (pdfPos) *pdfPos = 0;
+        if (pdfDir) *pdfDir = 0;
         return;
     }
-    auto p = ray(_planeDist / cosTheta);
+    auto p         = ray(_planeDist / cosTheta);
     auto pRaster3d = transformPoint(_cameraToRaster, transformPoint(_toLocal, p));
     if (pRaster3d.x < _res.x && pRaster3d.y < _res.y && pRaster3d.x >= 0 && pRaster3d.y >= 0) {
-        auto localD = transformVector(_toLocal,ray.d);
-        if(pdfPos)  *pdfPos = 1;
-        if(pdfDir)  *pdfDir = 1.f / A * (cosTheta * cosTheta * cosTheta);
+        auto localD = transformVector(_toLocal, ray.d);
+        if (pdfPos) *pdfPos = 1;
+        if (pdfDir) *pdfDir = 1.f / A * (cosTheta * cosTheta * cosTheta);
     } else {
-        if(pdfPos) *pdfPos = 0;
-        if(pdfDir) *pdfDir = 0;
+        if (pdfPos) *pdfPos = 0;
+        if (pdfDir) *pdfDir = 0;
         return;
     }
 
 }
-
-
-
-
-
-
-
-

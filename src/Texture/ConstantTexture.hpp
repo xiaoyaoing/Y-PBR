@@ -1,17 +1,17 @@
 #include "Common/Texture.hpp"
 
 template<class T>
-class ConstantTexture : public  Texture<T>{
+class ConstantTexture : public Texture<T> {
 public:
-    ConstantTexture(const T  value):value(value){
+    ConstantTexture(const T value) : value(value) {
     }
 
-    T eval(const Intersection * si = nullptr) const override { return value; }
-    T eval(vec2 uv) const override {return value; }
-    vec2 sample(TextureMapJacobian jacobian, const vec2 & uv,Float * pdf) const override {
+    T    eval(const Intersection* si = nullptr) const override { return value; }
+    T    eval(vec2 uv) const override { return value; }
+    vec2 sample(TextureMapJacobian jacobian, const vec2& uv, Float* pdf) const override {
         return vec2();
     }
-    Float pdf(TextureMapJacobian jacobian, const vec2 & uv) const override {
+    Float pdf(TextureMapJacobian jacobian, const vec2& uv) const override {
         return 1;
     }
 

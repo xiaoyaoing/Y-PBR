@@ -102,7 +102,7 @@ add_subdirectory(${YPBR_DEPENDENCIES_DIR})
 
 
 
-file(GLOB_RECURSE YPBR_SOURCES ${YPBR_SOURCES_DIR}/*.cpp   ${YPBR_SOURCES_DIR}/*.h  lib/lodepng/lodepng.cpp
+file(GLOB_RECURSE YPBR_SOURCES ${YPBR_SOURCES_DIR}/*.cpp   ${YPBR_SOURCES_DIR}/*.h  lib/lodepng/lodepng.cpp ${YPBR_SOURCES_DIR}/*.hpp
         lib/skylight/ArHosekSkyModel.cpp)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 

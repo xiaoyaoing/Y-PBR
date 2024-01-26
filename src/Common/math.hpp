@@ -8,14 +8,14 @@
 #include <string>
 #ifdef _USE_DOUBLE
 
-typedef double Float;
+typedef double     Float;
 typedef glm::dvec2 vec2;
 typedef glm::dvec3 vec3;
 typedef glm::dvec4 vec4;
 typedef glm::dmat3 mat3;
 typedef glm::dmat4 mat4;
 #else
-typedef float Float;
+typedef float     Float;
 typedef glm::vec2 vec2;
 typedef glm::vec3 vec3;
 typedef glm::vec4 vec4;
@@ -27,62 +27,54 @@ typedef glm::ivec2 ivec2;
 typedef glm::ivec3 ivec3;
 typedef glm::ivec4 ivec4;
 
-typedef std::uint8_t uint8;
+typedef std::uint8_t  uint8;
 typedef std::uint16_t uint16;
 typedef std::uint32_t uint32;
 typedef std::uint64_t uint64;
 
-typedef std::int8_t int8;
+typedef std::int8_t  int8;
 typedef std::int16_t int16;
 typedef std::int32_t int32;
 typedef std::int64_t int64;
 
-#define _POS_INFINY std::numeric_limits<Float>::infinity()
-#define _NEG_INFINY -std::numeric_limits<Float>::infinity()
+#define _POS_INFINY          std::numeric_limits<Float>::infinity()
+#define _NEG_INFINY          -std::numeric_limits<Float>::infinity()
 #define _NOT_IMPLEMENT_ERROR throw("This not implemented yet!");
-#define _ERROR(message) throw(message);
+#define _ERROR(message)      throw(message);
 
 #define CHECK(condition, message)                                                                                                    \
-    do                                                                                                                               \
-    {                                                                                                                                \
-        if (!(condition))                                                                                                            \
-        {                                                                                                                            \
+    do {                                                                                                                             \
+        if (!(condition)) {                                                                                                          \
             throw std::runtime_error(std::string("Check failed at ") + __FILE__ + ":" + std::to_string(__LINE__) + " - " + message); \
         }                                                                                                                            \
     } while (false)
 
 #define TODO(message)                                         \
-    do                                                        \
-    {                                                         \
+    do {                                                      \
         std::cout << "TODO: " << __FILE__ << ":" << __LINE__; \
-        if (message != nullptr)                               \
-        {                                                     \
+        if (message != nullptr) {                             \
             std::cout << " - " << message;                    \
         }                                                     \
         std::cout << std::endl;                               \
     } while (false)
 
-namespace Constant
-{
-    constexpr Float PI = 3.14159265358979323846;
-    constexpr Float PiOver2 = 1.57079632679489661923;
-    constexpr Float PiOver4 = 0.78539816339744830961;
-    constexpr Float INV_PI = 0.31830988618379067154;
-    constexpr Float INV_TWO_PI = INV_PI / 2;
+namespace Constant {
+    constexpr Float PI          = 3.14159265358979323846;
+    constexpr Float PiOver2     = 1.57079632679489661923;
+    constexpr Float PiOver4     = 0.78539816339744830961;
+    constexpr Float INV_PI      = 0.31830988618379067154;
+    constexpr Float INV_TWO_PI  = INV_PI / 2;
     constexpr Float INV_FOUR_PI = INV_PI / 4;
-    constexpr Float HALF_PI = 1.57079632679489661923;
-    constexpr Float TWO_PI = 6.283185307179586476925;
-    constexpr Float EPSILON = 5e-4f;
-}
+    constexpr Float HALF_PI     = 1.57079632679489661923;
+    constexpr Float TWO_PI      = 6.283185307179586476925;
+    constexpr Float EPSILON     = 5e-4f;
+}// namespace Constant
 
-class BitManip
-{
+class BitManip {
 public:
-    static inline uint32 floatBitsToUint(float f)
-    {
-        union
-        {
-            float f;
+    static inline uint32 floatBitsToUint(float f) {
+        union {
+            float  f;
             uint32 i;
         } unionHack;
         unionHack.f = f;
@@ -90,15 +82,12 @@ public:
     }
 };
 
-namespace std
-{
+namespace std {
 
-    template <glm::length_t Size>
-    class hash<glm::vec<Size, Float, glm::defaultp>>
-    {
+    template<glm::length_t Size>
+    class hash<glm::vec<Size, Float, glm::defaultp>> {
     public:
-        std::size_t operator()(const glm::vec<Size, Float, glm::defaultp> &v) const
-        {
+        std::size_t operator()(const glm::vec<Size, Float, glm::defaultp>& v) const {
             // See http://www.boost.org/doc/libs/1_33_1/doc/html/hash_combine.html
             uint32 result = 0;
             for (unsigned i = 0; i < Size; ++i)
@@ -107,12 +96,10 @@ namespace std
         }
     };
 
-    template <glm::length_t Size>
-    class hash<glm::vec<Size, int, glm::defaultp>>
-    {
+    template<glm::length_t Size>
+    class hash<glm::vec<Size, int, glm::defaultp>> {
     public:
-        std::size_t operator()(const glm::vec<Size, int, glm::defaultp> &v) const
-        {
+        std::size_t operator()(const glm::vec<Size, int, glm::defaultp>& v) const {
             // See http://www.boost.org/doc/libs/1_33_1/doc/html/hash_combine.html
             int result = 0;
             for (unsigned i = 0; i < Size; ++i)
@@ -121,85 +108,71 @@ namespace std
         }
     };
 
-}
+}// namespace std
 
-template <glm::length_t size>
-inline Float dot(glm::vec<size, Float, glm::defaultp> a, glm::vec<size, Float, glm::defaultp> b)
-{
+template<glm::length_t size>
+inline Float dot(glm::vec<size, Float, glm::defaultp> a, glm::vec<size, Float, glm::defaultp> b) {
     return glm::dot(a, b);
 }
 
-template <glm::length_t size>
-inline Float absDot(glm::vec<size, Float, glm::defaultp> a, glm::vec<size, Float, glm::defaultp> b)
-{
+template<glm::length_t size>
+inline Float absDot(glm::vec<size, Float, glm::defaultp> a, glm::vec<size, Float, glm::defaultp> b) {
     return abs(dot(a, b));
 }
 
-template <glm::length_t size>
-inline Float average(glm::vec<size, Float, glm::defaultp> a)
-{
+template<glm::length_t size>
+inline Float average(glm::vec<size, Float, glm::defaultp> a) {
     Float sum = 0;
     for (int i = 0; i < size; i++)
         sum += a[i];
     return sum / size;
 }
 
-template <glm::length_t size>
-inline Float length2(glm::vec<size, Float, glm::defaultp> a)
-{
+template<glm::length_t size>
+inline Float length2(glm::vec<size, Float, glm::defaultp> a) {
     return dot(a, a);
 }
 
-template <glm::length_t size>
-inline Float length(glm::vec<size, Float, glm::defaultp> a)
-{
+template<glm::length_t size>
+inline Float length(glm::vec<size, Float, glm::defaultp> a) {
     return glm::length(a);
 }
 
-template <glm::length_t size>
-inline Float distance2(glm::vec<size, Float, glm::defaultp> a, glm::vec<size, Float, glm::defaultp> b)
-{
+template<glm::length_t size>
+inline Float distance2(glm::vec<size, Float, glm::defaultp> a, glm::vec<size, Float, glm::defaultp> b) {
     return length2(a - b);
 }
 
-template <glm::length_t size>
-inline Float distance(glm::vec<size, Float, glm::defaultp> a, glm::vec<size, Float, glm::defaultp> b)
-{
+template<glm::length_t size>
+inline Float distance(glm::vec<size, Float, glm::defaultp> a, glm::vec<size, Float, glm::defaultp> b) {
     return length(a - b);
 }
 
-inline vec3 direction(vec3 a, vec3 b)
-{
+inline vec3 direction(vec3 a, vec3 b) {
     return normalize(b - a);
 }
 
-inline vec3 normalize(vec3 a)
-{
+inline vec3 normalize(vec3 a) {
     return glm::normalize(a);
 }
 
-inline auto radians(vec3 a)
-{
+inline auto radians(vec3 a) {
     return glm::radians(a);
 }
 
-inline vec3 faceForward(const vec3 &a, const vec3 &b)
-{
+inline vec3 faceForward(const vec3& a, const vec3& b) {
     return dot(a, b) > 0 ? a : -a;
 }
 
-inline vec3 intToColor(uint32_t i)
-{
+inline vec3 intToColor(uint32_t i) {
     return vec3((i >> 16) & 0xFF, (i >> 8) & 0xFF, i & 0xFF) / (Float)255.0;
 }
 
-inline mat4 rotate(Float radians, vec3 axis)
-{
+inline mat4 rotate(Float radians, vec3 axis) {
     return glm::rotate(radians, axis);
 }
 
-inline Float clamp(Float value, Float min, Float max)
-{
+inline Float clamp(Float value, Float min, Float max) {
     if (value < min)
         return min;
     else if (value > max)
@@ -208,18 +181,16 @@ inline Float clamp(Float value, Float min, Float max)
         return value;
 }
 
-inline std::string toColorStr(const vec3 &v)
-{
-    std::string s;
+inline std::string toColorStr(const vec3& v) {
+    std::string        s;
     std::ostringstream buffer;
     buffer << "r:" << v.x << " g: " << v.y << " b: " << v.z;
     return buffer.str();
 }
 
-inline std::string Mat4ToStr(const mat4 &mat)
-{
+inline std::string Mat4ToStr(const mat4& mat) {
     // return std::string();
-    std::string s;
+    std::string        s;
     std::ostringstream buffer;
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 4; j++)
@@ -228,44 +199,36 @@ inline std::string Mat4ToStr(const mat4 &mat)
     return buffer.str();
 }
 
-template <int num>
-Float max(const glm::vec<num, Float, glm::defaultp> &v)
-{
+template<int num>
+Float max(const glm::vec<num, Float, glm::defaultp>& v) {
     Float maxVal = -1e5;
-    for (uint32 i = 0; i < num; i++)
-    {
+    for (uint32 i = 0; i < num; i++) {
         maxVal = std::max(v[i], maxVal);
     }
     return maxVal;
 }
 
-template <typename Predicate>
-int FindInterval(int size, const Predicate &pred)
-{
+template<typename Predicate>
+int FindInterval(int size, const Predicate& pred) {
     int first = 0, len = size;
-    while (len > 0)
-    {
+    while (len > 0) {
         int half = len >> 1, middle = first + half;
         // Bisect range based on value of _pred_ at _middle_
-        if (pred(middle))
-        {
+        if (pred(middle)) {
             first = middle + 1;
             len -= half + 1;
-        }
-        else
+        } else
             len = half;
     }
     return clamp(first - 1, 0, size - 2);
 }
 
-template <uint32 num>
-bool AllInRange(const glm::vec<num, Float, glm::defaultp> &v,
-                Float minVal, Float maxVal)
-{
-    for (uint32 i = 0; i < num; i++)
-    {
-        if (v[i] < minVal || v[i] > maxVal)
-        {
+template<uint32 num>
+bool AllInRange(const glm::vec<num, Float, glm::defaultp>& v,
+                Float                                      minVal,
+                Float                                      maxVal) {
+    for (uint32 i = 0; i < num; i++) {
+        if (v[i] < minVal || v[i] > maxVal) {
             return false;
         }
     }
@@ -273,190 +236,158 @@ bool AllInRange(const glm::vec<num, Float, glm::defaultp> &v,
     return true;
 }
 
-template <glm::length_t size>
-glm::vec<size, Float, glm::defaultp> pow(const glm::vec<size, Float, glm::defaultp> &v,
-                                         Float e)
-{
+template<glm::length_t size>
+glm::vec<size, Float, glm::defaultp> pow(const glm::vec<size, Float, glm::defaultp>& v,
+                                         Float                                       e) {
     glm::vec<size, Float, glm::defaultp> res;
-    for (uint32 i = 0; i < size; i++)
-    {
+    for (uint32 i = 0; i < size; i++) {
         res[i] = std::pow(v[i], e);
     }
     return res;
 }
 
-template <glm::length_t size>
-Float maxElement(const glm::vec<size, Float, glm::defaultp> &v1)
-{
+template<glm::length_t size>
+Float maxElement(const glm::vec<size, Float, glm::defaultp>& v1) {
     Float res = -1e5;
-    for (uint32 i = 0; i < size; i++)
-    {
+    for (uint32 i = 0; i < size; i++) {
         res = std::max(v1[i], res);
     }
     return res;
 }
 
-template <glm::length_t size>
-Float minElement(const glm::vec<size, Float, glm::defaultp> &v1)
-{
+template<glm::length_t size>
+Float minElement(const glm::vec<size, Float, glm::defaultp>& v1) {
     Float res = 1e5;
-    for (uint32 i = 0; i < size; i++)
-    {
+    for (uint32 i = 0; i < size; i++) {
         res = min(v1[i], res);
     }
     return res;
 }
 
-template <glm::length_t size>
-glm::vec<size, Float, glm::defaultp> max(const glm::vec<size, Float, glm::defaultp> &v1,
-                                         const glm::vec<size, Float, glm::defaultp> &v2)
-{
+template<glm::length_t size>
+glm::vec<size, Float, glm::defaultp> max(const glm::vec<size, Float, glm::defaultp>& v1,
+                                         const glm::vec<size, Float, glm::defaultp>& v2) {
     glm::vec<size, Float, glm::defaultp> res;
-    for (uint32 i = 0; i < size; i++)
-    {
+    for (uint32 i = 0; i < size; i++) {
         res[i] = v1[i] > v2[i] ? v1[i] : v2[i];
     }
     return res;
 }
 
-template <glm::length_t size>
-glm::vec<size, Float, glm::defaultp> min(const glm::vec<size, Float, glm::defaultp> &v1,
-                                         const glm::vec<size, Float, glm::defaultp> &v2)
-{
+template<glm::length_t size>
+glm::vec<size, Float, glm::defaultp> min(const glm::vec<size, Float, glm::defaultp>& v1,
+                                         const glm::vec<size, Float, glm::defaultp>& v2) {
     glm::vec<size, Float, glm::defaultp> res;
-    for (uint32 i = 0; i < size; i++)
-    {
+    for (uint32 i = 0; i < size; i++) {
         res[i] = v1[i] < v2[i] ? v1[i] : v2[i];
     }
     return res;
 }
 
-template <glm::length_t size>
-glm::vec<size, Float, glm::defaultp> clamp(const glm::vec<size, Float, glm::defaultp> &v, Float l, Float r)
-{
+template<glm::length_t size>
+glm::vec<size, Float, glm::defaultp> clamp(const glm::vec<size, Float, glm::defaultp>& v, Float l, Float r) {
     glm::vec<size, Float, glm::defaultp> res;
-    for (uint32 i = 0; i < size; i++)
-    {
+    for (uint32 i = 0; i < size; i++) {
         res[i] = clamp(v[i], l, r);
     }
     return res;
 }
 
-template <glm::length_t size>
-glm::vec<size, Float, glm::defaultp> clamp(const glm::vec<size, Float, glm::defaultp> &v,
-                                           const glm::vec<size, Float, glm::defaultp> &l,
-                                           const glm::vec<size, Float, glm::defaultp> &r)
-{
+template<glm::length_t size>
+glm::vec<size, Float, glm::defaultp> clamp(const glm::vec<size, Float, glm::defaultp>& v,
+                                           const glm::vec<size, Float, glm::defaultp>& l,
+                                           const glm::vec<size, Float, glm::defaultp>& r) {
     glm::vec<size, Float, glm::defaultp> res;
-    for (uint32 i = 0; i < size; i++)
-    {
+    for (uint32 i = 0; i < size; i++) {
         res[i] = clamp(v[i], l[i], r[i]);
     }
     return res;
 }
 
-template <glm::length_t size>
-glm::vec<size, Float, glm::defaultp> lerp(const glm::vec<size, Float, glm::defaultp> &v1,
-                                          const glm::vec<size, Float, glm::defaultp> &v2,
-                                          const glm::vec<size, Float, glm::defaultp> &p)
-{
+template<glm::length_t size>
+glm::vec<size, Float, glm::defaultp> lerp(const glm::vec<size, Float, glm::defaultp>& v1,
+                                          const glm::vec<size, Float, glm::defaultp>& v2,
+                                          const glm::vec<size, Float, glm::defaultp>& p) {
     glm::vec<size, Float, glm::defaultp> res;
-    for (uint32 i = 0; i < size; i++)
-    {
+    for (uint32 i = 0; i < size; i++) {
         res[i] = p * v1[i] + (1 - p) * v2[i];
         // res[i] = std::lerp(v1[i], v2[i], p);
     }
     return res;
 }
 
-template <glm::length_t size>
-Float compAdd(const glm::vec<size, Float, glm::defaultp> &v)
-{
+template<glm::length_t size>
+Float compAdd(const glm::vec<size, Float, glm::defaultp>& v) {
     Float res = 0;
-    for (uint32 i = 0; i < size; i++)
-    {
+    for (uint32 i = 0; i < size; i++) {
         res += v[i];
     }
     return res;
 }
 
-template <glm::length_t size>
-bool hasNav(const glm::vec<size, Float, glm::defaultp> &v)
-{
+template<glm::length_t size>
+bool hasNav(const glm::vec<size, Float, glm::defaultp>& v) {
     Float res;
-    for (uint32 i = 0; i < size; i++)
-    {
+    for (uint32 i = 0; i < size; i++) {
         if (v[i] < 0)
             return true;
     }
     return false;
 }
 
-template <glm::length_t size>
-int maxDim(const glm::vec<size, Float, glm::defaultp> &v)
-{
+template<glm::length_t size>
+int maxDim(const glm::vec<size, Float, glm::defaultp>& v) {
     Float maxVal = -1e5;
-    int dim = -1;
-    for (uint32 i = 0; i < size; i++)
-    {
-        if (v[i] > maxVal)
-        {
+    int   dim    = -1;
+    for (uint32 i = 0; i < size; i++) {
+        if (v[i] > maxVal) {
             maxVal = v[i];
-            dim = int(i);
+            dim    = int(i);
         }
     }
     return dim;
 }
 
-template <class T>
-inline T lerp(const T &x00, const T &x01, const T &x10, const T &x11, Float u, Float v)
-{
+template<class T>
+inline T lerp(const T& x00, const T& x01, const T& x10, const T& x11, Float u, Float v) {
 
     return (x00 * (1.0f - u) + x01 * u) * (1.0f - v) +
            (x10 * (1.0f - u) + x11 * u) * v;
 }
 
-template <class T>
-inline T lerp(const T &x, const T &y, Float u)
-{
+template<class T>
+inline T lerp(const T& x, const T& y, Float u) {
 
     return x * (1 - u) + y * u;
 }
 
-template <class T>
-inline T sqr(T a)
-{
+template<class T>
+inline T sqr(T a) {
     return a * a;
 }
 
-template <class T>
-inline T mod(T a, T b)
-{
+template<class T>
+inline T mod(T a, T b) {
     T result = a - (a / b) * b;
     return (T)((result < 0) ? result + b : result);
 }
 
-template <class T>
-T interpolate3(const T &a, const T &b, const T &c, const vec2 &uv)
-{
+template<class T>
+T interpolate3(const T& a, const T& b, const T& c, const vec2& uv) {
     return uv.x * a + uv.y * b + (1 - uv.x - uv.y) * c;
 }
 
-namespace Angle
-{
-    static Float radToDeg(Float a)
-    {
+namespace Angle {
+    static Float radToDeg(Float a) {
         return a * (180.0 / Constant::PI);
     }
 
-    static Float degToRad(Float a)
-    {
+    static Float degToRad(Float a) {
         return a * (Constant::PI / 180.0);
     }
-}
+}// namespace Angle
 
-inline Float PowerHeuristic(Float a, Float b)
-{
+inline Float PowerHeuristic(Float a, Float b) {
     return a * a / (a * a + b * b);
 }
 
@@ -464,25 +395,21 @@ inline Float PowerHeuristic(Float a, Float b)
 // MSVC 编译器
 // 在这里添加针对 MSVC 编译器的代码
 #else
-template <class T>
-inline bool isnan(T a)
-{
+template<class T>
+inline bool isnan(T a) {
     return std::isnan(a);
 }
 
-template <class T>
-inline bool isinf(T a)
-{
+template<class T>
+inline bool isinf(T a) {
     return std::isinf(a);
 }
 
-inline Float sin(Float a)
-{
+inline Float sin(Float a) {
     return std::sin(a);
 }
 
-inline Float cos(Float a)
-{
+inline Float cos(Float a) {
     return std::cos(a);
 }
 // 非 MSVC 编译器

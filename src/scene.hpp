@@ -1,4 +1,4 @@
-#pragma  once
+#pragma once
 
 #include "Common/Json.hpp"
 #include "Primitives/Primitive.hpp"
@@ -10,18 +10,18 @@ class Light;
 class Primitive;
 class Medium;
 
-struct RenderOptions{
-    int spp;
-    int sppStep;
-    int tileSize;
-    bool overwrite{false};
+struct RenderOptions {
+    int         spp;
+    int         sppStep;
+    int         tileSize;
+    bool        overwrite{false};
     std::string outputFileName;
-    RenderOptions(const Json & renderJson){
-        spp = getOptional(renderJson,"spp",64);
-        sppStep = getOptional(renderJson,"spp_step",1);
-        tileSize = getOptional(renderJson,"tile_size",16);
-        outputFileName = getOptional(renderJson,"output_file",std::string("image.png"));
-        overwrite = getOptional(renderJson,"overwrite_output_files",false);
+    RenderOptions(const Json& renderJson) {
+        spp            = getOptional(renderJson, "spp", 64);
+        sppStep        = getOptional(renderJson, "spp_step", 1);
+        tileSize       = getOptional(renderJson, "tile_size", 16);
+        outputFileName = getOptional(renderJson, "output_file", std::string("image.png"));
+        overwrite      = getOptional(renderJson, "overwrite_output_files", false);
     }
 };
 
@@ -30,47 +30,43 @@ public:
     Scene(const Json sceneJson);
 
     // Scene and Light Intersection - Records the most recent intersection
-    std::optional<Intersection>  intersect(Ray & ray) const;
-
+    std::optional<Intersection> intersect(Ray& ray) const;
 
     //Determines whether the light and scene intersect - tests for occlusion
-    bool intersectP(const Ray & ray) const ;
+    bool intersectP(const Ray& ray) const;
     //log some info for debug
-    void logDebugInfo();
-    void build();
+    void    logDebugInfo();
+    void    build();
     Bounds3 getWorldBound() const {
         return worldBound;
     }
 
-    std::shared_ptr<BSDF> fetchBSDF(const Json & json) const;
-    std::shared_ptr<BSSRDF> fetchBSSRDF(const std::string & bsdfName) const;
-    std::shared_ptr<Medium> fetchMedium(const std::string & mediumName) const;
+    std::shared_ptr<BSDF>   fetchBSDF(const Json& json) const;
+    std::shared_ptr<BSSRDF> fetchBSSRDF(const std::string& bsdfName) const;
+    std::shared_ptr<Medium> fetchMedium(const std::string& mediumName) const;
 
-    void AddPrimitive(std::shared_ptr<Primitive> prim) {primitives.push_back(prim);}
-    void AddLight(std::shared_ptr<Light> light) {lights.push_back(light);}
+    void          AddPrimitive(std::shared_ptr<Primitive> prim) { primitives.push_back(prim); }
+    void          AddLight(std::shared_ptr<Light> light) { lights.push_back(light); }
     RenderOptions options;
-public :
+
+public:
     std::vector<std::shared_ptr<Light>> lights;
+
 protected:
     /// add light if exists
     /// \param p the   object json
     /// \param l left  bound  idx of the
     /// \param r right bound  idx of the object
-    void handleAddLight(const Json & j,int l,int r);
+    void handleAddLight(const Json& j, int l, int r);
 
-    std::vector<std::shared_ptr<Primitive>> primitives;
-    std::unordered_map<std::string,std::shared_ptr<BSDF>>  bsdfs;
-    std::unordered_map<std::string,std::shared_ptr<BSSRDF>>  bssrdfs;
-    std::unordered_map<std::string,std::shared_ptr<Medium>>  mediums;
+    std::vector<std::shared_ptr<Primitive>>                  primitives;
+    std::unordered_map<std::string, std::shared_ptr<BSDF>>   bsdfs;
+    std::unordered_map<std::string, std::shared_ptr<BSSRDF>> bssrdfs;
+    std::unordered_map<std::string, std::shared_ptr<Medium>> mediums;
 
+    Bounds3  worldBound;
+    RTCScene _scene = nullptr;
 
-    Bounds3 worldBound;
-    RTCScene  _scene = nullptr;
-
-    bool _useBVH;
+    bool                      _useBVH;
     std::unique_ptr<BVHAccel> bvh;
 };
-
-
-
-

@@ -1,3 +1,2 @@
-class Material{
-
+class Material {
 };

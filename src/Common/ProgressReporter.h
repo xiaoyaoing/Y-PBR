@@ -4,17 +4,16 @@
 
 #include <mutex>
 
-#include<iostream>
-
+#include <iostream>
 
 /// For printing how much work is done for an operation.
 /// The operations are thread-safe so we can safely use this in multi-thread environment.
 class ProgressReporter {
 public:
-    std::chrono::time_point<std::chrono::steady_clock> start ;
+    std::chrono::time_point<std::chrono::steady_clock> start;
 
     ProgressReporter(uint64_t total_work) : total_work(total_work), work_done(0) {
-        start =  std::chrono::steady_clock::now();
+        start = std::chrono::steady_clock::now();
     }
     void update(uint64_t num) {
         std::lock_guard<std::mutex> lock(mutex);
@@ -40,6 +39,6 @@ public:
 
 private:
     const uint64_t total_work;
-    uint64_t work_done;
-    std::mutex mutex;
+    uint64_t       work_done;
+    std::mutex     mutex;
 };

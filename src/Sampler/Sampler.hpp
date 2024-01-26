@@ -5,21 +5,17 @@
 
 #include "Common/math.hpp"
 
-
-
-
 // sampler interface
 class Sampler {
-
 
 public:
     Sampler() {}
 
-    virtual  ~Sampler() = default;
+    virtual ~Sampler() = default;
 
     Sampler(int spp = 4) : samplesPerPixel(spp) {}
-//    uint64_t getSeed() const { return rng.getSeed(); }
-//    void setSeed(uint64_t seed) { rng.setSeed(seed); }
+    //    uint64_t getSeed() const { return rng.getSeed(); }
+    //    void setSeed(uint64_t seed) { rng.setSeed(seed); }
 
     virtual std::unique_ptr<Sampler> clone(int seed) const = 0;
 
@@ -27,43 +23,41 @@ public:
 
     virtual vec2 getNext2D() = 0;
 
-    virtual void startPixel(const ivec2 &point) {
-        curPixel = point;
+    virtual void startPixel(const ivec2& point) {
+        curPixel  = point;
         curSample = 0;
     }
 
-    virtual bool startNextSample(){
+    virtual bool startNextSample() {
         curSample++;
-        return curSample<samplesPerPixel;
+        return curSample < samplesPerPixel;
     }
 
-    int samplesPerPixel;
+    int   samplesPerPixel;
     ivec2 curPixel;
-    int curSample;
+    int   curSample;
 };
 
 // uniform distribution sampler
 
-
 class GlobalSampler : public Sampler {
 public:
     // GlobalSampler Public Methods
-//    bool StartNextSample() {
-//
-//    }
+    //    bool StartNextSample() {
+    //
+    //    }
 
-    void startPixel(const ivec2 &point) override {
+    void startPixel(const ivec2& point) override {
         Sampler::startPixel(point);
-        dimension = 0;
+        dimension           = 0;
         intervalSampleIndex = GetIndexForSample(0);
         // Compute _arrayEndDim_ for dimensions used for array samples
         // arrayStartDim + sampleArray1D.size() + 2 * sampleArray2D.size();
     }
 
-
-    bool startNextSample() override{
-        dimension = 0;
-        intervalSampleIndex = GetIndexForSample(curSample+1);
+    bool startNextSample() override {
+        dimension           = 0;
+        intervalSampleIndex = GetIndexForSample(curSample + 1);
         return Sampler::startNextSample();
     }
 
@@ -92,9 +86,8 @@ public:
 
 private:
     // GlobalSampler Private Data
-    int dimension;
-    int64_t intervalSampleIndex;
+    int              dimension;
+    int64_t          intervalSampleIndex;
     static const int arrayStartDim = 5;
-    int arrayEndDim;
+    int              arrayEndDim;
 };
-
