@@ -1,6 +1,6 @@
 #pragma once
 #include "math.hpp"
-#include "nlohmann/json.hpp"
+#include <json.hpp>
 
 typedef nlohmann::json Json;
 

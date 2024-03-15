@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <spdlog.h>
 
 void Image::saveTXT(const std::string& fileName) const {
     std::ofstream file(fileName + "txt");
@@ -36,7 +37,8 @@ void Image::addPixel(uint32 x, uint32 y, vec3 rgb, bool count) {
     if (x < 0 || x >= width() || y < 0 || y >= height())
         return;
     if (hasNan(rgb)) {
-        throw("Rdiance NAN");
+       spdlog::info("radiance has nan");
+        return ;
     }
     if (rgb.r < 0 || rgb.g < 0 || rgb.z < 0) {
         //todo

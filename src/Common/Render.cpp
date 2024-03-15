@@ -49,30 +49,11 @@ void Render::Go() {
 }
 
 void Render::renderScene(const std::string path) {
-    //    for (int i = 0; i < 20; i++) {
-    //        for (int j = 0; j < 20; j++) {
-    //            Float beta_m = 0.01 + i * 0.01 * (i / 4 +1) * i;
-    //            Float beta_n = 0.01 + j * 0.01 * (j / 4 + 1) * j;
-    //            beta_m = beta_n;
-    //
-    //            std::cout << "beta_m";
     FileUtils::WorkingDir = path;
     std::ifstream scene_file(FileUtils::WorkingDir + "scene.json");
-
-    nlohmann::json json;
+    Json json;
     scene_file >> json;
     scene_file.close();
-    //  auto t = json["bsdfs"][0];
-
-    //            json["bsdfs"][0]["beta_m"] = beta_m;
-    //            json["bsdfs"][0]["beta_n"] = beta_n;
-    //            char s[100];
-    //            sprintf_s(s, sizeof(s), "betaM%.2f betaN%.2fTT.png", beta_m, beta_n);
-
-    //   json["renderer"]["output_file"] = std::string(s);
-
     Render render(json);
-
     render.Go();
-    // }
 }

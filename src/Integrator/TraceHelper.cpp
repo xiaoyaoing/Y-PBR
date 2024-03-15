@@ -50,7 +50,7 @@ Spectrum estimateDirect(SurfaceEvent& event, const vec2& uShading, const Light& 
                     if (!sampleBSDF) weight = 1;
                     Ld += f * weight * Li / lightPdf;
                     if (hasNan(Ld)) {
-                        int k = 1;
+                        1;
                     }
                 }
             }
@@ -65,10 +65,10 @@ Spectrum estimateDirect(SurfaceEvent& event, const vec2& uShading, const Light& 
                 vec3 worldShadowRayDir = event.toWorld(event.wi);
                 Ray  shaowRay(event.its->p, worldShadowRayDir);
                 if (event.its->primitive->areaLight.get() == &light) {
-                    int k = 1;
+                    1;
                 }
                 Spectrum Li = evalLightDirect(scene, light, shaowRay, medium, &lightPdf);
-                if (lightPdf == 0 && isBlack(Li)) return Ld;
+                if (lightPdf == 0 || isBlack(Li)) return Ld;
                 Float weight = 1;
                 if (!isSpecualr(event.sampleType)) {
                     weight = PowerHeuristic(scatteringPdf, lightPdf);
@@ -78,7 +78,7 @@ Spectrum estimateDirect(SurfaceEvent& event, const vec2& uShading, const Light& 
                 Ld += f * weight * Li / scatteringPdf;
                 if (hasNan(Ld)) {
                     bsdf->f(event, false);
-                    int k = 1;
+                    1;
                 }
             }
         }
@@ -166,7 +166,10 @@ evalLightDirect(const Scene& scene, const Light& light, Ray& ray, const Medium* 
     if (light.flags & int(LightFlags::Area)) L = lightIts->Le(-ray.d);
     if (light.flags & int(LightFlags::Infinite)) L = light.Le(ray);
     //avoid self shadow
-    if (isBlack(L)) return Spectrum(0);
+    if (isBlack(L)) {
+        if(lightPdf) *lightPdf = 0;
+        return Spectrum(0);
+    }
     if (lightPdf) *lightPdf = light.PdfLi(lightIts.value(), ray.o);
     return L * evalShadowDirect(scene, ray, medium);
 }

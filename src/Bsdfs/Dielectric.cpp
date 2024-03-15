@@ -6,7 +6,6 @@ Spectrum Dielectric::f(const SurfaceEvent& event) const {
 }
 
 Float Dielectric::Pdf(const SurfaceEvent& event) const {
-    // avoid compute specular pdf
     return 0;
 }
 

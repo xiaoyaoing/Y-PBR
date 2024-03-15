@@ -30,10 +30,11 @@ static int occludedCount  = 0;
 static int occludedCount1 = 0;
 
 Scene::Scene(const Json sceneJson) : options(RenderOptions(sceneJson.at("renderer"))) {
-    bsdfs   = BSDFFactory::LoadBsdfsFromJson(sceneJson.at("bsdfs"));
+    bsdfs   = BSDFFactory::LoadBsdfsFromJson(sceneJson.contains("bsdfs")?sceneJson.at("bsdfs"):sceneJson.at("materials"));
     bssrdfs = BSDFFactory::LoadBssrdfsFromJson(getOptional(sceneJson, "bssrdfs", Json()));
-    mediums = MediumFactory::loadMediumsFromJson(sceneJson.at("media"));
-    PrimitiveFactory::LoadPrimitivesFromJson(sceneJson.at("primitives"), *this);
+    mediums = MediumFactory::loadMediumsFromJson(sceneJson.contains("media")?sceneJson.at("media"):sceneJson.at("mediums"));
+
+    PrimitiveFactory::LoadPrimitivesFromJson(sceneJson.contains("primitives")?sceneJson.at("primitives"):sceneJson.at("entities"), *this);
 
     spdlog::info("{} Primitives", primitives.size());
     spdlog::info("{} lights", lights.size());

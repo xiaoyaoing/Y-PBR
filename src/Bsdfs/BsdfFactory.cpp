@@ -33,28 +33,31 @@ namespace BSDFFactory {
         return std::make_shared<SpecularR>();
     }
 
-    std::shared_ptr<Material> LoadDielectricMaterial(const Json& j) {
-        bool  enalbeT = getOptional(j, "enable_refraction", true);
-        Float ior     = getOptional(j, "ior", 1.33);
-        return std::make_shared<Dielectric>(ior, enalbeT);
+   
+
+    std::shared_ptr<Material> LoadRoughPlasticMaterial(const Json& j) {
+        return std::make_shared<RoughPlastic>(j);
+        std::shared_ptr<Texture<Spectrum>> specularReflection = TextureFactory::LoadTexture<Spectrum>(
+            j, "specular_reflection", Spectrum(1));
+        std::shared_ptr<Texture<Spectrum>> diffuseReflection = TextureFactory::LoadTexture<Spectrum>(
+            j, "diffuse_reflection", Spectrum(0.5));
+        Float       ior                  = getOptional(j, "ior", 1.5);
+        std::string distribStr           = getOptional(j, "distribution", std::string("beckmann"));
+        auto        roughnessTuple       = loadRoughness(j);
+        auto        roughPlasticMaterial = std::make_shared<RoughPlastic>(diffuseReflection, specularReflection, ior, LoadMicrofacetDistribution(distribStr), std::get<0>(roughnessTuple), std::get<1>(roughnessTuple), std::get<2>(roughnessTuple));
+        return roughPlasticMaterial;
     }
 
-    std::shared_ptr<Material> LoadConductorMaterial(const Json& j) {
-        if (contains(j, "material")) {
-            return std::make_shared<Conductor>(j["material"]);
-        }
-        vec3 eta = getOptional(j, "eta", vec3(0.2004376970f, 0.9240334304f, 1.1022119527f));
-        vec3 k   = getOptional(j, "k", vec3(3.9129485033f, 2.4528477015f, 2.1421879552f));
-        return std::make_shared<Conductor>(eta, k);
-    }
+    
     std::shared_ptr<Material> LoadPlasticMaterial(const Json& j) {
+        if(contains(j,"roughness"))
+            return LoadRoughPlasticMaterial(j);
         std::shared_ptr<Texture<Spectrum>> specularReflection = TextureFactory::LoadTexture<Spectrum>(
             j, "specular_reflection", Spectrum(1));
         std::shared_ptr<Texture<Spectrum>> diffuseReflection = TextureFactory::LoadTexture<Spectrum>(
             j, "diffuse_reflection", Spectrum(0.9));
         Float ior = getOptional(j, "ior", 1.5);
         return std::make_shared<Plastic1>(j);
-        return std::make_shared<Plastic>(diffuseReflection, specularReflection, ior);
     }
 
     std::shared_ptr<Material> LoadRoughConductorMaterial(const Json& j) {
@@ -79,18 +82,26 @@ namespace BSDFFactory {
         return roughDielectricMaterial;
     }
 
-    std::shared_ptr<Material> LoadRoughPlasticMaterial(const Json& j) {
-        return std::make_shared<RoughPlastic>(j);
-        std::shared_ptr<Texture<Spectrum>> specularReflection = TextureFactory::LoadTexture<Spectrum>(
-            j, "specular_reflection", Spectrum(1));
-        std::shared_ptr<Texture<Spectrum>> diffuseReflection = TextureFactory::LoadTexture<Spectrum>(
-            j, "diffuse_reflection", Spectrum(0.5));
-        Float       ior                  = getOptional(j, "ior", 1.5);
-        std::string distribStr           = getOptional(j, "distribution", std::string("beckmann"));
-        auto        roughnessTuple       = loadRoughness(j);
-        auto        roughPlasticMaterial = std::make_shared<RoughPlastic>(diffuseReflection, specularReflection, ior, LoadMicrofacetDistribution(distribStr), std::get<0>(roughnessTuple), std::get<1>(roughnessTuple), std::get<2>(roughnessTuple));
-        return roughPlasticMaterial;
+    std::shared_ptr<Material> LoadDielectricMaterial(const Json& j) {
+        if(contains(j,"roughness"))
+            return LoadRoughDielectricMaterial(j);
+        bool  enalbeT = getOptional(j, "enable_refraction", true);
+        Float ior     = getOptional(j, "ior", 1.33);
+        return std::make_shared<Dielectric>(ior, enalbeT);
     }
+
+    std::shared_ptr<Material> LoadConductorMaterial(const Json& j) {
+        if(contains(j,"roughness"))
+            return LoadRoughConductorMaterial(j);
+        if (contains(j, "material")) {
+            return std::make_shared<Conductor>(j["material"]);
+        }
+        vec3 eta = getOptional(j, "eta", vec3(0.2004376970f, 0.9240334304f, 1.1022119527f));
+        vec3 k   = getOptional(j, "k", vec3(3.9129485033f, 2.4528477015f, 2.1421879552f));
+        return std::make_shared<Conductor>(eta, k);
+    }
+
+    
 
     std::shared_ptr<Material> LoadHairMaterial(const Json& j) {
         return std::make_shared<Hair>(j);

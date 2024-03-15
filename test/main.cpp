@@ -25,7 +25,7 @@ int main(int argc, const char *argv[]) {
     //FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/cornell-box/";
     FileUtils::WorkingDir = "/Users/yjp/nju/大三下/graphics/offline-render/Y-PBR/example-scenes/teapot/";
 
-    if(argc>0){
+    if(argc>1){
 
         for(int i =1; i<argc;i++)
             Render::renderScene(argv[i]);

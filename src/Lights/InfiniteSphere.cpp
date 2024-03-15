@@ -25,7 +25,7 @@ Spectrum InfinteSphere::sampleLi(const vec3& ref, const vec2& u, vec3* wi, Float
         return Spectrum(0);
     float sinTheta;
     *wi = uvToDirection(uv, sinTheta);
-    if (sinTheta == 0)
+    if (sinTheta <= 1e-4f)
         *pdf = 0;
     else
         *pdf = mapPdf / (2 * Constant::PI * Constant::PI * sinTheta);
@@ -70,7 +70,7 @@ vec3 InfinteSphere::uvToDirection(vec2 uv, float& sinTheta) const {
 Float InfinteSphere::PdfLi(const Intersection& pShape, const vec3 /*ref*/&) const {
     Float sinTheta;
     vec2  uv = directionToUV(pShape.w, sinTheta);
-    if (sinTheta == 0) return 0;
+    if (sinTheta <= 1e-4f) return 0;
     return Constant::INV_PI * Constant::INV_TWO_PI * _emission->pdf(MAP_SPHERICAL, uv) / sinTheta;
 }
 

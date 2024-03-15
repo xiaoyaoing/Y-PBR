@@ -24,7 +24,7 @@ Spectrum Conductor::sampleF(SurfaceEvent& event, const vec2& u) const {
 }
 
 Spectrum RoughConductor::f(const SurfaceEvent& event) const {
-    if (event.wo.z < 0 || event.wi.z < 0) {
+    if (event.wo.z <= 0 || event.wi.z <= 0) {
         return Spectrum(0);
     }
     Float roughnessx = m_uRoughness ? m_uRoughness->eval(event.its) : m_roughness->eval(event.its);
@@ -45,7 +45,7 @@ Spectrum RoughConductor::f(const SurfaceEvent& event) const {
 }
 
 Float RoughConductor::Pdf(const SurfaceEvent& event) const {
-    if (event.wo.z < 0 || event.wi.z < 0) {
+    if (event.wo.z <= 0 || event.wi.z <= 0) {
         return 0;
     }
     Float roughnessx = m_uRoughness ? m_uRoughness->eval(event.its) : m_roughness->eval(event.its);
@@ -58,7 +58,7 @@ Float RoughConductor::Pdf(const SurfaceEvent& event) const {
 
 Spectrum
 RoughConductor::sampleF(SurfaceEvent& event, const vec2& u) const {
-    if (event.wo.z < 0) {
+    if (event.wo.z <= 0) {
         return Spectrum(0);
     }
     Float roughnessx = m_uRoughness ? m_uRoughness->eval(event.its) : m_roughness->eval(event.its);
@@ -67,7 +67,7 @@ RoughConductor::sampleF(SurfaceEvent& event, const vec2& u) const {
     vec2 alphaxy = vec2(m_distrib->roughnessToAlpha(roughnessx), m_distrib->roughnessToAlpha(roughnessy));
     vec3 wh      = m_distrib->Sample_wh(event.wo, u, alphaxy);
     event.wi     = Reflect(event.wo, wh);
-    if (event.wi.z < 0 || dot(wh, event.wo) < 0)
+    if (event.wi.z <= 0 || dot(wh, event.wo) <= 0)
         return Spectrum(0);
 
     event.sampleType = m_type;

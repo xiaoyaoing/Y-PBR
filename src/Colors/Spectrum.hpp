@@ -3,7 +3,8 @@
 using Spectrum = vec3;
 
 inline bool isBlack(const Spectrum& color) {
-    return color.x <= 1e-8f && color.y <= 1e-8f && color.z <= 1e-8f;
+    static const Float eps = 1e-5f;
+    return color.x <= eps && color.y <= eps && color.z <= eps;
 }
 
 inline Float luminace(const Spectrum& color) {
