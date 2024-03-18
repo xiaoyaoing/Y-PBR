@@ -1,6 +1,6 @@
 //#include "BitMapTexture.hpp"
 //#include "IO/ImageIO.hpp"
-//#include "spdlog/spdlog.h"
+//#include "Common/Log.h"
 //
 //static int count =0;
 //static vec3 rgb(0);
@@ -99,7 +99,7 @@
 //}
 //
 //void BitMapTexture::debugLoginfo( ) {
-//    spdlog::info("\nbitMap:"+toColorStr(rgb/float(count)));
+//    LOGI("\nbitMap:"+toColorStr(rgb/float(count)));
 //}
 //
 //vec3 BitMapTexture::average( ) {

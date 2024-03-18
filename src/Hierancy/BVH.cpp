@@ -2,7 +2,7 @@
 #include "../Common/Macro.hpp"
 #include "set"
 #include "iostream"
-#include "spdlog/spdlog.h"
+#include "Common/Log.h"
 static int BuildNodeCount    = 0;
 static int IntersectionCount = 0;
 struct BuildNode {
@@ -50,10 +50,10 @@ struct BuildNode {
     void logInfo(bool logInterior, bool logLeaf) {
         bool isLeaf = (nPrimitives > 0);
         if (isLeaf && logLeaf) {
-            spdlog::info("Leaf Node start idx:{0} primNum:{1}", firstPrimOffset, nPrimitives);
+            LOGI("Leaf Node start idx:{0} primNum:{1}", firstPrimOffset, nPrimitives);
         }
         if (!isLeaf && logInterior) {
-            spdlog::info("Interior node children : ");
+            LOGI("Interior node children : ");
         }
 
         if (!isLeaf) {
@@ -109,12 +109,12 @@ BVHAccel::BVHAccel(std::vector<std::shared_ptr<Primitive>> p,
     BuildNode*                              node = RecursiveBuild(primitiveInfo, 0, primitives.size(), orderedPrims);
     root                                         = node;
     node->logInfo(true, true);
-    spdlog::info("Build Num {0}", BuildNodeCount);
+    LOGI("Build Num {0}", BuildNodeCount);
     primitives.swap(orderedPrims);
     nodes      = new LinearNode[BuildNodeCount];
     int offset = 0;
     FlattenTree(node, &offset);
-    spdlog::info("BVH Constructed");
+    LOGI("BVH Constructed");
 
     root = node;
 
@@ -129,7 +129,7 @@ BVHAccel::BVHAccel(std::vector<std::shared_ptr<Primitive>> p,
             interiorNum++;
         }
     }
-    spdlog::info("NodeNum:{0} LeafNum:{1} interiorNum{2} PrimNum:{3}",
+    LOGI("NodeNum:{0} LeafNum:{1} interiorNum{2} PrimNum:{3}",
                  BuildNodeCount,
                  leafNum,
                  interiorNum,
@@ -317,7 +317,7 @@ std::optional<Intersection> BVHAccel::intersect(const Ray& ray) const {
     }
     Ray _ray(ray);
     //  auto temp=root->intersect(primitives,_ray);
-    //  spdlog::info("Search Count {0}",IntersectionCount);
+    //  LOGI("Search Count {0}",IntersectionCount);
     //IntersectionCount = 0;
     //  return temp;
 
@@ -330,13 +330,13 @@ std::optional<Intersection> BVHAccel::intersect(const Ray& ray) const {
     std::optional<Intersection> res;
     int                         searchCount = 0;
     while (true) {
-        //spdlog::info("CurNode {0}",curNodeIdx);
+        //LOGI("CurNode {0}",curNodeIdx);
         LinearNode& curNode = nodes[curNodeIdx];
         searchCount++;
         if (curNode.bounds.IntersectP(_ray, invDir, dirIsNeg)) {
             // node case
             if (curNode.nPrimitives > 0) {
-                //spdlog::info("LeafNode {0} ",curNodeIdx);
+                //LOGI("LeafNode {0} ",curNodeIdx);
                 for (int i = 0; i < curNode.nPrimitives; ++i) {
                     auto its = primitives[curNode.primitivesOffset + i]->intersect(_ray);
                     if (its.has_value())
@@ -349,17 +349,17 @@ std::optional<Intersection> BVHAccel::intersect(const Ray& ray) const {
             else {
                 //near
                 if (dirIsNeg[curNode.axis]) {
-                    //spdlog::info("push {0} to visitList",curNode.secondChildOffset);
+                    //LOGI("push {0} to visitList",curNode.secondChildOffset);
                     curNodeIdx += 1;
                     toVisit[visitIdx++] = curNode.secondChildOffset;
                 } else {
                     toVisit[visitIdx++] = curNodeIdx + 1;
                     curNodeIdx          = curNode.secondChildOffset;
-                    //spdlog::info("push {0} to visitList",curNodeIdx+1);
+                    //LOGI("push {0} to visitList",curNodeIdx+1);
                 }
             }
         } else {
-            //spdlog::info("CurNode not hit  {0}",curNodeIdx);
+            //LOGI("CurNode not hit  {0}",curNodeIdx);
             if (visitIdx == 0) break;
             curNodeIdx = toVisit[--visitIdx];
         }

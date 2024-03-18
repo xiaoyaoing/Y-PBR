@@ -2,10 +2,10 @@
 
 #include "Common/Texture.hpp"
 #include "Sampler/Distrib.hpp"
-#include "Colors/Spectrum.hpp"
+#include "Common/Spectrum.hpp"
 #include "IO/ImageIO.hpp"
 #include "IO/FileUtils.hpp"
-#include "spdlog.h"
+#include  "Common/Log.h"
 struct Rgba {
     uint8 c[4];
 
@@ -114,7 +114,7 @@ public:
     }
 
     void LoadResources() {
-        spdlog::info("Loading {0}", _path);
+        LOGI("Loading {0}", _path);
         _linear = true;
         _clamp  = false;
         _isHdr  = ImageIO::isHdr(_path);

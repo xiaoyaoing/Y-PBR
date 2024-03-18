@@ -1,5 +1,8 @@
 #include "Reflection.hpp"
 
+//Forward BSDF
+//Light will ignore this BSDF
+//Used for volume rendering
 class ForwardBSDF : public BSDF {
 public:
     ForwardBSDF() : BSDF(BSDF_FORWARD) {}

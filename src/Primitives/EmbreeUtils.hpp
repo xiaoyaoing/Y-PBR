@@ -8,7 +8,7 @@
 #define _CHECK_RTC_DEVICE assert(rtcGetDeviceError(EmbreeUtils::getDevice()) == RTC_ERROR_NONE);
 #define _LOG_RTC_DEVICE_STATES_IF_ERROR                                \
     if (rtcGetDeviceError(EmbreeUtils::getDevice()) != RTC_ERROR_NONE) \
-        spdlog::info(rtcGetDeviceError(EmbreeUtils::getDevice()));
+        LOGI(rtcGetDeviceError(EmbreeUtils::getDevice()));
 
 class Intersection;
 class Ray;

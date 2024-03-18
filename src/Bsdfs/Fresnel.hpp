@@ -1,5 +1,6 @@
 #include "Common/math.hpp"
 
+//Some Functions for Fresnel
 namespace Fresnel {
 
     static inline Float dielectricReflectance(Float eta, Float cosThetaI, Float& cosThetaT) {

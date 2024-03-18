@@ -1,5 +1,7 @@
 #include "Integrator.hpp"
 
+//A progressive photon mapping integrator
+//Get from pbrt-v3
 class PhotonMapper : public Integrator {
 public:
     void render(const Scene& scene) override;

@@ -157,7 +157,7 @@ Spectrum Hair::f(const SurfaceEvent& event) const {
     //  return Ntrt * MTRT;
     vec3 fsum = MR * Nr * lobeSamples[0] + MTT * Ntt * lobeSamples[1] + MTRT * Ntrt * lobeSamples[2];
     if (hasNan(fsum)) {
-        int k = 1;
+        DebugBreak();
     }
 
     //  return MR * Nr;
@@ -220,7 +220,7 @@ Float Hair::Pdf(const SurfaceEvent& event) const {
     pdf += M(_vTRT, sin(thetaOTRT), sinThetaI, cos(thetaOTRT), cosThetaI) * apPdf[2] *
            TrimmedLogistic(phi - Phi(gammaI, gammaT, 2), _betaR, -Constant::PI, Constant::PI);
     if (isnan(pdf) || pdf < 1e-8) {
-        int k = 1;
+        DebugBreak();
     }
     return pdf;
 }
@@ -391,7 +391,7 @@ std::array<Float, pMax + 1> Hair::ComputeApPdf(Float cosThetaO, Float h) const {
         apPdf[i] = lobeSamples[i] ? apPdf[i] / allPdf : 0;
     }
     if (isnan(apPdf[1])) {
-        int k = 1;
+        DebugBreak();
     }
     return apPdf;
 }

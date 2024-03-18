@@ -1,7 +1,6 @@
 #pragma once
 #include "PathVertex.h"
 #include "LightPath.h"
-#include "CameraPath.h"
 #include "Camera/ImagePrid.h"
 class BdptTracer {
     //  std::unique_ptr<PathVertex[]> lightPath;

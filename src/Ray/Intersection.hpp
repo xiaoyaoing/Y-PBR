@@ -1,7 +1,7 @@
 #pragma once
 #include "../Common/math.hpp"
 #include <optional>
-#include "../Colors/Spectrum.hpp"
+#include "../Common/Spectrum.hpp"
 #include "Ray.hpp"
 
 class Primitive;

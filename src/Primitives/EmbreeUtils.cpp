@@ -1,7 +1,7 @@
 #include "EmbreeUtils.hpp"
 #include "Primitive.hpp"
 #include "Ray/Intersection.hpp"
-#include "spdlog/spdlog.h"
+#include "Common/Log.h"
 
 namespace EmbreeUtils {
 
@@ -78,7 +78,7 @@ namespace EmbreeUtils {
     }
 
     void instanceIntersectFunc(const RTCIntersectFunctionNArguments* args) {
-        //spdlog::info("intersectFunc");
+        //LOGI("intersectFunc");
         void*       ptr       = args->geometryUserPtr;
         Primitive*  primitive = (Primitive*)ptr;
         RTCRayHit1* hit       = RTCRayHit1_(args->rayhit);

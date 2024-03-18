@@ -80,7 +80,7 @@ RoughConductor::sampleF(SurfaceEvent& event, const vec2& u) const {
 
     auto res = m_albedo->eval(event.its) * m_distrib->D(wh, alphaxy) * F * m_distrib->G(event.wo, event.wi, alphaxy) / (4 * event.wo.z);
     if (hasNeg(res)) {
-        int k = 1;
+        DebugBreak();
     }
     return res;
 }

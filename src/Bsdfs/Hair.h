@@ -4,7 +4,7 @@
 
 const int pMax = 3;
 
-/// Hair Bsdf
+/// Hair Bsdf Implementation Of Marschner Model
 class Deielectric;
 class Hair : public BSDF {
 public:

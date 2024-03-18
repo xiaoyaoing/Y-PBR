@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <spdlog.h>
+#include "Common/Log.h"
 
 void Image::saveTXT(const std::string& fileName) const {
     std::ofstream file(fileName + "txt");
@@ -37,16 +37,13 @@ void Image::addPixel(uint32 x, uint32 y, vec3 rgb, bool count) {
     if (x < 0 || x >= width() || y < 0 || y >= height())
         return;
     if (hasNan(rgb)) {
-       spdlog::info("radiance has nan");
+       LOGI("radiance has nan");
         return ;
     }
     if (rgb.r < 0 || rgb.g < 0 || rgb.z < 0) {
         //todo
     }
     uint32 idx = getIndex(x, y);
-    if (idx == 233499) {
-        int k = 1;
-    }
     buffers[idx].add(rgb);
     if (count)
         sampleCounts[idx]++;
@@ -55,7 +52,7 @@ void Image::addPixel(uint32 x, uint32 y, vec3 rgb, bool count) {
 void Image::save(const std::string& fileName, Float scale, bool overwrite) const {
     auto extension = FileUtils::getFileSuffix(fileName);
     if (extension.empty()) {
-        spdlog::info("Invalid Path {0}", fileName);
+        LOGI("Invalid Path {0}", fileName);
         return;
     } else {
         auto isHdr = ImageIO::isHdr(fileName);

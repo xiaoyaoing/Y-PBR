@@ -73,13 +73,13 @@ Spectrum
 LightPath::connectBDPT(const Scene& scene, const LightPath& lightPath, int l, const LightPath& cameraPath, int c) {
 
     if (l == 2 && c == 2) {
-        int k = 1;
+        DebugBreak();
     }
     const PathVertex& lightVertex  = lightPath[l - 1];
     const PathVertex& cameraVertex = cameraPath[c - 1];
 
     if (l == 1) {
-        int k = 1;
+        DebugBreak();
     }
     //    return lightVertex.beta *
     //           cameraVertex.beta
@@ -204,13 +204,13 @@ void LightPath::toAreaMeasure() {
         _vertexs[i].pdfFwd /= distance2(_vertexs[i].pos(), _vertexs[i - 1].pos());
         auto d = distance2(_vertexs[i].pos(), _vertexs[i - 1].pos());
         if (i == 2 && _vertexs[i].pdfFwd <= 0.003) {
-            int k = 1;
+            DebugBreak();
         }
         if (_vertexs[i].isSurface())
             _vertexs[i].pdfFwd *= _vertexs[i - 1].cosFactor(_vertexs[i]);
         //_vertexs[i].pdfFwd = 1/ distance2(_vertexs[i].pos(),_vertexs[i-1].pos());
         if (isinf(_vertexs[i].pdfFwd)) {
-            int k = 1;
+            DebugBreak();
         }
     }
     for (int i = _length - 3; i >= 0; i--) {

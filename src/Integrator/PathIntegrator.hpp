@@ -7,6 +7,9 @@ struct PathTraceSettings {
     bool enableTwoSide;
 };
 
+//Tradtional Monte Carlo Path Tracing
+//Not support volume scattering
+//Trace ray -> find intersection -> sample lights -> sample BSDF -> trace ray -> ...
 class PathIntegrator : public SamplerIntegrator {
 public:
     PathIntegrator(std::shared_ptr<Camera> camera, std::shared_ptr<Sampler> sampler, const Json& json) : SamplerIntegrator(camera, sampler, json),

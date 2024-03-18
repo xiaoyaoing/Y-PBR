@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Common/math.hpp"
-#include "Colors/Spectrum.hpp"
+#include "Common/Spectrum.hpp"
 #include "Common/Json.hpp"
 
 struct PhaseSample {

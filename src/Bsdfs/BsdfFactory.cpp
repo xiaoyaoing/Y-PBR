@@ -9,7 +9,7 @@
 #include "Texture/TextureFactory.hpp"
 
 #include <sstream>
-#include "spdlog/spdlog.h"
+#include "Common/Log.h"
 namespace BSDFFactory {
 
     typedef BSDF Material;
@@ -151,7 +151,7 @@ namespace BSDFFactory {
         }
         //todo  support other bsdfs
         else {
-            spdlog::info("{} bsdf not loaded correctly.Used Default Bsdf",
+            LOGI("{} bsdf not loaded correctly.Used Default Bsdf",
                          j["type"]);
             material = LoadDefualtMaterial();
         }
@@ -163,18 +163,18 @@ namespace BSDFFactory {
 
     std::unordered_map<std::string, std::shared_ptr<BSDF>>
     LoadBsdfsFromJson(const Json& j) {
-        //spdlog::info(to_string(j));
+        //LOGI(to_string(j));
         std::unordered_map<std::string, std::shared_ptr<BSDF>> bsdfMaps;
 
         for (auto& bsdfJson : j) {
             std::string bsdf_name = bsdfJson["name"];
-            spdlog::info(bsdf_name);
+            LOGI(bsdf_name);
             auto bsdf           = LoadBsdfFromJson(bsdfJson);
             bsdf->name          = bsdf_name;
             bsdfMaps[bsdf_name] = bsdf;
         }
         bsdfMaps["default"] = LoadDefualtMaterial();
-        spdlog::info(bsdfMaps.size());
+        LOGI(bsdfMaps.size());
         return bsdfMaps;
     }
 

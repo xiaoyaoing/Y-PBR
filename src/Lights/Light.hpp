@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Colors/Spectrum.hpp"
+#include "Common/Spectrum.hpp"
 #include "Ray/Intersection.hpp"
 #include "Ray/Ray.hpp"
 #include "SampleRecords/PositionAndDirectionSample.h"
