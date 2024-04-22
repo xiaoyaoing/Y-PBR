@@ -167,8 +167,7 @@ vec3 GGX::Sample_wh(const vec3& wo, const vec2& u, const vec2& alphaXY) const {
         vec3  hemisphereN = frame.toWorld(vec3(t1, t2, diskN.z));
         // Transforming the normal back to the ellipsoid configuration
         auto wh = normalize(vec3(alphaX * hemisphereN.x, alphaY * hemisphereN.y, std::max(0.0f, hemisphereN.z)));
-        if (hasNan(wh)) {
-        }
+
         return wh;
     } else {
         Float cosTheta, phi = (2 * Constant::PI) * u[1];

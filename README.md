@@ -1,4 +1,43 @@
 # Y-PBR
-Physically Based render 
+Physically Ray Tracer 
 
-todo: bdpt ,path guiding,verify sppm ,verify bssrdf,filter.
+Integrators:
+- Path Tracing
+- Bidirectional Path Tracing
+- SPPM
+- Volume Path Tracing
+
+Materials:
+- Lambertian
+- Mirror
+- Dielectric
+- Conductor
+- Plastic
+- Hair
+
+Volume:
+- Homogeneous
+
+Gallary
+![kitchen.png](Gallery%2Fkitchen.png)
+![ajar.png](Gallery%2Fveach-ajar.png)
+![bidir.png](Gallery%2Fbidir.png)![veach-bidir12-4.png](Gallery%2Fsppm.png)
+![bidir-water.png](Gallery%2Fbidir-water.png)
+![classroom.png](Gallery%2Fclassroom.png)
+![classroom1.png](Gallery%2Fclassroom1.png)
+![star.png](Gallery%2Fstar.png)
+![star1.png](Gallery%2Fstar1.png)
+
+Reference
+
+Scene Mainly From https://benedikt-bitterli.me/resources/
+
+Algorithm Reference From https://www.pbrt.org/  
+
+
+Tungsten Render  https://github.com/tunabrain/tungsten  
+
+Nori Render https://wjakob.github.io/nori/  
+
+Ray Tracing in One Weekend https://raytracing.github.io/books/RayTracingInOneWeekend.html  
+
