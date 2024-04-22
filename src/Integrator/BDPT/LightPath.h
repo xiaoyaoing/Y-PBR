@@ -4,6 +4,8 @@
 #include "scene.hpp"
 #include "Sampler/Sampler.hpp"
 
+#include <map>
+
 class LightPath {
     std::unique_ptr<PathVertex[]> _vertexs;
     int                           maxlength;

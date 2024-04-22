@@ -2,6 +2,8 @@
 
 #include "Common/math.hpp"
 
+//Spectral Not used in Y_PBR
+//I think RGB is enough for now
 namespace Spectral {
 
     static const int   CIE_samples = 471;

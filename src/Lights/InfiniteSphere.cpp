@@ -75,7 +75,7 @@ Float InfinteSphere::PdfLi(const Intersection& pShape, const vec3 /*ref*/&) cons
 }
 
 void InfinteSphere::logDebugInfo() const {
-    spdlog::info("infinite" + toColorStr(rgb / (float)count));
+    LOGI("infinite" + toColorStr(rgb / (float)count));
 }
 
 PositionAndDirectionSample InfinteSphere::sampleDirect(const vec2& positionSample, const vec2& dirSample) const {

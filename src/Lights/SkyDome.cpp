@@ -1,5 +1,5 @@
 #include "SkyDome.hpp"
-#include "Colors/Spectral.hpp"
+#include "Common/Spectral.hpp"
 #include "Common/Transform.hpp"
 #include "scene.hpp"
 #include "Texture/BitMapTexture.hpp"

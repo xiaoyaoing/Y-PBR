@@ -3,7 +3,7 @@
 #include "Common/Json.hpp"
 #include "../Common/math.hpp"
 #include "ToneMap.hpp"
-#include "spdlog/spdlog.h"
+#include "Common/Log.h"
 
 inline vec3 gammaCompress(const vec3& in) {
 
@@ -12,7 +12,7 @@ inline vec3 gammaCompress(const vec3& in) {
         out[c] = in[c] <= 0.0031308 ? 12.92 * in[c] : 1.055 * std::pow(in[c], 1.0 / 2.4) - 0.055;
     }
 
-    //    spdlog::info("{0} {1}", toColorStr(in), toColorStr(out));
+    //    LOGI("{0} {1}", toColorStr(in), toColorStr(out));
     return out;
 }
 
@@ -51,7 +51,7 @@ class Image {
             atomicAdd(rgb[1], value.y);
             atomicAdd(rgb[2], value.z);
             if (isnan(rgb[0].load())) {
-                spdlog::info("error");
+                LOGI("error");
             }
             return vec3();
         }

@@ -1,5 +1,6 @@
 #include "Dielectric.hpp"
 #include "Fresnel.hpp"
+#include "Common/Log.h"
 
 Spectrum Dielectric::f(const SurfaceEvent& event) const {
     return Spectrum(0);
@@ -121,10 +122,11 @@ Spectrum RoughDielectric::sampleF(SurfaceEvent& event, const vec2& u) const {
         event.sampleType = BXDFType(BSDF_TRANSMISSION | BSDF_GLOSSY);
     }
     if (whDotOut < 0) {
-        int k = 1;
+        DebugBreak();
     }
     event.pdf = Pdf(event);
     return f(event);
+    
 }
 
 RoughDielectric::RoughDielectric(Float ior, std::shared_ptr<MicrofacetDistribution> distrib, std::shared_ptr<Texture<Float>> roughness, std::shared_ptr<Texture<Float>> uroughness, std::shared_ptr<Texture<Float>> vroughness) : m_distrib(distrib),

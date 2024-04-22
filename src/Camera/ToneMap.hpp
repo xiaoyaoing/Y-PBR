@@ -1,5 +1,5 @@
 #include "../Common/math.hpp"
-#include "../Colors/Spectrum.hpp"
+#include "../Common/Spectrum.hpp"
 
 inline vec3 filmicACES(const vec3& in) {
     glm::dmat3 ACESInputMat = glm::dmat3(

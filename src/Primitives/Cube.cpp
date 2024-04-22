@@ -1,5 +1,5 @@
 #include "Cube.hpp"
-#include "spdlog/spdlog.h"
+#include "Common/Log.h"
 #include "Common/Transform.hpp"
 
 std::optional<Intersection> Cube::intersect(Ray& ray) const {

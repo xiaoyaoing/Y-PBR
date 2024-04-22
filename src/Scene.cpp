@@ -24,7 +24,7 @@
 #include "Common/Transform.hpp"
 
 #include <iostream>
-#include <spdlog.h>
+#include "Common/Log.h"
 
 static int occludedCount  = 0;
 static int occludedCount1 = 0;
@@ -36,9 +36,9 @@ Scene::Scene(const Json sceneJson) : options(RenderOptions(sceneJson.at("rendere
 
     PrimitiveFactory::LoadPrimitivesFromJson(sceneJson.contains("primitives")?sceneJson.at("primitives"):sceneJson.at("entities"), *this);
 
-    spdlog::info("{} Primitives", primitives.size());
-    spdlog::info("{} lights", lights.size());
-    spdlog::info("{} Bsdfs", bsdfs.size());
+    LOGI("{} Primitives", primitives.size());
+    LOGI("{} lights", lights.size());
+    LOGI("{} Bsdfs", bsdfs.size());
     _useBVH = getOptional(sceneJson["renderer"], "scene_bvh", false);
 }
 
@@ -119,7 +119,7 @@ bool Scene::intersectP(const Ray& ray) const {
 }
 
 void Scene::logDebugInfo() {
-    spdlog::info("Occluded {0} {1}", occludedCount, occludedCount1);
+    LOGI("Occluded {0} {1}", occludedCount, occludedCount1);
     //    static_cast<InfinteSphere *>(lights[0].get())->logDebugInfo();
 }
 
@@ -137,7 +137,7 @@ void Scene::build() {
             rtcSetGeometryOccludedFunction(geom, &EmbreeUtils::instanceOccludedFunc);
             rtcCommitGeometry(geom);
             int res = rtcAttachGeometry(_scene, geom);
-            spdlog::info(res);
+            LOGI(res);
         }
         rtcCommitScene(_scene);
         //bvh = std::make_unique<BVHAccel>(primitives);  // I will use embree now ,the bvh I implmented is too slow!

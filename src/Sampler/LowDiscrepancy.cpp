@@ -1,5 +1,5 @@
 #include "LowDiscrepancy.hpp"
-#include "spdlog/spdlog.h"
+#include "Common/Log.h"
 
 template<int base>
 static Float RadicalInverseSpecialized(uint64_t a) {

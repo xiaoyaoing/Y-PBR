@@ -84,7 +84,7 @@ Spectrum estimateDirect(SurfaceEvent& event, const vec2& uShading, const Light& 
         }
     }
     if (hasNan(Ld)) {
-        int k = 1;
+        DebugBreak();
     }
     // assert(isBlack(Ld));
     return Ld;
@@ -253,7 +253,7 @@ volumeEstimateDirect(VolumeEvent& event, const Medium* medium, const vec2& uShad
             Float weight = PowerHeuristic(scatteringPdf, lightPdf);
             if (!isBlack(Li)) Ld += f * weight * Li / scatteringPdf;
             if (luminace(Ld) > 10) {
-                int k = 1;
+                DebugBreak();
             }
         }
     }

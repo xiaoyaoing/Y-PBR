@@ -17,15 +17,10 @@ struct SPPMPIxel {
     Spectrum           Ld         = Spectrum(0);
     Spectrum           flux       = Spectrum(0);
     std::atomic<Float> phi[3];
+    vec2 pos;
     std::atomic<int>   curPhotonCount;
     Float              lastPhotonCount;
-    bool               isDielectric = false;
-    Float              rate         = 0;
-    Float              lastRate     = 0;
-    ivec2              pos;
-
-    int a, b, c;
-
+    float rate;
     struct VisiblePoint {
         VisiblePoint() {}
 
@@ -43,7 +38,7 @@ struct SPPMPIxel {
 struct SPPMListNode {
     SPPMPIxel*    pixel{nullptr};
     SPPMListNode* next{nullptr};
-
+    bool deleted{false};
     int length() {
         SPPMListNode* node = this;
         int           ans  = 0;
@@ -67,7 +62,7 @@ struct AtmoicVec3 {
     }
 
     void add(const vec3& v) {
-        value = atomic_load(&value) + v;
+        value = std::atomic_load(&value) + v;
     }
 
     void divide(const Float a) {
@@ -79,46 +74,10 @@ struct AtmoicVec3 {
     }
 };
 
-static std::atomic<int> visiblePhotonCount;
-static std::atomic<int> photonGridNum;
-static std::atomic<int> notIntersectNum;
-static std::atomic<int> count1;
-static std::atomic<int> count2;
-static std::atomic<int> count3;
-static std::atomic<int> count4;
-static std::atomic<int> count5;
-static std::atomic<int> count6;
-static std::atomic<int> photonInGrid;
 
-vec3            dir;
-vec3            photonColor;
-vec3            photonRayPos;
-std::atomic_int dielectricNum              = 0;
-int             photonDielectricNum        = 0;
-int             photonDielectricBounce0Num = 0;
-int             dielectribVPNum            = 0;
-int             specularRealVpNum          = 0;
-AtmoicVec3      averageSPosition;
-AtmoicVec3      averageSpecularPixelPosition;
 
-AtmoicVec3         averageSpecularPixelbeta;
-AtmoicVec3         averageSpecularPixelPhi;
-std::atomic<Float> averageSpecularPixelPhotons;
 
-AtmoicVec3 photonBounce1AveragePosition;
-AtmoicVec3 photonBounce0AveragePosition;
-AtmoicVec3 photonBounce0AverageDir;
-AtmoicVec3 photonBounce1AverageDir;
-AtmoicVec3 averageFlux;
 
-std::atomic<Float> averageSpecularPixelRadius = 0;
-
-int photonSNull = 0;
-int photonSD    = 0;
-int photonDS    = 0;
-int photonSS    = 0;
-int photonS     = 0;
-int photonSRuss = 0;
 
 static vec3 toGridPos(const Bounds3& bounds, const vec3& worldPos, const vec3& gridRes) {
     vec3 clampWorldPos = clamp(worldPos, bounds.pMin, bounds.pMax);
@@ -154,7 +113,7 @@ void PhotonMapper::render(const Scene& scene) {
     ProgressReporter reporter(iterations);
     for (int iteration = 0; iteration < iterations; iteration++) {
 
-        spdlog::info("Iteration {0} begin", iteration);
+        LOGI("Iteration {0} begin", iteration);
 
         //Generate pixel information
         parallel_for([&](ivec2 tileIndex) {
@@ -204,7 +163,6 @@ void PhotonMapper::render(const Scene& scene) {
                             pixel.vp.event      = new SurfaceEvent(event);
                             pixel.vp.event->its = new Intersection(*event.its);
                             pixel.vp.beta       = beta;
-                            pixel.isDielectric  = isDielectric;
                             break;
                         }
                         if (bounce < maxBounces - 1) {
@@ -226,25 +184,17 @@ void PhotonMapper::render(const Scene& scene) {
                             // break;
                         }
                     }
-                    //  averageSPosition.add(pixel.vp.event->its->p);
                     if (isDielectric) {
-                        dielectribVPNum++;
-                        if (pixel.vp.event) {
-                            specularRealVpNum++;
-                            //  averageSPosition.add(pixel.vp.event->its->p);
-                        }
                     }
                 }
         },
                      nTiles);
 
-        averageSPosition.divide(specularRealVpNum);
         //grid the visible points
         Bounds3 gridBounds;
         Float   maxRadius = 0;
         for (int i = 0; i < pixelNum; i++) {
             SPPMPIxel& pixel = pixels[i];
-            pixel.rate       = 0;
             if (isBlack(pixel.vp.beta))
                 continue;
             Bounds3 vpBpunds(pixel.vp.event->its->p);
@@ -278,16 +228,15 @@ void PhotonMapper::render(const Scene& scene) {
                         }
                         SPPMListNode* node = new SPPMListNode();
                         node->pixel        = &pixel;
-                        node->next         = grids[gridIndex];
+                        node->next         = grids[gridIndex].load();
                         while (!grids[gridIndex].compare_exchange_weak(
                             node->next, node))
                             ;
-                        photonGridNum++;
                     }
         },
                      pixelNum,
                      4096);
-        spdlog::info("Visiable point generated");
+        LOGI("Visiable point generated");
 
         int              count = 0;
         std::vector<int> counts;
@@ -324,45 +273,21 @@ void PhotonMapper::render(const Scene& scene) {
             if (lightSample.dirPdf == 0 || lightSample.posPdf == 0 || isBlack(lightSample.weight))
                 return;
             Ray& photonRay = lightSample.ray;
-            dir += photonRay.d / Float(photonsPerIteration);
-            photonRayPos += photonRay.o / Float(photonsPerIteration);
 
             Spectrum beta = lightSample.weight * absDot(photonRay.d, lightSample.n) / (lightSample.dirPdf * lightSample.posPdf);
             //   beta = Spectrum(20.f);
-            bool firstDielectric = false;
             for (int bounce = 0; bounce < 8; bounce++) {
                 std::optional<Intersection> its = scene.intersect(photonRay);
 
                 //if(photonRay.d.z>0) return ;
                 //not hitL
                 if (!its.has_value()) {
-                    if (bounce == 0)
-                        notIntersectNum++;
-                    if (bounce == 1 && firstDielectric)
-                        photonSNull++;
                     break;
                 }
 
-                if (bounce == 0) {
-                    count1++;
-                    photonBounce0AveragePosition.add(its->p);
-                    photonBounce0AverageDir.add(photonRay.d);
-                }
 
-                if (bounce == 0 && its->bsdf->HasFlag(BSDF_SPECULAR)) {
-                    // photonDielectricBounce0Num ++;
-                    firstDielectric = true;
-                    photonS++;
-                }
-                if (bounce == 1) {
-                    if (its->bsdf->HasFlag(BSDF_SPECULAR)) {
-                        if (firstDielectric)
-                            photonSS++;
-                        else
-                            photonDS++;
-                    } else
-                        photonSD++;
-                }
+
+                
                 if (bounce == 0) {
                     drawLine = drawLine & its->bsdf->HasFlag(BSDF_SPECULAR);
                 }
@@ -370,24 +295,14 @@ void PhotonMapper::render(const Scene& scene) {
                     _camera->drawLine(photonRay.o, its->p, lineColor);
                 //Direct lighting has been considered, so contribution is calculated only when depth is greater than 1
                 if (bounce > 0) {
-                    if (bounce == 1) {
-                        count2++;
-                        photonBounce1AveragePosition.add(its->p);
-                        photonBounce1AverageDir.add(photonRay.d);
-                    }
-                    if (firstDielectric) {
-                    }
                     vec3 photonP = its->p;
                     if (gridBounds.Contains(photonP)) {
-                        photonInGrid++;
                         vec3 gridPos   = toGridPos(gridBounds, photonP, gridRes);
                         int  gridIndex = hash(gridPos, pixelNum);
                         for (SPPMListNode* node = atomic_load(&grids[gridIndex]);
                              node != nullptr;
                              node = node->next) {
-                            if (iteration > 0) {
-                            }
-
+                            
                             SPPMPIxel*               pixel = node->pixel;
                             SPPMPIxel::VisiblePoint& vp    = pixel->vp;
                             SurfaceEvent*            event = vp.event;
@@ -403,7 +318,6 @@ void PhotonMapper::render(const Scene& scene) {
                             for (int i = 0; i < 3; i++)
                                 pixel->phi[i] = std::atomic_load(&pixel->phi[i]) + contrib[i];
                             ++pixel->curPhotonCount;
-                            ++visiblePhotonCount;
                         }
                     } else {
                     }
@@ -421,36 +335,38 @@ void PhotonMapper::render(const Scene& scene) {
                 Float russProb = std::max((Float)0, 1 - luminace(betaNew) / luminace(beta));
                 russProb       = 0;
                 if (RadicalInverse(haltonDim++, haltonIndex) < russProb) {
-                    if (bounce == 0) count3++;
-                    if (bounce == 0 && firstDielectric)
-                        photonSRuss++;
+                    
                     break;
                 }
                 //   beta = Spectrum(0);
                 beta      = betaNew / (1 - russProb);
                 vec3 wi   = event.toWorld(event.wi);
                 photonRay = event.sctterRay(wi);
-                if (firstDielectric && bounce == 0) {
-                }
             }
         },
                      photonsPerIteration,
                      8192);
 
-        for (auto& node : grids) {
-            while (node) {
-                auto next = node.load()->next;
-                delete node;
-                node = node.load()->next;
-            }
+        for (auto& atomic_node : grids) {
+            // auto node = atomic_node.load();
+            // while (node) {
+            //     auto next = node->next;
+            //  delete node;
+            //     node->deleted = true;
+            //     if(next == nullptr)
+            //         break;
+            //     if(next->deleted) {
+            //         DebugBreak();
+            //     }
+            //     next->length();
+            //     node = next;
+            // }
+            delete atomic_node.load();
         }
 
-        spdlog::info("Trace photons and accumlate contribution completed");
+        LOGI("Trace photons and accumlate contribution completed");
 
-        photonBounce1AveragePosition.divide(count2);
-        photonBounce0AveragePosition.divide(count1);
-        photonBounce1AverageDir.divide(count2);
-        photonBounce0AverageDir.divide(count1);
+
 
         //update pixel
         std::atomic<float> rate        = 0;
@@ -475,8 +391,6 @@ void PhotonMapper::render(const Scene& scene) {
                 pixel.flux = (pixel.flux + phi * pixel.vp.beta) * (newRadius * newRadius) /
                              (pixel.radius * pixel.radius);
                 // pixel.flux = phi;
-                int   a               = pixel.curPhotonCount;
-                Float b               = pixel.lastPhotonCount;
                 pixel.lastPhotonCount = newPhotons;
                 pixel.curPhotonCount  = 0;
                 pixel.lastRadius      = pixel.radius;
@@ -485,22 +399,7 @@ void PhotonMapper::render(const Scene& scene) {
                 updateCount++;
                 rate       = rate + pixel.radius / pixel.lastRadius;
                 pixel.rate = pixel.radius / pixel.lastRadius;
-                if (abs(pixel.rate - pixel.lastRate) < 0.0001) {
-                }
-                pixel.lastRate = pixel.rate;
-                pixel.c        = pixel.a;
-                pixel.a        = a;
-                pixel.b        = b;
-                if (pixel.isDielectric) {
-                    averageFlux.add(pixel.flux);
-                    dielectricNum++;
-                    averageSpecularPixelPosition.add(pixel.vp.event->its->p);
-                    averageSpecularPixelRadius = atomic_load(&averageSpecularPixelRadius) + pixel.radius;
-
-                    averageSpecularPixelbeta.add(pixel.vp.beta);
-                    averageSpecularPixelPhi.add(vec3(atomic_load(&pixel.phi[0]), atomic_load(&pixel.phi[1]), atomic_load(&pixel.phi[2])));
-                    averageSpecularPixelPhotons = atomic_load(&averageSpecularPixelPhotons) + pixel.lastPhotonCount;
-                }
+                
                 for (int i = 0; i < 3; i++)
                     pixel.phi[i] = 0;
             }
@@ -513,7 +412,7 @@ void PhotonMapper::render(const Scene& scene) {
         },
                      pixelNum,
                      4096);
-        spdlog::info("Update pixel completed");
+        LOGI("Update pixel completed");
 
         Float minR          = initRadius;
         Float maxR          = 0;
@@ -530,27 +429,14 @@ void PhotonMapper::render(const Scene& scene) {
 
         //        spdlog::error("{0} {1} {2} {3} {4} {5}", rate / updateCount, visiblePhotonCount, averageRadius, curPhoton,
         //                      lastPhoton, updateCount);
-        visiblePhotonCount = 0;
-
-        averageSpecularPixelPosition.divide(dielectricNum);
-        averageSpecularPixelbeta.divide(dielectricNum);
-        averageSpecularPixelPhi.divide(dielectricNum);
-        averageSpecularPixelPhotons = atomic_load(&averageSpecularPixelPhotons) / dielectricNum;
-
-        averageSpecularPixelRadius = atomic_load(&averageSpecularPixelRadius) / dielectricNum;
-        averageFlux.divide(dielectricNum);
-        dielectricNum = 0;
+        
         if (iteration + 1 == iterations || (iteration + 1) % writeFrequency == 0) {
 
-            //            spdlog::info(" {0} {1} {2} {3} visiblePhoton {4} {5} {6} {7} {8}",
+            //            LOGI(" {0} {1} {2} {3} visiblePhoton {4} {5} {6} {7} {8}",
             //                         std::atomic_load(& count3),
             //                         std::atomic_load(& notIntersectNum), std::atomic_load(& count2),
             //                         std::atomic_load(& photonGridNum), std::atomic_load(& visiblePhotonCount), dielectricNum,
-            //                         photonDielectricNum, dielectribVPNum, photonDielectricBounce0Num);
-            visiblePhotonCount = 0;
-            averageFlux.reset();
-            visiblePhotonCount = 0;
-            dielectricNum      = 0;
+            //                         photonDielectricNum, dielectribVPNum, photonDielectricBounce0Num);;
 
             {
                 for (int y = 0; y < pixelBounds.y; y++)
@@ -571,7 +457,7 @@ void PhotonMapper::render(const Scene& scene) {
             }
         }
         reporter.update(1);
-        spdlog::info("Iteration {0} end", iteration);
+        LOGI("Iteration {0} end", iteration);
     }
 
     parallel_cleanup();

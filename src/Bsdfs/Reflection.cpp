@@ -84,7 +84,7 @@ Spectrum BSDF::sampleF(SurfaceEvent& event, const vec2& u, bool adjoint) const {
     }
 
     if (hasNeg(fResult) || hasNan(fResult)) {
-        int k = 1;
+        DebugBreak();
     }
     return fResult;
 }

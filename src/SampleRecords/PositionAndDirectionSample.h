@@ -1,6 +1,6 @@
 #pragma once
 #include "Ray/Ray.hpp"
-#include "Colors/Spectrum.hpp"
+#include "Common/Spectrum.hpp"
 struct PositionAndDirectionSample {
     vec3  n;
     Float posPdf = 0;

@@ -3,6 +3,8 @@
 
 #include <glm/gtx/transform.hpp>
 // #include <glm/gtx/transform.hpp>
+#include "../../lib/spdlog/spdlog.h"
+
 #include <glm/glm.hpp>
 #include <sstream>
 #include <string>
@@ -58,11 +60,24 @@ typedef std::int64_t int64;
         std::cout << std::endl;                               \
     } while (false)
 
+
+#define LOGI(...)     SPDLOG_INFO(__VA_ARGS__)
+#define LOGW(...)  SPDLOG_WARN(__VA_ARGS__)
+#define LOGE(...)    SPDLOG_ERROR(__VA_ARGS__)
+#define LOGC(...) SPDLOG_CRITICAL(__VA_ARGS__)
+
+inline void DebugBreak() {
+    //Debug break
+    //Do nothing
+    LOGI("Debug break");
+}
+
 namespace Constant {
     constexpr Float PI          = 3.14159265358979323846;
-    constexpr Float PiOver2     = 1.57079632679489661923;
-    constexpr Float PiOver4     = 0.78539816339744830961;
-    constexpr Float INV_PI      = 0.31830988618379067154;
+    constexpr Float PiOver2     = 1.57079632679489661923f;
+    constexpr Float PiOver4     = 0.78539816339744830961f;
+    
+    constexpr Float INV_PI      = 0.31830988618379067154f;
     constexpr Float INV_TWO_PI  = INV_PI / 2;
     constexpr Float INV_FOUR_PI = INV_PI / 4;
     constexpr Float HALF_PI     = 1.57079632679489661923;

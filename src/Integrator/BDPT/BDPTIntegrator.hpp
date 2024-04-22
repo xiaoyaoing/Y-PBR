@@ -3,7 +3,7 @@
 #include "Integrator/Integrator.hpp"
 #include "BdptTracer.h"
 
-///Bidrectional path tracer.Mainly from tungsten.
+//Bid path tracer.Mainly from tungsten.
 int generateLightPath(const Distribution1D* ptr, Sampler& sampler, int maxDepth, PathVertex* path);
 
 int generateCameraPath();

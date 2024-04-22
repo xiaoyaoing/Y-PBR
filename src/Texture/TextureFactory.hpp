@@ -2,7 +2,7 @@
 #include "ConstantTexture.hpp"
 #include "CheckTexture.hpp"
 #include "BitMapTexture.hpp"
-#include "Colors/Spectrum.hpp"
+#include "Common/Spectrum.hpp"
 #include "Common/math.hpp"
 #include "Common/Json.hpp"
 #include "Common/Json.hpp"

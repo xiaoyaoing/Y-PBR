@@ -54,7 +54,7 @@ vec3 VolPathIntegrator::integrate(const Ray& ray, const Scene& scene, Sampler& s
                 BXDFType flags = surfaceEvent.sampleType;
                 specularBounce = (flags & BSDF_SPECULAR) != 0;
                 if (specularBounce) {
-                    int k = 1;
+                    DebugBreak();
                 }
                 beta *= f / surfaceEvent.pdf;
                 _ray = surfaceEvent.sctterRay(surfaceEvent.toWorld(surfaceEvent.wi));
@@ -67,7 +67,7 @@ vec3 VolPathIntegrator::integrate(const Ray& ray, const Scene& scene, Sampler& s
                  l;
             // return beta * l;
             if ((luminace(L) > 2)) {
-                int k = 1;
+                DebugBreak();
             }
 
             PhaseSample phaseSample;
@@ -84,7 +84,7 @@ vec3 VolPathIntegrator::integrate(const Ray& ray, const Scene& scene, Sampler& s
                 break;
         }
         if (bounce == 2 && luminace(L) > 2) {
-            int k = 1;
+            DebugBreak();
         }
     }
 
@@ -95,7 +95,7 @@ vec3 VolPathIntegrator::integrate(const Ray& ray, const Scene& scene, Sampler& s
             }
         }
     if (luminace(L) == 0) {
-        int k = 1;
+        DebugBreak();
     }
     if (bounce == 3) {
     }

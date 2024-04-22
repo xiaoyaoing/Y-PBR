@@ -14,7 +14,8 @@ struct alignas(32) LinearNode {
 struct BuildNode;
 struct BVHPrimitiveInfo;
 //BVHAccel Mainly  Borrowed from PBRTv3
-
+//Not really Used in Y_PBR
+//Embree is much faster
 class BVHAccel {
 
     BuildNode* RecursiveBuild(std::vector<BVHPrimitiveInfo>& primitiveInfo, int start, int end, std::vector<std::shared_ptr<Primitive>>& orderedPrims);
@@ -39,7 +40,7 @@ public:
             return;
         }
         //  auto temp=root->intersect(primitives,_ray);
-        //  spdlog::info("Search Count {0}",IntersectionCount);
+        //  LOGI("Search Count {0}",IntersectionCount);
         //IntersectionCount = 0;
         //  return temp;
 
@@ -52,13 +53,13 @@ public:
         std::optional<Intersection> res;
         int                         searchCount = 0;
         while (true) {
-            //spdlog::info("CurNode {0}",curNodeIdx);
+            //LOGI("CurNode {0}",curNodeIdx);
             LinearNode& curNode = nodes[curNodeIdx];
             searchCount++;
             if (curNode.bounds.IntersectP(ray, invDir, dirIsNeg)) {
                 // node case
                 if (curNode.nPrimitives > 0) {
-                    //spdlog::info("LeafNode {0} ",curNodeIdx);
+                    //LOGI("LeafNode {0} ",curNodeIdx);
                     for (int i = 0; i < curNode.nPrimitives; ++i) {
                         intersector(ray, primitives[curNode.primitivesOffset + i]->primId);
                     }
@@ -69,17 +70,17 @@ public:
                 else {
                     //near
                     if (dirIsNeg[curNode.axis]) {
-                        //spdlog::info("push {0} to visitList",curNode.secondChildOffset);
+                        //LOGI("push {0} to visitList",curNode.secondChildOffset);
                         curNodeIdx += 1;
                         toVisit[visitIdx++] = curNode.secondChildOffset;
                     } else {
                         toVisit[visitIdx++] = curNodeIdx + 1;
                         curNodeIdx          = curNode.secondChildOffset;
-                        //spdlog::info("push {0} to visitList",curNodeIdx+1);
+                        //LOGI("push {0} to visitList",curNodeIdx+1);
                     }
                 }
             } else {
-                //spdlog::info("CurNode not hit  {0}",curNodeIdx);
+                //LOGI("CurNode not hit  {0}",curNodeIdx);
                 if (visitIdx == 0) break;
                 curNodeIdx = toVisit[--visitIdx];
             }

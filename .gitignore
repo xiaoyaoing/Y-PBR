@@ -3,3 +3,5 @@ example-scenes
 build
 tiny-cuda-nn
 .idea
+.vscode
+.vs

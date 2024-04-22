@@ -1,7 +1,7 @@
 #pragma once
 
 #include "SampleRecords/SurfaceScatterEvent.hpp"
-#include "Colors/Spectrum.hpp"
+#include "Common/Spectrum.hpp"
 #include "BsdfTypes.hpp"
 #include "Common/Texture.hpp"
 
