@@ -48,7 +48,7 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 
 
 
-add_executable(Y_PBR test/main.cpp ${YPBR_SOURCES})
+add_executable(Y_PBR y-pbr/main.cpp ${YPBR_SOURCES})
 add_dependencies(Y_PBR lib)
 target_link_libraries(Y_PBR PUBLIC lib)
 #target_include_directories(Y_PBR PRIVATE ${PROJECT_SOURCE_DIR}/lib/nlohmann/include)
@@ -69,8 +69,7 @@ endif()
 
 
 
-add_executable(sampleTest test/samplerTest.cpp  ${YPBR_SOURCES})
-target_link_libraries(sampleTest PRIVATE tinyexr)
+
 
 if (WIN32)
     install(TARGETS ${executables} DESTINATION .)
