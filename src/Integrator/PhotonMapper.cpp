@@ -17,10 +17,10 @@ struct SPPMPIxel {
     Spectrum           Ld         = Spectrum(0);
     Spectrum           flux       = Spectrum(0);
     std::atomic<Float> phi[3];
-    vec2 pos;
+    vec2               pos;
     std::atomic<int>   curPhotonCount;
     Float              lastPhotonCount;
-    float rate;
+    float              rate;
     struct VisiblePoint {
         VisiblePoint() {}
 
@@ -38,10 +38,10 @@ struct SPPMPIxel {
 struct SPPMListNode {
     SPPMPIxel*    pixel{nullptr};
     SPPMListNode* next{nullptr};
-    bool deleted{false};
-    int length() {
-        SPPMListNode* node = this;
-        int           ans  = 0;
+    bool          deleted{false};
+    int           length() {
+        auto node = this;
+        int  ans  = 0;
         while (node && node->pixel) {
             ans++;
             node = node->next;
@@ -74,11 +74,6 @@ struct AtmoicVec3 {
     }
 };
 
-
-
-
-
-
 static vec3 toGridPos(const Bounds3& bounds, const vec3& worldPos, const vec3& gridRes) {
     vec3 clampWorldPos = clamp(worldPos, bounds.pMin, bounds.pMax);
     auto t             = (clampWorldPos - bounds.pMin);
@@ -89,8 +84,8 @@ static vec3 toGridPos(const Bounds3& bounds, const vec3& worldPos, const vec3& g
 
 //convert 3d grid coordinate to linear index
 static inline int hash(const ivec3& p, int hashSize) {
-    return (unsigned int)((p.x * 73856093) ^ (p.y * 19349663) ^
-                          (p.z * 83492791)) %
+    return static_cast<unsigned int>((p.x * 73856093) ^ (p.y * 19349663) ^
+                                     (p.z * 83492791)) %
            hashSize;
 }
 
@@ -103,7 +98,7 @@ void PhotonMapper::render(const Scene& scene) {
         pixels[i].lastRadius = initRadius;
     }
     UniformSampler sampler;
-    const int      tileSize = 16;
+    constexpr int  tileSize = 16;
     ivec2          nTiles((pixelBounds.x + tileSize - 1) / tileSize,
                  (pixelBounds.y + tileSize - 1) / tileSize);
 
@@ -206,9 +201,9 @@ void PhotonMapper::render(const Scene& scene) {
         ivec3 gridRes;
         vec3  diag    = gridBounds.Diagonal();
         Float maxDiag = maxElement(diag);
-        int   baseRes = int(maxDiag / maxRadius);
+        int   baseRes = static_cast<int>(maxDiag / maxRadius);
         for (int i = 0; i < 3; i++)
-            gridRes[i] = std::max(int(baseRes * (diag[i] / maxDiag)), 1);
+            gridRes[i] = std::max(static_cast<int>(baseRes * (diag[i] / maxDiag)), 1);
 
         std::vector<std::atomic<SPPMListNode*>> grids(pixelNum);
         parallel_for([&](int pixelIndex) {
@@ -222,13 +217,10 @@ void PhotonMapper::render(const Scene& scene) {
             for (int x = gridMin.x; x <= gridMax.x; x++)
                 for (int y = gridMin.y; y <= gridMax.y; y++)
                     for (int z = gridMin.z; z <= gridMax.z; z++) {
-                        int gridIndex = hash(ivec3(x, y, z), pixelNum);
-                        if (gridIndex == 437299) {
-                            toGridPos(gridBounds, pMin, gridRes);
-                        }
-                        SPPMListNode* node = new SPPMListNode();
-                        node->pixel        = &pixel;
-                        node->next         = grids[gridIndex].load();
+                        int  gridIndex = hash(ivec3(x, y, z), pixelNum);
+                        auto node      = new SPPMListNode();
+                        node->pixel    = &pixel;
+                        node->next     = grids[gridIndex].load();
                         while (!grids[gridIndex].compare_exchange_weak(
                             node->next, node))
                             ;
@@ -249,7 +241,7 @@ void PhotonMapper::render(const Scene& scene) {
         std::unique_ptr<Distribution1D> lightPowerDistrib = computeLightPowerDistrib(scene);
         parallel_for([&](int photonIndex) {
             uint64_t haltonIndex =
-                (uint64_t)iteration * (uint64_t)photonsPerIteration +
+                static_cast<uint64_t>(iteration) * static_cast<uint64_t>(photonsPerIteration) +
                 photonIndex + 1;
             int haltonDim = 0;
 
@@ -278,21 +270,9 @@ void PhotonMapper::render(const Scene& scene) {
             //   beta = Spectrum(20.f);
             for (int bounce = 0; bounce < 8; bounce++) {
                 std::optional<Intersection> its = scene.intersect(photonRay);
-
-                //if(photonRay.d.z>0) return ;
-                //not hitL
                 if (!its.has_value()) {
                     break;
                 }
-
-
-
-                
-                if (bounce == 0) {
-                    drawLine = drawLine & its->bsdf->HasFlag(BSDF_SPECULAR);
-                }
-                if (drawLine)
-                    _camera->drawLine(photonRay.o, its->p, lineColor);
                 //Direct lighting has been considered, so contribution is calculated only when depth is greater than 1
                 if (bounce > 0) {
                     vec3 photonP = its->p;
@@ -302,7 +282,7 @@ void PhotonMapper::render(const Scene& scene) {
                         for (SPPMListNode* node = atomic_load(&grids[gridIndex]);
                              node != nullptr;
                              node = node->next) {
-                            
+
                             SPPMPIxel*               pixel = node->pixel;
                             SPPMPIxel::VisiblePoint& vp    = pixel->vp;
                             SurfaceEvent*            event = vp.event;
@@ -311,34 +291,27 @@ void PhotonMapper::render(const Scene& scene) {
                                 continue;
                             event->wi        = event->toLocal(-photonRay.d);
                             Spectrum contrib = event->its->bsdf->f(*event, false) * beta;
-                            // contrib = beta;
-                            //f(event->its->bsdf->hasFlag(BSDF_SPECULAR)) contrib /= AbsCosTheta(event->wi);
-                            if (hasNan(contrib)) {
-                            }
                             for (int i = 0; i < 3; i++)
                                 pixel->phi[i] = std::atomic_load(&pixel->phi[i]) + contrib[i];
                             ++pixel->curPhotonCount;
                         }
                     } else {
                     }
-                    //    break;
                 }
                 const BSDF*  photonBsdf = its->bsdf;
                 SurfaceEvent event      = makeLocalScatterEvent(&its.value());
                 event.requestType       = BSDF_ALL;
                 Spectrum f              = photonBsdf->sampleF(event, vec2(RadicalInverse(haltonDim + 0, haltonIndex), RadicalInverse(haltonDim + 1, haltonIndex)), true);
 
-                //if(!isSpecualr(event.sampleType)) f *=abs(event.wi.z);
                 haltonDim += 2;
                 Spectrum betaNew = beta * f / event.pdf;
 
-                Float russProb = std::max((Float)0, 1 - luminace(betaNew) / luminace(beta));
+                Float russProb = std::max(static_cast<Float>(0), 1 - luminace(betaNew) / luminace(beta));
                 russProb       = 0;
                 if (RadicalInverse(haltonDim++, haltonIndex) < russProb) {
-                    
+
                     break;
                 }
-                //   beta = Spectrum(0);
                 beta      = betaNew / (1 - russProb);
                 vec3 wi   = event.toWorld(event.wi);
                 photonRay = event.sctterRay(wi);
@@ -348,25 +321,10 @@ void PhotonMapper::render(const Scene& scene) {
                      8192);
 
         for (auto& atomic_node : grids) {
-            // auto node = atomic_node.load();
-            // while (node) {
-            //     auto next = node->next;
-            //  delete node;
-            //     node->deleted = true;
-            //     if(next == nullptr)
-            //         break;
-            //     if(next->deleted) {
-            //         DebugBreak();
-            //     }
-            //     next->length();
-            //     node = next;
-            // }
             delete atomic_node.load();
         }
 
         LOGI("Trace photons and accumlate contribution completed");
-
-
 
         //update pixel
         std::atomic<float> rate        = 0;
@@ -396,10 +354,10 @@ void PhotonMapper::render(const Scene& scene) {
                 pixel.lastRadius      = pixel.radius;
                 pixel.radius          = newRadius;
 
-                updateCount++;
+                ++updateCount;
                 rate       = rate + pixel.radius / pixel.lastRadius;
                 pixel.rate = pixel.radius / pixel.lastRadius;
-                
+
                 for (int i = 0; i < 3; i++)
                     pixel.phi[i] = 0;
             }
@@ -427,33 +385,21 @@ void PhotonMapper::render(const Scene& scene) {
             }
         }
 
-        //        spdlog::error("{0} {1} {2} {3} {4} {5}", rate / updateCount, visiblePhotonCount, averageRadius, curPhoton,
-        //                      lastPhoton, updateCount);
-        
         if (iteration + 1 == iterations || (iteration + 1) % writeFrequency == 0) {
-
-            //            LOGI(" {0} {1} {2} {3} visiblePhoton {4} {5} {6} {7} {8}",
-            //                         std::atomic_load(& count3),
-            //                         std::atomic_load(& notIntersectNum), std::atomic_load(& count2),
-            //                         std::atomic_load(& photonGridNum), std::atomic_load(& visiblePhotonCount), dielectricNum,
-            //                         photonDielectricNum, dielectribVPNum, photonDielectricBounce0Num);;
 
             {
                 for (int y = 0; y < pixelBounds.y; y++)
                     for (int x = 0; x < pixelBounds.x; x++) {
                         const SPPMPIxel& pixel   = pixels[y * pixelBounds.x + x];
                         int              photonN = photonsPerIteration * (iteration + 1);
-                        // photonN = photonsPerIteration;
-                        Spectrum L(0);
-                        //pixel.Ld / ( iteration + 1.f ); //+
-                        L += (pixel.flux) / Float(photonN * Constant::PI * pixel.radius * pixel.radius);
+                        Spectrum         L(0);
+                        L += (pixel.flux) / (photonN * Constant::PI * pixel.radius * pixel.radius);
                         if (iteration == iterations - 1)
                             L += pixel.Ld / (iteration + 1.f);
                         Spectrum c = Spectrum(1 - (pixel.radius - minR) / (maxR - minR));
                         _camera->image->addPixel(x, y, L, true);
                     }
                 _camera->image->save(scene.options.outputFileName, 1, false);
-                //    _camera->image->fill(Spectrum(0));
             }
         }
         reporter.update(1);

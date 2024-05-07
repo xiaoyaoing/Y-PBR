@@ -151,8 +151,6 @@ namespace BSDFFactory {
         }
         //todo  support other bsdfs
         else {
-            LOGI("{} bsdf not loaded correctly.Used Default Bsdf",
-                         j["type"]);
             material = LoadDefualtMaterial();
         }
 

@@ -60,13 +60,6 @@ LightPath::connectCameraBDPT(const Scene& scene, Sampler& sampler, const LightPa
     s *= tr;
 
     return s;
-    //  Float weight = misWeight(lightPath, l, cameraPath, 1);
-    //    if (onlyMisWeight)
-    //        return Spectrum(weight);
-    //
-    //    if (onlyLight)
-    //        return s;
-    //    return s * weight;
 }
 
 Spectrum
@@ -81,10 +74,6 @@ LightPath::connectBDPT(const Scene& scene, const LightPath& lightPath, int l, co
     if (l == 1) {
         DebugBreak();
     }
-    //    return lightVertex.beta *
-    //           cameraVertex.beta
-    //           / distance2(lightVertex.pos(), cameraVertex.pos());
-    // return Spectrum(lightVertex.eval(cameraVertex, true) * cameraVertex.eval(lightVertex, false));
     auto s = lightVertex.eval(cameraVertex, true) * cameraVertex.eval(lightVertex, false) * lightVertex.beta *
              cameraVertex.beta / distance2(lightVertex.pos(), cameraVertex.pos());
 
@@ -94,16 +83,7 @@ LightPath::connectBDPT(const Scene& scene, const LightPath& lightPath, int l, co
     auto ray = generateRay(cameraVertex, lightVertex);
     auto tr  = evalShadowDirect(scene, ray, nullptr);
 
-    //  return lightVertex.eval(cameraVertex, true) * cameraVertex.eval(lightVertex, false);
     return s * tr;
-    //    if (isBlack(s * tr))
-    //        return Spectrum(0);
-    //    Float weight = misWeight(lightPath, l, cameraPath, c);
-    //    if (onlyMisWeight)
-    //        return Spectrum(weight);
-    //    if (onlyLight)
-    //        return s * tr;
-    //    return s * tr * weight;
 }
 
 Spectrum
@@ -129,14 +109,11 @@ Float LightPath::misWeight(const LightPath& lightPath, int l, const LightPath& c
 
     if (l + c == 1)
         return 1.f;
-    //    return 1.f;
-    //   return (1.f/(l+c));
-    Float* pdfForward  = reinterpret_cast<float*>(alloca((l + c) * sizeof(float)));
-    Float* pdfBackward = reinterpret_cast<float*>(alloca((l + c) * sizeof(float)));
-    Float* r           = reinterpret_cast<float*>(alloca((l + c) * sizeof(float)));
-    bool*  connectable = reinterpret_cast<bool*>(alloca((l + c) * sizeof(bool)));
 
-    //todo 判断相机路径末尾和光线路径末尾能否连接
+    auto pdfForward  = reinterpret_cast<float*>(alloca((l + c) * sizeof(float)));
+    auto pdfBackward = reinterpret_cast<float*>(alloca((l + c) * sizeof(float)));
+    auto r           = reinterpret_cast<float*>(alloca((l + c) * sizeof(float)));
+    auto connectable = reinterpret_cast<bool*>(alloca((l + c) * sizeof(bool)));
 
     for (int i = 0; i < l; ++i) {
         pdfForward[i]  = lightPath[i].pdfFwd;
@@ -148,18 +125,6 @@ Float LightPath::misWeight(const LightPath& lightPath, int l, const LightPath& c
         pdfBackward[l + c - (i + 1)] = cameraPath[i].pdfBack;
         connectable[l + c - (i + 1)] = !cameraPath[i].isDelta();
     }
-
-    /// 跟其他可能构成同样长度的路径来比
-    /// ps/sum(p0,p1,p2...pn)
-    /// pi =  pf_0 * pf_1 * ... *  pf_i-1  * pb_i * ... pb_(n-1)
-    /// mis weight : w_s
-    /// let ri = pi / ps;
-    /// w_s = 1/ (r0 + r1+r2+...+1+r_(s+1)+...r(n-1))
-    /// ri = {
-    ///         1  if i==s,
-    ///         pb_i / pf(i) * r_i+1 if i <
-    ///          pf_(i-1) / pb(i-1) * r_(i-1) if i <s
-    /// }
 
     /// 相机路径和光子路径的最后一个节点的pdfBack没有计算
     const PathVertex *lightEnd    = l > 0 ? &lightPath[l - 1] : nullptr,
@@ -208,7 +173,6 @@ void LightPath::toAreaMeasure() {
         }
         if (_vertexs[i].isSurface())
             _vertexs[i].pdfFwd *= _vertexs[i - 1].cosFactor(_vertexs[i]);
-        //_vertexs[i].pdfFwd = 1/ distance2(_vertexs[i].pos(),_vertexs[i-1].pos());
         if (isinf(_vertexs[i].pdfFwd)) {
             DebugBreak();
         }
@@ -228,9 +192,9 @@ Spectrum LightPath::cameraDirectLight(const Scene& scene, const LightPath& camer
         return Spectrum(0);
     // assert(cameraVertex._sampler.light->flags && LightFlags::Area);
     //Only Support Area Light
-    const AreaLight* areaLight = static_cast<const AreaLight*>(cameraVertex.getLight());
-    vec3             wo        = normalize(cameraPath[c - 2].pos() - cameraVertex.pos());
-    Spectrum         result    = areaLight->directLighting(cameraVertex._record.surfaceRecord.its, wo) *
+    auto     areaLight = static_cast<const AreaLight*>(cameraVertex.getLight());
+    vec3     wo        = normalize(cameraPath[c - 2].pos() - cameraVertex.pos());
+    Spectrum result    = areaLight->directLighting(cameraVertex._record.surfaceRecord.its, wo) *
                       cameraVertex.beta;
     return result;
 }

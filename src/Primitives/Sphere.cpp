@@ -72,7 +72,7 @@ void Sphere::computeBoundingBox() {
 }
 
 Intersection Sphere::sample(const vec2& u, Float* pdf) const {
-    Intersection it;
+    Intersection it{};
     it.p  = center + radius * Warp::squareToUniformSphere(u);
     it.Ng = normal(it.p);
     *pdf  = inv_area;
@@ -108,7 +108,6 @@ Intersection Sphere::sample(const vec3& ref, const vec2& u, Float* pdf, vec3* wi
 
     Float cosTheta  = (cosThetaMax - 1) * u[0] + 1;
     Float sinTheta2 = std::max(1 - cosTheta * cosTheta, 0.f);
-    Float sinTheta  = sqrt(sinTheta2);
 
     if (sinThetaMax2 < 0.00068523f /* sin^2(1.5 deg) */) {
         /* Fall back to a Taylor series expansion for small angles, where

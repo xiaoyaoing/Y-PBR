@@ -9,7 +9,7 @@ bool PathVertex::canConnect() const {
             return true;
         case VertexType::Light:
             // return (sampler.light->flags )
-            return (_sampler.light->flags & (int)LightFlags::DeltaDirection) == 0;
+            return (_sampler.light->flags & static_cast<int>(DeltaDirection)) == 0;
         case VertexType::Camera:
             return true;
         case VertexType::Surface:
@@ -124,10 +124,9 @@ bool PathVertex::sampleNext(const Scene& scene, bool adjoint, PathState& state, 
     switch (type) {
         case VertexType::Light: {
             auto& record = _record.lightRecord;
-            ;
-            ray    = record.sample.ray;
-            pdf    = record.sample.dirPdf;
-            weight = Spectrum(1.f) / (record.sample.dirPdf);
+            ray          = record.sample.ray;
+            pdf          = record.sample.dirPdf;
+            weight       = Spectrum(1.f) / (record.sample.dirPdf);
             break;
         }
         case VertexType::Camera: {
@@ -147,7 +146,7 @@ bool PathVertex::sampleNext(const Scene& scene, bool adjoint, PathState& state, 
             if (isBlack(weight) || event.pdf == 0) {
                 return false;
             }
-            if (event.sampleType & BXDFType::BSDF_SPECULAR)
+            if (event.sampleType & BSDF_SPECULAR)
                 diarc = true;
             weight /= event.pdf;
             if (russian(state.bounce, state.sampler, weight * beta))
@@ -166,10 +165,12 @@ bool PathVertex::sampleNext(const Scene& scene, bool adjoint, PathState& state, 
     record.its   = its.value();
     auto event   = makeLocalScatterEvent(&record.its);
     record.event = event;
-    next         = PathVertex(record, beta * weight);
+
+    next = PathVertex(record, beta * weight);
     next.pointerFixUp();
     next.pdfFwd = pdf;
     state.bounce++;
+
     return true;
 }
 
