@@ -64,9 +64,6 @@ Spectrum estimateDirect(SurfaceEvent& event, const vec2& uShading, const Light& 
             if (!isBlack(f) && scatteringPdf != 0) {
                 vec3 worldShadowRayDir = event.toWorld(event.wi);
                 Ray  shaowRay(event.its->p, worldShadowRayDir);
-                if (event.its->primitive->areaLight.get() == &light) {
-                    1;
-                }
                 Spectrum Li = evalLightDirect(scene, light, shaowRay, medium, &lightPdf);
                 if (lightPdf == 0 || isBlack(Li)) return Ld;
                 Float weight = 1;

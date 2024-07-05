@@ -71,7 +71,11 @@ Float InfinteSphere::PdfLi(const Intersection& pShape, const vec3 /*ref*/&) cons
     Float sinTheta;
     vec2  uv = directionToUV(pShape.w, sinTheta);
     if (sinTheta <= 1e-4f) return 0;
-    return Constant::INV_PI * Constant::INV_TWO_PI * _emission->pdf(MAP_SPHERICAL, uv) / sinTheta;
+    float result =  Constant::INV_PI * Constant::INV_TWO_PI * _emission->pdf(MAP_SPHERICAL, uv) / sinTheta;
+    if(isnan(result)) {
+        result = 0;
+    }
+    return result;
 }
 
 void InfinteSphere::logDebugInfo() const {

@@ -1,11 +1,12 @@
 #include "Primitive.hpp"
 #include "Common/Transform.hpp"
+#include "Texture/BitMapTexture.hpp"
 
 #pragma once
 
 class Quad : public Primitive {
 public:
-    Quad(const Json& json) : Primitive(json) {}
+    Quad(const Json& json);
     virtual std::optional<Intersection> intersect(Ray& ray) const;
     virtual vec3                        operator()(Float u, Float v) const {
         return _base + _edge0 * u + _edge1 * v;
@@ -19,6 +20,7 @@ public:
     bool occluded(const Ray& ray) const override;
 
     Float powerToRadianceScale() const override;
+    std::unique_ptr<BitMapTexture<vec3>> normalMap;
 
 protected:
     virtual void computeArea();

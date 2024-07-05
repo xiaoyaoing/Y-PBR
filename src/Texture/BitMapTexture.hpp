@@ -73,6 +73,23 @@ public:
         //    ImageIO::saveLdr("a.png", ldr.get(), width(), height(), 3, overwrite);
     }
 
+    T evalWithStochasticSampling(vec2 uv,float u){
+        uv[0] = std::max(0.f,uv[0] * width() - 0.5f);
+        uv[1] = std::max(0.f,uv[1] * height() - 0.5f);
+
+
+        int u0 = std::floor(uv[0]), v0 = std::floor(uv[1]);
+        Float du = uv[0] - u0, dv = uv[1] - v0;
+        if (u < du) {
+            ++u0;
+            u /= du;
+        } else
+            u = (u - du) / (1 - du);
+
+        if (u < dv)
+            ++v0;
+        return getValue(u0, v0);
+    }
     T eval(vec2 uv) const override {
         float u = uv.x * _w;
         float v = (1 - uv.y) * _h;

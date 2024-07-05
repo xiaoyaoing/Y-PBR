@@ -10,6 +10,12 @@ void Quad::preCompute() {
     computeBoundingBox();
     _invSq  = vec2(1 / length2(_edge0), 1 / length2(_edge1));
     _normal = normalize(cross(_edge1, _edge0));
+    
+}
+
+Quad::Quad(const Json& json) :Primitive(json) {
+    normalMap = std::make_unique<BitMapTexture<vec3>>("NormalMap.png");
+    normalMap->LoadResources();
 }
 
 std::optional<Intersection> Quad::intersect(Ray& ray) const {
@@ -36,6 +42,14 @@ std::optional<Intersection> Quad::intersect(Ray& ray) const {
     its.uv   = vec2(l0, l1);
     its.p    = q;
     its.Ng = its.Ns = _normal;
+
+    if(normalMap) {
+        vec2 uv = glm::fract(its.uv * 100.f);
+        its.Ns = normalMap->eval(uv);
+     //   its.Ns = normalMap->evalWithStochasticSampling(uv);
+        its.Ns = normalize(its.Ns * 2.f - 1.f);
+    }
+    
     its.primitive   = this;
     its.bsdf        = bsdf.get();
     return {its};

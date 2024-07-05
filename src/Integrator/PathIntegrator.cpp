@@ -7,6 +7,8 @@
 #include "TraceHelper.h"
 #include <optional>
 
+#include "Primitives/Quad.hpp"
+
 //2022/7/15
 Spectrum PathIntegrator::integrate(const Ray& ray, const Scene& scene, Sampler& sampler) const {
 
@@ -35,6 +37,9 @@ Spectrum PathIntegrator::integrate(const Ray& ray, const Scene& scene, Sampler& 
 
         if (!its.has_value() || bounces >= maxDepth)
             break;
+        auto normal_val = dynamic_cast<const Quad *>(its->primitive)->normalMap->evalWithStochasticSampling( glm::fract(its->uv * 100.f), sampler.getNext1D());
+        normal_val = normalize(normal_val * 2.f - 1.f);
+        its->Ns = normal_val;
         if (DebugConfig::OnlyShowNormal) {
             return (its->Ns + Spectrum(1.f)) / 2.f;
         }
