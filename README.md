@@ -41,3 +41,19 @@ Nori Render https://wjakob.github.io/nori/
 
 Ray Tracing in One Weekend https://raytracing.github.io/books/RayTracingInOneWeekend.html  
 
+
+Build
+Run the following command in the root directory of the project
+```shell
+mkdir build
+cd build
+cmake -G "Visual Studio 17 2022" ..
+```
+Then open the solution file in the build directory and build the project.
+
+Usage:
+```shell
+Y-PBR.exe scene.json
+```
+[scene.json](scenes/classroom/scene.json)
+Scenes can be found in the Scenes directory.

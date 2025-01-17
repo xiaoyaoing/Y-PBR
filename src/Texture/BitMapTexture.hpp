@@ -24,7 +24,7 @@ public:
         RGB_HDR    = 3,
     };
 
-    BitMapTexture(const std::string& path) : _path(path) {
+    BitMapTexture(const std::string& path) : _path(path){
     }
 
     BitMapTexture(void* texels, int w, int h, TexelType texelType, bool linear, bool clamp) : _texels(texels), _w(w), _h(h), _texelType(texelType), _linear(linear), _clamp(clamp) {

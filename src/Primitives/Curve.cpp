@@ -385,7 +385,7 @@ Curve::Curve(const Json& json, Scene& scene) : Primitive(json) {
     computeBoundingBox();
 
     m_scene    = rtcNewScene(EmbreeUtils::getDevice());
-    m_geometry = rtcNewGeometry(EmbreeUtils::getDevice(), RTC_GEOMETRY_TYPE_FLAT_BEZIER_CURVE);
+    m_geometry = rtcNewGeometry(EmbreeUtils::getDevice(), RTC_GEOMETRY_TYPE_ROUND_BSPLINE_CURVE);
     float* vb  = (float*)rtcSetNewGeometryBuffer(m_geometry, RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT4, 4 * sizeof(float), _nodeData.size());
     for (size_t i = 0; i < _nodeData.size(); i++) {
         vb[4 * i]     = _nodeData[i].x;

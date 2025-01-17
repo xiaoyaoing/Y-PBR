@@ -64,22 +64,14 @@ LightPath::connectCameraBDPT(const Scene& scene, Sampler& sampler, const LightPa
 
 Spectrum
 LightPath::connectBDPT(const Scene& scene, const LightPath& lightPath, int l, const LightPath& cameraPath, int c) {
-
-    if (l == 2 && c == 2) {
-        DebugBreak();
-    }
+    
     const PathVertex& lightVertex  = lightPath[l - 1];
     const PathVertex& cameraVertex = cameraPath[c - 1];
-
-    if (l == 1) {
-        DebugBreak();
-    }
+    
     auto s = lightVertex.eval(cameraVertex, true) * cameraVertex.eval(lightVertex, false) * lightVertex.beta *
              cameraVertex.beta / distance2(lightVertex.pos(), cameraVertex.pos());
-
     if (isBlack(s))
         return s;
-
     auto ray = generateRay(cameraVertex, lightVertex);
     auto tr  = evalShadowDirect(scene, ray, nullptr);
 
@@ -168,9 +160,6 @@ void LightPath::toAreaMeasure() {
             continue;
         _vertexs[i].pdfFwd /= distance2(_vertexs[i].pos(), _vertexs[i - 1].pos());
         auto d = distance2(_vertexs[i].pos(), _vertexs[i - 1].pos());
-        if (i == 2 && _vertexs[i].pdfFwd <= 0.003) {
-            DebugBreak();
-        }
         if (_vertexs[i].isSurface())
             _vertexs[i].pdfFwd *= _vertexs[i - 1].cosFactor(_vertexs[i]);
         if (isinf(_vertexs[i].pdfFwd)) {

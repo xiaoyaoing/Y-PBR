@@ -219,8 +219,11 @@ Float Hair::Pdf(const SurfaceEvent& event) const {
            TrimmedLogistic(phi - Phi(gammaI, gammaT, 1), _betaR, -Constant::PI, Constant::PI);
     pdf += M(_vTRT, sin(thetaOTRT), sinThetaI, cos(thetaOTRT), cosThetaI) * apPdf[2] *
            TrimmedLogistic(phi - Phi(gammaI, gammaT, 2), _betaR, -Constant::PI, Constant::PI);
-    if (isnan(pdf) || pdf < 1e-8) {
+    if (isnan(pdf)) {
         DebugBreak();
+    }
+    if (pdf<1e-6) {
+        return 0;
     }
     return pdf;
 }

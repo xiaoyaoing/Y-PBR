@@ -137,7 +137,6 @@ void Scene::build() {
             rtcSetGeometryOccludedFunction(geom, &EmbreeUtils::instanceOccludedFunc);
             rtcCommitGeometry(geom);
             int res = rtcAttachGeometry(_scene, geom);
-            LOGI(res);
         }
         rtcCommitScene(_scene);
         //bvh = std::make_unique<BVHAccel>(primitives);  // I will use embree now ,the bvh I implmented is too slow!

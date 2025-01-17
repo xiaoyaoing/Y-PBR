@@ -49,8 +49,9 @@ void Render::Go() {
 }
 
 void Render::renderScene(const std::string path) {
-    FileUtils::WorkingDir = path;
-    std::ifstream scene_file(FileUtils::WorkingDir + "scene.json");
+    std::filesystem::path p(path);
+    FileUtils::WorkingDir =     p.parent_path().string() + "\\";
+    std::ifstream scene_file(path);
     Json json;
     scene_file >> json;
     scene_file.close();
